@@ -1,0 +1,268 @@
+{
+  "item_id": "arxiv:2611.04368",
+  "document_id": "401105ec546c7a870f50ddce8b7bfb49586da605690324c502c49b2e3e136175",
+  "source_url": "https://arxiv.org/html/2611.04368v1",
+  "paper_version": "2611.04368v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "当前会话代理 · 手动单篇试跑",
+  "created": "2026-11-05T05:31:58+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "值得关注的是“推理适配 → 冻结适配器 → 动作微调”这一训练配方。正文消融支持它优于所测联合训练和可训练适配器；收益依任务和扰动差别很大。优先理解训练顺序和控制实验，再决定是否复现。",
+  "coverage": {
+    "read": 91,
+    "total": 91,
+    "evidence_ids": [
+      "ab10303a86f41d3b",
+      "23594deaa1b62be0",
+      "4db493a9aaf55f5c",
+      "5b88768ae9ca5593",
+      "a84068958a679ad4",
+      "f4354d417c517253",
+      "0e54fee51ecb85cd",
+      "ba8546f54bce5fb7",
+      "7bc4f0b92b85002b",
+      "75789f9299351a71",
+      "611ea7c8af37d3d7",
+      "a939bc18dbcad3d4",
+      "402bd3844cb0850e",
+      "e24e079d0e0f9fe1",
+      "6df8988159159cd7",
+      "745d6b87aa13c5df",
+      "b7cddbe44023cd85",
+      "b16c6220d7e898ce",
+      "f5b0aa0e8094647c",
+      "a18ee1a87ff079e1",
+      "ae854a1efd883516",
+      "7d9786fe12c942fa",
+      "8f79ccea6d5da580",
+      "76869b796ecaaaa0",
+      "4588b7807c9570f6",
+      "c5185ce935a12050",
+      "a1b88d3184fa0787",
+      "615770bc6459a3e9",
+      "242f51b85cd1814d",
+      "117582c992c19b2f",
+      "71268eefbd7ace11",
+      "7b4ba4f8907f189c",
+      "a82042b47f8788ac",
+      "e1ccaf373a1db8a3",
+      "d8c8b9a89c47a58c",
+      "f93622eb6aab5813",
+      "5a9eb07c39aa1a49",
+      "0c2086892bf6de1d",
+      "8314c2564192f9a5",
+      "35f2542f53996f68",
+      "e084306181107c5e",
+      "4aba4446c701386c",
+      "e51dfdb523a93f6c",
+      "e0754157ec66a422",
+      "9458327b34e87e91",
+      "dbc1fecd569bd6bb",
+      "d20aba92d64f0d36",
+      "7563e80a4753adb8",
+      "79df3852e02ad2ce",
+      "bf798dbc199b9625",
+      "8c04320d06002855",
+      "e9e1af63d9f06348",
+      "891b0d345e602bfe",
+      "55391d0cc982182c",
+      "8c9ed3fd6c41d979",
+      "b4c6746a9cd61649",
+      "47564b8d259a6f91",
+      "7aa3550a733e79a2",
+      "151431e02d09b411",
+      "78e1c11f4383d193",
+      "4533e62cfc081567",
+      "78e7e33c14cc4b1f",
+      "1dbd1fab59a50ed2",
+      "6f4da2ff056b19b4",
+      "e2fa944a75ab3624",
+      "a5ef8107fe5e915a",
+      "7d883afb41fdd7e9",
+      "480276e9b4c4145a",
+      "35b310ba1931f337",
+      "3f54c4b6c82daf36",
+      "f454f270f593cd38",
+      "c3fb231ddd673c68",
+      "7ae5289f795c233d",
+      "741cb2d5f30f3a42",
+      "4604d47d78d09bde",
+      "4dd11098c2bdf409",
+      "b7f3600f0adfa726",
+      "e5c1e4ab3b1db09e",
+      "774c12679077d1d5",
+      "a2ad0a3a4eb3c7b0",
+      "63b0ac90d36bbc83",
+      "22a0470f2e71c483",
+      "5d196da1664cf491",
+      "90736d4afbb8899d",
+      "78fbaee67c654458",
+      "dc33cb68e2bca442",
+      "c46fdb81da6a6284",
+      "bc2909dc9a6d9674",
+      "be03f9086948e567",
+      "b51cb9f5924dc1c6",
+      "2ade4155bfe8c098"
+    ],
+    "pdf_pages_visually_checked": [
+      6,
+      7,
+      10,
+      15,
+      19,
+      20,
+      21
+    ],
+    "pdf_sha256": "1563bba4c84f32f3ee8184cc17f6fb45fcaa587697b16102849b29af63c1f96b"
+  },
+  "notice": "已阅读提取出的91个文字片段（主文与附录），并目视核对PDF第6、7、10、15、19、20、21页关键图表；未逐一检查所有图片、公式、引用文献或执行代码。逐字引文匹配只验证出处，不证明语义判断正确；实验数值来自作者，未复现。",
+  "findings": [
+    {
+      "title": "关键增量：冻结推理适配器，再学习动作",
+      "kind": "method",
+      "text": "RAFT 的增量是后训练的参数与顺序安排。先用任务相关推理训练视觉和语言 LoRA；动作训练阶段冻结它们，更新语言模型、动作专家与投影层。它不要求推理时先生成文字链再动作。作者的消融支持这一配方，但不能据此证明冻结对所有 VLA 都有效。",
+      "evidence_ids": [
+        "f4354d417c517253",
+        "a939bc18dbcad3d4",
+        "f5b0aa0e8094647c"
+      ],
+      "quote": "reasoning-adapter weights"
+    },
+    {
+      "title": "两阶段具体更新哪些参数？",
+      "kind": "method",
+      "text": "第一阶段只更新 LoRA，预训练 SigLIP 与其余主干冻结；第二阶段 LoRA 与 SigLIP 仍冻结，语言主干、动作专家、投影层参与动作微调。仿真/DROID 配置的 LoRA rank=64、alpha=128，覆盖视觉和语言模块。YAM 使用 π0.5，不直接套用 MolmoBot 的全部配置。",
+      "evidence_ids": [
+        "a939bc18dbcad3d4",
+        "f5b0aa0e8094647c",
+        "7563e80a4753adb8",
+        "bf798dbc199b9625"
+      ],
+      "quote": "pretrained SigLIP"
+    },
+    {
+      "title": "新增数据：推理标注也有成本",
+      "kind": "method",
+      "text": "作者用 Gemini 3.1 Pro 为观测和指令生成框、关键点、轨迹、空间描述或 VQA 标注。主实验抓放用 full reasoning，开抽屉用 bbox；同一任务内部固定模态。相同动作示范数不代表没有额外数据加工、模型标注和计算成本。",
+      "evidence_ids": [
+        "e24e079d0e0f9fe1",
+        "8c04320d06002855",
+        "35b310ba1931f337"
+      ],
+      "quote": "reasoning annotations"
+    },
+    {
+      "title": "DROID：75.0% 来自三类 OOD 的合并结果",
+      "kind": "evidence",
+      "text": "MolmoBot 用50条抓放示范适配。作者报告 RAFT/Plain FT 的 OOD 成功率75.0%/27.9%：换物体颜色83%/33%（24次）、干扰物75%/25%（24次）、背景65%/25%（20次），共68次 OOD 试验。ID另有30次，约63%/60%。75%不等于图6含ID的 Mean，后者约71%。",
+      "evidence_ids": [
+        "a1b88d3184fa0787",
+        "151431e02d09b411",
+        "615770bc6459a3e9"
+      ],
+      "quote": "demonstrations"
+    },
+    {
+      "title": "YAM：70% 是完整任务，且包括 ID",
+      "kind": "evidence",
+      "text": "π0.5 用100条示范学习开箱、取物并放入箱内。70.0%是五个轴的整段任务合并成功率；DeLock36%、Plain FT约35%、RETAIN29%。它既不是仅开箱成功率，也不是仅OOD。附录明确每个OOD轴30次，但没有同样明确写出YAM的ID次数，因此本试跑不补写总样本数。",
+      "evidence_ids": [
+        "242f51b85cd1814d",
+        "151431e02d09b411"
+      ],
+      "quote": "full sequence"
+    },
+    {
+      "title": "仿真：83.21% 对79.62%，需看分轴",
+      "kind": "evidence",
+      "text": "MolmoBot/MolmoSpaces 每任务106条单布局成功示范；抓放五个评测划分各106次，方法间使用匹配初始条件。表4均值83.21%/79.62%，差约3.59个百分点；纹理与指令轴与普通微调打平。真机的大幅提升不能替代仿真结论，本报告也不据此断言跨训练随机种子的显著性。",
+      "evidence_ids": [
+        "4588b7807c9570f6",
+        "e5c1e4ab3b1db09e"
+      ],
+      "quote": "matched seeds"
+    },
+    {
+      "title": "核心消融：冻结、继续更新与联合训练",
+      "kind": "evidence",
+      "text": "仿真抓放中冻结适配器83.21%，动作阶段继续更新73.96%，仅推理阶段48.30%；推理与动作1:1联合训练63.21%，普通微调79.62%。这支持分阶段与冻结的重要性，但这一联合配方的失败不等于所有联合训练无效。",
+      "evidence_ids": [
+        "741cb2d5f30f3a42",
+        "4dd11098c2bdf409",
+        "e5c1e4ab3b1db09e"
+      ],
+      "quote": "Adapter setting"
+    },
+    {
+      "title": "更强控制：冻结视觉已缩小部分差距",
+      "kind": "limitation",
+      "text": "冻结视觉的Plain FT平均79.62%，但新物体成功率从35.85%升至40.57%；RAFT为43.40%，相对这个控制只高2.83个百分点。应同时看这个控制，避免把所有收益归因于推理内容。",
+      "evidence_ids": [
+        "e5c1e4ab3b1db09e",
+        "774c12679077d1d5"
+      ],
+      "quote": "frozen vision"
+    },
+    {
+      "title": "复现条件：额外1,000步训练与外部标注",
+      "kind": "limitation",
+      "text": "表1的仿真/DROID配置：推理阶段1,000步、有效batch48、单张46GB L40；动作阶段5,000步、有效batch512、四张46GB L40。基线统一动作训练5,000步，但总训练预算并不完全相等。已读文字未提供足够的标注美元成本、端到端工时和所有训练重复信息，暂不估算费用。",
+      "evidence_ids": [
+        "7d9786fe12c942fa",
+        "bf798dbc199b9625",
+        "e24e079d0e0f9fe1"
+      ],
+      "quote": "Optimization steps"
+    },
+    {
+      "title": "推理模态没有通吃的赢家",
+      "kind": "limitation",
+      "text": "抓放新物体成功率：轨迹45.28%，VQA/full reasoning各43.40%，bbox/keypoint各34.91%，普通微调35.85%；开抽屉不同模态在ID和视觉扰动上各有优势。监督内容本身需要验证，不能认为任意推理标注都能改善结果。",
+      "evidence_ids": [
+        "35b310ba1931f337",
+        "f454f270f593cd38"
+      ],
+      "quote": "trajectory traces"
+    },
+    {
+      "title": "表示分析提供相关证据，尚非因果证明",
+      "kind": "limitation",
+      "text": "线性探针414帧来自46个策略训练episode；按episode留出探针拟合，不代表这些轨迹未进入策略训练。所谓任务进度标签是时间四分位，并非人工标定的实际子任务完成度。注意力集中与PR相关性支持表示变化，不单凭这些测量证明因果或通用推理能力。",
+      "evidence_ids": [
+        "7b4ba4f8907f189c",
+        "dc33cb68e2bca442",
+        "bc2909dc9a6d9674",
+        "be03f9086948e567",
+        "f93622eb6aab5813"
+      ],
+      "quote": "policy-training episodes"
+    },
+    {
+      "title": "口径核查：39%和38.05%不是同一均值",
+      "kind": "limitation",
+      "text": "图5开抽屉39%覆盖ID、灯光、纹理和指令；表5独立RAFT的38.05%只覆盖ID、灯光、纹理三轴，不能强行统一。表5组合RAFT为36.16%，低于独立RAFT的38.05%，所以可与RETAIN组合不等于组合更好。论文代码链接本次访问返回404，未核查实现或复现。",
+      "evidence_ids": [
+        "22a0470f2e71c483",
+        "5d196da1664cf491",
+        "8f79ccea6d5da580",
+        "a2ad0a3a4eb3c7b0"
+      ],
+      "quote": "Overall RETAIN"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "最小实验：收益对标注噪声有多敏感？",
+      "text": "待验证假设：冻结适配器保留的既可能是任务信号，也可能是错误标注。先只做一个仿真抓放任务，固定动作示范、初始化、数据顺序、动作训练步数与评测episode。四组为冻结视觉Plain FT、标准RAFT、10%记录加入可控对象/坐标错误的RAFT、30%同类错误的RAFT。RAFT各组固定推理训练量，单独记录额外GPU时与标注量。先小规模检查，再以至少3个训练种子评测ID/新物体/纹理成功率及配对差异区间；另加总GPU时匹配的动作训练控制。若噪声不影响结果，或预算匹配控制达到相同收益，就反对“精确任务推理信号是主要来源”的解释；只在单一扰动退化则缩小假设。实验尚未运行，也未全面排查相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "e24e079d0e0f9fe1",
+        "e51dfdb523a93f6c",
+        "f454f270f593cd38",
+        "741cb2d5f30f3a42",
+        "e5c1e4ab3b1db09e"
+      ],
+      "quote": "action learning"
+    }
+  ]
+}

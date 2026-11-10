@@ -1,0 +1,463 @@
+{
+  "id": "68d25a31dafd58853d92ca8903a61305002c267342790033898b6024fa01b363",
+  "url": "https://arxiv.org/html/2611.06654v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "10c95676f630595c",
+      "section": "正文",
+      "location": "正文",
+      "text": "Compounding Physical RSI: Turning Execution Failure into Inherited Capability",
+      "url": "https://arxiv.org/html/2611.06654v1#p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8a06e0b670a924e",
+      "section": "正文",
+      "location": "正文",
+      "text": "Yixuan Yang 1 , Qiang Chen 1 , Run Shao 1 , Shuwei Dong 1 , Wenhao Li 1 , Yunpeng Wang 1",
+      "url": "https://arxiv.org/html/2611.06654v1#p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2b4ea158f324f943",
+      "section": "正文",
+      "location": "正文",
+      "text": "Wenhan Fang 1 , Haomiao Wu 1 , Xingyu Wang 1 , Lichen Man, Rong Zhang",
+      "url": "https://arxiv.org/html/2611.06654v1#p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "acfbceca5aabf1d3",
+      "section": "正文",
+      "location": "正文",
+      "text": "Xuezhi Cui, Yuan Liu, Bingyan Lu, Jiawei Ma, Xiaoyang Ma, Zhemin Sun",
+      "url": "https://arxiv.org/html/2611.06654v1#p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "14258c9eb21946bd",
+      "section": "正文",
+      "location": "正文",
+      "text": "Zhuorui Yao, Yutong Dong, Yuxuan Zhao, Yichong Mu, Jiabao Jiang",
+      "url": "https://arxiv.org/html/2611.06654v1#p2.4",
+      "kind": "p"
+    },
+    {
+      "id": "8d09703a8eeca103",
+      "section": "正文",
+      "location": "正文",
+      "text": "Wenxuan Deng, Junling Zhou, Yi Chen 2 , Deyu Zhang 3 , Yiming Yan 3",
+      "url": "https://arxiv.org/html/2611.06654v1#p2.5",
+      "kind": "p"
+    },
+    {
+      "id": "8aa1e1250e1b1656",
+      "section": "正文",
+      "location": "正文",
+      "text": "Yige Yuan 3 , Shan You, Fei Wang 2 , Haifeng Li 4 , Hongyan Xu 2 , Yichao Cao 5 , Xiu Su 6,∗",
+      "url": "https://arxiv.org/html/2611.06654v1#p2.6",
+      "kind": "p"
+    },
+    {
+      "id": "ff48c47bc4761149",
+      "section": "正文",
+      "location": "正文",
+      "text": "1 Core Algorithm Development & Implementation 2 Principal Contributor 3 Resource Contributor 4 Project Leader 5 Execution Leader & Principal Contributor 6 Technical Leader & Principal Contributor",
+      "url": "https://arxiv.org/html/2611.06654v1#p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "7664a0d040f2c863",
+      "section": "正文",
+      "location": "正文",
+      "text": "ECCV 2026 RoboDojo Safe World Models Challenge | Champion | CSU-AI-07",
+      "url": "https://arxiv.org/html/2611.06654v1#p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "211acdbebb1ccb9b",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Vision-language-action (VLA) models have substantially advanced generalist robot manipulation by unifying visual perception, language grounding, and action generation within a single policy [ 1 , 2 , 3 , 4 , 5 ] . Recent efforts have extended this paradigm across diverse embodiments [ 6 , 7 , 8 ] , refined spatial representations and fine-tuning efficiency [ 9 , 10 ] , and scaled pre-training to over 100K hours of real-world trajectories [ 11 ] . Yet despite these advances in pre-training scale, a generalist policy still encounters many of its fundamental capability limits only after static training has ended and closed-loop physical execution begins.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b80b27dfd56a569e",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "This limitation stems from the sequential, stage-gated nature of manipulation. A robot must approach an object before grasping it, and must establish a stable grasp before transporting or placing it. Consequently, a deficiency in a downstream stage remains masked until the policy reliably passes all preceding stages: a policy that fails during grasping never reveals how it would fail during transport, because its rollouts never reach that state. Moreover, the failure modes encountered during transport depend directly on the contact configuration produced by the grasp, as each policy induces its own closed-loop state distribution [ 12 ] . We define the earliest task stage that a policy cannot yet pass reliably as its capability frontier . Because behavior beyond this frontier remains unobserved during execution, a fixed dataset cannot anticipate how the evolving policy will fail once it crosses the current barrier. Each successful fix advances the capability frontier and exposes the next latent failure mode.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "24f3c2d53fdf633a",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "A moving capability frontier naturally motivates Recursive Self-Improvement (RSI) for embodied intelligence. Rooted in classical formulations of self-referential learning [ 13 , 14 ] and renewed in modern foundation-model research [ 15 ] , RSI recognizes that when a policy’s next bottleneck becomes visible only after the current one is resolved, improvement cannot be reduced to a single static training run. Instead, the robot must iteratively execute, diagnose its own failures, learn from them, and execute again so that each generation uncovers the empirical evidence required by the next. Physical RSI formalizes this paradigm for embodied systems, where contact-rich physical experience drives persistent policy evolution [ 16 , 17 ] . Recent studies have explored key facets of embodied self-improvement, including inference-time self-correction and subtask backtracking [ 18 ] , deployment-time adaptation and memory consolidation [ 19 , 20 ] , and iterative policy updates via autonomous data collection or residual reinforcement learning [ 8 , 21 , 22 , 23 ] .",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6e7c8266cfd865e7",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "While these efforts show that a robot policy can improve over a single update or within narrow task settings, the central open question is whether such improvements can compound across generations. The potential for compounding follows directly from the staged structure of manipulation. Because a task succeeds only when every constituent stage succeeds, overall task completion behaves like a product of stage-level pass rates. In such a product, stage-level gains multiply: stabilizing a grasp not only lifts the completion rate of every subsequent stage, but also sends a larger fraction of rollouts across the capability frontier, generating richer downstream evidence for the next generation. A recursive loop can therefore achieve super-additive progress across rounds, provided that each generation builds reliably upon the verified gains of its predecessor.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "f08e436bf6404add",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "However, making Physical RSI compound in practice is hindered by three fundamental bottlenecks that mirror the lifecycle of a policy update. First, execution feedback suffers from opaque temporal credit assignment [ 24 ] : a terminal failure flag indicates that a trial failed, but rarely localizes which stage broke, as visible failure often manifests long after the erroneous action that caused it. Second, failed rollouts lack corrective supervision: even a precisely localized failure shows what went wrong without specifying the counterfactual action the policy should have executed. Third, multi-task gains are fragile under shared weights: because a generalist policy encodes all skills in one parameter set, an unconstrained update that repairs one failure stage can silently degrade previously mastered tasks [ 25 ] . Under the same multiplicative structure that amplifies stage-level gains, such cross-task regressions multiply losses, causing naive recursive loops to accumulate policy churn rather than lasting capability.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "d8d2ef0e6b29bb9b",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We argue that the core challenge of Physical RSI is therefore achieving compounding —ensuring that every generation diagnoses its active frontier, resolves it effectively, and inherits verified capabilities without regression. To this end, we propose Compounding Physical RSI , a three-stage self-evolving policy framework, and evaluate the resulting generalist policy, CSU-AI-07 , across all 42 tasks of RoboDojo-Sim. Our main contributions are:",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "9b656dce1f44bed9",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Formulating compounding as the central problem of Physical RSI. We show how the stage-gated structure of manipulation necessitates recursive improvement and establish a formal structural definition of compounding across policy generations.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b7b3c11d0d0bd7d7",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "A closed-loop Diagnosis–Remedy–Retention framework. We couple stage-level capability-gap diagnosis with objective-conditioned offline reinforcement learning (remedy) and evaluation-guided weight-space consolidation (retention), ensuring that targeted frontier fixes are absorbed without eroding prior skills.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6895efee6b90a249",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "State-of-the-art generalist benchmark performance. Across the 42 tasks of RoboDojo-Sim, CSU-AI-07 ranks first on the overall leaderboard in both Overall Score (26.15) and Success Rate (20.70%), outperforming thirteen public generalist policies by substantial margins.",
+      "url": "https://arxiv.org/html/2611.06654v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b746d7c4265eb864",
+      "section": "2.1 From improvement to compounding",
+      "location": "2.1 From improvement to compounding",
+      "text": "The stage-gated structure of manipulation imposes three strict requirements on a recursive improvement loop. First, because downstream weaknesses remain hidden behind earlier bottlenecks, improvement is most consequential where execution currently stalls; the loop must therefore accurately localize the active capability frontier. Second, because failed rollouts carry no explicit corrective labels, the loop must synthesize targeted supervision to cross that frontier. Third, because stage-level regressions multiply just as readily as stage-level gains, the loop must preserve previously mastered capabilities when absorbing new updates. Checking these three requirements across successive generations yields a structural definition of compounding:",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ac6751282c7978bc",
+      "section": "2.1 From improvement to compounding",
+      "location": "2.1 From improvement to compounding",
+      "text": "The three clauses of this definition map one-to-one to the three stages of our framework: Diagnosis (Section 3 ), Remedy (Section 4 ), and Retention (Section 5 ). Consistent with recent formulations of Physical RSI [ 16 ] , the term physical denotes that the loop is driven by closed-loop, contact-rich execution governed by physical dynamics—whether in physics simulation or on physical hardware. In our instantiation, closed-loop execution in RoboDojo-Sim supplies the empirical failure evidence, and full-benchmark behavioral outcomes determine which candidate policy survives into the next generation.",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "df65dc82b0071eaf",
+      "section": "2.2 The recursive policy transition",
+      "location": "2.2 The recursive policy transition",
+      "text": "For capability to accumulate across generations, the handover from one generation to the next must be governed by explicit operators. We formalize generation k k as a structured policy transition in which each intermediate product fulfills a distinct functional role. Let π k \\pi_{k} denote the inherited reference policy at generation k k . Rolling out π k \\pi_{k} across the task suite yields execution evidence E k = { ( o t , s t , a t , r t , τ t ) } t = 1 T E_{k}=\\{(o_{t},s_{t},a_{t},r_{t},\\tau_{t})\\}_{t=1}^{T} , recording observations o t o_{t} , robot and object states s t s_{t} , actions a t a_{t} , rewards r t r_{t} , and task-stage annotations τ t \\tau_{t} .",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "84a6eac98751ac87",
+      "section": "2.2 The recursive policy transition",
+      "location": "2.2 The recursive policy transition",
+      "text": "One recursive generation then proceeds as:",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "930cfb4eb969dcde",
+      "section": "2.2 The recursive policy transition",
+      "location": "2.2 The recursive policy transition",
+      "text": "g k \\displaystyle g_{k} = 𝒜 ⁡ ( E k ) , \\displaystyle=\\mathcal{A}(E_{k}), ℬ k + 1 \\displaystyle\\mathcal{B}_{k+1} = ℬ k ∪ ℱ ⁡ ( E k ) , \\displaystyle=\\mathcal{B}_{k}\\cup\\mathcal{F}(E_{k}), 𝒟 k + 1 \\displaystyle\\mathcal{D}_{k+1} = 𝒞 ⁡ ( ℬ k + 1 , g k ) , \\displaystyle=\\mathcal{C}(\\mathcal{B}_{k+1},g_{k}), (1) π k ′ \\displaystyle\\pi^{\\prime}_{k} = 𝒰 off ​ ( π k , 𝒟 k + 1 , g k ) , \\displaystyle=\\mathcal{U}_{\\mathrm{off}}(\\pi_{k},\\mathcal{D}_{k+1},g_{k}), π k + 1 \\displaystyle\\pi_{k+1} = 𝒮 ⁡ ( { π k ( i ) } , 𝒱 k + 1 ) , \\displaystyle=\\mathcal{S}\\!\\left(\\{\\pi_{k}^{(i)}\\},\\mathcal{V}_{k+1}\\right),",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.E1",
+      "kind": "table"
+    },
+    {
+      "id": "6689f1004bac184f",
+      "section": "2.2 The recursive policy transition",
+      "location": "2.2 The recursive policy transition",
+      "text": "where 𝒜 \\mathcal{A} performs stage-level capability-gap assessment to extract the structured improvement objective g k g_{k} ; ℱ \\mathcal{F} validates and normalizes new execution traces before integrating them into the accumulated experience base ℬ k \\mathcal{B}_{k} ; 𝒞 \\mathcal{C} curates the objective-relevant experience subset 𝒟 k + 1 \\mathcal{D}_{k+1} ; 𝒰 off \\mathcal{U}_{\\mathrm{off}} conducts behavior-regularized offline policy refinement to produce the evolved endpoint π k ′ \\pi^{\\prime}_{k} ; and 𝒮 \\mathcal{S} selects the next generation’s reference policy π k + 1 \\pi_{k+1} from weight-consolidated candidates { π k ( i ) } \\{\\pi_{k}^{(i)}\\} via automated full-benchmark evaluation 𝒱 k + 1 \\mathcal{V}_{k+1} . As shown in Figure 1 , the upper pathway executes this within-generation progression from rollout diagnosis to candidate promotion, while the lower pathway transfers the promoted policy π k + 1 \\pi_{k+1} forward as the inherited reference state of generation k + 1 k+1 .",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.SS2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "7e54e8f3a2c68c54",
+      "section": "2.2 The recursive policy transition",
+      "location": "2.2 The recursive policy transition",
+      "text": "This transition architecture directly addresses the practical constraints of learning from physical interaction. Because physical rollouts are costly, execution is reserved for gathering diagnostic evidence and verifying candidate policies, whereas policy optimization is performed offline over accumulated experience without requiring new environment interactions at each gradient step [ 26 ] . Equally important, because proxy training losses correlate poorly with closed-loop success in contact-rich manipulation, the recursive loop is closed by empirical task evaluation 𝒱 k + 1 \\mathcal{V}_{k+1} , ensuring that a candidate advances only when its complete behavioral profile justifies promotion.",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "8047635090bf7b0a",
+      "section": "2.2 The recursive policy transition",
+      "location": "2.2 The recursive policy transition",
+      "text": "Figure 1: Architecture of Compounding Physical RSI. Closed-loop execution in RoboDojo-Sim feeds automated stage-level capability-gap assessment (Diagnosis), which produces a structured objective g k g_{k} to guide experience curation and offline reinforcement learning (Remedy). Retention interpolates candidates between the inherited reference policy and the refined policy, promotes the best-performing candidate via full-benchmark evaluation, and passes it forward as the reference state for the next generation.",
+      "url": "https://arxiv.org/html/2611.06654v1#S2.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "06b0e99b79b3ff3b",
+      "section": "3 Diagnosis: Making Failure Legible",
+      "location": "3 Diagnosis: Making Failure Legible",
+      "text": "Diagnosis initiates each generation of the RSI loop by translating raw execution traces into an explicit specification of what the policy must improve next—fulfilling the first prerequisite for compounding.",
+      "url": "https://arxiv.org/html/2611.06654v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1abf45fc725eb536",
+      "section": "3.1 Execution evidence",
+      "location": "3.1 Execution evidence",
+      "text": "A binary terminal reward reports only whether an entire chain of manipulation stages succeeded, obscuring where a failed rollout broke down. Two policies with identical overall success rates may stall at entirely different stages and require fundamentally different updates. To preserve the temporal structure of every trial, we execute the current policy π k \\pi_{k} across diverse task configurations in RoboDojo-Sim, which provides a repeatable testbed for behavioral probing. Each rollout is logged as a time-indexed trajectory capturing task-stage boundaries, action transitions, robot and object state changes, terminal conditions, and behavioral responses to environmental variation.",
+      "url": "https://arxiv.org/html/2611.06654v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a616251ad1b39307",
+      "section": "3.2 Stage-level capability-gap assessment",
+      "location": "3.2 Stage-level capability-gap assessment",
+      "text": "Because manipulation progress is stage-gated, the most informative diagnostic signal in a failed rollout is the exact stage where progression halts. Downstream stages beyond that point remain unvisited—leaving little empirical basis for optimizing them—whereas resolving the bottleneck at the active capability frontier immediately benefits every subsequent stage. Our capability-gap assessment operator 𝒜 \\mathcal{A} therefore evaluates each rollout against the expected stage progression of the task (e.g., approach , grasp , manipulate , place , and verify ). By detecting where closed-loop execution diverges from the expected progression and characterizing the conditions accompanying that divergence, the assessment isolates recurring failure patterns such as target misselection, unstable grasp formation, incomplete manipulation stages, inconsistent action transitions, and sensitivity to scene variations. Operating at the granularity of task stages allows 𝒜 \\mathcal{A} to pinpoint the exact interaction segment associated with the bottleneck.",
+      "url": "https://arxiv.org/html/2611.06654v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "eb12b7b454ce3489",
+      "section": "3.3 From capability gap to improvement objective",
+      "location": "3.3 From capability gap to improvement objective",
+      "text": "For diagnostic findings to steer downstream learning, they must be represented in a form that directly parameterizes data curation and policy optimization. We therefore compile the identified capability gap into a structured improvement objective g k g_{k} that specifies the failing task context, the bottleneck stage, and the affected capability dimension—such as target selection, grasp stability, stage transition, or contact persistence. This structured objective g k g_{k} formally marks the capability frontier of generation k k , conditioning both experience selection ( 𝒞 \\mathcal{C} ) and offline policy optimization ( 𝒰 off \\mathcal{U}_{\\mathrm{off}} ) in the Remedy stage.",
+      "url": "https://arxiv.org/html/2611.06654v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "284b96be713cdf39",
+      "section": "3.3 From capability gap to improvement objective",
+      "location": "3.3 From capability gap to improvement objective",
+      "text": "Figure 2: Diagnosis and remedy across two representative manipulation failure modes. (a) Contact-to-transition failure on a desk object, where physical contact fails to advance the task stage. (b) In-hand transport instability, where an object is lifted successfully but slips during transport. In both cases, Diagnosis traces execution evidence to the specific failing stage, conditioning the selection of validated corrective experience in Remedy.",
+      "url": "https://arxiv.org/html/2611.06654v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2399339d125e2ee5",
+      "section": "3.3 From capability gap to improvement objective",
+      "location": "3.3 From capability gap to improvement objective",
+      "text": "Figure 2 illustrates this diagnostic-to-remedy linkage on two representative cases. In Case (a), initial contact with a desk object fails to trigger the intended task progression, localizing the limitation to the boundary between contact establishment and stage transition. In Case (b), the object is grasped and lifted but loses stability during transport, localizing the limitation to grasp maintenance and in-hand state transition. Case (b) also exemplifies how the capability frontier shifts across updates: the transport instability becomes observable only after the policy has acquired a reliable lifting capability.",
+      "url": "https://arxiv.org/html/2611.06654v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e45f5e0a3074fd66",
+      "section": "4 Remedy: Making Failure Teachable",
+      "location": "4 Remedy: Making Failure Teachable",
+      "text": "While Diagnosis identifies where a policy fails, failed rollouts alone do not specify what the robot should do instead. The Remedy stage bridges this gap by curating validated, stage-targeted experience conditioned on g k g_{k} and converting it into a policy update.",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3c6428937dd42dc3",
+      "section": "4.1 Unified Episode representation",
+      "location": "4.1 Unified Episode representation",
+      "text": "Retrieving experience that directly addresses an improvement objective g k g_{k} requires a data representation that is jointly queryable by task, stage, and outcome. We standardize all robot experience into a unified, source-aware Episode schema that serves as the common unit for representing, validating, and releasing trajectories. Each Episode contains the task identity, language instruction, time-synchronized observation–state–action tuples, source provenance, task-stage boundaries, terminal outcome flags, quality status, and dataset version. Aligning observations, states, actions, and stage transitions along a shared time axis enables the same unit to support diagnostic analysis, stage-level experience selection, and offline policy optimization.",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0da51fd4e1157344",
+      "section": "4.2 Complementary experience sources",
+      "location": "4.2 Complementary experience sources",
+      "text": "Because a failed rollout lacks the optimal counterfactual action, no single form of experience can supply all that is missing. A geometrically feasible path does not guarantee semantic instruction completion, whereas clean expert demonstrations rarely cover recovery from the specific off-nominal states visited by an imperfect policy. We therefore organize the experience base ℬ k \\mathcal{B}_{k} around three complementary sources: (i) task exemplars , which express instruction-conditioned behavior and feasible multi-stage action sequences; (ii) geometric exemplars , which encode target-conditioned spatial structure; and (iii) on-policy execution evidence , which captures the actual state distribution induced by π k \\pi_{k} , including successful progressions, incomplete actions, and near-frontier recovery behaviors. Incorporating on-policy execution evidence is vital because offline updates are most effective when supported by experience near the states the policy actually visits [ 12 , 22 ] .",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "91613bef34ebf822",
+      "section": "4.3 Automated quality validation",
+      "location": "4.3 Automated quality validation",
+      "text": "Because offline learning optimizes directly against its dataset, even a small fraction of misaligned Episodes can teach erroneous behavior. Raw execution rollouts require particular care: failed trajectories are indispensable as diagnostic evidence, yet unsuitable as direct action targets. Our automated validation operator ℱ \\mathcal{F} resolves this tension through a five-stage pipeline: normalization, temporal alignment, task-stage association, consistency assessment, and versioned release. Normalization standardizes observation and state fields; temporal alignment verifies correspondence between observations and control actions; task-stage association maps each trajectory segment to its manipulation phase; and consistency assessment checks coherence among the language instruction, scene state, robot configuration, and action sequence. Incomplete or unstable rollouts are flagged and retained strictly for capability-gap diagnosis ( 𝒜 \\mathcal{A} ), whereas only validated, coherent segments join the experience base ℬ k + 1 \\mathcal{B}_{k+1} as actionable supervision.",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9a8ce1a2b00f051b",
+      "section": "4.4 RSI-driven experience selection",
+      "location": "4.4 RSI-driven experience selection",
+      "text": "As the experience base ℬ k + 1 \\mathcal{B}_{k+1} grows across generations, trajectories relevant to the active capability frontier occupy only a small fraction of the repository, so uniform sampling would dilute the corrective signal needed at generation k k . Instead, our curation operator 𝒞 \\mathcal{C} actively selects a targeted subset 𝒟 k + 1 = 𝒞 ⁡ ( ℬ k + 1 , g k ) \\mathcal{D}_{k+1}=\\mathcal{C}(\\mathcal{B}_{k+1},g_{k}) guided by g k g_{k} . Specifically, 𝒞 \\mathcal{C} retrieves validated Episodes sharing the bottleneck task stage, object-interaction pattern, or state-transition boundary identified in g k g_{k} , prioritizing trajectories that demonstrate successful progression across the diagnosed limitation. The curated set 𝒟 k + 1 \\mathcal{D}_{k+1} is versioned and linked to the objective g k g_{k} and reference policy π k \\pi_{k} , ensuring that every policy update is traceable to the failure mode that motivated it.",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d04e626f5e97e392",
+      "section": "4.5 Objective-conditioned offline reinforcement learning",
+      "location": "4.5 Objective-conditioned offline reinforcement learning",
+      "text": "To turn the curated dataset 𝒟 k + 1 \\mathcal{D}_{k+1} into improved closed-loop behavior, the update must evaluate actions by their long-horizon consequences across stages [ 24 ] while learning strictly from a fixed offline experience distribution [ 26 ] . We formulate each remedy update 𝒰 off \\mathcal{U}_{\\mathrm{off}} as an objective-conditioned offline reinforcement learning problem over 𝒟 k + 1 \\mathcal{D}_{k+1} , where the improvement objective g k g_{k} acts as a goal in the sense of universal value functions [ 27 ] . Specifically, the update seeks a policy that maximizes objective-conditioned value while remaining anchored to the inherited reference policy π k \\pi_{k} :",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8977ac96f58afd49",
+      "section": "4.5 Objective-conditioned offline reinforcement learning",
+      "location": "4.5 Objective-conditioned offline reinforcement learning",
+      "text": "π k ′ = arg max π 𝔼 s ∼ 𝒟 k + 1 , a ∼ π ( ⋅ ∣ s , g k ) [ Q ( s , a ∣ g k ) ] − λ D ( π , π k ) , \\pi^{\\prime}_{k}=\\arg\\max_{\\pi}\\;\\mathbb{E}_{s\\sim\\mathcal{D}_{k+1},\\,a\\sim\\pi(\\cdot\\mid s,g_{k})}\\!\\left[Q(s,a\\mid g_{k})\\right]-\\lambda\\,\\mathrm{D}(\\pi,\\pi_{k}), (2)",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.E2",
+      "kind": "table"
+    },
+    {
+      "id": "6cd60cff9c635269",
+      "section": "4.5 Objective-conditioned offline reinforcement learning",
+      "location": "4.5 Objective-conditioned offline reinforcement learning",
+      "text": "where Q ⁡ ( s , a ∣ g k ) Q(s,a\\mid g_{k}) is the learned value estimate on 𝒟 k + 1 \\mathcal{D}_{k+1} , D ⁡ ( π , π k ) \\mathrm{D}(\\pi,\\pi_{k}) measures divergence from the reference policy, and λ > 0 \\lambda>0 controls anchor strength. While this formulation follows behavior-regularized and conservative offline reinforcement learning [ 28 , 29 , 30 ] to mitigate out-of-distribution value extrapolation, the divergence anchor serves a crucial second role in our framework: it constrains unnecessary parameter drift on states and tasks outside the current objective g k g_{k} . Rather than serving as a final deployment checkpoint, the refined candidate π k ′ \\pi^{\\prime}_{k} is passed to the Retention stage for verification.",
+      "url": "https://arxiv.org/html/2611.06654v1#S4.SS5.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "82d339aff9a84f54",
+      "section": "5 Retention: Making Gains Heritable",
+      "location": "5 Retention: Making Gains Heritable",
+      "text": "Although Remedy produces an evolved policy π k ′ \\pi^{\\prime}_{k} with stronger performance on the targeted capability frontier, updating shared weights inevitably risks degrading previously mastered skills [ 25 ] . Because overall task success is a product of stage pass rates, even small cross-task regressions can erase net progress. The Retention stage governs what the next generation actually inherits, separating a compounding loop from a sequence of isolated fine-tuning runs.",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fd471940f5999513",
+      "section": "5.1 Reference-state initialization",
+      "location": "5.1 Reference-state initialization",
+      "text": "Capability inheritance requires an explicit predecessor against which behavioral changes can be measured. The framework therefore maintains a shared reference policy π k \\pi_{k} that can be evaluated as a complete controller at the start of each generation. Compatible policy checkpoints provide its parameter-space basis—with compatibility established by matching model architectures, parameter representations, and execution interfaces—and are integrated via model-soup weight averaging and interference-aware merging [ 31 , 32 ] . The resulting reference state gives offline learning ( 𝒰 off \\mathcal{U}_{\\mathrm{off}} ) a coherent initialization that preserves the capabilities verified prior to generation k k .",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3bf0692fd70dc066",
+      "section": "5.2 Candidate consolidation",
+      "location": "5.2 Candidate consolidation",
+      "text": "Directly adopting the evolved endpoint π k ′ \\pi^{\\prime}_{k} rarely achieves the optimal balance between new frontier gains and existing skills: full adoption ( π k ′ \\pi^{\\prime}_{k} ) risks cross-task regression, whereas full rejection ( π k \\pi_{k} ) discards the newly acquired capability. Consolidation exposes the Pareto frontier between these extremes by constructing candidates along the linear weight-space trajectory from the inherited reference parameters θ k \\theta_{k} to the evolved parameters θ k ′ \\theta^{\\prime}_{k} :",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "41a93c44ff7a1eb6",
+      "section": "5.2 Candidate consolidation",
+      "location": "5.2 Candidate consolidation",
+      "text": "θ k ( i ) = ( 1 − α i ) ​ θ k + α i ​ θ k ′ , α i ∈ [ 0 , 1 ] , \\theta_{k}^{(i)}=(1-\\alpha_{i})\\,\\theta_{k}+\\alpha_{i}\\,\\theta^{\\prime}_{k},\\qquad\\alpha_{i}\\in[0,1], (3)",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.E3",
+      "kind": "table"
+    },
+    {
+      "id": "91af42c09749e4eb",
+      "section": "5.2 Candidate consolidation",
+      "location": "5.2 Candidate consolidation",
+      "text": "where the consolidation coefficient α i \\alpha_{i} sets how strongly each candidate π k ( i ) \\pi_{k}^{(i)} incorporates the update. Searching this linear path is grounded in linear mode connectivity [ 33 ] : because θ k \\theta_{k} and θ k ′ \\theta^{\\prime}_{k} share a common ancestor, weight-space interpolation retains functional coherence across the loss landscape. Moreover, because interpolation acts directly on weights rather than ensembling action distributions, each candidate π k ( i ) \\pi_{k}^{(i)} remains a single standalone policy with zero additional inference overhead.",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "fe0f570dd032ceae",
+      "section": "5.3 Evaluation-guided promotion",
+      "location": "5.3 Evaluation-guided promotion",
+      "text": "Because parameter-space proximity alone cannot guarantee skill survival in contact-rich control, retention must be adjudicated on closed-loop behavior across the full task set. Each consolidated candidate π k ( i ) \\pi_{k}^{(i)} is evaluated under a standardized RoboDojo-Sim protocol ( 𝒱 k + 1 \\mathcal{V}_{k+1} ) using Overall Score, Success Rate, and task-completion validity, weighing frontier gains on targeted tasks against any loss on others. The selection operator 𝒮 \\mathcal{S} promotes the best-performing candidate to π k + 1 \\pi_{k+1} and excludes all unpromoted variants.",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "76cef3f650d88dcd",
+      "section": "5.3 Evaluation-guided promotion",
+      "location": "5.3 Evaluation-guided promotion",
+      "text": "Promotion is the point at which the loop compounds: the promoted state π k + 1 \\pi_{k+1} becomes the inherited reference policy of generation k + 1 k+1 , which then executes π k + 1 \\pi_{k+1} to diagnose the newly exposed frontier. Model identity, reference lineage, experience version, and evaluation logs are archived together, endowing the policy with a traceable evolutionary history.",
+      "url": "https://arxiv.org/html/2611.06654v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9f777c2dee8a822e",
+      "section": "6.1 Why RoboDojo-Sim",
+      "location": "6.1 Why RoboDojo-Sim",
+      "text": "Validating whether a recursive framework compounds calls for a broad benchmark where narrow overfitting or cross-task forgetting is immediately penalized in aggregate metrics. We evaluate on RoboDojo-Sim , part of the unified RoboDojo benchmark for generalist robot manipulation [ 34 ] . Its 42 tasks span five capability dimensions— generalization , memory , long-horizon execution , precision , and open task specification —ensuring that a fix that breaks another skill lowers the aggregate result. Overall Score captures continuous stage-level task progress, while Success Rate (SR) measures binary full-task completion. Reading the two metrics together separates policies that merely advance through early stages from those that cross the final frontier to finish the task, matching the diagnostic interpretation emphasized by the benchmark authors [ 34 ] . A shared protocol and public leaderboard via XPolicyLab place all policies on equal terms [ 35 ] , and the benchmark is highly demanding: the highest Success Rate among the thirteen public baselines in Table 2 is 14.88%.",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "092a2b506dbe775e",
+      "section": "6.2 Aggregate performance and multi-seed stability",
+      "location": "6.2 Aggregate performance and multi-seed stability",
+      "text": "Both the promoted policy checkpoint ( CSU-AI-07 ) and the benchmark configuration are fixed before evaluation, and performance is reported as the arithmetic mean over three independent evaluation seeds. As shown in Table 1 , CSU-AI-07 achieves a three-seed mean Overall Score of 26.15 and a mean Success Rate of 20.70% , with seed-level results spanning a narrow range of 1.07 points and 0.74 percentage points. Notably, while Seed 0 was used for candidate selection during iteration, held-out evaluations on Seeds 1 and 2 remain closely aligned with Seed 0, confirming that evaluation-guided promotion yields stable cross-seed generalization.",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cf1840fe49f8cf17",
+      "section": "6.2 Aggregate performance and multi-seed stability",
+      "location": "6.2 Aggregate performance and multi-seed stability",
+      "text": "Table 1: Full-benchmark RoboDojo-Sim evaluation results for CSU-AI-07 across three independent evaluation seeds.",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "303645cafa6d32ff",
+      "section": "6.2 Aggregate performance and multi-seed stability",
+      "location": "6.2 Aggregate performance and multi-seed stability",
+      "text": "Evaluation Overall Score ↑ \\uparrow Success Rate (%) ↑ \\uparrow Seed 0 26.53 21.05 Seed 1 25.46 20.31 Seed 2 26.45 20.75 Three-seed mean 26.15 20.70",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.T1.4",
+      "kind": "table"
+    },
+    {
+      "id": "7b8503629d9b6f8e",
+      "section": "6.2 Aggregate performance and multi-seed stability",
+      "location": "6.2 Aggregate performance and multi-seed stability",
+      "text": "Table 2: Overall RoboDojo-Sim leaderboard comparing CSU-AI-07 against thirteen public generalist policies. The benchmark protocol follows RoboDojo-Sim [ 34 ] .",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "526c2092898d4f8b",
+      "section": "6.2 Aggregate performance and multi-seed stability",
+      "location": "6.2 Aggregate performance and multi-seed stability",
+      "text": "Policy Overall Score ↑ \\uparrow Success Rate (%) ↑ \\uparrow CSU-AI-07 26.15 20.70 GalaxeaVLA (G0.5) [ 36 ] 20.23 14.88 Xiaomi-Robotics-1 [ 11 ] 20.07 13.93 Hy-Embodied-0.5-VLA [ 37 ] 13.07 8.80 SimpleMemVLA [ 38 ] 12.58 9.27 Spatial Forcing [ 9 ] 12.38 8.04 π 0.5 \\pi_{0.5} [ 5 ] 11.44 6.93 InternVLA-A1.5 [ 39 ] 11.15 7.14 VLAct [ 40 ] 10.65 7.58 X-VLA [ 41 ] 10.13 6.52 X-WAM [ 42 ] 7.69 3.83 StarVLA [ 43 ] 6.40 3.24 π 0 \\pi_{0} [ 4 ] 3.48 1.53 GR00T-N1.7 [ 44 ] 2.85 1.31",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.T2.7",
+      "kind": "table"
+    },
+    {
+      "id": "5b6e2d9c58c180d0",
+      "section": "6.3 Leaderboard comparison",
+      "location": "6.3 Leaderboard comparison",
+      "text": "Table 2 presents the overall RoboDojo-Sim leaderboard, where CSU-AI-07 ranks first on both metrics. It surpasses the next-best Overall Score (20.23) by 5.92 points and the next-best Success Rate (14.88%) by 5.82 percentage points —relative margins of 29.3% and 39.1% , respectively. Compared with π 0.5 \\pi_{0.5} (6.93% SR), a widely adopted open generalist policy, CSU-AI-07 achieves nearly three times the task completion rate. At the same time, a 20.70% Success Rate leaves substantial room for further progress across the 42 tasks; within our framework, these remaining failed trials constitute the empirical evidence that subsequent generations will diagnose and consolidate into inherited capability.",
+      "url": "https://arxiv.org/html/2611.06654v1#S6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "42eb89f64bb4ccb5",
+      "section": "7 Discussion",
+      "location": "7 Discussion",
+      "text": "Compounding Physical RSI reframes generalist robot policy development: the central question shifts from how much static experience a policy consumes to how effectively each generation converts its own closed-loop failures into capabilities that its successors inherit. Crucially, the three stages of our framework are mutually indispensable in this loop: without stage-level Diagnosis , policy updates lack directional focus at the capability frontier; without targeted Remedy , localized failure modes do not translate into corrective supervision; and without evaluation-guided Retention , unconstrained updates risk silently erasing the accumulated gains of earlier generations.",
+      "url": "https://arxiv.org/html/2611.06654v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a9a8564fbcf90ef1",
+      "section": "7 Discussion",
+      "location": "7 Discussion",
+      "text": "The present scope also defines clear next steps. First, while our benchmark results evaluate the integrated system across 42 tasks, fine-grained ablations isolating the individual contributions of diagnosis, experience selection, and weight consolidation will further clarify the mechanics of compounding. Second, compounding here operates on policy capability while the improvement operators ( 𝒜 , 𝒞 , 𝒰 off \\mathcal{A},\\mathcal{C},\\mathcal{U}_{\\mathrm{off}} ) remain fixed; extending RSI to evolve the improvement procedure itself is the higher bar set by recent formulations of Physical RSI [ 16 , 17 ] . Finally, carrying this closed-loop framework from physics simulation to physical hardware—where each trial is far costlier—will make verified capability inheritance even more valuable.",
+      "url": "https://arxiv.org/html/2611.06654v1#S7.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e86bc34d9e5eeeae",
+      "section": "8 Conclusion",
+      "location": "8 Conclusion",
+      "text": "Because behavior beyond the current capability frontier remains unobserved during execution, a generalist manipulation policy learns what it needs next by executing, failing, and improving. This report has argued that the central challenge of Physical RSI is ensuring that such iterative improvements compound across generations. Compounding Physical RSI addresses this challenge by diagnosing failure at the granularity of task stages, remedying it via objective-conditioned offline reinforcement learning over curated experience, and retaining verified gains through evaluation-guided weight consolidation. The resulting policy, CSU-AI-07 , ranks first on the overall RoboDojo-Sim leaderboard across 42 tasks with a three-seed mean Overall Score of 26.15 and Success Rate of 20.70%, demonstrating that execution failure can be systematically transformed into inherited capability.",
+      "url": "https://arxiv.org/html/2611.06654v1#S8.p1.1",
+      "kind": "p"
+    }
+  ]
+}

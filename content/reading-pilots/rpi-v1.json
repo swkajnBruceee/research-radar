@@ -1,0 +1,417 @@
+{
+  "item_id": "arxiv:2611.08361",
+  "document_id": "c0bd497272b9eacd7e7a7a34e16f22c2ad2894f79f19b13bec22e8bc2c823993",
+  "source_url": "https://arxiv.org/html/2611.08361v1",
+  "paper_version": "2611.08361v1",
+  "paper": {
+    "id": "arxiv:2611.08361",
+    "title": "Radio-to-Pose Information for Gauge-Drift Correction in Cooperative Localization",
+    "url": "https://arxiv.org/abs/2611.08361v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [],
+    "summary": "arXiv:2611.08361v1 Announce Type: new Abstract: Cooperative localization uses odometry and inter-robot measurements to estimate the motion of a robot team. These measurements describe only relative geometry, but the team's estimated position and orientation can drift together over time, i.e., gauge drift. In this work, we study correction of this gauge drift using a radio attenuation map registered in the same world coordinate frame used for robot poses. Specifically, we propose Radio-to-Pose Information (RPI), an interface that converts power residuals and their pose derivatives into a Gaussian information matrix and vector pair. RPI builds on the insight that received power is sensitive to shared displacement in the world map. The pose estimator uses the interface together with odometry and inter-robot measurements to update poses and minimize uncertainty. We characterize the shared motions detectable from the map and observed links. For an uncertain shared map, RPI keeps correlations across robots and time and reproduces joint Gaussian pose estimates and covariances. Across $1000$ simulated Gaussian trials, RPI matches the results of joint estimation. Across 32 paired trials with a registered map, RPI reduces common-position RMSE from $0.542$m to $0.140$m in a $50\\times50$m arena compared with a baseline that uses radio only to weight relative measurements."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-08T17:28:56.220473+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 85,
+    "total": 85,
+    "evidence_ids": [
+      "469fbc9b243794ea",
+      "31746d6f31504d48",
+      "db680a7b0aded5ba",
+      "6f35c175ac5b325f",
+      "4e7b842df6a528e3",
+      "8319ca7701ca24ae",
+      "013f1a37499f98e8",
+      "8e0d3f378a08b4c7",
+      "aa4725d4606c6484",
+      "057a6fb0e9dbc092",
+      "719c01f2b8522bc7",
+      "64b00e5beaa0d2d2",
+      "da646687437f9318",
+      "a227ab7407f94c60",
+      "896695136fee8d4d",
+      "084997078c685b8d",
+      "9dc0f66696a480f1",
+      "f96681624a850566",
+      "2fcc551ee0af4190",
+      "f87fc25487ad4e01",
+      "23a6c334402ca88e",
+      "6e29d6e9ed143874",
+      "1842a407904cd2c6",
+      "8357da210b7133d6",
+      "4db3e39590e89c62",
+      "f033308c4e693847",
+      "15305d00d65d9ee8",
+      "bde095a1be8ce76e",
+      "b48c7389ffeac655",
+      "c4bc3a47c2cdedc3",
+      "4065a4dfbf02f6f4",
+      "f8e0b5a718a2e780",
+      "faa526c64229e640",
+      "50a3eeea62dc462c",
+      "f33b7d1d12a4426b",
+      "0b0f9097d2b61990",
+      "5d22e65be15991c4",
+      "59ee938da88e7ddc",
+      "71eeae488e6c09cd",
+      "546a77156b0a28f8",
+      "ab8811f938059c54",
+      "c5c4ccaf1027fad8",
+      "793da788a46b4fbf",
+      "8f2a661e018974c5",
+      "3fa53f2e435271f9",
+      "a59a546ff159fe8d",
+      "1ee29c969be9a17a",
+      "1a985077b9bfced0",
+      "3439dc33710b091b",
+      "2a293a3b095a92f8",
+      "7c222bc4c023518a",
+      "3413e93fa8ce8a8d",
+      "2653b1d84a81f096",
+      "8ab6fb6f054efa8b",
+      "07780552011454c2",
+      "b5f5e21b9d8b4536",
+      "a3e2385c6cd23b18",
+      "2f1a84621db4336c",
+      "16b0b7fcc06a401d",
+      "5b68c77c90561b02",
+      "6d1cf8690528614c",
+      "9ab0594ee7f09cd4",
+      "01e766384dc3ccfd",
+      "95ea2c6a36c4a223",
+      "3206d35a90a28e2b",
+      "dee37d54c34c8cd3",
+      "9b4fa86bcd610fb5",
+      "ddba4498b1a9c7ab",
+      "a9472166c981ca6f",
+      "7aa8578d33b794cd",
+      "a776dc413c675c25",
+      "b9e4e87c2c4cc2e1",
+      "9ea2316688209a0f",
+      "fefdaf8cb4c374df",
+      "be8087dff25e2539",
+      "51c14a910f645038",
+      "2c070297fda0412d",
+      "061cb0b3a84ce239",
+      "4d6537cbe61d90c3",
+      "1ae6228a47e9d92a",
+      "95dcc3d0b688f692",
+      "cffae94826114f13",
+      "e094c7d6be9e4993",
+      "53cf72ba2ecd5af9",
+      "82c70b8c930aed4f"
+    ],
+    "pdf_pages_visually_checked": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "pdf_sha256": "8f544e98cdee298173fadb66d827353bffcfb3265d6aa35f00289a7b8cc2af86"
+  },
+  "overview": "RPI把无线功率残差及对位姿/地图的导数，经共享地图变量Schur消元变成位姿信息矩阵与向量，使无线模块可接入位姿估计器并保留跨机器人/时间相关性。值得跟进的是信息接口和避免重复/独立化共享地图，而非提出比等价联合估计更强的新求解器。纠正共同漂移的信息来自已配准地图及实际观测链路；只有衰减值不确定性模型不能吸收地图坐标配准偏差。已知航向的合成实验显示正确信息可降低共同平移误差，也显示错图会让位置更差而协方差仍小。",
+  "notice": "当前会话代理完整阅读85/85固定HTML证据片段，含数学分析、接口及全部实验；该版本无附录。额外读取PDF补齐HTML未提取的两组比较方法列表，明确Per-step map、Scalar、固定/不确定地图及Joint定义。固定PDF7页、522428字节，目视物理页3/4/5/6，核命题1–3、公式1–5、图3–6与噪声/配准/方向消融。实验均为作者合成模拟，未复现；未运行代码、实机或真实RSSI数据，未独立审计原始统计/求解实现。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "固定质量权重改善相对几何，不能直接补共同刚体信息",
+      "text": "相对位置和里程计残差对团队共同SE(2)变换不变，所以相应Jacobian满足J_k G=0；对固定非负无线质量权重q，G^T sum(q J_k^T R_k^−1 J_k)G=0，选子集也不改变。命题限定对不变相对因子作固定权重，并不是所有无线定位或所有数据依赖权重方法都无效。RPI增加的是功率随世界地图中位置变化的观测模型，使纠偏有新的世界参考，而不是仅改变旧因子置信度。",
+      "evidence_ids": [
+        "31746d6f31504d48",
+        "db680a7b0aded5ba",
+        "8319ca7701ca24ae",
+        "8e0d3f378a08b4c7",
+        "719c01f2b8522bc7",
+        "9dc0f66696a480f1",
+        "f96681624a850566",
+        "2fcc551ee0af4190",
+        "b48c7389ffeac655",
+        "c4bc3a47c2cdedc3",
+        "4065a4dfbf02f6f4",
+        "f8e0b5a718a2e780",
+        "faa526c64229e640",
+        "50a3eeea62dc462c",
+        "f33b7d1d12a4426b"
+      ],
+      "quote": "fixed nonnegative"
+    },
+    {
+      "kind": "method",
+      "title": "世界参考由已配准衰减图提供，不是无锚绝对定位",
+      "text": "接收功率预测=参考功率−距离路径损耗−链路对衰减场积分。共同平移/旋转不改变链长，但可改变采样衰减。若位姿和地图一起施加同一坐标变换，预测功率仍不变；因此两者共同估计若无世界参考先验仍不能恢复绝对位置/方向。本文把地图位置和朝向视为已知，只为衰减值加高斯不确定性；已知传播参数、与位姿独立的高斯功率噪声等也是模型条件。地图注册本身是外部信息来源，不能称凭相对无线链路凭空消除gauge。",
+      "evidence_ids": [
+        "6f35c175ac5b325f",
+        "4e7b842df6a528e3",
+        "64b00e5beaa0d2d2",
+        "f87fc25487ad4e01",
+        "23a6c334402ca88e",
+        "6e29d6e9ed143874",
+        "1842a407904cd2c6",
+        "8357da210b7133d6",
+        "3fa53f2e435271f9",
+        "2a293a3b095a92f8"
+      ],
+      "quote": "world-frame reference"
+    },
+    {
+      "kind": "method",
+      "title": "可观测方向由地图梯度和实际链路共同决定",
+      "text": "共同扰动ξ对应的功率导数是链路权重对∇F^T(a+ωS(v−o))的积分。地图不变运动集合N_F一定在观测Jacobian的零空间内，只有额外满足链路敏感性条件才相等；即使地图有变化，链路未覆盖或积分抵消也可漏信息。常量图不辨共同平移/旋转，只有x变化的图不辨y平移，径向图不辨绕中心旋转。满秩只保证局部可区分，重复地图模式可保留远处歧义；不能写成全局唯一定位或任意团队布局都可观。",
+      "evidence_ids": [
+        "0b0f9097d2b61990",
+        "5d22e65be15991c4",
+        "59ee938da88e7ddc",
+        "71eeae488e6c09cd",
+        "546a77156b0a28f8",
+        "ab8811f938059c54",
+        "c5c4ccaf1027fad8",
+        "793da788a46b4fbf",
+        "8f2a661e018974c5"
+      ],
+      "quote": "local distinguishability"
+    },
+    {
+      "kind": "method",
+      "title": "质心增长下界有已知航向与独立高斯噪声前提",
+      "text": "在已知航向、世界坐标位移、各机器人/时间独立同方差位置过程噪声σ_p²的分析模型下，平均运动噪声协方差为σ_p²/N，文中给质心条件协方差P_c0+tσ_p²/N I及均方误差下界tr(P_c0)+2tσ_p²/N。它解释相对几何可准确而团队整体仍漂移，以及机器人数量只降低这一噪声项。不应推广为任意未知航向、相关过程噪声、带绝对观测或复杂先验下的普适误差定律；RPI后续SE(2)敏感性分析范围大于实验实际未知量范围。",
+      "evidence_ids": [
+        "db680a7b0aded5ba",
+        "a227ab7407f94c60",
+        "f033308c4e693847",
+        "15305d00d65d9ee8",
+        "bde095a1be8ce76e",
+        "3206d35a90a28e2b",
+        "b9e4e87c2c4cc2e1"
+      ],
+      "quote": "independent across"
+    },
+    {
+      "kind": "method",
+      "title": "离散衰减与位姿导数来自同一个可微功率模型",
+      "text": "用格点值双线性插值表示衰减场，沿两端机器人之间的链路取64个含端点样本，积分权重归一到平滑链长，κ=8使内部权重近均匀并降低端点权重；链长以约1e−6m平滑项避免零距离问题。功率为mu_free(X)−A_h(X)F，固定图求位姿Jacobian J_X，固定pose求J_F=−A_h。它是简化传播/积分模型，不是从真实多径RSSI自动学得的通用无线场；本文没有测墙体变化、发射功率漂移或非高斯干扰的模型失配。",
+      "evidence_ids": [
+        "f87fc25487ad4e01",
+        "23a6c334402ca88e",
+        "6e29d6e9ed143874",
+        "1ee29c969be9a17a",
+        "1a985077b9bfced0",
+        "3439dc33710b091b",
+        "3206d35a90a28e2b",
+        "82c70b8c930aed4f"
+      ],
+      "quote": "bilinear interpolation"
+    },
+    {
+      "kind": "method",
+      "title": "Schur消元把共享地图变成pose-only信息，精确限局部高斯",
+      "text": "当前线性化r≈J_X z+J_F f+epsilon，地图先验独立于pose先验且协方差正定。定义A=J_X^T W J_X、B=J_F^T W J_F+P_F^−1、C=J_X^T W J_F、a/b对应残差与先验信息向量，则Λ=A−CB^−1C^T、η=a−CB^−1b。估计器加到任务信息后解z=(H_task+Λ)^−1(b_task+η)，协方差为该信息矩阵逆；固定已知地图退化为(A,a)。命题3要求因子、先验、权重、坐标和线性化完全相同且总信息正定，才与联合解的pose均值/协方差一致。它是高斯边缘化接口，不是优于等价radio factor或保证非线性全局收敛的新优化算法。",
+      "evidence_ids": [
+        "da646687437f9318",
+        "2a293a3b095a92f8",
+        "7c222bc4c023518a",
+        "3413e93fa8ce8a8d",
+        "2653b1d84a81f096",
+        "8ab6fb6f054efa8b",
+        "07780552011454c2",
+        "b5f5e21b9d8b4536",
+        "a3e2385c6cd23b18",
+        "2f1a84621db4336c",
+        "16b0b7fcc06a401d",
+        "5b68c77c90561b02"
+      ],
+      "quote": "Schur complement"
+    },
+    {
+      "kind": "method",
+      "title": "先汇总跨机器人/时间测量再消元，更新消息应替换旧贡献",
+      "text": "同一不确定地图影响多机器人和多时刻，必须把这些无线观测一起建模后消去地图变量，保留诱导的交叉相关。给每时间步独立复制地图只保留步内相关，会改变联合概率模型。每次重线性化重建RPI，消息包含Λ/η、pose变量顺序和线性化点；图3注明修订消息替换先前贡献，不能把同一观测的摘要反复作为独立新信息叠加。位姿信息矩阵存储O(N²L²)，接口未自动变成可扩展分布式方案；实现的重线性化/替换和稀疏近似仍需单独检验。",
+      "evidence_ids": [
+        "da646687437f9318",
+        "a59a546ff159fe8d",
+        "2f1a84621db4336c",
+        "6d1cf8690528614c",
+        "9ab0594ee7f09cd4",
+        "01e766384dc3ccfd",
+        "ddba4498b1a9c7ab",
+        "7aa8578d33b794cd"
+      ],
+      "quote": "relinearization"
+    },
+    {
+      "kind": "evidence",
+      "title": "1000次固定高斯试验支持接口等价与相关性保留",
+      "text": "三机器人×12步=72位置坐标，九个有空间相关高斯先验的径向基地图系数，Jacobians固定，1000次配对试验；无线噪声扫0.03–1.92dB。Joint估同一个共享图与pose，RPI消图，Per-step map每时间独立图但保留步内相关（方法列表从PDF补读）。RPI与Joint曲线重合，平均终端质心误差0.686→0.797m；默认测试终端质心每坐标NEES两者1.012，对逐步独立地图1.890，95%坐标覆盖约94.7%对84.88%。图4协方差相对Joint的差异量标RPI6.63e−13、Per-step0.163，支持该线性模型下数值一致；这不是任意非线性未知地图的一般校准证明。",
+      "evidence_ids": [
+        "01e766384dc3ccfd",
+        "3206d35a90a28e2b",
+        "9b4fa86bcd610fb5",
+        "ddba4498b1a9c7ab",
+        "a9472166c981ca6f",
+        "7aa8578d33b794cd",
+        "a776dc413c675c25"
+      ],
+      "quote": "underestimates uncertainty"
+    },
+    {
+      "kind": "evidence",
+      "title": "正确注册图纠共同平移，未量化航向漂移",
+      "text": "非线性合成50×50m场景，四机器人80步×0.5s、六条全连接无线链路，航向已知且相对位置量在世界坐标，因此实验剩两维共同平移自由度。32配对试验共初始化/观测/固定相对因子权重；噪声标准差初始位置0.5m、里程计0.08m、相对坐标0.1m、功率3dB。固定图RPI与直接加入非线性radio term的Joint共同RMSE0.140m，Scalar仅质量重加权0.542m，降低约74%，配对变化95%区间[−0.494,−0.311]m；相对RMSE均约0.060m。未知衰减值的RPI为0.158m。RMSE只取末三分之一，终端不确定性另为0.189/0.232m对Scalar0.615m，不能把两种时间口径当同一校准比值。",
+      "evidence_ids": [
+        "469fbc9b243794ea",
+        "3206d35a90a28e2b",
+        "dee37d54c34c8cd3",
+        "9b4fa86bcd610fb5",
+        "b9e4e87c2c4cc2e1",
+        "9ea2316688209a0f",
+        "fefdaf8cb4c374df",
+        "be8087dff25e2539",
+        "51c14a910f645038",
+        "2c070297fda0412d"
+      ],
+      "quote": "paired trials"
+    },
+    {
+      "kind": "evidence",
+      "title": "地图偏移是决定性反例：误差增大而报告不确定性仍小",
+      "text": "真图不变，给估计器偏移1m、衰减×1.2或两者都有；各地图条件重算相对权重，但同条件各方法共享。固定图RPI/Joint共同RMSE分别0.981/0.659/1.183m，均差于Scalar0.542m；未知衰减RPI为0.957/0.172/0.967m，只在衰减尺度错时明显改善。该不确定模型估1600个格点，先验σ0.25dB/m、3m相关长度、80%空间相关+20%独立，最多25次LM；它没有把注册平移作为未知量。固定图终端共同不确定性仍0.171–0.189m，未知衰减图0.217–0.233m，未随大偏差充分增长。扩大衰减值自由度不等于已处理地图配准误差，也不等于保持统计一致。",
+      "evidence_ids": [
+        "fefdaf8cb4c374df",
+        "2c070297fda0412d",
+        "061cb0b3a84ce239",
+        "4d6537cbe61d90c3",
+        "1ae6228a47e9d92a",
+        "82c70b8c930aed4f"
+      ],
+      "quote": "registration bias"
+    },
+    {
+      "kind": "evidence",
+      "title": "方向消融区分“有地图”与“有可用方向信息”",
+      "text": "同轨迹/非无线观测/初始化/功率噪声实现，常量、仅x变化、二维变化三图各生成并推断自身观测，避免故意错图，验证平移信息rank0/1/2。32次配对，Scalar共同x/y RMSE始终0.324/0.403m；固定图RPI常量相同，仅x图0.170/0.403m，二维图0.099/0.091m。未知衰减图分别0.322/0.407、0.219/0.405、0.118/0.094m，保持有信息方向才主要改善的模式。该受控实验比单个总体RMSE更支持可观测性解释，仍只验证已知heading下的平移方向，不是旋转或全局歧义实验。",
+      "evidence_ids": [
+        "8f2a661e018974c5",
+        "3206d35a90a28e2b",
+        "95dcc3d0b688f692",
+        "cffae94826114f13",
+        "e094c7d6be9e4993"
+      ],
+      "quote": "translation-information"
+    },
+    {
+      "kind": "limitation",
+      "title": "真实无线与规模成本尚无证据，等价不等于更低成本",
+      "text": "所有评测由已知轨迹和衰减图生成噪声，已知航向、已知传播参数；没有真实RSSI、真实机器人、NLOS/多径失配、部分链路或掉线的部署数据。线性九系数图的等价试验与非线性1600格值试验不应混写成同一种测试；32次非线性误差区间也不能替代证明全局优化收敛。论文给O(N²L²)消息存储，却没有运行硬件、时间、通信字节或规模扩展曲线，不能宣称比Joint更省算力/带宽。正文称代码在论文录用后发布，本轮未审计可复现实现，保留代码/日志缺口；未来工作明确是真实无线数据及pose-update收敛。",
+      "evidence_ids": [
+        "a227ab7407f94c60",
+        "6e29d6e9ed143874",
+        "2a293a3b095a92f8",
+        "2f1a84621db4336c",
+        "9ab0594ee7f09cd4",
+        "3206d35a90a28e2b",
+        "ddba4498b1a9c7ab",
+        "b9e4e87c2c4cc2e1",
+        "fefdaf8cb4c374df",
+        "82c70b8c930aed4f"
+      ],
+      "quote": "known headings"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：显式共享注册平移先验，能否缓解错图过度自信？",
+      "text": "待验证假设：在保留共享衰减值相关性的同时，把地图注册平移作为带有限协方差先验的全局共享变量，可比仅衰减值不确定性更准确地反映错图引起的共同位置风险。仅复用论文合成模型做仿真，固定四机器人轨迹、heading、相对因子与相同功率噪声，比较Scalar、固定图RPI、仅衰减值RPI、显式二维注册偏移并共同消元的RPI，另以等价Joint验证高斯局部边缘化。对0/0.5/1/2m注册偏移、衰减尺度及有限注册先验强度分层；注册均值/协方差按预设真分布取样校准，另设刻意错配先验负对照，不用真实轨迹给估计器额外锚定。每条件至少100个配对seed，报告末三分之一共同/相对RMSE、终端NEES和95%坐标覆盖、各方向信息谱、失败/收敛率及内存/耗时。先验趋于无约束时预期pose和地图共同平移重新不可辨，不能宣称无世界参考也能绝对纠偏。若显式注册变量仍显著低覆盖、RMSE或数值不稳恶化、优势只依赖不公平真值先验，或局部结果不匹配Joint，则推翻该扩展足以改善风险表述的假设。实验未执行、未创建选题；未全面查新，不宣称新研究空白，仍需真实无线验证。",
+      "evidence_ids": [
+        "8357da210b7133d6",
+        "8f2a661e018974c5",
+        "3fa53f2e435271f9",
+        "2a293a3b095a92f8",
+        "07780552011454c2",
+        "16b0b7fcc06a401d",
+        "6d1cf8690528614c",
+        "fefdaf8cb4c374df",
+        "061cb0b3a84ce239",
+        "4d6537cbe61d90c3",
+        "1ae6228a47e9d92a",
+        "82c70b8c930aed4f"
+      ],
+      "quote": "registration error"
+    }
+  ],
+  "attention": {
+    "level": "notable",
+    "reason": "共享地图消元与消息替换可用于相关传感信息融合，但注册误差使定位更差且仍过度自信，采用前应验证参考地图、可观测方向与不确定性覆盖。",
+    "basis": [
+      "controlled_comparison",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "07780552011454c2",
+      "16b0b7fcc06a401d",
+      "6d1cf8690528614c",
+      "9ab0594ee7f09cd4",
+      "a776dc413c675c25",
+      "51c14a910f645038",
+      "4d6537cbe61d90c3",
+      "1ae6228a47e9d92a",
+      "cffae94826114f13"
+    ]
+  },
+  "frontier_brief": {
+    "title": "RPI：保留共享地图相关性，把无线功率残差变成位姿信息",
+    "change_type": "融合接口 · 共同漂移与一致性",
+    "delta": "对功率模型线性化，先汇总跨机器人/时间观测，再Schur消元共享衰减图，向pose估计器传Λ/η、变量顺序和线性化点；重线性化后替换旧消息。",
+    "before": "仅把无线质量作为相对因子固定权重，不增加共同运动的直接信息；若每时间步独立处理同一地图，会丢跨时间相关并过度自信。",
+    "after": "1000次固定高斯试验RPI与Joint均值/协方差一致；正确注册图的32次非线性试验共同RMSE0.542→0.140m。信息来自已注册地图，接口不比等价Joint创造更多定位能力。",
+    "relevance": "把不确定环境先验交给另一估计器时，保留共享变量诱导相关并管理消息替换；用方向消融、NEES和覆盖率同时检验，避免只看位置RMSE。",
+    "caveat": "地图偏移1m使固定图RMSE0.981m，高于Scalar0.542m，未知衰减图也未解决注册偏差。全实验已知heading、合成无线，未验证真实RSSI、旋转漂移或计算/通信优势。",
+    "question": "显式建模共享地图注册平移及其有限先验，能否避免错图时过度自信？",
+    "evidence": [
+      {
+        "label": "相关性反例",
+        "value": "终端质心NEES：1.012对1.890",
+        "context": "RPI/Joint对每步独立地图，1000次、3机器人×12步；95%覆盖约94.7%对84.88%，固定Gaussian Jacobian。"
+      },
+      {
+        "label": "正确图定位收益",
+        "value": "共同RMSE0.542→0.140m",
+        "context": "Scalar→固定图RPI，4机器人×80步、32配对、已知heading、六链路；末三分之一RMSE，相对误差约0.060m。"
+      },
+      {
+        "label": "地图配准反例",
+        "value": "偏移1m：固定图0.981m，未知衰减图0.957m",
+        "context": "都差于Scalar0.542m；未知的是衰减值而非注册，终端不确定性仍约0.189/0.233m。"
+      },
+      {
+        "label": "可观测方向对照",
+        "value": "仅x变化图：x/y误差0.170/0.403m",
+        "context": "固定图RPI，对Scalar0.324/0.403m；常量图无改善，二维变化图才两方向均改善，32配对合成试验。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "地图给共享运动参考",
+        "text": "共同平移不变链长，却可改变沿链路衰减积分；地图对称与链路覆盖决定实际可观测方向，只有局部满秩不保证全局唯一。"
+      },
+      {
+        "title": "共享变量共同消元",
+        "text": "Λ=A−CB⁻¹Cᵀ、η=a−CB⁻¹b，与任务信息相加；完全相同模型/线性化下复现Joint局部高斯pose边缘。"
+      },
+      {
+        "title": "历史与版本作为接口一部分",
+        "text": "先合并跨机器人/时间无线测量再消元，重线性化消息替换旧贡献；信息矩阵存储O(N²L²)，不是已测可扩展分布式系统。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08361v1",
+      "checked": "固定PDF7页、522428字节；目视物理页3/4/5/6，核命题1–3、公式2–5、图3–6。补齐PDF比较方法列表，核1000 Gaussian试验、32配对末段RMSE、注册/衰减误差与方向信息rank。无附录；实验未复现。"
+    }
+  ]
+}

@@ -1,0 +1,408 @@
+{
+  "item_id": "arxiv:2611.07663",
+  "document_id": "d69410cfa54dc9da6b7dbf6a5d0fcef9c843ea68ace3375c146314de2ab6f20d",
+  "source_url": "https://arxiv.org/html/2611.07663v1",
+  "paper_version": "2611.07663v1",
+  "paper": {
+    "id": "arxiv:2611.07663",
+    "title": "Energy-Aware Open-Vocabulary Detection Scheduling for Low-Power Robotic Autonomy",
+    "url": "https://arxiv.org/abs/2611.07663v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "planning",
+      "evaluation"
+    ],
+    "summary": "arXiv:2611.07663v1 Announce Type: new Abstract: Open-vocabulary object detection (OVD) lets robots search for run-time object queries, but fixed-rate inference spends embedded compute on low-value frames during idle motion, map revisits, or stable viewpoints. This paper presents an energy-aware OVD scheduler for low-power mobile robots. The scheduler uses odometry, map change, and detector confidence to switch among low-, mid-, and high-power YOLO-World-S modes on a Jetson Orin Nano. We evaluate the energy-quality trade-off on an AgileX LIMO using 40 real navigation trials: two target objects, five placements per target-policy pair, and four perception policies. Across bottle and cup trials, the scheduler records 8/10 mission success compared with 7/10 for each fixed-rate baseline, while reducing mean Jetson input power (a Jetson-side power-draw metric) by 5.2% relative to an 8 Hz high-rate baseline and lowering achieved OVD call rate by 34.0%. It does not minimize mission-window Jetson input energy because longer missions can erase instantaneous power savings. A separate 60 s stationary microbenchmark isolates the perception workload: the scheduler lowers mean power from 8.045 W to 7.301 W and energy from 484.7 J to 438.1 J relative to the 8 Hz baseline. These results support robot-state-aware OVD scheduling as a promising power-management mechanism with competitive task reliability, while showing that mission-window Jetson input energy must be read together with task progress and runtime."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-08T20:30:50.088924+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 78,
+    "total": 78,
+    "evidence_ids": [
+      "1f246842ff91839c",
+      "8cf80d9230124dd3",
+      "ef9f3f5a2218f9cf",
+      "0d2db8afd1fc9fc3",
+      "519c305f90c347ed",
+      "50f1c1819556575f",
+      "5b297e5839eb2417",
+      "50cb4b69ee5fba0c",
+      "cb68348922a695c0",
+      "1b4d87d0113f3d35",
+      "412fa0db98dd1f37",
+      "b2a14721dd7893cc",
+      "5e39b745e02989f1",
+      "aaa380821686d949",
+      "35f287c9df2fefb2",
+      "869ef0cfdcc89f79",
+      "32054458b25936c6",
+      "094d758ada18ad4d",
+      "77910e1921503675",
+      "84b1371021a02a82",
+      "f9c10c5189de1c5e",
+      "3f210b084e9ed5cf",
+      "d4be32aced4b2a51",
+      "2d24d516f7f124bc",
+      "57262bda7e4f46b6",
+      "ff920de5abb6ec2a",
+      "98177d763ad31e81",
+      "295175120d741344",
+      "c960584a276102c4",
+      "5155d38ae847795a",
+      "406dd8cc914ce221",
+      "f27875ec8c10f511",
+      "32e3c6286d6665fb",
+      "0362f62ac3a718e2",
+      "a6eaccbcc6ff457d",
+      "d050f72ff3701fab",
+      "23ca1626294fd18d",
+      "1609c53c5ce45d05",
+      "38d6c35edfef846a",
+      "d2f145aa571cd87b",
+      "60de3a8bf498cf6f",
+      "6965ae37f6af5a15",
+      "1cea6afdf10a45e1",
+      "613c6e34eee4d25e",
+      "eff5c98c55f298eb",
+      "cbd6bb9105521ff9",
+      "938aaab2c47fc5e0",
+      "9b538d9e7aa38b34",
+      "b4344066f8cd6fdf",
+      "560bcd8a45dad1d9",
+      "f32d730318440e03",
+      "e0758e1a401e62f9",
+      "c67d80f07cb4252c",
+      "608c400d0c5e3a62",
+      "93527cc595f325d3",
+      "3910c79a6a7ada46",
+      "61a0a1b7ff9b0d14",
+      "b15c076cee6d9461",
+      "684cc5ccd9f81508",
+      "c453d31084236f06",
+      "23e569e3061a2c7b",
+      "84f129af89312d7c",
+      "f3e3126875c847d7",
+      "a178576a31a508e5",
+      "5d437c25d9084675",
+      "0133f702b13f0743",
+      "2043dfdcf97f2027",
+      "67f5944cc0b4b959",
+      "cdc6f6a4a95a47e4",
+      "4b732af4ae88f5ff",
+      "c08c13281553a0ca",
+      "dde33d8a7f5b0e19",
+      "e0c97158256ff824",
+      "ae76db4dca620320",
+      "e2b6d442f460518a",
+      "447508d21548cf60",
+      "04a1ace8135406e0",
+      "33ce87ed69fbc555"
+    ],
+    "pdf_pages_visually_checked": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "pdf_sha256": "781457b042b273f864d026a7070412e7685c6f46e8c797170ff8fd94abdfe986"
+  },
+  "overview": "将YOLO-World-S调用时机与精度绑定到机器人状态：根据运动、局部占据图熵变化、目标置信度与距离，在LOW/MID/HIGH之间切换。可复用的是带滞回的部署调度机制，以及必须联合报告功率、运行时长、能量与任务质量的评测口径。40次实机搜索中，相对固定8Hz高精度策略，平均Jetson输入功率下降5.2%、实际调用率下降34.0%，但平均任务窗口能量从866.9J增至1114.0J。成功次数8/10对7/10且存在对象间反向结果，不能确证可靠性提升。静止脚本实验支持感知负载省电，不足以证明完整导航更省能。",
+  "notice": "当前会话代理完整阅读固定HTML证据78/78片段，涵盖方法、全部实验、讨论和结论；该版本无附录。额外读取固定PDF（6页、1451273字节），目视物理页3/4/5/6，核架构图1、参数表II、实机照片图2、主表III、静止表IV及图3–8；补读PDF方法与实验口径。全部实验为作者结果，未复现，未运行论文代码或机器人试验，未独立审计原始逐次日志、INT8校准或成功标签。图7的阶段文字为定性估计，不当作同步状态日志。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "把检测帧当作任务资源，但必须检验闭环能量",
+      "text": "本文改变推理调用策略，而非重新训练检测器：ROS导航持续运行，摄像头持续送流，状态调度器决定何时允许YOLO-World-S执行及用何精度。固定高调用率可能把边端计算花在稳定视角；作者目标是降低Jetson功率与检测负载并保持任务表现。任务能量是从开始到结束的Jetson功率积分，低功率若拖长搜索可增加总能量；首次过阈检测时间TTD不终止任务，也不等于任务成功。该取舍是本文值得复用的评测认识，不能改写为整机续航已提高。",
+      "evidence_ids": [
+        "1f246842ff91839c",
+        "84b1371021a02a82",
+        "f9c10c5189de1c5e",
+        "3f210b084e9ed5cf",
+        "d4be32aced4b2a51",
+        "2d24d516f7f124bc",
+        "57262bda7e4f46b6",
+        "98177d763ad31e81",
+        "5d437c25d9084675",
+        "33ce87ed69fbc555"
+      ],
+      "quote": "robot-state-aware"
+    },
+    {
+      "kind": "method",
+      "title": "用占据图变化与新鲜目标信号驱动调度",
+      "text": "局部信息代理是机器人中心4m×4m窗口内二元占据熵的归一化均值变化，不是图像语义信息增益；未知栅格取0.5，不同地图范围采用重叠索引单元。调度20Hz，比较相邻0.05s的绝对熵差。运动信号来自线速度；置信度只在检测调用后更新，MID进入HIGH的置信度分支必须使用新输出。距离分支采用未过期目标估计：RGB-D框中心反投影、0.3m范围LiDAR吸附、α=0.3指数滤波，30s未更新则距离置无穷。这些时效规则避免把过期置信度直接当作新的目标证据，但占据熵仍只是新空间的代理。",
+      "evidence_ids": [
+        "98177d763ad31e81",
+        "c960584a276102c4",
+        "5155d38ae847795a",
+        "406dd8cc914ce221",
+        "f27875ec8c10f511",
+        "32e3c6286d6665fb",
+        "0362f62ac3a718e2"
+      ],
+      "quote": "confidence branch"
+    },
+    {
+      "kind": "method",
+      "title": "三态规则带滞回，设定频率不能当作实际吞吐",
+      "text": "参数表II与公式4–7：LOW/MID/HIGH请求1.5/4/8Hz；LOW在速度>0.03m/s或熵差>0.02时进入MID；MID在新鲜置信度≥0.25或目标距离≤2m时进入HIGH；连续5次检测评估置信度<0.20才从HIGH退到MID；低速且熵差<0.02持续2s再降LOW。5次指检测评估，不是5个20Hz调度tick；所有轨迹参数固定。摄像头流速不随之降低，请求频率只是检测门控上限，实际受延迟限制。主表中固定8Hz实际4.74Hz，调度策略3.12Hz，其LOW/MID/HIGH驻留25/60/15%。正式转移规则未列出静止LOW状态下仅凭新目标置信度直接升档的路径，现有汇总不能独立判断该边界的实现行为。",
+      "evidence_ids": [
+        "98177d763ad31e81",
+        "0362f62ac3a718e2",
+        "a6eaccbcc6ff457d",
+        "d050f72ff3701fab",
+        "23ca1626294fd18d",
+        "1609c53c5ce45d05",
+        "38d6c35edfef846a",
+        "60de3a8bf498cf6f",
+        "6965ae37f6af5a15",
+        "613c6e34eee4d25e",
+        "608c400d0c5e3a62",
+        "c453d31084236f06"
+      ],
+      "quote": "Scheduler update rate"
+    },
+    {
+      "kind": "method",
+      "title": "频率与量化同时变化，尚未隔离状态选择的独立收益",
+      "text": "运行时将高精度路径和INT8 TensorRT引擎同时常驻内存；仅LOW使用INT8，MID/HIGH使用FP16。LOW检测内部阈值0.20，但任务检测/TTD统一采用0.25。全部报告实验INT8可用，没有回退，因此不能把这批数据解释为含精度回退的部署验证。共同数值阈值也不证明两种精度的置信度经过等效校准；未给出可核验的INT8校准数据与精度损失分析。固定8/5Hz是FP16，固定2Hz是INT8，主比较同时改变调用率、时机与精度，没有等实际调用预算、固定精度的消融来单独证明状态感知调度优于均匀降频。",
+      "evidence_ids": [
+        "613c6e34eee4d25e",
+        "eff5c98c55f298eb",
+        "560bcd8a45dad1d9",
+        "f32d730318440e03",
+        "e0758e1a401e62f9",
+        "608c400d0c5e3a62",
+        "61a0a1b7ff9b0d14",
+        "ae76db4dca620320"
+      ],
+      "quote": "precision fallback"
+    },
+    {
+      "kind": "method",
+      "title": "能耗边界是Jetson模块，失败任务也纳入积分",
+      "text": "功率来自tegrastats的VDD_IN total_W，采样请求间隔50ms，GPU/SoC子轨仅诊断。按任务开始/结束墙钟对齐，对窗口内有效样本作梯形积分；失败任务纳入时长与能量平均。该测量不含完整电池侧的电机、相机、LiDAR等所有负载，且不是独立外接功率计审计。表中功率是试验平均功率再汇总，不能用平均功率×平均时长替代逐次积分能量，特别是时长与负载相关时。主张低功率、低任务能量和整机续航需要分开验证。",
+      "evidence_ids": [
+        "f9c10c5189de1c5e",
+        "2d24d516f7f124bc",
+        "cbd6bb9105521ff9",
+        "3910c79a6a7ada46",
+        "c453d31084236f06",
+        "dde33d8a7f5b0e19",
+        "33ce87ed69fbc555"
+      ],
+      "quote": "Jetson module"
+    },
+    {
+      "kind": "evidence",
+      "title": "40次实机试验复用位置，但顺序与成功标签存在边界",
+      "text": "平台为AgileX LIMO、Orin Nano 8GB、RGB-D和2D LiDAR，ROS Noetic/GMapping/move_base，YOLO-World-S每次只查询一个类别。瓶/杯两对象×四策略×五位置共40次，每策略10次；固定起点，各策略复用五个目标位置，单次上限180s，试验间重启导航。对象分批、策略按块执行而未随机化，电池、温度和光照漂移可能影响对照。成功取框架mission_summary字段；论文未给独立外部成功标签或足够可复核的操作定义，不能由TTD替代。作者仅报描述统计，无置信区间或显著性检验；这些约束限制从8/10推断稳定可靠性增益。",
+      "evidence_ids": [
+        "84b1371021a02a82",
+        "2d24d516f7f124bc",
+        "9b538d9e7aa38b34",
+        "560bcd8a45dad1d9",
+        "f32d730318440e03",
+        "e0758e1a401e62f9",
+        "c67d80f07cb4252c",
+        "93527cc595f325d3",
+        "3910c79a6a7ada46",
+        "b15c076cee6d9461"
+      ],
+      "quote": "policy-specific"
+    },
+    {
+      "kind": "evidence",
+      "title": "降低平均功率，却增加任务窗口能量",
+      "text": "目视核对表III、图3/4：固定8Hz与调度策略平均功率9.35→8.86W（下降5.2%）、实际调用4.74→3.12Hz（下降34.0%），但平均时长92.8→125.9s，任务窗口Jetson能量866.9→1114.0J。由表中四舍五入数计算，能量增加约28.5%；作者按其原始汇总给时长增35.8%，舍入表值约35.7%。调度成功8/10、固定8Hz 7/10。与固定5Hz比，功率8.92→8.86W差距很小，能量1019.8→1114.0J亦更高；固定2Hz功率最低8.38W，却因140.4s时长达到最高1155.0J。该组实机数据支持功率/工作量取舍，提供低功率不等于低任务能量的明确反例。",
+      "evidence_ids": [
+        "cbd6bb9105521ff9",
+        "b15c076cee6d9461",
+        "684cc5ccd9f81508",
+        "c453d31084236f06",
+        "23e569e3061a2c7b",
+        "84f129af89312d7c",
+        "f3e3126875c847d7",
+        "a178576a31a508e5",
+        "5d437c25d9084675"
+      ],
+      "quote": "power-management"
+    },
+    {
+      "kind": "evidence",
+      "title": "成功条件下的TTD不能代表全体搜索速度",
+      "text": "表III成功试验TTD为固定8/5/2Hz的25.9/53.6/0.9s，调度10.9s。TTD是首次共同阈值0.25检测事件，既不终止任务，也不是成功标签；失败试验被排除出TTD而保留在其余全体指标。固定2Hz的0.9s反映成功的容易案例，不能据此称最慢调用策略普遍搜索更快；同理，调度10.9对25.9s不直接证明所有任务的达标速度提升。应共同看超时、成功与全任务时长，未来评估可纳入失败截尾的时间到事件分析。",
+      "evidence_ids": [
+        "84b1371021a02a82",
+        "d4be32aced4b2a51",
+        "2d24d516f7f124bc",
+        "613c6e34eee4d25e",
+        "b15c076cee6d9461",
+        "c453d31084236f06",
+        "23e569e3061a2c7b",
+        "5d437c25d9084675"
+      ],
+      "quote": "successful runs"
+    },
+    {
+      "kind": "evidence",
+      "title": "合并成功次数掩盖瓶类回退",
+      "text": "图8及对应正文：瓶类固定8Hz成功5/5、调度4/5、固定5/2Hz各3/5；杯类调度和固定5/2Hz各4/5、固定8Hz 2/5。调度的8/10对7/10来自跨对象合并，瓶类并未优于高频策略；每对象仅5次且没有随机顺序/统计区间，不能宣称普遍占优或将单次成功差异转成稳健可靠性提升。对象仅瓶/杯，也未覆盖多类别同时查询与新环境泛化。",
+      "evidence_ids": [
+        "9b538d9e7aa38b34",
+        "93527cc595f325d3",
+        "3910c79a6a7ada46",
+        "b15c076cee6d9461",
+        "c453d31084236f06",
+        "447508d21548cf60",
+        "04a1ace8135406e0",
+        "33ce87ed69fbc555"
+      ],
+      "quote": "object-level variation"
+    },
+    {
+      "kind": "evidence",
+      "title": "静止脚本隔离出感知功率取舍，不能替代导航收益",
+      "text": "核表IV、图5：名义60s静止测试保留相机、检测/调度与记录器，但关闭导航、SLAM、move_base与速度命令执行；调度使用预设输入经过三态，基线保持固定模式。固定8Hz实际6.67Hz、402次，8.045W/484.7J；调度3.37Hz、202次，7.301W/438.1J，功率下降9.2%、能量下降9.6%。频率由调用数除以实际同一积分窗口，不必强行按恰好60.000s反算。调度驻留约50/37.6/12.5%，表内50/38/13%有舍入；不能据101%判数据错误。固定2Hz仍更低，6.847W/410.8J；调度位于固定2与5Hz之间。该脚本机制检验没有任务质量对照，且驻留由脚本决定，不能外推完整搜索节能或证明最优调度。",
+      "evidence_ids": [
+        "61a0a1b7ff9b0d14",
+        "b15c076cee6d9461",
+        "0133f702b13f0743",
+        "cdc6f6a4a95a47e4",
+        "c08c13281553a0ca",
+        "dde33d8a7f5b0e19",
+        "e0c97158256ff824",
+        "ae76db4dca620320",
+        "e2b6d442f460518a"
+      ],
+      "quote": "stationary microbenchmark"
+    },
+    {
+      "kind": "limitation",
+      "title": "图像阶段标注与同步日志的证据强度不同",
+      "text": "目视图6为一个导航运行的功率、置信度、路径进展与状态时序示例，不能与图5静止60s或主表平均值混用。图7瓶/杯视频帧上的LOW/MID/HIGH仅为定性阶段估计，不是同步调度标签；量化驻留与时序依据表III/IV及图6，不能用选取的画面独立核证触发规则。原始逐次日志、功率轨迹与成功外标未在本轮独立核查，INT8校准与精度/时机分离消融也不足。作者提出扩展对象环境、随机化、外部标签与整机能量测量；当前仅支持小样本平台部署结果，尚不能确认整机续航或多环境可靠性收益。",
+      "evidence_ids": [
+        "0362f62ac3a718e2",
+        "60de3a8bf498cf6f",
+        "eff5c98c55f298eb",
+        "3910c79a6a7ada46",
+        "b15c076cee6d9461",
+        "2043dfdcf97f2027",
+        "67f5944cc0b4b959",
+        "4b732af4ae88f5ff",
+        "33ce87ed69fbc555"
+      ],
+      "quote": "synchronized scheduler"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：相同调用预算下，状态选择时机能否改善任务能量与质量？",
+      "text": "待验证假设：在精度和实际检测调用预算匹配时，状态感知调用时机仍能比均匀调用降低达到相同任务质量所需的Jetson任务能量。实验草案先在公开导航仿真中做状态/均匀时机×固定FP16/LOW使用INT8的二乘二对照，统一检测模型、导航器、目标位置、种子与超时；均匀策略的实际调用预算应由独立开发集确定，不能使用测试任务结束后的调度次数作在线先验。记录预设预算误差并作预算扫描，而非将请求Hz当匹配依据。按对象与场景分层随机区组，至少30个配对种子/条件；增加静止LOW时目标新出现的事件，核实升档路径与漏检。先用开放图像/回放核精度和置信度校准，再做闭环仿真，回放结果不代替闭环收益。能量结论另需在相同Jetson平台的实机验证：记录有效功率采样覆盖、逐任务Jetson积分及独立电池侧整机能量；由预定义距离/可见性标准或外部标签确认成功，区分首次检测与达成目标，失败超时也计成本。报告成功率配对区间、含失败截尾的达标时间、全体/成功/失败能量与时长、实际调用数、各对象回退，以及固定时限负载实验；在成功率非劣界和预算容差预注册后比较能量。若固定FP16且预算相当时优势消失、只依赖INT8，或功率降低但时间/失败代价使等质量能量不降，则推翻状态选择本身足以带来任务节能的假设。此为未执行的可编辑实验草案，未创建选题，未全面查新，不宣称研究空白。",
+      "evidence_ids": [
+        "2d24d516f7f124bc",
+        "0362f62ac3a718e2",
+        "60de3a8bf498cf6f",
+        "613c6e34eee4d25e",
+        "eff5c98c55f298eb",
+        "cbd6bb9105521ff9",
+        "93527cc595f325d3",
+        "3910c79a6a7ada46",
+        "61a0a1b7ff9b0d14",
+        "b15c076cee6d9461",
+        "c453d31084236f06",
+        "5d437c25d9084675",
+        "dde33d8a7f5b0e19",
+        "e2b6d442f460518a",
+        "04a1ace8135406e0",
+        "33ce87ed69fbc555"
+      ],
+      "quote": "closed-loop workload"
+    }
+  ],
+  "attention": {
+    "level": "notable",
+    "reason": "值得跟进机器人状态驱动的检测调度与低功率反增任务能量的实机反例，但仅两对象小样本且缺等调用预算消融，全文核查后不维持突破级优先判断。",
+    "basis": [
+      "compute_shift",
+      "controlled_comparison",
+      "real_robot",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "0362f62ac3a718e2",
+      "60de3a8bf498cf6f",
+      "613c6e34eee4d25e",
+      "eff5c98c55f298eb",
+      "cbd6bb9105521ff9",
+      "93527cc595f325d3",
+      "3910c79a6a7ada46",
+      "c453d31084236f06",
+      "5d437c25d9084675",
+      "dde33d8a7f5b0e19",
+      "e2b6d442f460518a",
+      "04a1ace8135406e0"
+    ]
+  },
+  "frontier_brief": {
+    "title": "按运动与目标证据切换OVD频率和精度：功率下降，导航能量反升",
+    "change_type": "推理调度与评测反例",
+    "delta": "在YOLO-World-S前加入20Hz三态调度，以线速度、局部占据熵变化、新鲜置信度和目标距离，选择1.5Hz INT8或4/8Hz FP16调用；使用滞回抑制频繁切换。",
+    "before": "Orin Nano上固定8Hz FP16检测，导航实际4.74Hz；固定5Hz FP16、2Hz INT8提供降载对照，摄像头与导航仍持续运行。",
+    "after": "40次瓶/杯搜索中，调度实际3.12Hz、平均Jetson功率8.86W，相对固定8Hz的9.35W下降5.2%；平均任务时长125.9s、能量1114.0J，高于92.8s、866.9J。",
+    "relevance": "适用于Orin级移动平台的感知负载/散热预算决策；若目标是任务续航，必须把达到目标、超时及运行时长纳入功率积分，不能按瓦数或静止省电率选方案。",
+    "caveat": "作者实验未复现；每策略仅10次、两对象，策略顺序未随机化，成功为框架字段。8/10对7/10不确证可靠性提升，瓶类还从5/5退到4/5。量化与频率同时变化，未隔离状态选择的独立收益；测量仅Jetson模块，非整机电池。",
+    "question": "固定精度并匹配实际调用预算后，状态感知选择帧的时机能否在成功率不降时减少闭环任务能量？",
+    "evidence": [
+      {
+        "label": "导航主对照",
+        "value": "9.35→8.86W；866.9→1114.0J",
+        "context": "表III；LIMO/Orin Nano 8GB，瓶/杯各5位置、每策略10次，固定8Hz FP16对三态调度；实际调用4.74→3.12Hz，时长92.8→125.9s。能量增28.5%由舍入表值计算，失败亦计入。"
+      },
+      {
+        "label": "任务质量与条件TTD",
+        "value": "成功7/10→8/10；TTD 25.9→10.9s",
+        "context": "TTD只在成功试验上平均，首次检测不终止任务。瓶类固定8Hz 5/5而调度4/5；杯类2/5→4/5。小样本、非随机顺序，不能断言普遍更可靠或整体更快。"
+      },
+      {
+        "label": "静止机制检验",
+        "value": "484.7→438.1J（−9.6%）",
+        "context": "表IV/图5，名义60s，导航/SLAM/运动执行关闭；固定8Hz对脚本三态，实际6.67→3.37Hz、402→202次。固定2Hz仍最低410.8J；该节能率不能外推闭环搜索。"
+      },
+      {
+        "label": "更接近的降频基线",
+        "value": "固定5Hz 1019.8J；固定2Hz 1155.0J",
+        "context": "导航表III，均7/10成功；平均功率8.92/8.38W、时长114.2/140.4s。调度不是最低能量策略，固定2Hz虽最低功率却能量最高。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "用机器人信号分配检测帧",
+        "text": "LOW因运动/地图变化进入MID；新鲜目标置信度或近目标触发HIGH。20Hz监测与检测调用解耦，摄像头持续送流；熵变化仅为新空间代理。"
+      },
+      {
+        "title": "滞回与精度绑定",
+        "text": "静稳2s后降LOW；HIGH连续5次检测低置信度才回MID。LOW 1.5Hz INT8，MID/HIGH 4/8Hz FP16，双路径常驻；所有报告运行INT8可用、无回退。"
+      },
+      {
+        "title": "按闭环任务积分验证收益",
+        "text": "tegrastats VDD_IN按任务窗口积分，失败也纳入；降低调用可能延长任务，实机主表出现平均功率下降却能量增加。成功条件TTD与脚本静止结果分别解释。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/html/2611.07663v1",
+      "checked": "固定HTML证据78/78片段全部阅读，含完整方法与实验，引用逐字匹配。"
+    },
+    {
+      "url": "https://arxiv.org/pdf/2611.07663v1",
+      "checked": "固定PDF6页、1451273字节；目视物理页3/4/5/6，核图1–8、参数表II、导航表III和静止表IV。核对功率/能量/时长、成功条件TTD、对象拆分、50ms模块侧测量及非随机试验顺序；实验未复现。"
+    }
+  ]
+}

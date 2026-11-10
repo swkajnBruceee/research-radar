@@ -1,0 +1,288 @@
+{
+  "item_id": "arxiv:2611.06881",
+  "document_id": "b6b8122e2b6dd63238ee7b72b7668cddb9a533e4732a5271bd69dc8d7b0d8b88",
+  "source_url": "https://arxiv.org/html/2611.06881v1",
+  "paper_version": "2611.06881v1",
+  "paper": {
+    "id": "arxiv:2611.06881",
+    "title": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+    "url": "https://arxiv.org/abs/2611.06881v1",
+    "published": "2026-11-04",
+    "updated": "2026-11-04",
+    "topics": [
+      "sim",
+      "evaluation",
+      "control"
+    ],
+    "summary": "For robots to operate reliably in commercial and industrial applications, they must persistently perform specific tasks with known variations in object shape and pose. We call this Variational Automation (VA) to differentiate these settings from fixed automation. Inspired by recent papers on Agentic Robotics, where pretrained LLM and VLM coding agents combine interpretable robot programming with the open-world adaptability of model free policies, we propose a general set of agentic robotics benchmark design criteria that includes accessibility, repeatability, diversity, relevance to agentic robotics and practical applications, physical realizability, resistance to benchmark saturation, and computational efficiency. We instantiate these principles in six manipulation task classes spanning industrial, medical, and infrastructure applications: tool sorting, tool hanging, gear meshing, syringe packing, cable insertion, and cable routing. We introduce the Variational Automation Benchmark for Agentic Robotics (VABAR), an open, easily replicable, simulation-based manipulation benchmark to systematically evaluating agentic robotics systems. Built fully on open-source tools, VABAR features detailed implementations using the Newton physics engine, standardized task variations, difficulty tiers, success metrics, and a library of 33 generalizable skills with human-authored programmatic reference solutions. We provide initial baseline evaluations using an open agentic manipulation harness, Graph-as-Policy (GaP), and Isaac Lab Arena."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-05T11:57:14.624696+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "VABAR的新意是把工业操作的预期变化定义为可采样、可分级的任务空间，并在同一技能与执行栈下提供人工执行图和自动生成图作为对照。对研究最有用的不是另一个总分，而是区分技能能力、图组合及几何参数化的缺口。作者只提供仿真初始基线，尚不能证明工业可靠性或某个单独模块的因果收益。",
+  "coverage": {
+    "read": 72,
+    "total": 72,
+    "evidence_ids": [
+      "49437d142407abf8",
+      "0c5d4bb7e89094a9",
+      "72222bd204c94099",
+      "f122bc25249901de",
+      "8a2afe6c7dbc2299",
+      "966a0a5d35bb9be8",
+      "eff3c33955e78ec8",
+      "ee1f0f6f60a0ccd6",
+      "df30905ba9b35f62",
+      "3ede752c8f1bb737",
+      "d9c12269dc2fd4e1",
+      "8e152e898e7edf44",
+      "0de12ce26998a3eb",
+      "36f2384edeff1cff",
+      "c886fb7bc8497698",
+      "cc181122f8ab5a69",
+      "22e971e25da8b555",
+      "53a9079c31acc39c",
+      "b78d83f6d30bd507",
+      "761fcb4b1443f243",
+      "e21074a6a8cf6adb",
+      "4c66dafab1c6cf38",
+      "af160f051e60ae3c",
+      "711efabcaa4e6958",
+      "33751010631678c8",
+      "0cb63a9844462e35",
+      "d00b391ba87b2f04",
+      "afbe2ba2d9a4a5be",
+      "d4328c8f2e73f79c",
+      "64edf69ee083e630",
+      "fe5e6b8096acb57e",
+      "80e9c8c25735a04b",
+      "5f70800aca777d19",
+      "894e20c6a0161e71",
+      "d004308c3077ada8",
+      "375b1fbf9646a477",
+      "1c787077cd23c0c8",
+      "9a9cf76369b810df",
+      "63dd7e6bf5539ec5",
+      "35b0aa2d8162c4b0",
+      "4845cf1cd1b18f1f",
+      "29a042e8fac2afb9",
+      "b7bf86e1c377e13c",
+      "6d83fcab17515908",
+      "2ab1f29e01e45652",
+      "75c86743f22dc64b",
+      "82f8a99be3ff8894",
+      "6459898eeefc7183",
+      "6cefc31c1f48a5c2",
+      "0ae449b809108f80",
+      "38a2d96c31988e65",
+      "646992d8cd7ddab2",
+      "10a92c9404c8a8c4",
+      "f5dc63a14dd7cb25",
+      "eb7a156788797008",
+      "1e8d4f3324a1cb9d",
+      "161a664211ec64a6",
+      "b1bb6faf5f313d05",
+      "8b2a2aa7f1439361",
+      "6eaab2138dae1e35",
+      "e7bf74a9bd2c3cbc",
+      "3f1d30d8f7af25cb",
+      "1d62c51a464558d3",
+      "f7524cea1d8da3f9",
+      "36f81b5fb5b950ea",
+      "434682d5619a854b",
+      "0fe93dad4d76a0cb",
+      "445d461d48b61363",
+      "e691e27102f6f963",
+      "d8b30251813cd490",
+      "2d593fcebbd15a06",
+      "838a4bce0fadb719"
+    ],
+    "pdf_pages_visually_checked": [
+      5,
+      6,
+      7
+    ],
+    "pdf_sha256": "467988d960d9f4792b153fe2383f1b770e8990d8999c495453b72b8fc5e72893"
+  },
+  "notice": "已阅读HTML提取的72个文字片段，涵盖正文、方法、实验、讨论及表格；固定版本PDF共9页，无附录，另查看了第8、9页的提取文字和参考文献列表。目视核对PDF第5、6、7页的图3/4/5及表I/II/III。未逐图核查前四页图片、逐篇核查参考文献、运行代码或独立复现实验。项目页经HTTP读取可访问并提供仓库链接；仓库浏览请求超时，本轮未核查实现。逐字引文匹配验证出处，不保证判断正确。",
+  "findings": [
+    {
+      "title": "技术增量：预期变化成为任务定义的一部分",
+      "kind": "method",
+      "text": "VABAR不是新控制器，而是面向agentic robotics的评测方法与环境。任务类显式定义环境坐标、机器人、资产、配置空间、采样分布及成功条件；变化需保持任务不变、物理与机器人可行、难度可控，并保留底层技能结构。它把固定自动化与无约束通用操作之间的“持续任务、结构化变化”变成可比较对象。",
+      "evidence_ids": [
+        "72222bd204c94099",
+        "0cb63a9844462e35",
+        "d00b391ba87b2f04",
+        "afbe2ba2d9a4a5be",
+        "d4328c8f2e73f79c"
+      ],
+      "quote": "not defined by unconstrained scene randomization"
+    },
+    {
+      "title": "把图组合与技能能力放在同一个对照里",
+      "kind": "method",
+      "text": "人工编写GaP执行图与同一底层语言模型自动生成的GaP图，共享感知、MORSL技能、规划和执行模块；另有不带机器人专用harness和技能库的Claude Code。前两者的差距可定位到图组合/参数化这个组合层面。后两者同时改变harness与技能库，无法分离两项贡献。论文每个任务×难度×条件生成30个独立实例，但没有给出足够信息据此宣称训练随机性显著性或严格配对差异区间。",
+      "evidence_ids": [
+        "1d62c51a464558d3",
+        "445d461d48b61363"
+      ],
+      "quote": "Systems (a) and (c) share the same perception, skill, planning, and execution modules"
+    },
+    {
+      "title": "可复用技能扩展：功能特征、对接与线缆",
+      "kind": "method",
+      "text": "技能库在MORSL上扩展到33个bundle：相对五月GaP库保留8个、增加25个，覆盖感知、抓取、运动/执行和验证。具体扩展包括度量功能特征定位、源目标对应、手中物体配准、分阶段特征对接，以及有序3D线缆中心线、锚定、绕线和端点放置。33是复用技能bundle数，不是33种机器人任务；不能把所有能力算成agent自己学会的。",
+      "evidence_ids": [
+        "b7bf86e1c377e13c",
+        "eb7a156788797008",
+        "838a4bce0fadb719"
+      ],
+      "quote": "25 added skill bundles"
+    },
+    {
+      "title": "关键对照：同样技能，齿轮任务仍相差30个百分点",
+      "kind": "evidence",
+      "text": "表II的Newton齿轮啮合任务：人工GaP图在Level1/2成功率100.0%/90.0%，自动GaP图70.0%/60.0%，普通Claude Code均0。Level1装两个齿轮，Level2三个；该任务以完整依赖序列为评测单元，每任务难度条件30个生成实例。共享执行栈仍有30个百分点差距，提示应继续研究组合和参数化；这不是更换底层LLM带来的提升，也没有把组合与参数化分别消融。",
+      "evidence_ids": [
+        "82f8a99be3ff8894",
+        "10a92c9404c8a8c4",
+        "e7bf74a9bd2c3cbc",
+        "1d62c51a464558d3",
+        "445d461d48b61363"
+      ],
+      "quote": "GaP achieves 70.0% and 60.0% success"
+    },
+    {
+      "title": "不要把harness基线差距写成单模块增益",
+      "kind": "evidence",
+      "text": "同一底层模型下，作者报告GaP优于普通Claude Code的条件为11/12；Tool Hanging Level2同为10.0%。但GaP同时获得机器人专用harness和技能库，而普通代码agent两者均无。因此该结果支持组合系统更有效，不能宣称“图表示单独提升11项任务”或“33技能库单独产生全部增益”。",
+      "evidence_ids": [
+        "10a92c9404c8a8c4",
+        "1d62c51a464558d3",
+        "445d461d48b61363"
+      ],
+      "quote": "they do not isolate the contributions of the harness and skill library"
+    },
+    {
+      "title": "评测单元与时间口径不能混算",
+      "kind": "limitation",
+      "text": "相互独立的分拣/悬挂尝试按物体统计，齿轮等有前后依赖的任务按完整实例统计；因此六任务的百分比不能无条件平均成统一整段成功率。表II的Cyc.是成功trial中的仿真周期中位数，不是全trial的平均耗时，也不是包含LLM生成、调试和仿真计算的墙钟延迟。GaP较快的成功子集不证明整体吞吐更好。",
+      "evidence_ids": [
+        "f5dc63a14dd7cb25",
+        "6eaab2138dae1e35",
+        "e7bf74a9bd2c3cbc"
+      ],
+      "quote": "median cycle time (s) among successful trials"
+    },
+    {
+      "title": "难度增加不保证每行数字都单调下降",
+      "kind": "limitation",
+      "text": "难度表给出明确变化，例如绕线从2–3个宽间距peg变为4–6个并增加转弯。总体更难，但人工Newton绕线两级均46.7%，人工Newton插线时间78.8降到74.2秒（只看成功子集）。讨论里的概括不能改写成所有系统、任务和周期时间都单调退化，也不能把不同难度同时改变的因素当成单变量消融。",
+      "evidence_ids": [
+        "82f8a99be3ff8894",
+        "10a92c9404c8a8c4",
+        "f5dc63a14dd7cb25",
+        "0fe93dad4d76a0cb"
+      ],
+      "quote": "moderate initial cable variation"
+    },
+    {
+      "title": "失败归因有未解释的表格缺口",
+      "kind": "limitation",
+      "text": "协议把失败归到证据支持的最早原因，比例条件于失败trial。正文称表III分解GaP失败，但齿轮Level1在表II中GaP成功70.0%，表III同项三列却均N/A，未解释为何未统计。这一缺口尚未解决，不能由N/A推导没有失败；也不把其中某项96% motion解释为全部试验96%动作失败。",
+      "evidence_ids": [
+        "10a92c9404c8a8c4",
+        "3f1d30d8f7af25cb",
+        "36f81b5fb5b950ea",
+        "434682d5619a854b",
+        "e691e27102f6f963"
+      ],
+      "quote": "Gear Meshing Level 1 N/A N/A N/A"
+    },
+    {
+      "title": "Newton与ILA差异不是纯物理引擎消融",
+      "kind": "limitation",
+      "text": "两实现的纹理、光照、资产、机器人配置均有差别。人工图插线Level1在Newton/ILA为86.7%/97.5%，绕线Level2为46.7%/5.0%。不能把差距全部归因于物理后端，或据此证明sim-to-real效果。作者在L40 GPU节点集群执行评测，已读文字未给每方法完整模型调用预算、墙钟成本和置信区间，本报告不估算费用。",
+      "evidence_ids": [
+        "10a92c9404c8a8c4",
+        "161a664211ec64a6",
+        "8b2a2aa7f1439361",
+        "0fe93dad4d76a0cb"
+      ],
+      "quote": "different texture, lighting, asset and robot implementations"
+    },
+    {
+      "title": "诊断真值与真实部署观测需要分开",
+      "kind": "limitation",
+      "text": "记录链区分观测、估计、决策、物理状态/接触和验证；图3虚线框为特权仿真状态，可辅助诊断。图5通过内部视图识别针筒跨在盒盖平面上的卡住状态，示例分别有7/8和6/8已投入记录。它展示诊断信息，并没有报告修复前后受控成功率；不能说真值在线提供给部署策略，或说诊断已证明提升真实机器人可靠性。本篇基线均为仿真。",
+      "evidence_ids": [
+        "fe5e6b8096acb57e",
+        "80e9c8c25735a04b",
+        "1c787077cd23c0c8",
+        "161a664211ec64a6",
+        "d8b30251813cd490",
+        "2d593fcebbd15a06"
+      ],
+      "quote": "available only to a “privileged” observer"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：图结构还是几何参数更限制齿轮装配？",
+      "text": "待验证假设：在固定技能与执行栈后，几何参数化比执行图结构更限制GaP齿轮装配成功率。选择Newton齿轮Level1/2，固定感知/规划/技能版本、同一模型、生成与修复调用预算。四组为人工结构+人工参数、生成结构+生成参数、生成结构+人工校准参数、人工结构+模型参数；结构与参数的接口需预先约定，人工校准只用独立开发实例，不查看测试真值。先做小规模接口验证，再至少用30个全新共同测试配置并重复生成图，按完整任务统计成功率、配对差异区间、首次失败位置、仿真周期分布及全部运行的模型调用和墙钟成本。诊断真值离线标注，评测时所有策略只接收相同观测。若替换为人工校准参数不能稳定缩小差距，或仅更换图结构就带来更大改善，就反对参数化主导假设；若结果依难度而异，则按条件报告。该实验尚未运行，未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "afbe2ba2d9a4a5be",
+        "80e9c8c25735a04b",
+        "e7bf74a9bd2c3cbc",
+        "1d62c51a464558d3",
+        "445d461d48b61363",
+        "838a4bce0fadb719"
+      ],
+      "quote": "skill composition and parameterization"
+    }
+  ],
+  "frontier_brief": {
+    "title": "VABAR：用同一套技能，对照人工与生成的执行图",
+    "change_type": "评测方法 · 技能组合",
+    "delta": "在预先规定变化范围的任务中，让人工执行图与模型生成图调用同一套感知、技能和规划模块，再比较表现。这样能把注意力转向技能如何组合、几何参数如何设定，而不只看换了哪个大模型。",
+    "before": "只比较不同完整agent的成功率，或把场景变化当随机扰动；图生成、技能库和执行器的差异容易混在一起。",
+    "after": "把对象、布局和几何变化定义为有约束的采样空间与难度层级，并提供共享执行栈的人工图参考；记录观测、决策、接触和验证链来诊断失败。",
+    "relevance": "做代码策略或技能组合选题时，先复用一个同栈人工图作为参照，再区分结构生成、几何参数化和执行模块的瓶颈。齿轮任务适合按整段成功率做对照；不要把按物体统计的分拣与之直接平均。",
+    "caveat": "仅有仿真初始基线；普通代码agent与GaP同时差在harness和技能库。表II周期只统计成功trial，表III的齿轮Level1失败归因有未解释的N/A。作者实验未复现。",
+    "question": "固定技能栈后，应该先改执行图结构，还是几何参数？",
+    "evidence": [
+      {
+        "label": "相同执行栈，生成图仍落后人工图",
+        "value": "70% / 100%",
+        "context": "Newton齿轮啮合Level1：自动GaP图70.0%，人工GaP图100.0%；同感知、技能、规划和执行模块。两齿轮完整任务，每条件30个生成实例。表II；未提供配对差异区间。"
+      },
+      {
+        "label": "更难的装配仍保留30个百分点差距",
+        "value": "60% / 90%",
+        "context": "Newton齿轮Level2改装三个齿轮：自动GaP图60.0%，人工图90.0%，普通Claude Code为0。后一个对照同时改变harness和技能库，不能归因于单独一个模块。"
+      },
+      {
+        "label": "时间口径会改变对快慢的理解",
+        "value": "156.6 / 165.9 s",
+        "context": "同一Level1齿轮对照中，自动图/人工图的成功trial仿真周期中位数为156.6/165.9秒。但成功率不同，数字不含所有失败trial、LLM生成或调试墙钟成本，不能据此断言整体更快。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "先规定变化",
+        "text": "明确任务不变的目标、对象配置分布和可行性，再用难度层级逐步增加变化。六类任务涵盖刚体、精密接触与线缆操作。"
+      },
+      {
+        "title": "共享底层技能",
+        "text": "33个技能bundle包括功能特征定位、手中配准、特征对接和线缆处理。人工与生成图使用相同执行栈来比较组合和参数化。"
+      },
+      {
+        "title": "保留失败链",
+        "text": "将观测估计、图决策、物理状态/接触和验证结果关联。仿真真值用于诊断时单独标识，避免与策略可用观测混淆。"
+      }
+    ]
+  }
+}

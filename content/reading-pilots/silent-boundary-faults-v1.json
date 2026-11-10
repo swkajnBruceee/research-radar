@@ -1,0 +1,390 @@
+{
+  "item_id": "arxiv:2611.08144",
+  "document_id": "1212cf73c8767b1f87b76c24e3890a8889162eefdf7c66a7f2c7b4a22b9752da",
+  "source_url": "https://arxiv.org/html/2611.08144v1",
+  "paper_version": "2611.08144v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-07T23:17:29.333813+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.08144",
+    "title": "Detecting Silent Faults at the Environment-Trainer Boundary in Reinforcement Learning",
+    "url": "https://arxiv.org/abs/2611.08144v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "imitation",
+      "evaluation"
+    ],
+    "summary": "arXiv:2611.08144v1 Announce Type: new Abstract: Robot reinforcement learning increasingly runs environments outside the trainer: in another process, on another machine, in another language. Many faults at this boundary raise no error. We make the boundary a wire protocol and ask what notices a fault in it. On Pendulum, HalfCheetah, Hopper and a 7-joint arm (Pusher), we injected up to 23 faults into what crosses the wire and 2 into the trainer's log, from one value to every value. Unless every value was wrong, a learning-curve threshold caught at most one run in ten, and a comparison with ten fault-free seeds at most 21%. A clean evaluation of all 1,060 final policies agreed with the curves: of the 728 boundary-fault runs both curve checks passed, 723 scored no more than three standard deviations below fault-free seeds, though nearly all ended on other weights and, for reward faults, logged other returns. Checks of the run itself, not of its outcome, saw every fault. A step ledger kept on both sides and compared step by step caught and located every fault that crossed, on Pendulum, Hopper and Pusher on one machine and on Pendulum across two, with no fault-free run and, on Pendulum, a median 3% more training time. An episode record kept at the environment caught the faults in the trainer's log. We list such faults found in practice, in Gymnasium 1.3 and our own code and, reported by others, in five multi-agent libraries, and recommend a step ledger and episode counts kept at the environment."
+  },
+  "overview": "本文将环境–训练器边界显式化为协议，并用故障注入比较“结果正常”与“运行记录正确”两种证据。多数接口错误逃过学习曲线和干净策略评测，却被放在环境外侧与训练器侧的逐步账本定位；这对分布式RL实验可信性值得优先阅读。账本的全检出来自双方记录差异这一限定定义，不是发现所有RL错误；实现为训练后对账，四个dense-reward状态环境、SB3 PPO、三个seed，未验证持续运动真机或图像故障覆盖。",
+  "coverage": {
+    "read": 65,
+    "total": 65,
+    "evidence_ids": [
+      "cdb52f268181f2c2",
+      "9fb0fa59851f0366",
+      "6d5d250165e69fc4",
+      "f0abba28945e43d6",
+      "bf1e22d452242da2",
+      "9154929b127a68b3",
+      "c709fbb6d97a1ac5",
+      "17af235c5630645a",
+      "7088abca2aa0671a",
+      "6fc48501643425d0",
+      "cb5e0613a6646375",
+      "530d69c87e4f217a",
+      "198be1e4a459a730",
+      "8b2b765d8a5a4c65",
+      "290704d7a3a0ca35",
+      "9d04b4189a4eb7dc",
+      "71b9814637d05a8e",
+      "c609829a8b5d5e52",
+      "93515f3fd32fa951",
+      "75a2c0845915a4a5",
+      "9ee8e741a224daf6",
+      "40995ba019cb3426",
+      "4b7267d7ca98303d",
+      "a52959a771836ef4",
+      "d7eccb04d1ae49a6",
+      "22c5ccc5a5a133c3",
+      "8d2553275eb08dde",
+      "057edf764cf7a0f7",
+      "9acc0d292d56981f",
+      "eaf4e1a090089b5f",
+      "190340f12215b41a",
+      "87e05bef30267a49",
+      "b2203e9a008f8fb8",
+      "86ebf721b940f9d5",
+      "6cc79bd085cff25d",
+      "41444baa26d688c4",
+      "3ff115dd9e638379",
+      "a235e44d1fd07414",
+      "0bf1b8d768690390",
+      "b45ca1d4d80543b3",
+      "51b7714899e00254",
+      "5f342ab959e3c913",
+      "0d608bb2e85f36df",
+      "9d4f0b89b4b2512e",
+      "f8bb78e2b66d92ff",
+      "f424d7c60d9069d9",
+      "e9f426977dbeba4d",
+      "78fabeaea03a432d",
+      "df81fa1c63c8b6aa",
+      "4bdf64ed57c20561",
+      "a638734b26aa8945",
+      "aa7d158c3eceb46f",
+      "6e467518e7f18073",
+      "1f6d68d731fce9d3",
+      "bc453d6b64782665",
+      "3d48ecefb7bab11a",
+      "71ed829f8a40516a",
+      "64282069fcb3dcd5",
+      "19e7fa2619457422",
+      "ffef74d53e485f1d",
+      "7766f02a216f681b",
+      "fc600d6540d4abdb",
+      "96731d47cd30442c",
+      "09ca6d429d26a36d",
+      "b99932b6c035aa3e"
+    ],
+    "pdf_pages_visually_checked": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      7
+    ],
+    "pdf_sha256": "3a3a12783d62895130804675e4fa78587629e3eb6fc62c24a49f7223b2267af0"
+  },
+  "notice": "完整阅读65个原文提取片段，含正文和附录A–G；固定PDF7页，目视核对物理页1/2/3/4/6/7的图1–6与表I–VI。核对故障种类/剂量、样本分母、校验盲区、计时/通信与episode计数。公开源码、注册协议和原始日志未逐项独立审计，未运行作者代码、注入故障或复现实验。本文版本中的软件问题按历史实验报告，不当作当前所有版本仍有缺陷。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "研究增量：把“仍能学”与边界记录是否忠实分开验证",
+      "text": "边界故障被定义为环境实际收到/产出的值，与trainer送出/收到的值不一致。本文将mutation testing和训练–服务偏移式对账用于该接口，并非提出新RL优化算法。错误可能只改变最终权重或日志，短任务回报仍正常；因此曲线改善和clean evaluation可验证能力，却不能替代运行数据完整性检查。“两侧差异”是可操作但有限的故障定义，不覆盖内部算法正确性。",
+      "evidence_ids": [
+        "bf1e22d452242da2",
+        "9154929b127a68b3",
+        "c709fbb6d97a1ac5",
+        "17af235c5630645a",
+        "7088abca2aa0671a",
+        "cb5e0613a6646375",
+        "9acc0d292d56981f",
+        "b45ca1d4d80543b3",
+        "51b7714899e00254",
+        "5f342ab959e3c913"
+      ],
+      "quote": "boundary fault"
+    },
+    {
+      "kind": "method",
+      "title": "协议显式约定episode结束、顺序与断连，不填造缺失step",
+      "text": "PlugRL以msgpack/NumPy over WebSocket交互：infer含env索引、step id与观察，action含H步chunk，feedback含末观察、累加reward、termination/truncation与info。env自己reset，结束feedback传terminal observation、下一infer传reset observation，stop与resync区分停机/重连。lockstep bridge等所有client回报再推进；shape/keys/env集合不符则拒绝，断连停止，不补造step。两侧spec checker与运行期记录互补；写了协议并不保证实现无误，作者自己也发现spec/client约定问题。",
+      "evidence_ids": [
+        "198be1e4a459a730",
+        "8b2b765d8a5a4c65",
+        "290704d7a3a0ca35",
+        "9d04b4189a4eb7dc",
+        "71b9814637d05a8e",
+        "c609829a8b5d5e52",
+        "93515f3fd32fa951",
+        "eaf4e1a090089b5f",
+        "87e05bef30267a49",
+        "0bf1b8d768690390"
+      ],
+      "quote": "lockstep server"
+    },
+    {
+      "kind": "method",
+      "title": "故障矩阵覆盖边界字段与剂量，非全面随机软件缺陷分布",
+      "text": "主注入在SB3 PPO的Pendulum、HalfCheetah、Hopper、7关节Pusher上，seeds0–2。观察/动作/reward/terminal observation做zero、stale、跨env swap、float16 round，动作还半幅clip，结束标志伪造/丢失/混淆，step被跳过并补feedback；Hopper额外两种termination错误，共21或23种。另两种trainer日志错误为丢首reward与少记一步。剂量one value、1%、all，Pendulum再加0.1%与10%，同seed改同位置。未注入info内错误，也未证明该矩阵代表所有线上缺陷的概率或严重度。",
+      "evidence_ids": [
+        "75a2c0845915a4a5",
+        "9ee8e741a224daf6",
+        "40995ba019cb3426",
+        "5f342ab959e3c913",
+        "1f6d68d731fce9d3"
+      ],
+      "quote": "final observations"
+    },
+    {
+      "kind": "evidence",
+      "title": "学习曲线与干净评测大多漏检，但“不显著差”不是等价证明",
+      "text": "Fig1 Pendulum单值故障63次：gain/seed spread各0/63、byte63/63、episode13/63、ledger63/63；曲线仅绘57条完整记录者，6条缺日志用cross标出。图2四环境低于all剂量时gain最多检出10%、seed spread最多21%；all剂量gain也仅43/35/48/33%。gain阈值预定（Pendulum500），spread用10无故障seed的均值±3std，留一法对照误报0/1/0/0各10seed。全部1060最终策略各跑50个干净确定性episode，过两曲线检查的728次边界故障中723次不低于无故障均值3std；这不是统计等价检验，更不能称故障无害。",
+      "evidence_ids": [
+        "cdb52f268181f2c2",
+        "6d5d250165e69fc4",
+        "17af235c5630645a",
+        "75a2c0845915a4a5",
+        "40995ba019cb3426",
+        "4b7267d7ca98303d",
+        "a52959a771836ef4",
+        "d7eccb04d1ae49a6",
+        "9acc0d292d56981f"
+      ],
+      "quote": "clean evaluation"
+    },
+    {
+      "kind": "method",
+      "title": "双侧账本须包住真实环境接口，而不是只比传输后日志",
+      "text": "环境外wrapper在env client之前记录每step的observations、交给环境的action及返回值；另一wrapper在SB3所见vector env记录trainer送收值，按step/env/field对账。若故障恰定义为这两个观测点的差异，完整记录和正确比较应检出它，检验价值在于实现、定位与成本。单trainer端bridge log已在错误之后，只能核对自身日志，不能看见client中途篡改。部署位置因此是方法的关键，而非单纯多加一个日志文件。",
+      "evidence_ids": [
+        "7088abca2aa0671a",
+        "c609829a8b5d5e52",
+        "40995ba019cb3426",
+        "22c5ccc5a5a133c3",
+        "8d2553275eb08dde",
+        "41444baa26d688c4",
+        "3ff115dd9e638379",
+        "9d4f0b89b4b2512e"
+      ],
+      "quote": "observations"
+    },
+    {
+      "kind": "evidence",
+      "title": "585次账本注入全检出，不能写成四环境全部900次均验证",
+      "text": "E55/E56/E58账本分别检出Pendulum189、Hopper207、Pusher189次边界故障（合计585，本轮加总），均定位首个变值/字段；每环境27次无边界故障对照没有差异。图2明确HalfCheetah未跑账本，Pendulum账本也未覆盖主曲线所有剂量。跨机仅Pendulum单值21种故障全检出、一个无故障run无差异，不依赖fault-free参考训练或权重可复现。零误报是这些对照中的观察，不是任意数据/数值转换/软件栈的误报率上界。",
+      "evidence_ids": [
+        "f0abba28945e43d6",
+        "75a2c0845915a4a5",
+        "22c5ccc5a5a133c3",
+        "41444baa26d688c4"
+      ],
+      "quote": "fault-free run"
+    },
+    {
+      "kind": "evidence",
+      "title": "episode对账补日志盲区，但不能代替字段级账本",
+      "text": "episode record比较count、length、return，可检出本次全部两类日志错误及改变episode统计的故障；会漏观察、action、final-observation和部分结束类型错误。目视图6的step:fill（跳步补反馈）在one值与1%剂量episode各检出3/3，但all剂量为0/3；不应把正文“every step skipped”误读成所有跳步剂量都漏检。日志故障时ledger和byte identity保持正常，episode/bridge log各3/3检出。几种检查针对不同层，不宜用“ledger检测所有日志/生命周期错误”概括。",
+      "evidence_ids": [
+        "c609829a8b5d5e52",
+        "40995ba019cb3426",
+        "8d2553275eb08dde",
+        "057edf764cf7a0f7",
+        "9d4f0b89b4b2512e",
+        "f8bb78e2b66d92ff",
+        "1f6d68d731fce9d3"
+      ],
+      "quote": "episode record"
+    },
+    {
+      "kind": "evidence",
+      "title": "byte identity能检验实现等价，却会漏未读字段且跨机失效",
+      "text": "900边界故障中888次最终权重不同；Hopper其余12次只改fall时的final observation，SB3只在time limit才bootstrap该值，训练没读取它，故权重不变而账本有差异。日志故障/1ms延迟/float64 wire对照亦可保持权重相同。同机原进程与bridge9对、代理延迟0–25ms每向12次都保持byte-identical，但跨机MuJoCo build首step可差8.9e-16，同seed权重已不同。权重不同既不定位故障也不证明性能坏；相同权重也不能保证协议所有字段正确。",
+      "evidence_ids": [
+        "71b9814637d05a8e",
+        "057edf764cf7a0f7",
+        "9acc0d292d56981f",
+        "b2203e9a008f8fb8",
+        "a235e44d1fd07414",
+        "df81fa1c63c8b6aa",
+        "4bdf64ed57c20561",
+        "a638734b26aa8945",
+        "ffef74d53e485f1d"
+      ],
+      "quote": "byte-identical"
+    },
+    {
+      "kind": "limitation",
+      "title": "3%是Pendulum加账本的开销，不是bridge总价或在线报警延迟",
+      "text": "E55同run有/无两侧ledger的learn_s差中位+3%、范围−5到+9%，216次权重未变；负值不表示负计算成本，论文未给重复测量置信区间。这个数字仅Pendulum，不外推图像/真机。比较在每run结束后做，Hopper每run记录约150MB；在线逐step digest属未来工作，不能称已实时阻止错误。另E50原进程→bridge总时间Pendulum12.7→16.3–16.5s、HalfCheetah64.0–67.0→76.0–76.5s，增加0.37–0.58ms/16-env vector step，与3%是不同分母。",
+      "evidence_ids": [
+        "22c5ccc5a5a133c3",
+        "b2203e9a008f8fb8",
+        "5f342ab959e3c913",
+        "df81fa1c63c8b6aa",
+        "64282069fcb3dcd5",
+        "19e7fa2619457422",
+        "ffef74d53e485f1d"
+      ],
+      "quote": "training time"
+    },
+    {
+      "kind": "evidence",
+      "title": "最小计数器例说明错误可只在报告层，修复范围需按版本说",
+      "text": "E51每step t给reward t，t5结束，2env×3episode应各return15、length5。Gymnasium1.3 vector统计NEXT_STEP得到6×(15,5)，SAME_STEP首两条正常后四条(14,4)；按sub-env放单环境wrapper则两mode均正常。作者报告1.4已修复，不将其当当前版本问题；CleanRL测试是把固定依赖换为1.3，并非其所pin0.29下已证实同错。自家计数器在无显式reset时也累加成(15,5)/(30,11)/(45,17)，说明计数器的reset契约须一并验证。表I其他多agent问题是引用历史报告，本轮未复查issue或补丁。",
+      "evidence_ids": [
+        "9154929b127a68b3",
+        "6fc48501643425d0",
+        "eaf4e1a090089b5f",
+        "190340f12215b41a",
+        "87e05bef30267a49",
+        "fc600d6540d4abdb",
+        "96731d47cd30442c",
+        "09ca6d429d26a36d",
+        "b99932b6c035aa3e"
+      ],
+      "quote": "RecordEpisodeStatistics"
+    },
+    {
+      "kind": "evidence",
+      "title": "协议与传输资源可复用，但不构成大模型RL有效性的证据",
+      "text": "E46在同Wi-Fi+Tailscale路径23.7MB/s、5×1000exchange测量，588KiB观察从发两次改一次，RTT49.8→27.1ms，保持权重一致；184KiB观察11.6ms。文中拿它除以100ms的pi0.5动作块耗时，该100ms实为单GPU随机权重、5去噪步、3次启动中位，不是训练收敛或整套机器人延迟。LIBERO权重pi0.5只完成一个学习step，无性能评测。E45 env侧C++无第三方包86KB、minimal Python2包2.6MB，排除解释器；完整client222MB，不能以最小client代表所有功能，也不能将inference-only客户端与训练端当等能力比较。",
+      "evidence_ids": [
+        "86ebf721b940f9d5",
+        "a638734b26aa8945",
+        "aa7d158c3eceb46f",
+        "6e467518e7f18073",
+        "bc453d6b64782665",
+        "3d48ecefb7bab11a",
+        "71ed829f8a40516a"
+      ],
+      "quote": "reuse-feedback-obs"
+    },
+    {
+      "kind": "limitation",
+      "title": "完整性不等于算法正确或机器人安全，盲区在两个wrapper之外",
+      "text": "主结论限四个状态/稠密奖励sim、单SB3 PPO、三个seed，未覆盖图像fault、稀疏长程、replay buffer或真实机器人。环境内部错误在两个记录点上可一致而漏检；只有硬件client可包裹时也无法验证它之前的物理执行/观测。lockstep环境等动作才推进，所以延迟仅改何时step；持续运动机器人不满足此条件。表II lifecycle重连与scheduler慢1.87倍的故障也不一定改变权重或边界值，需要独立生命周期/成本检查。作者称实验有事前协议、pilot后amendment和公开日志，但本轮只核论文，未独立审计原始注册/代码，不能把全部实现和外部issue标为已复现。",
+      "evidence_ids": [
+        "530d69c87e4f217a",
+        "b2203e9a008f8fb8",
+        "b45ca1d4d80543b3",
+        "51b7714899e00254",
+        "5f342ab959e3c913",
+        "f424d7c60d9069d9",
+        "e9f426977dbeba4d",
+        "78fabeaea03a432d",
+        "df81fa1c63c8b6aa",
+        "aa7d158c3eceb46f"
+      ],
+      "quote": "state-based environments"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：在线逐step摘要能否保留定位覆盖并减少落盘成本？",
+      "text": "待验证假设：对每个step的规范化双侧记录计算摘要、在线比对并在差异时保留原payload，可保留离线完整账本的已测检出覆盖，同时减少正常run的落盘量。仅做本地仿真与trace回放，先写清记录字段、env/episode/step键、合法dtype/序列化转换和reset契约，固定同一环境/训练器版本；对比完整payload训练后对账、每step摘要在线对账、相同预算的抽样payload对账。复用原故障字段与one/1%/all剂量，另加预先定义的重复/乱序/断连事件和合法float64-wire阴性对照，每组至少10seed；记录检出率、首错误定位一致率、首次检测延迟、误报、训练吞吐、p95step耗时、峰值内存及落盘字节。摘要碰撞与实现bug不能被写成零概率，发现差异后需用payload确认；不执行真实机器人或跨机部署。若摘要遗漏完整记录能定位的故障、阴性对照误报，或减少落盘却使训练吞吐/尾延迟明显变差，则推翻该替代方案在所测范围内可用的假设。实验未执行，未全面检索相关工作，不能称新发现研究空白；在线摘要亦为作者已提出的未来方向。",
+      "evidence_ids": [
+        "198be1e4a459a730",
+        "290704d7a3a0ca35",
+        "9d04b4189a4eb7dc",
+        "c609829a8b5d5e52",
+        "22c5ccc5a5a133c3",
+        "057edf764cf7a0f7",
+        "eaf4e1a090089b5f",
+        "a235e44d1fd07414",
+        "0bf1b8d768690390",
+        "5f342ab959e3c913",
+        "9d4f0b89b4b2512e",
+        "df81fa1c63c8b6aa"
+      ],
+      "quote": "reconciliation"
+    }
+  ],
+  "attention": {
+    "level": "priority",
+    "reason": "优先阅读其用故障注入反驳“曲线正常即接口正确”的实验依据，并将双侧逐步对账与episode统计互补用于分布式RL验证；证据限状态仿真与所测故障，作者实验未复现。",
+    "basis": [
+      "controlled_comparison",
+      "negative_result",
+      "reusable_resource"
+    ],
+    "evidence_ids": [
+      "c709fbb6d97a1ac5",
+      "198be1e4a459a730",
+      "40995ba019cb3426",
+      "4b7267d7ca98303d",
+      "d7eccb04d1ae49a6",
+      "22c5ccc5a5a133c3",
+      "8d2553275eb08dde",
+      "5f342ab959e3c913"
+    ]
+  },
+  "frontier_brief": {
+    "title": "RL接口静默故障：双侧逐步对账，补上正常学习曲线的盲区",
+    "change_type": "评测方法 · 实验完整性",
+    "delta": "将环境–训练器交互写成显式协议，在真实环境接口外和trainer所见接口各记逐step账本；用故障注入与episode独立计数检验运行记录是否忠实。",
+    "before": "学习曲线达到阈值、或策略在干净环境得分正常，只检查结果；形状、范围与NaN检查也可能放过stale/rounded值。",
+    "after": "在已测585次账本边界故障运行中全部定位首个错误字段，另用env侧episode记录检出日志层错误；无需另外训练fault-free参考policy。",
+    "relevance": "更换跨进程/网络/语言环境接入方式，或比较RL方法时，先验证边界传递与日志账本，避免把记录偏差当作算法差异。",
+    "caveat": "全检出针对两侧记录差异的限定定义；HalfCheetah未测ledger，环境内部/持续运动真机未覆盖。实现为run结束后对账，3%仅Pendulum的ledger增量，非协议总开销。",
+    "question": "在线每step摘要加差异payload保留，能否在相同故障覆盖下减少存储且不恶化尾延迟？",
+    "evidence": [
+      {
+        "label": "曲线正常仍有故障",
+        "value": "723/728过曲线检查的故障策略未低于参考3std",
+        "context": "全部1060policy各50个干净episode；不构成统计等价或故障无害证明，参考10个无故障seed。"
+      },
+      {
+        "label": "逐step对账覆盖",
+        "value": "189+207+189=585次全部检出",
+        "context": "Pendulum/Hopper/Pusher，首变值和字段定位；每环境27对照无差异，HalfCheetah未跑账本。"
+      },
+      {
+        "label": "检查互补反例",
+        "value": "Hopper12次权重不变，账本仍有差异",
+        "context": "仅改fall时final observation，SB3没读取该字段；byte identity不能代替运行记录对账。日志故障则需episode计数。"
+      },
+      {
+        "label": "有限成本证据",
+        "value": "Pendulum训练时间中位+3%；Hopper约150MB/run",
+        "context": "+3%为同run有无ledger的learn_s差，范围−5至+9%；本文离线对账，非在线报警延迟或跨进程桥接总成本。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "把约定写成协议",
+        "text": "明确env/step索引、terminal/reset observation、termination/truncation、stop/resync；结构不合法直接拒绝，不填造step。"
+      },
+      {
+        "title": "比较两侧实际经历",
+        "text": "在env client外包环境记录taken/given值，与trainer接口记录按step/env/field对齐；错误后的bridge log无法独立核client。"
+      },
+      {
+        "title": "episode与逐step互补",
+        "text": "env侧独立统计count/length/return核trainer日志；字段级ledger捕获不影响episode统计的观测/动作差异。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08144v1",
+      "checked": "固定PDF7页、505946字节；目视物理页1/2/3/4/6/7图1–6、表I–VI，核对63/63示例、三环境账本分母、Hopper例外、Fig6按剂量的step:fill差异、RTT与计数器对照。全部数值仍属作者结果，未运行代码或审计其公开实验日志。"
+    }
+  ]
+}

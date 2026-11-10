@@ -1,0 +1,532 @@
+{
+  "item_id": "arxiv:2611.08373",
+  "document_id": "e9d3cc489bcb83c3317e99d4630e36aa50ef195eecae2ed8db3e69450e781cc0",
+  "source_url": "https://arxiv.org/html/2611.08373v1",
+  "paper_version": "2611.08373v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-06T15:11:31.032342+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.08373",
+    "title": "SLA: Scaling Spatial-Language-Action Model via Continual Pre-training",
+    "url": "https://arxiv.org/abs/2611.08373v1",
+    "published": "2026-11-05",
+    "updated": "2026-11-05",
+    "topics": [
+      "vla",
+      "data",
+      "planning"
+    ],
+    "summary": "Reliable robotic manipulation requires both semantic understanding and precise control in three-dimensional space. However, vision-language-action (VLA) foundations largely inherit visual representations from 2D vision-language pre-training, while spatial supervision is often introduced only during task-specific adaptation. Developing spatial understanding as a transferable foundation-model capability therefore calls for learning from broader robot experience. We present SLA, a Spatial-Language-Action Model that scales implicit spatial alignment to continual pre-training and maintains it during downstream post-training. Initialized from a pretrained pi05 policy, SLA jointly optimizes action prediction and alignment between intermediate visual embeddings and spatial representations from a frozen 3D perception model. We curate and unify heterogeneous robot datasets to support spatial learning across diverse embodiments, tasks, and scenes. To accommodate this diversity, we introduce feature-dependent gates that adaptively aggregate visual embeddings from multiple VLA layers for spatial supervision. The teacher further exploits partially available depth and camera calibration alongside RGB observations, enabling effective use of heterogeneous geometric annotations. Probabilistic state dropout encourages reliance on visual cues and mitigates overfitting to demonstration trajectories. All auxiliary components are used only during training, allowing direct reuse of pretrained VLA weights and preserving the original inference architecture."
+  },
+  "overview": "值得复用的是把冻结3D教师的特征对齐从下游后训练移到持续预训练，并在后训练继续使用；用逐token、逐通道门控聚合多层特征，让异构数据共享空间监督。两阶段开关消融支持此训练选择，但state dropout、动作表示与数据处理也会显著改变成绩。RoboDojo还加入历史帧，不能把其全部收益或推理成本归于无额外开销的空间对齐。",
+  "coverage": {
+    "read": 150,
+    "total": 150,
+    "evidence_ids": [
+      "c2130bcaa4038d5a",
+      "824f6e714d250e48",
+      "f17abde4881015bd",
+      "259d134d454a54a5",
+      "ed720d7fc2b5e34c",
+      "6de2b0315c00c85c",
+      "6378097c785102dc",
+      "370fef0c04501764",
+      "c3e0cc7af4e15f0b",
+      "52d9e9f36ed6b8b2",
+      "f8bda3a678e44368",
+      "cdeea608b71ef7c4",
+      "eb1ed94f9ea70790",
+      "ac9677c29c095e0f",
+      "3e9d3601353ebf29",
+      "617da6281dcfb156",
+      "5aca8fe022440413",
+      "25616fc221526f81",
+      "9d81111ac3bbdf68",
+      "88fa40732efddaf8",
+      "f7403eb51062abb3",
+      "3dc42f961849a1b3",
+      "f188a2968edd6b69",
+      "d59335e8d1e20b98",
+      "22513833eadf9c82",
+      "cb478ce0221090d9",
+      "73ffa26a6f471273",
+      "a5c8171f4c4be7d2",
+      "b30ddc4896f87137",
+      "c41178b183e0080a",
+      "dfeec432f3fe10af",
+      "8dd6874537b9f5cf",
+      "ce6e2f48cb9e8072",
+      "81f3f68d118daafd",
+      "eaf79ac019a5cc9f",
+      "cf5bd3b5ac1b2f7b",
+      "21d04ee7dcd6442c",
+      "b5c596c49b11f58c",
+      "4f3fbb0a8cb78538",
+      "b509bc31b76f0568",
+      "0cb931c1c6501a70",
+      "fd6d17085407b9bc",
+      "67a56879351cbe8d",
+      "22cdf1080f1edc60",
+      "0075f8b5f52f884e",
+      "cf906c4afb3fe16a",
+      "2f11b066cd93e927",
+      "e890813b8672d0b7",
+      "ed094ae9ac473ff7",
+      "00dd2270cf58e1fa",
+      "a2618ed2c7f99b56",
+      "3897234eb7a16b19",
+      "ee4320108f011d26",
+      "ed2bb8ce981c178c",
+      "15fd6645a907c098",
+      "faea1b1288659a79",
+      "b97b98295cb9edf8",
+      "faf0ec5cf80b8849",
+      "56dbacfb13b68310",
+      "65d9b39caa6e2118",
+      "29048d85f7088194",
+      "b95f28f4c7bc4401",
+      "9c841165cd58d2bf",
+      "2c319aa04b15ccd4",
+      "92ab57c068d21383",
+      "7f62ee1a7862964a",
+      "7e1e9eb7cd71e968",
+      "c9ccf4035b59351a",
+      "aeef7d0c381718ac",
+      "ff603772aaecb2aa",
+      "ec1c504b6f500e39",
+      "8001abdc9243d9d0",
+      "9114b3fcc142d84e",
+      "5060a8fefcb7f9ad",
+      "9cc4f8a6eb274943",
+      "7111e59b07fef352",
+      "558c3b8bae350f13",
+      "38afd0aea0207c76",
+      "4870d52ace423623",
+      "422768a2865da5d4",
+      "def3e6f7a6848700",
+      "e7aff1859cf2d39c",
+      "b6cee8139dd49fcc",
+      "92a795c711d1b0de",
+      "7a34f30066c5138a",
+      "848a026a0183c6e6",
+      "877c279d90cfad3a",
+      "1389839068763bfd",
+      "dfe30b5efd34a5cb",
+      "9662e7e5b68782ae",
+      "94aa3ec6ce3abe6a",
+      "63dfdf49aa70bc97",
+      "6cf10ca049816a1c",
+      "2eca2398e0f4ae5e",
+      "f5ef44362911b37c",
+      "0ee62a8650a5ef49",
+      "94feb805e5857937",
+      "d0e934722587aa1c",
+      "c61b29b1b1cbbea2",
+      "9d28035b63d97e04",
+      "31352f8a36d76e76",
+      "9f2316340ce4e4c9",
+      "bf766a9a66cb082f",
+      "114c3d174fc4dc2e",
+      "766cff3612059cc9",
+      "340452ca89c343cf",
+      "653c6d90664b3180",
+      "676abeb55bddd28d",
+      "9bd922adb8c55208",
+      "126f324cc1c072c3",
+      "f3b97966e0fd5946",
+      "d08d5fd8c2aefa85",
+      "4954b307afdedea1",
+      "2cb15131d2c39067",
+      "a7e2798b9a3dfdd5",
+      "e7cbce55c139eb6e",
+      "3270b730798440ed",
+      "6510d0702b5fb7fa",
+      "6fd5494cb59c76bb",
+      "7b64cca7c59feb86",
+      "d2e6bcddf3178164",
+      "347c26699acd874e",
+      "1097a55ad5484d3b",
+      "ad612cbf6c248176",
+      "df5889b57307725b",
+      "09d42e4e3c4b4513",
+      "d68632f91703255e",
+      "681c0f174c60eb40",
+      "bb0938a347656bda",
+      "04553f626671e658",
+      "de21c25f1f11df6f",
+      "8d520d0808bbe2b9",
+      "d779dea93cdef4b8",
+      "ea0ae30716a49f5a",
+      "bb5e2486d26a296b",
+      "ced3daeb3d2db279",
+      "9278c708a82acaba",
+      "951a9362056df79b",
+      "4a03790d12a1602f",
+      "f6a4af4779cc15b5",
+      "9a8d8c0b1e3d4589",
+      "bd9da8bdded8377a",
+      "637698c3d03aa271",
+      "ac25c96d0460b625",
+      "ac44148fc39f750c",
+      "3b485849cd7680a1",
+      "dd863d96dc8a4735",
+      "3e7282380eba0958",
+      "b2e5792a42625c2e",
+      "9048740995384898"
+    ],
+    "pdf_pages_visually_checked": [
+      6,
+      7,
+      9,
+      12,
+      14,
+      15,
+      16,
+      19,
+      28,
+      31
+    ],
+    "pdf_sha256": "552c3677c12a3822700eb49c7f8ef2831005ed997104f72e2ddd7d5024f8f48a"
+  },
+  "notice": "完整阅读150个提取片段，包含正文方法、公式、实验及附录A全部结果和附录B记忆机制。固定版本PDF31页；目视核对物理页6、7、9、12、14–16、19、28、31的深度示例、对齐公式、表1–3/5–11/13–14及记忆定义。未逐一核查其他图像、逐篇核查参考文献、执行代码或复现实验。正文与附录的部分分机器人均值不一致，已保留原值，未擅自修正。",
+  "findings": [
+    {
+      "title": "动机证据边界：深度示例不能证明所有2D VLA缺乏3D",
+      "kind": "problem",
+      "text": "作者沿用Spatial Forcing的训练时隐式空间监督，新增重点是让这一信号参与异构机器人数据的持续预训练。图2冻结VLA、训练DPT深度头并给出图像示例；正文称其为linear probing，但DPT头本身不应直接等同线性读出。未给完整深度误差、数据划分和跨底座统计，不能从这些定性图推导所有2D VLA没有空间信息，或证明空间表示是控制增益的唯一原因。",
+      "evidence_ids": [
+        "ed720d7fc2b5e34c",
+        "6de2b0315c00c85c",
+        "6378097c785102dc",
+        "3e9d3601353ebf29",
+        "d59335e8d1e20b98",
+        "22513833eadf9c82",
+        "cb478ce0221090d9"
+      ],
+      "quote": "lightweight depth"
+    },
+    {
+      "title": "方法：冻结OmniVGGT，训练跨层聚合特征匹配",
+      "kind": "method",
+      "text": "从π0.5初始化。冻结OmniVGGT读取多视角RGB及可用深度/内外参；缺失几何输入用教师的placeholder机制处理。教师末层特征加位置编码，再双线性重采样到VLA视觉token网格。VLA各层经共享LN和两层MLP投影，再由sigmoid门控按token与通道加权求和；不是只硬选一层，也不是跨层softmax。用同视角同位置的余弦距离对齐，加到原flow-matching动作损失。更新VLA、投影与门控，教师冻结；空间辅助分支在推理时丢弃。",
+      "evidence_ids": [
+        "73ffa26a6f471273",
+        "a5c8171f4c4be7d2",
+        "b30ddc4896f87137",
+        "c41178b183e0080a",
+        "dfeec432f3fe10af",
+        "8dd6874537b9f5cf",
+        "ce6e2f48cb9e8072",
+        "81f3f68d118daafd",
+        "eaf79ac019a5cc9f",
+        "cf5bd3b5ac1b2f7b",
+        "21d04ee7dcd6442c",
+        "b5c596c49b11f58c",
+        "4f3fbb0a8cb78538",
+        "b509bc31b76f0568",
+        "0cb931c1c6501a70",
+        "67a56879351cbe8d",
+        "22cdf1080f1edc60",
+        "0075f8b5f52f884e",
+        "cf906c4afb3fe16a"
+      ],
+      "quote": "representations"
+    },
+    {
+      "title": "状态丢弃：删整段state token，不改图像或指令",
+      "kind": "method",
+      "text": "两训练阶段按样本随机省略整个state-token片段，保留图像和指令，以减少将本体状态与示范轨迹绑定的捷径。推理时关闭dropout并恢复正常state输入。它是训练配方的重要部分，不能把性能变化全部归因于3D教师；同一checkpoint的后训练概率扫描才是文中直接控制。",
+      "evidence_ids": [
+        "2f11b066cd93e927",
+        "31352f8a36d76e76",
+        "9f2316340ce4e4c9",
+        "bf766a9a66cb082f"
+      ],
+      "quote": "proprioceptive"
+    },
+    {
+      "title": "跨机器人动作接口：固定当前帧作整个chunk参考",
+      "kind": "method",
+      "text": "状态用绝对EEF姿态，动作用chunk-wise delta EEF；单臂原点为臂基座，双臂为两基座中点，坐标前/左/上。每个动作t都相对当前姿态(p0,R0)，Δp_t=p_t−p0，ΔR_t=R_t R0^T，再取SO(3)对数为旋转向量，不相对前一个预测动作。作者采用逐通道归一化；这与统一坐标、相对旋转的计算方式是不同选择，复现时须分别保留。",
+      "evidence_ids": [
+        "56dbacfb13b68310",
+        "65d9b39caa6e2118",
+        "29048d85f7088194",
+        "b95f28f4c7bc4401",
+        "9c841165cd58d2bf",
+        "2c319aa04b15ccd4",
+        "92ab57c068d21383",
+        "7f62ee1a7862964a"
+      ],
+      "quote": "normalization"
+    },
+    {
+      "title": "核心控制：两阶段对齐72.3%，两阶段关闭48.2%",
+      "kind": "evidence",
+      "text": "表6/图4在RoboTwin Clean2Random、全量处理后混合数据条件下：持续预训练/后训练都开对齐72.3%，仅预训练开63.2%，仅后训练开57.1%，两者都关48.2%。两阶段对齐相对各单阶段分别高9.1/15.2个百分点。数据占比5%→100%时，两阶段对齐49.2→72.3%，都关43.8→48.2%；中间无对齐曲线并非单调。此控制支持两阶段都用，不是拟合出的普适scaling law，正文没有充分交代各占比的独立训练重复与预算匹配，不补写统计显著或超加性协同。",
+      "evidence_ids": [
+        "8001abdc9243d9d0",
+        "63dfdf49aa70bc97",
+        "6cf10ca049816a1c",
+        "2eca2398e0f4ae5e",
+        "f5ef44362911b37c",
+        "0ee62a8650a5ef49",
+        "94feb805e5857937"
+      ],
+      "quote": "post-training"
+    },
+    {
+      "title": "门控消融：优于所测最好的单层，但没隔离动态权重",
+      "kind": "evidence",
+      "text": "表7固定层1/6/12/18的Clean2Random为43.4/45.0/67.3/64.6%，18层全聚合自适应为72.3%，比最好单层12高5.0点；两设置平均为79.2对75.7%。因此更深并不必然更好。所测控制没有均匀多层平均、静态可学习层权重等对照，不能把多层信息、参数量和按内容动态选择的收益全部区分开。",
+      "evidence_ids": [
+        "fd6d17085407b9bc",
+        "67a56879351cbe8d",
+        "22cdf1080f1edc60",
+        "0075f8b5f52f884e",
+        "cf906c4afb3fe16a",
+        "d0e934722587aa1c",
+        "c61b29b1b1cbbea2",
+        "9d28035b63d97e04"
+      ],
+      "quote": "feature-dependent"
+    },
+    {
+      "title": "dropout消融：0%到25%的变化大于多数模块差距",
+      "kind": "evidence",
+      "text": "表8从相同持续预训练checkpoint，仅改变后训练state dropout。0%时Clean2Clean/Clean2Random为55.5/20.7%，25%为86.0/72.3%，平均38.1→79.2%。50/75/100%时平均53.9/61.9/56.7%，不单调且全删状态不是最优。强烈说明配方对state输入处理敏感，但没做空间对齐×dropout的完整交叉实验，不能单独证明捷径被抑制的机制。",
+      "evidence_ids": [
+        "2f11b066cd93e927",
+        "31352f8a36d76e76",
+        "9f2316340ce4e4c9",
+        "bf766a9a66cb082f"
+      ],
+      "quote": "not monotonic"
+    },
+    {
+      "title": "旋转消融：比较的是SO(3)合成之后如何编码",
+      "kind": "evidence",
+      "text": "表9从同一持续预训练checkpoint后训练：旋转向量平均79.2%、四元数74.3%、Euler65.5%、Rot6D62.9%。全部先做SO(3)相对旋转合成，因此此表不是“Euler直接相减对矩阵合成”的消融；图3直接相减产生±2π离群值是另一组分布说明。79.2对74.3支持所测任务用旋转向量，不能推出对所有机器人或归一化都普适。",
+      "evidence_ids": [
+        "29048d85f7088194",
+        "9c841165cd58d2bf",
+        "2c319aa04b15ccd4",
+        "92ab57c068d21383",
+        "7f62ee1a7862964a",
+        "114c3d174fc4dc2e",
+        "766cff3612059cc9",
+        "340452ca89c343cf"
+      ],
+      "quote": "representation"
+    },
+    {
+      "title": "教师标定：额外3.2点来自作者另采的数据设置",
+      "kind": "evidence",
+      "text": "表10在作者自采的50任务RoboTwin clean示范上，从相同checkpoint改变后训练空间监督：无对齐平均31.8%，VGGT42.5%，RGB-only OmniVGGT42.8%，加内外参OmniVGGT46.0%。标定额外+3.2点，RGB空间监督本身相对无对齐+11.0点；不能将46.0%与标准示范主实验79.2%拼成同条件结果。标定仅供训练教师，策略推理不必输入内外参；这张表没有独立量化深度标签的收益。",
+      "evidence_ids": [
+        "b509bc31b76f0568",
+        "0cb931c1c6501a70",
+        "653c6d90664b3180",
+        "676abeb55bddd28d",
+        "9bd922adb8c55208"
+      ],
+      "quote": "post-training"
+    },
+    {
+      "title": "基准口径：大幅收益与小幅领先需要分别看",
+      "kind": "evidence",
+      "text": "RoboTwin用50任务各50条clean示范，每任务每设置100次，SLA Clean2Clean86.0%、Clean2Random72.3%，比π0.5的46.0%随机场景高26.3点；但clean仍低于ME-Dex89.6%。LIBERO-Plus共10,030次、按各扰动episode数加权，87.4%对π0.5的84.4%，对表内Qwen robot-only87.1%仅高0.3点。RoboCasa-Panda每任务50示范、24任务×3评估seed×50次=3,600次，68.4%对Spatial Forcing67.6%仅高0.8点。评估seed不是独立训练seed，文中未给足跨训练重复置信区间，榜单间总数据/计算量也不相等。",
+      "evidence_ids": [
+        "ec1c504b6f500e39",
+        "8001abdc9243d9d0",
+        "9114b3fcc142d84e",
+        "558c3b8bae350f13",
+        "38afd0aea0207c76",
+        "4870d52ace423623",
+        "422768a2865da5d4",
+        "def3e6f7a6848700",
+        "e7aff1859cf2d39c",
+        "b6cee8139dd49fcc",
+        "92a795c711d1b0de",
+        "7a34f30066c5138a",
+        "848a026a0183c6e6",
+        "877c279d90cfad3a",
+        "1389839068763bfd",
+        "d779dea93cdef4b8",
+        "ea0ae30716a49f5a"
+      ],
+      "quote": "demonstrations"
+    },
+    {
+      "title": "真机83.8%：物体级均值，A/B/D每条件仅10条rollout",
+      "kind": "evidence",
+      "text": "表11 SLA八条件A–H为94/82/76/78/98/84/78/80%，算术均值83.75%（表记83.8%），π0.5为59.75%（表记59.8%），差24.0点。每条件各50个独立计分的物体实例，但A/B/D来自10条rollout、每条5物体，不能当50条独立整任务试验。A–C复用100条A示范训练的策略；D另用100 Piper+10 Franka联合训练，非零样本跨机器人；E–H复用100条E示范策略。H物体只排除于下游数据，未证明从未出现在底座预训练。E中98对Spatial Forcing94只多成功2物体，须保留有限样本边界。",
+      "evidence_ids": [
+        "9cc4f8a6eb274943",
+        "126f324cc1c072c3",
+        "f3b97966e0fd5946",
+        "4954b307afdedea1",
+        "2cb15131d2c39067",
+        "a7e2798b9a3dfdd5",
+        "e7cbce55c139eb6e",
+        "3270b730798440ed",
+        "6510d0702b5fb7fa",
+        "6fd5494cb59c76bb",
+        "7b64cca7c59feb86",
+        "d2e6bcddf3178164",
+        "347c26699acd874e",
+        "1097a55ad5484d3b",
+        "ad612cbf6c248176",
+        "df5889b57307725b",
+        "09d42e4e3c4b4513"
+      ],
+      "quote": "object-level"
+    },
+    {
+      "title": "数据与成本：170万是筛选前来源规模",
+      "kind": "limitation",
+      "text": "表1的1,713.9K episode、14,330小时来自6个来源的筛选前统计，不是最终实际训练量。InternData特定任务只留3%或10%，RoboCasa365 MimicGen留0.5%、composite留15%，另删移动底座、灵巧手、异常速度及可识别静止片段；最终混合大小、各源占比和几何标注覆盖率未完整列出。作者声明排除导致下游泄漏的数据，本轮未独立审计去重。主要持续预训练36k步、有效batch4608，48张H100约110小时；约5280 GPU小时是卡数乘时间的核算，不是实测能耗。没有给对齐α数值、各对照总GPU预算和完整推理profile，不能称总数据或计算效率更优。",
+      "evidence_ids": [
+        "cf5bd3b5ac1b2f7b",
+        "21d04ee7dcd6442c",
+        "b5c596c49b11f58c",
+        "ed094ae9ac473ff7",
+        "00dd2270cf58e1fa",
+        "a2618ed2c7f99b56",
+        "ee4320108f011d26",
+        "15fd6645a907c098",
+        "b97b98295cb9edf8",
+        "faf0ec5cf80b8849",
+        "7e1e9eb7cd71e968",
+        "c9ccf4035b59351a",
+        "aeef7d0c381718ac",
+        "558c3b8bae350f13",
+        "38afd0aea0207c76"
+      ],
+      "quote": "pre-training"
+    },
+    {
+      "title": "推理无空间分支，不代表RoboDojo没有额外视觉开销",
+      "kind": "limitation",
+      "text": "空间教师、投影与门控在推理丢弃；但RoboDojo-Real另加9张历史主相机图：首帧加此前8秒每秒1帧，各经SigLIP产生256 token，即额外2,304视觉token。它们与当前三视图经full attention交互，按位置编码时序，无额外时间embedding；历史帧不进空间对齐。部署保留缓冲并逐episode清空。这保留网络骨干结构，却增加输入和视觉编码/注意力工作，文中未给其延迟或严格等历史输入的baseline控制，不能把RoboDojo收益全归于空间对齐或将整套方案概括成零推理成本。",
+      "evidence_ids": [
+        "4f3fbb0a8cb78538",
+        "5060a8fefcb7f9ad",
+        "94aa3ec6ce3abe6a",
+        "ac44148fc39f750c",
+        "3b485849cd7680a1",
+        "dd863d96dc8a4735",
+        "3e7282380eba0958",
+        "b2e5792a42625c2e",
+        "9048740995384898"
+      ],
+      "quote": "256 visual tokens"
+    },
+    {
+      "title": "RoboDojo逐机器人均值冲突：整体一致不代表分项一致",
+      "kind": "limitation",
+      "text": "表5 SLA的ARX X5为Score50.3/SR36.7%，表14为50.7/38.3%；Piper SR表5为55.0%、表14为53.3%；Piper X Score16.3对16.0。两表整体仍都记Score42.3/SR33.9%，本轮保留冲突、不改原文。整体33.9%对π0.5的12.8%还伴随SLA历史帧输入，缺少去记忆对照；不拿分项冲突数据给机器人表现作精细排名。",
+      "evidence_ids": [
+        "5060a8fefcb7f9ad",
+        "dfe30b5efd34a5cb",
+        "9662e7e5b68782ae",
+        "94aa3ec6ce3abe6a",
+        "ced3daeb3d2db279",
+        "9278c708a82acaba",
+        "951a9362056df79b",
+        "ac44148fc39f750c"
+      ],
+      "quote": "Overall average"
+    },
+    {
+      "title": "失败边界：布局与开放任务远未解决",
+      "kind": "limitation",
+      "text": "附录RoboTwin Place Cans Plasticbox从clean96%降random40%，Handover Block91→38%。RoboDojo-Sim为另一个配置：带记忆、空间对齐仅用于持续预训练，平均SR12.0%、Score16.4，Open仅1.9%、Long-Horizon11.9%；它不是主文两阶段对齐的同一协议。54个配置中多项完全失败，stack_bowls随机化70→10%，7/8开放任务无下游示范。真机Piper X整体仅10%，说明更高汇总分并不等于稳健长程、开放任务或无示范迁移。",
+      "evidence_ids": [
+        "04553f626671e658",
+        "de21c25f1f11df6f",
+        "8d520d0808bbe2b9",
+        "9278c708a82acaba",
+        "4a03790d12a1602f",
+        "f6a4af4779cc15b5",
+        "9a8d8c0b1e3d4589",
+        "bd9da8bdded8377a",
+        "637698c3d03aa271",
+        "ac25c96d0460b625"
+      ],
+      "quote": "configurations"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：空间对齐能否在控制state dropout之后仍独立改善泛化？",
+      "text": "待验证假设：正确对应的3D教师对齐在固定25% state dropout时仍提供独立的随机场景泛化收益。先从同一持续预训练checkpoint做RoboTwin后训练2×2对照：空间对齐开/关×state dropout 0%/25%；另在25% dropout加入教师空间位置错配的对齐控制，保留特征分布、投影/门控参数与相同损失权重。固定示范、旋转向量接口、归一化、训练步数和数据顺序，记录教师额外GPU时与显存；以验证任务选checkpoint，测试用相同clean/random场景seed，每组至少3个训练seed，并按任务聚类计算差值区间。主要指标为Clean2Random成功率、clean保留率及相机/布局扰动分项，另测有/无状态干扰时表现；不以深度示例替代动作指标。若25% dropout下正确对齐不优于无对齐，或位置错配对齐同样改善，便反对“对应的空间内容提供独立增益”的解释；若仅0%条件有效则结论缩小为与state使用方式的交互。实验尚未运行，尚未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "73ffa26a6f471273",
+        "eaf79ac019a5cc9f",
+        "2f11b066cd93e927",
+        "6cf10ca049816a1c",
+        "f5ef44362911b37c",
+        "9f2316340ce4e4c9",
+        "bf766a9a66cb082f",
+        "340452ca89c343cf"
+      ],
+      "quote": "visual evidence"
+    }
+  ],
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08373v1",
+      "checked": "网页PDF工具因文件过大未返回内容；直接下载同一固定版本29,159,823字节PDF后本机渲染核查。表6两阶段开关、表7层选择、表8状态丢弃、表9旋转表示、表10标定、表11物体级评估和表5/14均值冲突均已目视检查。"
+    }
+  ],
+  "frontier_brief": {
+    "title": "SLA：把空间特征对齐贯穿持续预训练与后训练",
+    "change_type": "训练配方 · 空间监督扩展",
+    "delta": "从π0.5继续训练，将冻结OmniVGGT的空间特征同时用于持续预训练与后训练。VLA全部18层的视觉token经共享投影和逐token、逐通道sigmoid门控聚合，用余弦距离匹配教师；教师可利用不完整的深度与标定信息。",
+    "before": "Spatial Forcing只在下游后训练做空间对齐；异构大规模数据通常缺少完整几何标签，单一固定层也可能不适合各场景。",
+    "after": "在统一EEF接口的混合机器人数据上持续施加空间对齐，后训练继续保留；以可学习门控融合多层信息，并按样本丢弃整段state token来改变视觉与本体感觉的使用。空间分支仅训练时存在。",
+    "relevance": "已有π0.5并准备做异构数据持续预训练时，值得先复现两阶段开关对照；同时核对state dropout和旋转接口，避免把整套配方收益只算给教师。若不做大规模CPT，可从固定checkpoint的对齐×dropout交叉实验起步。",
+    "caveat": "源数据170万条是筛选前规模；主要CPT用48张H100约110小时，最终混合量、对齐α与多种子方差披露不足。RoboDojo额外历史图像增加输入开销，部分分机器人表格均值冲突；结果来自作者，未复现。",
+    "question": "固定25% state dropout后，正确空间对应的教师特征还提供独立收益吗？",
+    "evidence": [
+      {
+        "label": "同数据量下的两阶段开关",
+        "value": "72.3% / 63.2% / 57.1% / 48.2%",
+        "context": "表6，RoboTwin Clean2Random、100%处理后混合数据：两阶段开、仅CPT开、仅后训练开、都关。支持两阶段均使用；不是同总预算的跨模型比较，也未给跨训练重复区间。"
+      },
+      {
+        "label": "自适应聚合超过最好单层",
+        "value": "Clean2Random：72.3%对67.3%",
+        "context": "表7，18层自适应融合对固定第12层，差5.0点；未比较均匀多层平均，尚不能隔离动态门控与多层信息的贡献。"
+      },
+      {
+        "label": "state输入处理不能省略",
+        "value": "25% dropout对0%：72.3%对20.7%",
+        "context": "表8，相同CPT checkpoint后训练，仅改变state dropout，指标为Clean2Random；平均SR79.2%对38.1%。不是将教师监督效果单独隔离的实验。"
+      },
+      {
+        "label": "真机提升按物体计分",
+        "value": "A–H均值83.8%对π0.5的59.8%",
+        "context": "表11，差24.0个百分点。每条件50物体；A/B/D实际各10条rollout、每条5物体。D使用10条目标Franka示范，不能称零样本跨机器人。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "教师吸收部分可用的几何约束",
+        "text": "OmniVGGT固定，RGB以外的深度和相机内外参有则用、缺则占位；末层空间特征加位置编码并重采样至当前视图token位置。"
+      },
+      {
+        "title": "多层辅助分支持续对齐",
+        "text": "18层视觉token经共享LN/MLP和内容相关sigmoid门控求和，与同视角同位置教师特征计算余弦损失；动作损失同时训练，后训练也保留对齐。"
+      },
+      {
+        "title": "区分训练辅助与额外输入",
+        "text": "门控、投影和3D教师推理时移除，正常state输入恢复；RoboDojo的9张历史图像是另一个保留在推理中的机制，成本应另算。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.08100",
+    "source_signature": "d59f111d23190df4288ede60b228a6d9fe2bb5dfbf3802c1c1dd5623f859386b",
+    "level": 0,
+    "reason": "常规ROS2组件集成且仅三次任务展示，适合部署参考；摘要未有重复量化导航对照，尚不改变通用学习路线。",
+    "quote": "An Integrated"
+  },
+  {
+    "item_id": "arxiv:2611.08013",
+    "source_signature": "a53be5a402f5c18d8a91dd6faaeb8a996244365ee90efa9de9c7e6027965a27f",
+    "level": 0,
+    "reason": "开源打印臂结合手势遥操作与DH运动学，资源用途明确但缺比较实验，不优先于数据或策略路线增量。",
+    "quote": "Development of"
+  },
+  {
+    "item_id": "arxiv:2611.08009",
+    "source_signature": "9629f1dd0ac0ae4296eb734889ccd19b5f14daccb4525f64909b2938c7f06739",
+    "level": 1,
+    "reason": "有Kinova三种接触任务对旧架构的实机对照，可复用交互模式切换；影响范围主要为此类被动阻抗控制。",
+    "quote": "A Unified Fractal"
+  },
+  {
+    "item_id": "arxiv:2611.07630",
+    "source_signature": "6a8686d1888e4cf214cdbddf3b626c31edcb2075b224dc6dacbcbed9885585b4",
+    "level": 1,
+    "reason": "同频PWM身份与双速率事件更新减少频率资源需求，有机载闭环展示；依赖主动标记和事件相机，复用较窄。",
+    "quote": "Real-Time Event-Based"
+  },
+  {
+    "item_id": "arxiv:2611.08259",
+    "source_signature": "2fa909a75cc4210740284a26e299120786450426e22c6ace3c8ed6a5c402544e",
+    "level": 1,
+    "reason": "冻结故障电机路由并用新种子验证，模型扰动反例可改进验证设计；仍为特定LoE与仿真分配器问题。",
+    "quote": "Fault-Geometry-Aware"
+  },
+  {
+    "item_id": "arxiv:2611.08142",
+    "source_signature": "199e150b1301059aba405ebe0fa0fc34edf9c5276af0559982e0b00548ca3ddb",
+    "level": 0,
+    "reason": "Webots接口映射到TurtleBot降低教学部署门槛，但仅学生初评反馈，缺受控学习或性能证据。",
+    "quote": "Educational robotics"
+  },
+  {
+    "item_id": "arxiv:2611.08119",
+    "source_signature": "062d7ac406535a51f582658192a187dab61cb32c1e55b8e7dda4440186134099",
+    "level": 1,
+    "reason": "边界压缩提供精确有向可达与批查询摊销，吞吐有具体对照；限定静态图和查询密集规划场景。",
+    "quote": "H-BRICK: Hierarchical"
+  },
+  {
+    "item_id": "arxiv:2611.07808",
+    "source_signature": "04d7fdcf0579c2f47c5b8d316d9ee75eb14b5728195ae4d90506eed4c5a5e63b",
+    "level": 0,
+    "reason": "网络与机体尺寸成本联动有反直觉能耗结果，但偏配送系统工程，较少直接改变具身策略训练与执行。",
+    "quote": "A Sequential"
+  },
+  {
+    "item_id": "arxiv:2611.05372",
+    "source_signature": "fd0334a92d8c025b89f58e7d778875ed1619a8bd85da53aedec86153c5b85776",
+    "level": 1,
+    "reason": "参考偏置观测与双尺度误差改善到达保持，且有同时间预算经典IK实机对照；适用精密臂控制，需核公平性。",
+    "quote": "PolicyIK: High-Precision"
+  },
+  {
+    "item_id": "arxiv:2611.03520",
+    "source_signature": "fd1edfdefd68b3ab7f77e8ed6d6622163992ad4d2af2d8830812ad0b2c887a89",
+    "level": 1,
+    "reason": "低成本三轴触觉和去剪切消融提供明确任务增量，值得核传感器一致性；目前三类操作不代表广泛策略收益。",
+    "quote": "PanoTac: A Dense"
+  },
+  {
+    "item_id": "arxiv:2611.03584",
+    "source_signature": "cc8612ec222a37cfe09c2c714d09add8646794b756a05b9f30ee80db8ce70eff",
+    "level": 1,
+    "reason": "将信念空间约束求解嵌入LVLM工具循环，跨两平台优于直接调用；摘要缺量化预算与消融，先作相关增量。",
+    "quote": "TAMPAgent: Agentic"
+  },
+  {
+    "item_id": "arxiv:2611.03622",
+    "source_signature": "a465c7e0dc04e28f145d24eb61c6efe06b17cd2d7866f61f3d03e4ba3f8bdc33",
+    "level": 1,
+    "reason": "描述与绝对标准评估解耦可省逐模型后训练，涉及失败偏差与下游RL；摘要未列定量对照，暂不认定路线突破。",
+    "quote": "D&A: Decoupling"
+  },
+  {
+    "item_id": "arxiv:2611.03647",
+    "source_signature": "64f1e091a78131c9da88a51dbf7d7007a35ec59326a51d071b5688ff74829b96",
+    "level": 1,
+    "reason": "场景重定向和误差感知掩码针对人体视角差异，五任务有进展；还依赖在策略纠正，需分离各环节数据代价。",
+    "quote": "Pixel-UMI: Learning"
+  },
+  {
+    "item_id": "arxiv:2611.03648",
+    "source_signature": "6a3e52a3a0f1b9ac73fe069fd2d92131f80e87f7fdb9ae074f5d63f9469082cf",
+    "level": 0,
+    "reason": "硬件数据控制共设计范围广，但摘要主要系统展示，没有清楚量化比较或独立机制证据，暂列常规整合。",
+    "quote": "Pixel: A Co-Designed"
+  },
+  {
+    "item_id": "arxiv:2611.03779",
+    "source_signature": "7d196cd045bd658650d2d2f92e19b847321fce9c8179adb567e9fdd2d0688d90",
+    "level": 1,
+    "reason": "近百小时跨物体手持数据及相机、中训练对照明确，可复用采集设计；仍依赖匹配软手指并在未见物体微调。",
+    "quote": "Robot-Matched"
+  },
+  {
+    "item_id": "arxiv:2611.03815",
+    "source_signature": "55f657651545155a170daf269c75f523befca8f9d3268838fbcc9cffb8cd0aa5",
+    "level": 2,
+    "reason": "无机器人采集与纠正的万小时手持数据路线有同任务后训练基线对照，并承诺开放数据权重，可能改变采集门槛。",
+    "quote": "AIRoA-0: Long-Horizon,"
+  },
+  {
+    "item_id": "arxiv:2611.05163",
+    "source_signature": "9250e9af68704c14474dbbbdb77ab05e25f63c38bcc54e582af61a9877507c1c",
+    "level": 2,
+    "reason": "人视频生成目标机器人视频并以深度IDM标动作，跨本体任务及遥操作成本对照可能替代采集路线，需核前置数据。",
+    "quote": "Synthesizing"
+  },
+  {
+    "item_id": "arxiv:2611.08156",
+    "source_signature": "f85205a3f7d39b3dcc6d1a7c3dd3259214159cd5e8b07dfb182d461984cf6776",
+    "level": 2,
+    "reason": "控制专用紧凑JEPA骨干与训练时预测涉及参数和推理成本，含特征与指令修正比较，可影响模型架构选择。",
+    "quote": "La-JEPA: Compact"
+  },
+  {
+    "item_id": "arxiv:2611.08318",
+    "source_signature": "c72fa376c8977d5a24dfdcc598dead6260e228ef8913de87e00fb90c0a164601",
+    "level": 2,
+    "reason": "同一自改进代理暴露或隐藏判据的受控实验及轻微改判据、跨任务检验，可能改变通用自改进评测结论。",
+    "quote": "Learning the"
+  },
+  {
+    "item_id": "arxiv:2611.07516",
+    "source_signature": "fcd65fbc23061f556af8775beaa8a0df2cd9e2ebea5b0935335ff24eb661be37",
+    "level": 1,
+    "reason": "训练外参数和独立验收揭示车辆控制排名失真，有迁移验证价值；结论限特技车及部分运动学指标。",
+    "quote": "Training-Independent"
+  },
+  {
+    "item_id": "arxiv:2611.08295",
+    "source_signature": "140cf5d0516abc8d3fd3cd7393808b821b2ecbc69701a0a6de64c871227ec189",
+    "level": 0,
+    "reason": "健康参与者的小样本神经肌肉轨迹预测是康复概念验证，与通用具身训练路线较远，且非临床效果证据。",
+    "quote": "Transformer-Based"
+  },
+  {
+    "item_id": "arxiv:2611.08056",
+    "source_signature": "8018b72df33ba5438424c723b91b681ee902a4ac17da0c2f00f05a3e08b2e5ea",
+    "level": 1,
+    "reason": "先模仿再放松先验以适配接触支撑，真机与支撑消融明确；限定跑酷地形与特定本体，须核成功口径。",
+    "quote": "Terrain-Indexed"
+  },
+  {
+    "item_id": "arxiv:2611.07537",
+    "source_signature": "37cb89d0b35634201d1562a4bf1128a60b3f890efafd4230bc7642796d04def4",
+    "level": 1,
+    "reason": "HJ与CBF统一比较和基准可辅助安全方法选择，但为综述型综合，不是新训练推理机制或已证实成本改变。",
+    "quote": "Unified Overview"
+  },
+  {
+    "item_id": "arxiv:2611.07687",
+    "source_signature": "15047c7864b58a649519917aba87de87ea2d1acc0a972c7e68902aac60f8f067",
+    "level": 1,
+    "reason": "主动创建特征有900次仿真与实机漂移对照，但飞控使用OptiTrack，须区分VIO改善和独立自主飞行。",
+    "quote": "Not Losing Your"
+  }
+]

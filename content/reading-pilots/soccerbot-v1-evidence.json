@@ -1,0 +1,711 @@
+{
+  "id": "d6ea47ffad57c21e15159dc318f734bf4c38c590f05c42f9366ffb6597aa73ee",
+  "url": "https://arxiv.org/html/2611.06564v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "86cd1340fbd76a44",
+      "section": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+      "location": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+      "text": "Humanoid soccer requires a robot to seamlessly combine agile locomotion, ball manipulation, and impact-rich contact dynamics across a continuous, dynamic behavioral spectrum. Yet existing approaches either cover only a limited set of skills, or forego motion priors entirely and produce unnatural behaviors, leaving the combination of a unified skill set and human-like motion quality unaddressed. We present SoccerBot , a hierarchical reinforcement learning framework that resolves both limitations through a structured latent motion prior distilled from large-scale human soccer motion capture data. By constraining policy learning within this dynamically plausible motion manifold, a single skill-conditioned policy naturally learns to perform moving, dribbling, trapping, and kicking in a unified formulation, while inherently producing human-like motion and fluid transitions during commanded skill switching. Augmented by robustness-oriented simulation design, SoccerBot transfers zero-shot to the Unitree G1 humanoid robot, demonstrating agile, natural, and robust execution of the full soccer skill repertoire under real-world conditions.",
+      "url": "https://arxiv.org/html/2611.06564v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c8e0264998d2023",
+      "section": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+      "location": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+      "text": "Figure 1: Real-world soccer skill execution on the Unitree G1 humanoid robot. SoccerBot learns a single unified policy that covers the full soccer behavioral spectrum, including moving, trapping, dribbling, and kicking, with agile and human-like whole-body coordination.",
+      "url": "https://arxiv.org/html/2611.06564v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "af0015ecbfe3d193",
+      "section": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+      "location": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+      "text": "Keywords: Humanoid Soccer, Latent Motion Priors",
+      "url": "https://arxiv.org/html/2611.06564v1#p3.1.1",
+      "kind": "p"
+    },
+    {
+      "id": "387ed0e528b58fdd",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Soccer stands apart from sports such as table tennis [ 19 , 17 ] and tennis [ 28 ] as a uniquely demanding benchmark for humanoid robots: rather than isolating upper-body dexterity, it demands the inseparable coupling of agile whole-body locomotion and non-prehensile ball manipulation across a rich, continuous behavioral spectrum. Humans master this spectrum with remarkable fluency: sprinting, trapping, dribbling, and kicking compose seamlessly into a continuous, expressive behavioral repertoire. This fluency emerges from decades of motor learning that endows human motion with natural coordination, dynamic stability, and graceful skill transitions. Replicating such fluency on a humanoid robot is far from trivial: the robot must not only master a diverse set of highly dynamic skills, but also execute smooth, natural transitions across the full behavioral spectrum. Humanoid soccer thus emerges as a compelling platform for studying unified whole-body control, simultaneously demanding agile locomotion, non-prehensile object manipulation, impact-rich contact dynamics, and human-like motion quality within a single, coherent control problem.",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "226bc70dff86d38c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Despite recent progress in reinforcement learning for humanoid locomotion [ 16 , 14 , 15 ] and motor skill acquisition [ 13 , 12 , 8 , 4 , 7 , 26 , 21 , 3 ] , existing approaches to humanoid soccer remain fundamentally limited along two orthogonal axes. On one axis, existing methods lack a unified skill repertoire: most prior works address only a narrow subset of soccer behaviors [ 6 , 22 , 23 ] , such as directed kicking, dribbling, or locomotion-only control, and even multi-skill systems rely on decoupled, independently trained controllers that cannot naturally bridge the dynamics between different actions [ 5 ] . Multi-skill soccer built on human motion priors has so far been demonstrated only for simulated characters [ 9 , 5 ] . The result is a fragmented behavioral space where inter-skill transitions are inherently discontinuous and unnatural, as evidenced by the jarring switches between running and trapping, or dribbling and kicking. On the other axis, many existing methods rely solely on task-reward-driven reinforcement learning without any motion prior [ 3 ] , leaving motion naturalness entirely unaddressed. Without structural regularization grounded in human motion, such policies produce erratic, mechanically unnatural behaviors that are both visually implausible and brittle under the contact-rich dynamics of real soccer interaction. Together, these two axes define a clear gap in the literature: the combination of human-like coordination and a complete, unified soccer skill set has never been simultaneously achieved in a single humanoid soccer system.",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6d33951b47e62870",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "To close this gap, we propose SoccerBot , a hierarchical learning framework that addresses both limitations through a unified mechanism: a structured latent motion prior distilled from large-scale human soccer motion capture data. Building on recent advances in physics-based motion imitation [ 10 ] , we first distill a motion tracking policy into a compact latent action space that encodes a rich, dynamically plausible manifold of human-like whole-body motion. A unified skill-conditioned policy then operates within this latent space via residual control, learning to perform dribbling, trapping, kicking, and moving under a shared control formulation. By grounding all skills within the same motion prior, SoccerBot inherently produces natural, human-like motion across the full behavioral spectrum, and produces fluid, natural inter-skill transitions during commanded skill switching. To further support reliable real-world deployment, we incorporate robustness-oriented simulation design including ball dynamics modeling, domain randomization, and observation perturbation, enabling zero-shot sim-to-real transfer to the Unitree G1 humanoid robot.",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6afaa3fcd0868694",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We evaluate SoccerBot in both simulation and real-world settings, demonstrating that a single unified policy can execute the full spectrum of soccer skills with agility and naturalness under real-world conditions. The main contributions of this work are as follows:",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "770043b7001ec7bb",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We present SoccerBot , to our knowledge the first real-world humanoid soccer system that jointly achieves a complete skill repertoire and human-like motion quality, learning moving, dribbling, trapping, and kicking within a single unified policy.",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "91bd2ca1ca65a174",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We propose a hierarchical latent motion prior framework with transition state initialization (TSI), grounding unified soccer skill learning within a structured motion manifold and enabling agile, human-like behaviors, fluid inter-skill transitions, and robust cross-skill composition without explicit state machines or separate controllers.",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "55301966397133ed",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We conduct extensive simulation benchmarks and real-world experiments on the Unitree G1, demonstrating strong task performance across all four skills, structured latent skill-space organization, and reliable zero-shot sim-to-real transfer with minimal performance degradation.",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "409ce5c9e71393d9",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Videos are available at https://soccerbot-humanoid.github.io .",
+      "url": "https://arxiv.org/html/2611.06564v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "5a3dc76c55b71775",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Reinforcement learning has driven rapid progress in humanoid robot control, enabling robust locomotion [ 15 , 16 , 14 ] and whole-body motion tracking [ 8 , 4 , 2 , 27 , 21 , 7 ] from large-scale human motion capture data [ 11 ] . Beyond locomotion and motion tracking, RL has enabled humanoid robots to master a growing range of athletic skills, including tennis [ 28 ] , table tennis [ 19 , 17 ] , and parkour [ 24 , 26 ] . Among these, humanoid soccer stands out as uniquely demanding: it requires the tight coupling of agile locomotion and non-prehensile ball manipulation through the feet, sustained across a continuous and dynamic behavioral spectrum. Early learning-based soccer systems demonstrated agile ball interaction on simulated avatars [ 9 ] and small real bipedal robots [ 3 ] , while more recent work has explored soccer motion generation from human demonstrations [ 20 , 25 ] . On real humanoid robots, Dribble Master [ 23 ] learns agile dribbling through a two-stage curriculum with virtual-camera perception, and other works study perception-driven kicking and reactive soccer skills [ 6 , 22 ] . Most closely related to our work, PhysicsFC [ 5 ] learns dribbling, trapping, moving, and kicking with smooth transitions, but relies on skill-specific policies with an explicit finite-state machine and remains confined to simulation. In contrast, our work learns a single unified policy across the full soccer skill repertoire and deploys it on a real humanoid robot.",
+      "url": "https://arxiv.org/html/2611.06564v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e7350b3d5ba2ae5a",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "A prominent approach to regularizing humanoid reinforcement learning uses adversarial motion priors. AMP [ 13 ] learns a discriminator from unstructured motion clips to provide a style reward that guides task policies toward natural behaviors, and ASE [ 12 ] extends this by learning reusable adversarial skill embeddings for downstream task policies. While effective, adversarial approaches require careful balancing between task reward and motion realism, and can struggle to discover precise contact-rich strategies such as ball trapping. An alternative line of work constructs structured latent action spaces by distilling motion tracking controllers into compact motor representations. PULSE [ 10 ] distills a universal humanoid motion tracker into a VAE-style latent action space with a learned state-conditioned prior, enabling downstream policies to generate coherent human-like motions without adversarial rewards. Inspired by this framework, recent work has extended latent motion priors to athletic humanoid skills, demonstrating their effectiveness for contact-rich tasks such as tennis [ 28 ] . We adapt the latent motion prior framework to unified humanoid soccer, training a single residual latent policy conditioned on skill commands across moving, dribbling, trapping, and kicking, which extends beyond single-skill athletic tasks to a complete soccer skill repertoire deployed on a real robot.",
+      "url": "https://arxiv.org/html/2611.06564v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9d519e45ccde6280",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Figure 2: Overview of SoccerBot . The framework consists of three stages: (1) a motion tracking expert is trained on retargeted human soccer motion data; (2) the tracking expert is distilled into a structured latent motion prior via a variational encoder-decoder framework; (3) a unified skill-conditioned policy learns to perform moving, dribbling, trapping, and kicking via residual latent control over the frozen prior, with transition state initialization enabling robust cross-skill composition. Real-world deployment uses an external motion capture system for ball state estimation.",
+      "url": "https://arxiv.org/html/2611.06564v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3255bc13a7c6461a",
+      "section": "3 Method",
+      "location": "3 Method",
+      "text": "We present SoccerBot , a staged framework for learning a unified whole-body policy for humanoid soccer skills. The key idea is to separate low-level motor competence from high-level soccer task optimization. As shown in Fig. 2 , our pipeline has three stages: Stage I trains a motion tracking teacher from curated soccer demonstrations; Stage II distills this teacher into a compact latent motion prior; and Stage III trains a skill-conditioned soccer policy within this frozen latent action space. The final policy receives a skill command and task observation, predicts a latent residual, and decodes it into joint position targets through the pretrained motion decoder.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f1274674d387bca9",
+      "section": "3.1 Motion Tracking Policy Learning",
+      "location": "3.1 Motion Tracking Policy Learning",
+      "text": "The first stage constructs a physically feasible motion corpus and trains a whole-body tracking policy π trk \\pi_{\\mathrm{trk}} . We source human soccer demonstrations from Soccer-X [ 25 ] and retarget them to the humanoid robot using GMR [ 1 ] . Since raw retargeted motions may contain kinematic artifacts such as foot skating, discontinuous contacts, and dynamically infeasible poses, we apply a filtering pipeline: a pretrained tracker rolls out each sequence in simulation, and segments that cannot be tracked under hardware torque limits are discarded. This yields approximately 2.5 2.5 hours of curated reference motions 𝒟 motion \\mathcal{D}_{\\mathrm{motion}} .",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0f4c813b506e5069",
+      "section": "3.1 Motion Tracking Policy Learning",
+      "location": "3.1 Motion Tracking Policy Learning",
+      "text": "We train π trk ​ ( a t ∣ s t , s ^ ref ) \\pi_{\\mathrm{trk}}(a_{t}\\mid s_{t},\\hat{s}_{\\mathrm{ref}}) with reinforcement learning to imitate the filtered trajectories. The state is s t = ( s t prop , s t priv ) s_{t}=(s_{t}^{\\mathrm{prop}},s_{t}^{\\mathrm{priv}}) , where s t prop s_{t}^{\\mathrm{prop}} contains proprioceptive observations such as joint positions and velocities, projected gravity, base angular velocity, and previous action, while s t priv s_{t}^{\\mathrm{priv}} denotes privileged information available only in simulation, such as the base linear velocity. The reference s ^ ref ∈ 𝒟 motion \\hat{s}_{\\mathrm{ref}}\\in\\mathcal{D}_{\\mathrm{motion}} specifies target full-body poses and velocities. The policy outputs joint position targets tracked by a low-level PD controller, and the reward combines pose and velocity imitation with balance and control regularization. After convergence, π trk \\pi_{\\mathrm{trk}} is executed on 𝒟 motion \\mathcal{D}_{\\mathrm{motion}} and provides the teacher actions for distillation.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e90a281ecc016c94",
+      "section": "3.2 Latent Motion Prior Construction via Distillation",
+      "location": "3.2 Latent Motion Prior Construction via Distillation",
+      "text": "The second stage distills the tracking teacher into a structured latent motion prior. The student consists of a posterior encoder q ϕ ​ ( z t ∣ s t prop , s t ref ) q_{\\phi}(z_{t}\\mid s_{t}^{\\mathrm{prop}},s_{t}^{\\mathrm{ref}}) , a state-conditioned prior p ψ ​ ( z t ∣ s t prop ) p_{\\psi}(z_{t}\\mid s_{t}^{\\mathrm{prop}}) , and a decoder D θ ​ ( z t , s t prop ) D_{\\theta}(z_{t},s_{t}^{\\mathrm{prop}}) . The posterior observes both proprioception and reference motion, while the prior observes only proprioception. This asymmetry lets the encoder infer the latent that best explains the teacher motion, while forcing the prior to model the motions that are feasible from the current body state alone, which is exactly the information available to the downstream soccer policy.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6f3bfd68b14d1ef0",
+      "section": "3.2 Latent Motion Prior Construction via Distillation",
+      "location": "3.2 Latent Motion Prior Construction via Distillation",
+      "text": "We model both distributions as diagonal Gaussians,",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7926e71d7715e387",
+      "section": "3.2 Latent Motion Prior Construction via Distillation",
+      "location": "3.2 Latent Motion Prior Construction via Distillation",
+      "text": "q ϕ = 𝒩 ⁡ ( μ ϕ ​ ( s t prop , s t ref ) , diag ⁡ ( σ ϕ 2 ) ) , p ψ = 𝒩 ⁡ ( μ ψ ​ ( s t prop ) , diag ⁡ ( σ ψ 2 ) ) . q_{\\phi}=\\mathcal{N}(\\mu_{\\phi}(s_{t}^{\\mathrm{prop}},s_{t}^{\\mathrm{ref}}),\\mathrm{diag}(\\sigma_{\\phi}^{2})),\\qquad p_{\\psi}=\\mathcal{N}(\\mu_{\\psi}(s_{t}^{\\mathrm{prop}}),\\mathrm{diag}(\\sigma_{\\psi}^{2})).",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "49d819d6993d93ed",
+      "section": "3.2 Latent Motion Prior Construction via Distillation",
+      "location": "3.2 Latent Motion Prior Construction via Distillation",
+      "text": "Given the teacher action a t ⋆ = π trk ​ ( s t , s ^ ref ) a_{t}^{\\star}=\\pi_{\\mathrm{trk}}(s_{t},\\hat{s}_{\\mathrm{ref}}) , the student samples z t = μ ϕ , t + σ ϕ , t ⊙ ϵ t z_{t}=\\mu_{\\phi,t}+\\sigma_{\\phi,t}\\odot\\epsilon_{t} , ϵ t ∼ 𝒩 ⁡ ( 0 , I ) \\epsilon_{t}\\sim\\mathcal{N}(0,I) , and reconstructs a ^ t = D θ ​ ( z t , s t prop ) \\hat{a}_{t}=D_{\\theta}(z_{t},s_{t}^{\\mathrm{prop}}) . Training uses an online DAgger-style distillation buffer [ 18 ] containing student-visited states and the corresponding teacher actions.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "73a520d7956b60bb",
+      "section": "3.2 Latent Motion Prior Construction via Distillation",
+      "location": "3.2 Latent Motion Prior Construction via Distillation",
+      "text": "ℒ distill = 𝔼 t ∥ a ^ t − a t ⋆ ∥ 2 2 + β KL 𝔼 t D KL ( q ϕ ∥ p ψ ) + β sm 𝔼 t ∥ μ ϕ , t − μ ϕ , t − 1 ∥ 2 2 . \\mathcal{L}_{\\mathrm{distill}}=\\mathbb{E}_{t}\\|\\hat{a}_{t}-a_{t}^{\\star}\\|_{2}^{2}+\\beta_{\\mathrm{KL}}\\mathbb{E}_{t}D_{\\mathrm{KL}}(q_{\\phi}\\|p_{\\psi})+\\beta_{\\mathrm{sm}}\\mathbb{E}_{t}\\|\\mu_{\\phi,t}-\\mu_{\\phi,t-1}\\|_{2}^{2}. (1)",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "8ad85c679306c5bb",
+      "section": "3.2 Latent Motion Prior Construction via Distillation",
+      "location": "3.2 Latent Motion Prior Construction via Distillation",
+      "text": "The first term trains the decoder to reproduce the teacher’s joint targets. The second term regularizes the full information posterior toward the learned prior, so that the information carried by the reference motion is transferred into a distribution that can be queried without it. The third term penalizes abrupt changes of the posterior mean and yields temporally smooth latent trajectories, which improves the continuity of the decoded joint targets. After distillation, the posterior is discarded, while p ψ p_{\\psi} and D θ D_{\\theta} are frozen for downstream soccer learning.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS2.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "666cb960719d7c79",
+      "section": "3.3 Skill-Conditioned Soccer Policy Learning",
+      "location": "3.3 Skill-Conditioned Soccer Policy Learning",
+      "text": "The third stage trains a unified skill-conditioned policy π η \\pi_{\\eta} for the soccer skills. A single policy handles four primitives: dribbling , kicking , moving , and trapping . Its observation contains the velocity command, ball position and velocity in the robot frame, skill one-hot vector, and proprioceptive state. For moving , ball observations are masked, so the same interface supports both ball-centric and robot-centric behaviors without skill-specific observation spaces.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b230c9abeaa44e52",
+      "section": "3.3.1 Latent Space Residual Actor",
+      "location": "3.3.1 Latent Space Residual Actor",
+      "text": "To preserve the stability and naturalness of the motion prior during dynamic ball interaction, the soccer policy does not act directly in joint space. Instead, it learns a residual in the pretrained latent motion space while the prior and decoder stay frozen. Given proprioception s t prop s_{t}^{\\mathrm{prop}} , task observation s t task s_{t}^{\\mathrm{task}} , and skill command e t e_{t} , the frozen prior produces z t p = μ ψ ​ ( s t prop ) z_{t}^{p}=\\mu_{\\psi}(s_{t}^{\\mathrm{prop}}) . The policy samples a residual z t s ∼ 𝒩 ⁡ ( μ η ​ ( s t prop , s t task , e t ) , diag ⁡ ( σ η 2 ) ) z_{t}^{s}\\sim\\mathcal{N}(\\mu_{\\eta}(s_{t}^{\\mathrm{prop}},s_{t}^{\\mathrm{task}},e_{t}),\\mathrm{diag}(\\sigma_{\\eta}^{2})) and decodes",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e2cc8a39e55f8af0",
+      "section": "3.3.1 Latent Space Residual Actor",
+      "location": "3.3.1 Latent Space Residual Actor",
+      "text": "z t = z t p + α ​ z t s , a t = D θ ​ ( z t , s t prop ) . z_{t}=z_{t}^{p}+\\alpha z_{t}^{s},\\qquad a_{t}=D_{\\theta}(z_{t},s_{t}^{\\mathrm{prop}}). (2)",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "c4560a887b67593d",
+      "section": "3.3.1 Latent Space Residual Actor",
+      "location": "3.3.1 Latent Space Residual Actor",
+      "text": "Here α \\alpha scales the residual and σ η \\sigma_{\\eta} is a learnable state-independent standard deviation. PPO optimizes this latent residual distribution rather than the 29 29 -dimensional joint action: likelihood ratios, entropy, and KL terms are computed only in latent space. This restricts stochastic exploration to the neighborhood of the motion prior while still allowing the policy to adapt to dynamic ball interactions.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.SSS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "016d8ada2bd0a5a0",
+      "section": "3.3.1 Latent Space Residual Actor",
+      "location": "3.3.1 Latent Space Residual Actor",
+      "text": "We regularize the residual mean by",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f3fd79cad4526c92",
+      "section": "3.3.1 Latent Space Residual Actor",
+      "location": "3.3.1 Latent Space Residual Actor",
+      "text": "ℒ bound = 𝔼 t ​ ∑ i [ max ⁡ ( | μ η , i ​ ( s t prop , s t task , e t ) | − 1 , 0 ) ] 2 . \\mathcal{L}_{\\mathrm{bound}}=\\mathbb{E}_{t}\\sum_{i}\\left[\\max\\left(|\\mu_{\\eta,i}(s_{t}^{\\mathrm{prop}},s_{t}^{\\mathrm{task}},e_{t})|-1,0\\right)\\right]^{2}. (3)",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "d5edd28777a03d5c",
+      "section": "3.3.1 Latent Space Residual Actor",
+      "location": "3.3.1 Latent Space Residual Actor",
+      "text": "This keeps the task policy close to the motion prior while preserving the expressivity needed for ball interaction.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.SSS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "d1eccef90e36f720",
+      "section": "3.3.2 Multi-Skill Training and Transition Curricula",
+      "location": "3.3.2 Multi-Skill Training and Transition Curricula",
+      "text": "Each episode samples an active skill and interprets the command accordingly. For moving , the command specifies the desired robot velocity. For the ball-centric skills, it specifies the desired ball motion: dribbling samples low-speed target ball velocities, kicking samples high-speed target velocities together with strikeable initial ball states, and trapping launches incoming ground passes that the robot must intercept and damp. Rewards are routed by skill: only the terms of the active skill are enabled at each timestep, while a shared set of regularizers encourages consistent whole-body behavior.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fc3415d03ef08c12",
+      "section": "3.3.2 Multi-Skill Training and Transition Curricula",
+      "location": "3.3.2 Multi-Skill Training and Transition Curricula",
+      "text": "We use transition state initialization (TSI) to train robust skill switching. For each skill, we keep a circular buffer of terminal robot and ball states from episodes that ended without failure. At reset, an episode of the target skill can be initialized from the terminal state of a preceding skill. This exposes the policy to the postures, momentum, and ball configurations resulting from the preceding skill, rather than relying solely on canonical initial states.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS3.SSS2.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4b144ce352aa03c9",
+      "section": "3.4 Robustness for Sim-to-Real Transfer",
+      "location": "3.4 Robustness for Sim-to-Real Transfer",
+      "text": "We train with lightweight randomization and observation corruption that target the two main sources of sim-to-real mismatch in soccer: contact-rich robot–ball dynamics and imperfect state estimation.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fe957a783bf089f6",
+      "section": "3.4 Robustness for Sim-to-Real Transfer",
+      "location": "3.4 Robustness for Sim-to-Real Transfer",
+      "text": "We randomize robot–ground and ball–ground friction and restitution and the ball mass, and we apply angular damping to the ball with a coefficient c a c_{a} sampled uniformly from [ 0.3 , 0.6 ] [0.3,0.6] for each environment at initialization. This encourages repeated interaction with the ball to maintain the commanded speed during dribbling. We further randomize the torso center of mass, default joint positions, and actuator latency. External velocity pushes during rollouts improve recovery from contact-induced disturbances.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1b56dd54886d16e9",
+      "section": "3.4 Robustness for Sim-to-Real Transfer",
+      "location": "3.4 Robustness for Sim-to-Real Transfer",
+      "text": "Policy observations are corrupted with bounded noise on ball position, ball velocity, base angular velocity, projected gravity, joint positions, and joint velocities, which makes the controller less dependent on exact simulator states.",
+      "url": "https://arxiv.org/html/2611.06564v1#S3.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9f4fbfdb39d1b1d2",
+      "section": "4 Experimental Results",
+      "location": "4 Experimental Results",
+      "text": "The multi-skill policy is trained within the NVIDIA Isaac Lab simulation environment tailored to the Unitree G1 humanoid robot. For real-world hardware deployment, exteroceptive states are captured via an external optical motion capture system. The tracked ball states are transformed into the local robot base coordinate frame before being fed into the control policy.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "49d8d987861a0922",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "We evaluate the proposed framework on four humanoid soccer skills: kicking, dribbling, trapping, and moving. These skills require not only task completion, but also stable whole-body dynamic balancing and human-like motion quality. Each method is evaluated on 2,500 2{,}500 episodes per skill with randomized simulation settings.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9061ec0a1bb7c195",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "We compare our method with the following baselines: 1) PPO : vanilla PPO trained with our task reward without human motions. 2) AMP : PPO with an adversarial motion prior reward computed from human motions. 3) ASE : an adversarial skill embedding baseline that pre-trains a latent-conditioned low-level controller on the human motions and then trains a high-level task policy that selects skill latents. 4) LATENT : a task policy trained in a learned latent action space with Latent Action Barrier [ 28 ] . We compare our method with the following ablations: 1) Ours w/o prior : removes the learned state-conditioned prior and predicts task latents directly. 2) Ours w/o TSI : trains without TSI.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec83e82b3a678f77",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "We use a compact set of task and motion metrics. SR is the percentage of trials that satisfy the skill-specific success condition without a fall or task failure. VelErr measures the speed tracking error of the task object: the ball for kicking and dribbling, and the robot base for moving. DirErr is the heading error between the realized motion and the commanded direction in the horizontal plane. For dribbling, ResT is the response time after a command switch. For trapping, StopT is the time from first ball contact to a stable stop, and DistErr is the ball displacement during stopping. Train ref. and Post-train ref. measure how closely a policy moves like a human: each is the squared maximum mean discrepancy, MMD 2 , between motion features of the policy’s rollouts and those of a human reference set. Train ref. uses the training motions 𝒟 motion \\mathcal{D}_{\\mathrm{motion}} , and Post-train ref. consists of motion capture clips that were not used to train any of the evaluated methods.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b6ce2748aa998a57",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "Table 1 summarizes performance across kicking, dribbling, trapping, and moving. Ours achieves the highest kicking ( 97.04 % 97.04\\% ) and dribbling ( 89.88 % 89.88\\% ) SR of all methods and completes every moving command. PPO kicks and traps reliably but never dribbles successfully, AMP fails most trapping and dribbling episodes, and ASE learns neither kicking nor dribbling.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ccc4eaee34a64ed1",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "Every method that uses human motion data is closer to the training motions than PPO, which shares our task rewards but uses none. AMP, which directly rewards matching the motion distribution, is closest to both reference sets, and ASE, whose low-level controller imitates the reference motions, is second on the post-training clips. However, AMP traps only 23.08 % 23.08\\% of passes and dribbles in 46.36 % 46.36\\% of episodes, and ASE learns neither kicking nor dribbling. Among the methods that complete all four skills, Ours is closest to both reference sets.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS1.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c2e4d60f224582b6",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "The components serve distinct roles: the frozen decoder, distilled from human soccer motions, carries the motion representation in every latent variant; the state-conditioned prior supplies a feasible latent anchor around which the residual explores; and TSI broadens the distribution of switching states. Because the w/o prior variant keeps the same decoder, it isolates the anchor. Both ablations trap more reliably than Ours. Ours tends to block fast passes with an extended leg, and the ball then rebounds beyond the displacement gate. Removing the prior lowers kicking and dribbling SR, and removing TSI lowers dribbling SR. The prior shows instead in how the policy moves: with the same decoder, removing it moves the policy further from both human reference sets, raising the mean MMD 2 to 0.234 0.234 and 0.582 0.582 . The benefit of TSI appears mainly when skills start from non-canonical states ( Sections 4.2 and 4.3 ).",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS1.SSS0.Px6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "057d70e96d6f8750",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "Table 1: Main simulation results on four humanoid soccer skills.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b4c634d0c58409c2",
+      "section": "4.1 Main Simulation Results on Soccer Skills",
+      "location": "4.1 Main Simulation Results on Soccer Skills",
+      "text": "Method Kicking Dribbling Trapping Moving Motion alignment SR ↑ \\uparrow VE ↓ \\downarrow DE ↓ \\downarrow SR ↑ \\uparrow VE ↓ \\downarrow DE ↓ \\downarrow ResT ↓ \\downarrow SR ↑ \\uparrow StopT ↓ \\downarrow DistErr ↓ \\downarrow SR ↑ \\uparrow VE ↓ \\downarrow DE ↓ \\downarrow Train ref. ↓ \\downarrow Post-train ref. ↓ \\downarrow PPO 93.96 8.68 4.35 0.00 99.81 163.83 5.00 94.64 0.87 0.31 99.96 6.07 1.77 0.328 0.575 AMP [ 13 ] 87.48 10.32 7.26 46.36 37.05 47.88 4.09 23.08 5.49 3.07 99.96 9.43 4.21 0.170 0.308 ASE [ 12 ] 0.00 99.52 169.79 0.00 99.67 163.64 5.00 49.24 3.46 1.58 58.60 28.59 26.62 0.292 0.409 LATENT [ 28 ] 91.00 8.50 6.80 85.24 12.69 7.21 1.92 85.92 1.53 0.64 100.00 9.67 2.71 0.231 0.603 Ours 97.04 7.26 4.76 89.88 8.79 4.24 1.36 83.08 1.43 0.49 100.00 4.95 5.38 0.226 0.554 – w/o prior 94.40 8.47 4.79 89.48 7.67 3.06 1.38 94.00 0.97 0.32 100.00 4.67 2.87 0.234 0.582 – w/o TSI 95.80 7.81 5.23 87.76 13.68 4.24 1.48 98.12 0.72 0.13 100.00 4.79 2.10 0.252 0.587",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T1.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "149c05d1946b3e95",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "We evaluate whether the four learned skills can naturally switch between each other. For each source skill, we roll out and store terminal robot and ball states. Each target skill is then evaluated from these states. For ball-centric targets, only source states with the ball within 0.8 0.8 m of the robot are eligible. We compare the full model with the variant trained without TSI.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "758ce359eb351ec0",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "Each entry in Table 2 is the SR of the target skill when initialized from terminal states of the source skill. Off-diagonal entries evaluate cross-skill switching, while diagonal entries evaluate command resampling within the same skill.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0fdf7c04cc4ccc21",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "Table 2 shows that the learned skills can be composed from terminal states of other skills. For non-trapping targets, the full model is higher than the variant without TSI in 8 8 of 9 9 cells, most on Dribble → \\rightarrow Kick ( 87.5 % 87.5\\% vs. 78.0 % 78.0\\% ), Move → \\rightarrow Dribble ( 78.5 % 78.5\\% vs. 71.5 % 71.5\\% ), and Trap → \\rightarrow Kick ( 96.5 % 96.5\\% vs. 92.0 % 92.0\\% ), whereas from canonical starts the two differ by only 1 1 – 2 2 points on kicking and dribbling. For trapping targets, the variant without TSI is higher in all four cells, mirroring the full model’s weaker trapping of fast passes from canonical starts rather than a transition-specific effect.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS2.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0c2f66a04f15ad14",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "From / To Dribble Kick Move Trap Dribble 94.0 / 90.0 87.5 / 78.0 93.0 / 91.5 53.0 / 71.0 Kick – / – – / – 99.5 / 97.5 86.5 / 96.5 Move 78.5 / 71.5 – / – 92.5 / 91.5 58.5 / 68.5 Trap 87.5 / 85.0 96.5 / 92.0 99.0 / 100.0 79.5 / 95.5",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T2.1.1",
+      "kind": "table"
+    },
+    {
+      "id": "c4f90caddad75ca0",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "Table 2: Terminal state skill transition success rate (%). Each cell reports Ours / w/o TSI .",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "493b3a42e2a49eee",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "Method Near Mid Incoming WideYaw Ours w/o prior 97.4 76.5 92.4 88.2 Ours w/o TSI 95.3 34.3 60.4 73.7 Ours(sim) 98.6 87.0 72.9 83.9 Ours(real) 95.0 85.0 70.0 80.0",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T3.1.1",
+      "kind": "table"
+    },
+    {
+      "id": "b50ea4934dfcfdb3",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "Table 3: Kicking success rate (%) across controlled ball and command conditions.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d774eea355aee890",
+      "section": "4.2 Skill Transition and Composability",
+      "location": "4.2 Skill Transition and Composability",
+      "text": "Figure 3: Latent skill-space construction under a joint t-SNE projection. Samples from z prior z_{\\mathrm{prior}} , z task z_{\\mathrm{task}} , and the final latent z z are embedded together and shown in separate panels. Colors indicate skill labels. The prior latent captures shared state-conditioned motor modes, while the task residual and final latent reveal increasingly skill-dependent structure.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d34b5e8f897975b6",
+      "section": "4.3 Kicking Robustness Across Ball and Command Conditions",
+      "location": "4.3 Kicking Robustness Across Ball and Command Conditions",
+      "text": "We evaluate the kicking policy across four controlled settings: Near and Mid static balls with different initial distances, Incoming balls moving toward the robot, and WideYaw commands with large target yaw angles. The command speed is fixed to 8.0 ​ m / s 8.0\\,\\mathrm{m/s} , and each setting is tested over 1000 1000 deterministic simulation episodes. We report the success rate ( SR ), where success requires valid ball contact, satisfying the kicking velocity and direction gates, and maintaining balance.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1f049b01e31cd898",
+      "section": "4.3 Kicking Robustness Across Ball and Command Conditions",
+      "location": "4.3 Kicking Robustness Across Ball and Command Conditions",
+      "text": "Table 3 summarizes the kicking success rates under different ball and command conditions. In simulation, our full method achieves strong performance on near and mid-range static balls, with success rates of 98.6 % 98.6\\% and 87.0 % 87.0\\% , respectively. The policy also remains robust under more challenging incoming ball and wide yaw settings, achieving 72.9 % 72.9\\% and 83.9 % 83.9\\% success rates. Compared with the variant without TSI, the full method improves all four conditions by 3.3 3.3 – 52.7 52.7 points, most strongly on mid-range balls, suggesting that the more diverse reset distribution helps the policy adapt to kicking situations away from the nominal setup.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "406d4055c01bf0f4",
+      "section": "4.3 Kicking Robustness Across Ball and Command Conditions",
+      "location": "4.3 Kicking Robustness Across Ball and Command Conditions",
+      "text": "The real-world results further demonstrate the sim-to-real transferability of the learned policy in controlling kicking direction, with success evaluated solely based on directional accuracy. Despite the hardware and perception uncertainties in real deployment, the real-robot success rates remain close to the simulation results, with only a small average performance drop of about 3.1 3.1 percentage points. This suggests that the learned kicking strategy is not only effective in simulation but also transfers well to the real robot across different ball and command conditions.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS3.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a39c67490f1f31c9",
+      "section": "4.4 Latent Skill-Space Construction",
+      "location": "4.4 Latent Skill-Space Construction",
+      "text": "We analyze how the latent action is constructed from the motion prior and the task residual. During evaluation rollouts, we record the prior latent z prior z_{\\mathrm{prior}} , the task residual latent z task z_{\\mathrm{task}} , and the final latent z z for kicking, dribbling, moving, and trapping. Samples from all three latent types are concatenated and embedded with a single joint t-SNE projection, then shown as three separate panels in Fig. 3 . Since the three panels share the same embedding space, we compare local neighborhoods and skill clusters, rather than interpreting the t-SNE axes directly.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c57d7de779f920e7",
+      "section": "4.4 Latent Skill-Space Construction",
+      "location": "4.4 Latent Skill-Space Construction",
+      "text": "Fig. 3 shows a transition from a shared motion prior to a skill-aware latent space. In z prior z_{\\mathrm{prior}} , the four skills largely overlap, suggesting that the prior captures state-conditioned feasible motor modes rather than explicit skill identity. The residual latent z task z_{\\mathrm{task}} introduces clearer skill-dependent separation. The final latent z z preserves the shared support of the prior while forming structured regions for dribbling, kicking, moving, and trapping. Moving and dribbling remain partially close because both rely on locomotion dynamics, while kicking and trapping occupy more specialized regions associated with striking and stopping the ball. This visualization indicates that the policy builds a structured skill space by adapting a shared motion prior with skill-conditioned residuals, rather than learning four isolated controllers.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7c6cdec4bdd8041c",
+      "section": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "location": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "text": "We deploy the policy zero-shot on a Unitree G1 humanoid robot. Ball and robot states are tracked by an external optical motion capture system and transformed into the robot base frame. We evaluate each of the four skills with 20 20 trials: moving and dribbling vary the commanded speed and heading, trapping varies the incoming ball velocity, and kicking varies the target ball speed and heading. Table 4 compares it with its sibling simulation policy.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS5.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3b08eb99b493e99b",
+      "section": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "location": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "text": "Table 4 shows the sim-to-real gap. Moving transfers most closely in speed: its speed error rises only from 19.14 % 19.14\\% in simulation to 21.53 % 21.53\\% on hardware. Dribbling and trapping degrade more across their continuous metrics. For dribbling, the speed error grows from 8.55 % 8.55\\% to 30.17 % 30.17\\% and the response time from 1.21 1.21 s to 2.37 2.37 s. For trapping, the stopping time grows from 0.78 0.78 s to 1.84 1.84 s, and the ball travels 1.07 1.07 m after contact instead of 0.31 0.31 m. Both skills depend on sustained robot–ball contact and rolling dynamics. Kicking retains substantially better directional than speed control: DirErr increases from 4.09 ∘ 4.09^{\\circ} to 10.41 ∘ 10.41^{\\circ} , whereas VelErr increases from 8.12 % 8.12\\% to 47.38 % 47.38\\% .",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS5.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ea8e1ff8065d6250",
+      "section": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "location": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "text": "To diagnose the remaining gap, we conducted two ball dynamics identification experiments on the deployment surface. Twenty passive drop trials yield a ball–ground restitution of e = 0.654 e=0.654 , which falls within the randomized range of [ 0.45 , 0.85 ] [0.45,0.85] . Free rolling trials measure an effective rolling deceleration of 0.100 0.100 m/s 2 . Reproducing these trials in simulation over the randomized angular damping range yields mean decelerations of 0.097 0.097 to 0.167 0.167 m/s 2 , so both measurements fall within the corresponding domain randomization ranges, supporting coverage of the observed real-world ball dynamics. The higher outgoing ball speed on hardware points to stronger effective foot–ball impulse transfer: the simulated ball is rigid, whereas the real inflated ball deforms during impact, altering the contact duration, force profile, and effective restitution.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.SS5.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d97823cee5033ba5",
+      "section": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "location": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "text": "Table 4: Simulation and real-robot results on four humanoid soccer skills.",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e7766bb2bb7aba0c",
+      "section": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "location": "4.5 Real-World Evaluation and Sim-to-Real Analysis",
+      "text": "Method Kicking Dribbling Trapping Moving VelErr (%) DirErr ( ∘ ) VelErr (%) DirErr ( ∘ ) ResT (s) StopT (s) DistErr (m) VelErr (%) DirErr ( ∘ ) Ours (sim) 8.12 4.09 8.55 3.77 1.21 0.78 0.31 19.14 5.85 Ours (real) 47.38 10.41 30.17 16.49 2.37 1.84 1.07 21.53 13.74",
+      "url": "https://arxiv.org/html/2611.06564v1#S4.T4.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "424ff4fe6629026b",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "We presented SoccerBot , a hierarchical learning framework for unified humanoid soccer control. By decoupling whole-body motor competence from task-level optimization, our approach distills human motion data into a reusable latent motion prior, upon which a single skill-conditioned policy learns moving, dribbling, kicking, and trapping within a shared latent action space. Simulation and real-world experiments on the Unitree G1 demonstrate robust skill execution, natural whole-body motion, and stable sim-to-real transfer. Beyond individual skills, the unified command interface enables higher-level planners to compose learned primitives into longer-horizon behaviors, suggesting a practical path toward autonomous planning and potentially multi-robot coordination.",
+      "url": "https://arxiv.org/html/2611.06564v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dea1f0fb7ddafe17",
+      "section": "6 Limitations and Future Work",
+      "location": "6 Limitations and Future Work",
+      "text": "Despite promising results, several limitations remain. First, the gap between simulation and real deployment varies across skills. On hardware, kicks overshoot the commanded speed, while dribbling and trapping exhibit the largest increases in continuous error metrics. These discrepancies may partly stem from the rigid ball contact model. Future work could explore compliant contact modeling and policy fine-tuning on the real robot. Second, the system relies on an external motion capture system for state estimation, restricting deployment to instrumented indoor environments. Integrating onboard perception would enable deployment in less structured settings. Third, the skill set is limited to four fundamental soccer behaviors; extending it with broader motion data and task curricula would make the policy more expressive. Fourth, our experiments focus on single-robot control, leaving multi-agent coordination and game-level decision making for future work. A natural direction is to use the learned skill-conditioned policy as a reusable low-level interface for autonomous planning and multi-agent humanoid soccer.",
+      "url": "https://arxiv.org/html/2611.06564v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "90bec30f21b1348c",
+      "section": "Acknowledgments",
+      "location": "Acknowledgments",
+      "text": "We thank the area chair and the anonymous reviewers for their constructive feedback, which helped improve this paper.",
+      "url": "https://arxiv.org/html/2611.06564v1#S6.SS0.SSSx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "35a316ef33c1ef4b",
+      "section": "Appendix A Problem Formulation",
+      "location": "Appendix A Problem Formulation",
+      "text": "We formulate humanoid soccer skill learning as a skill-conditioned Markov decision process ℳ = ( 𝒮 , 𝒜 , 𝒞 , p , r , γ ) \\mathcal{M}=(\\mathcal{S},\\mathcal{A},\\mathcal{C},p,r,\\gamma) . At time t t , the state s t ∈ 𝒮 s_{t}\\in\\mathcal{S} contains the robot and ball states, the action a t ∈ 𝒜 a_{t}\\in\\mathcal{A} is a vector of joint position targets, and c t ∈ 𝒞 c_{t}\\in\\mathcal{C} denotes the active skill. The skill set is",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a87078de734693c6",
+      "section": "Appendix A Problem Formulation",
+      "location": "Appendix A Problem Formulation",
+      "text": "𝒞 = { dribbling , kicking , moving , trapping } . \\mathcal{C}=\\{\\texttt{dribbling},\\texttt{kicking},\\texttt{moving},\\texttt{trapping}\\}.",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.Ex2",
+      "kind": "table"
+    },
+    {
+      "id": "539beb1e3c6c29e9",
+      "section": "Appendix A Problem Formulation",
+      "location": "Appendix A Problem Formulation",
+      "text": "Given the observation o t o_{t} , the objective is",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "dc94491bd4ac74b6",
+      "section": "Appendix A Problem Formulation",
+      "location": "Appendix A Problem Formulation",
+      "text": "max π 𝔼 c ∼ p ( c ) , τ ∼ π ( ⋅ ∣ c ) [ ∑ t = 0 T − 1 γ t r c ( s t , a t ) ] , a t = π ( o t , c ) , \\max_{\\pi}\\mathbb{E}_{c\\sim p(c),\\,\\tau\\sim\\pi(\\cdot\\mid c)}\\left[\\sum_{t=0}^{T-1}\\gamma^{t}r_{c}(s_{t},a_{t})\\right],\\qquad a_{t}=\\pi(o_{t},c), (A.1)",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.E1",
+      "kind": "table"
+    },
+    {
+      "id": "72e312b50b33b092",
+      "section": "Appendix A Problem Formulation",
+      "location": "Appendix A Problem Formulation",
+      "text": "where r c r_{c} is a skill-conditioned reward. The final soccer policy does not act directly in the raw joint action space. Instead, it predicts a residual latent action, combines it with a frozen state-conditioned motion prior, and decodes the resulting latent into joint position targets.",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "3ad1c6f9420ca0d7",
+      "section": "A.1 Observations and Commands",
+      "location": "A.1 Observations and Commands",
+      "text": "The actor observes the command, masked ball state, skill one-hot code, proprioception, and previous action. For moving , ball position and velocity are masked to zero so that the shared policy interface does not depend on irrelevant ball state. The critic uses the same clean terms and additionally observes base linear velocity. Table A.1 gives the complete observation layout, dimensions, and policy-side corruption ranges.",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d5671dd1cd55eced",
+      "section": "A.1 Observations and Commands",
+      "location": "A.1 Observations and Commands",
+      "text": "Table A.1: Observation layout for the unified soccer skill policy and critic. The policy observation concatenates all listed policy terms and applies corruption where specified. The critic uses the corresponding uncorrupted terms, additionally includes base linear velocity, and disables corruption. For the Unitree G1, there are 29 actuated joints, yielding 106 policy dimensions and 109 critic dimensions.",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3dded5f212e8a2f2",
+      "section": "A.1 Observations and Commands",
+      "location": "A.1 Observations and Commands",
+      "text": "Group Term Dim. Corruption Policy/Critic Command 3 None Policy/Critic Ball position 3 [ − 0.02 , 0.02 ] [-0.02,0.02] m Policy/Critic Ball velocity 3 [ − 0.1 , 0.1 ] [-0.1,0.1] m/s Policy/Critic Skill one-hot 4 None Policy/Critic Base angular velocity 3 [ − 0.05 , 0.05 ] [-0.05,0.05] rad/s Critic only Base linear velocity 3 None Policy/Critic Projected gravity 3 [ − 0.02 , 0.02 ] [-0.02,0.02] Policy/Critic Relative joint position 29 [ − 0.01 , 0.01 ] [-0.01,0.01] rad Policy/Critic Relative joint velocity 29 [ − 0.5 , 0.5 ] [-0.5,0.5] rad/s Policy/Critic Last action 29 None",
+      "url": "https://arxiv.org/html/2611.06564v1#A1.T1.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "aeca35844d5afe98",
+      "section": "Appendix B Reward Specification",
+      "location": "Appendix B Reward Specification",
+      "text": "Rewards are routed by skill so that only the objective associated with the active soccer skill is optimized at each timestep:",
+      "url": "https://arxiv.org/html/2611.06564v1#A2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9e07964ad259516b",
+      "section": "Appendix B Reward Specification",
+      "location": "Appendix B Reward Specification",
+      "text": "r t = r t shared + ∑ c ∈ 𝒞 𝟏 { c t = c } r t c . r_{t}=r_{t}^{\\mathrm{shared}}+\\sum_{c\\in\\mathcal{C}}\\mathbf{1}_{\\{c_{t}=c\\}}r_{t}^{c}. (A.2)",
+      "url": "https://arxiv.org/html/2611.06564v1#A2.E2",
+      "kind": "table"
+    },
+    {
+      "id": "031078534fa50b3b",
+      "section": "Appendix B Reward Specification",
+      "location": "Appendix B Reward Specification",
+      "text": "This routing avoids conflicting gradients between objectives, such as accelerating the ball for kicking and damping the ball for trapping . Shared terms regularize posture, action smoothness, joint limits, and termination behavior. Table A.2 lists the implemented task and regularization terms with their weights. Compact gates g ⁡ ( ⋅ ) g(\\cdot) denote implementation-specific conditions, such as possession, contact phase, standing-command mode, and reward ramping.",
+      "url": "https://arxiv.org/html/2611.06564v1#A2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "dda6f2de4d1b8092",
+      "section": "Appendix B Reward Specification",
+      "location": "Appendix B Reward Specification",
+      "text": "Table A.2: Reward terms for the unified skill environment. I drib I_{\\mathrm{drib}} , I kick I_{\\mathrm{kick}} , I move I_{\\mathrm{move}} , and I trap I_{\\mathrm{trap}} denote active-skill indicators; v c v_{c} , v b v_{b} , and v r v_{r} denote the command, ball, and root velocities, respectively; p b r p_{b}^{r} denotes the ball position in the robot frame; d f d_{f} denotes the nearest foot–ball distance; and g ⁡ ( ⋅ ) g(\\cdot) denotes implementation-specific gates, including contact phase, possession, standing-command mode, and reward ramping.",
+      "url": "https://arxiv.org/html/2611.06564v1#A2.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3cbf4a01f7e4de3e",
+      "section": "Appendix B Reward Specification",
+      "location": "Appendix B Reward Specification",
+      "text": "Reward term Expression Weight dribble_ball_vel I drib ​ exp ⁡ { − 10 ​ [ ( ‖ v c − v b ‖ / ( ‖ v c ‖ + ϵ ) ) 2 + 0.1 ​ ( ( ‖ v c ‖ − ‖ v b ‖ ) / ( ‖ v c ‖ + ϵ ) ) 2 ] } ​ g poss ​ g ramp I_{\\mathrm{drib}}\\exp\\{-10[(\\|v_{c}-v_{b}\\|/(\\|v_{c}\\|+\\epsilon))^{2}+0.1((\\|v_{c}\\|-\\|v_{b}\\|)/(\\|v_{c}\\|+\\epsilon))^{2}]\\}\\,g_{\\mathrm{poss}}g_{\\mathrm{ramp}} 8.0 dribble_ball_root_pos I drib exp ( − ∥ p b r − [ 0.4 , 0 ] ∥ 2 / 0.2 2 ) g front I_{\\mathrm{drib}}\\exp(-\\|p_{b}^{r}-[0.4,0]\\|^{2}/0.2^{2})\\,g_{\\mathrm{front}} 2.0 dribble_root_vel I drib ​ exp ⁡ { − 10 ​ [ ( ‖ v r − v c → ‖ / ( ‖ v c ‖ + ϵ ) ) 2 + 0.1 ​ ( ( ‖ v c ‖ − ‖ v r ‖ ) / ( ‖ v c ‖ + ϵ ) ) 2 ] } I_{\\mathrm{drib}}\\exp\\{-10[(\\|v_{r}-v_{c}^{\\rightarrow}\\|/(\\|v_{c}\\|+\\epsilon))^{2}+0.1((\\|v_{c}\\|-\\|v_{r}\\|)/(\\|v_{c}\\|+\\epsilon))^{2}]\\} 2.0 dribble_stand_still I drib ​ I ‖ v c ‖ < 0.05 ​ I ‖ v b ‖ < 0.05 ​ ( 1 − exp ⁡ [ − c still ] ) I_{\\mathrm{drib}}I_{\\|v_{c}\\|<0.05}I_{\\|v_{b}\\|<0.05}(1-\\exp[-c_{\\mathrm{still}}]) -6.0 kick_soccer_vel I kick ​ I contact ​ I ‖ v c ‖ > 0.1 ​ r speed ​ r dir ​ r upright I_{\\mathrm{kick}}I_{\\mathrm{contact}}I_{\\|v_{c}\\|>0.1}\\,r_{\\mathrm{speed}}r_{\\mathrm{dir}}r_{\\mathrm{upright}} 10.0 kick_no_lateral_vel I kick ​ I contact ​ I ‖ v c ‖ > 0.1 ​ clip ​ ( v b ∥ / ‖ v c ‖ , 0 , 1 ) ​ exp ⁡ [ − 8 ​ ( v b ⟂ / ‖ v c ‖ ) 2 ] I_{\\mathrm{kick}}I_{\\mathrm{contact}}I_{\\|v_{c}\\|>0.1}\\,\\mathrm{clip}(v_{b}^{\\parallel}/\\|v_{c}\\|,0,1)\\exp[-8(v_{b}^{\\perp}/\\|v_{c}\\|)^{2}] 2.0 kick_approach I kick ​ I ¬ contact ​ I ‖ v c ‖ > 0.1 ​ ( 0.45 ​ r behind + 0.35 ​ r foot + 0.20 ​ r approach ) ​ g align I_{\\mathrm{kick}}I_{\\neg\\mathrm{contact}}I_{\\|v_{c}\\|>0.1}(0.45r_{\\mathrm{behind}}+0.35r_{\\mathrm{foot}}+0.20r_{\\mathrm{approach}})g_{\\mathrm{align}} 3.0 kick_align I kick ​ g pre / post ​ g close ​ exp ⁡ [ 2 ​ ( d ^ ball ⋅ d ^ root − 1 ) ] I_{\\mathrm{kick}}g_{\\mathrm{pre/post}}g_{\\mathrm{close}}\\exp[2(\\hat{d}_{\\mathrm{ball}}\\cdot\\hat{d}_{\\mathrm{root}}-1)] 1.0 kick_stand I kick ​ g contact / zero ​ exp ⁡ [ − ( ‖ v r ‖ 2 + 0.5 ​ ‖ ω r ‖ 2 + 0.05 ​ ‖ q ˙ ‖ 2 + 0.5 ​ ‖ q − q 0 ‖ 2 ) ] I_{\\mathrm{kick}}g_{\\mathrm{contact/zero}}\\exp[-(\\|v_{r}\\|^{2}+0.5\\|\\omega_{r}\\|^{2}+0.05\\|\\dot{q}\\|^{2}+0.5\\|q-q_{0}\\|^{2})] 10.0 move_track_vel I move ​ exp ⁡ { − 4 ​ [ ( ‖ v c − v r ‖ / ( ‖ v c ‖ + ϵ ) ) 2 + 0.1 ​ ( ( ‖ v c ‖ − ‖ v r ‖ ) / ( ‖ v c ‖ + ϵ ) ) 2 ] } I_{\\mathrm{move}}\\exp\\{-4[(\\|v_{c}-v_{r}\\|/(\\|v_{c}\\|+\\epsilon))^{2}+0.1((\\|v_{c}\\|-\\|v_{r}\\|)/(\\|v_{c}\\|+\\epsilon))^{2}]\\} ; for ‖ v c ‖ < 0.05 \\|v_{c}\\|<0.05 : I move ​ exp ⁡ [ − ( ‖ v r ‖ / 0.03 ) 2 ] I_{\\mathrm{move}}\\exp[-(\\|v_{r}\\|/0.03)^{2}] 7.0 move_track_dir I move ​ exp ⁡ ( − 2 ​ θ 2 ) I_{\\mathrm{move}}\\exp(-2\\theta^{2}) , θ = arccos ⁡ ( v ^ c ⋅ d ^ root ) \\theta=\\arccos(\\hat{v}_{c}\\cdot\\hat{d}_{\\mathrm{root}}) 2.0 move_turn_stability I move ​ I ‖ v c ‖ > 0.05 ​ exp ⁡ [ − 1.5 ​ max ⁡ ( 0 , | ω z | − 0.6 − 2 ​ θ / π ) 2 − 0.4 ​ ( ω x 2 + ω y 2 ) ] I_{\\mathrm{move}}I_{\\|v_{c}\\|>0.05}\\exp[-1.5\\max(0,|\\omega_{z}|-0.6-2\\theta/\\pi)^{2}-0.4(\\omega_{x}^{2}+\\omega_{y}^{2})] 1.5 trap I trap ​ [ I ¬ contact ​ ( 0.1 ​ r foot − ball + 0.3 ​ r approach + 0.1 ​ r height ) + I contact ​ ( 0.9 ​ r stop + 0.1 ​ r step + 1 ) ] I_{\\mathrm{trap}}\\,[I_{\\neg\\mathrm{contact}}(0.1r_{\\mathrm{foot-ball}}+0.3r_{\\mathrm{approach}}+0.1r_{\\mathrm{height}})+I_{\\mathrm{contact}}(0.9r_{\\mathrm{stop}}+0.1r_{\\mathrm{step}}+1)] 1.5 trap_align I trap ​ exp ⁡ [ 3 ​ ( d ^ ball ⋅ d ^ root − 1 ) ] I_{\\mathrm{trap}}\\exp[3(\\hat{d}_{\\mathrm{ball}}\\cdot\\hat{d}_{\\mathrm{root}}-1)] 1.0 trap_post_contact_still I trap ​ I contact ​ g ramp ​ exp ⁡ [ − ( ‖ v r ‖ / 0.12 ) 2 ] ​ exp ​ [ − ( ‖ v b ‖ / 0.08 ) 2 ] I_{\\mathrm{trap}}I_{\\mathrm{contact}}g_{\\mathrm{ramp}}\\exp[-(\\|v_{r}\\|/0.12)^{2}]\\exp[-(\\|v_{b}\\|/0.08)^{2}] , g ramp g_{\\mathrm{ramp}} rising from 0.12 0.12 to 0.5 0.5 s after contact 0.25 action_rate_l2 ‖ a t − a t − 1 ‖ 2 \\|a_{t}-a_{t-1}\\|^{2} -0.02 foot_landing_impact g skill ​ min ⁡ { 6 , ∑ f I land , f ​ [ ( max ⁡ ( 0 , F f − 300 ) / 600 ) 2 + 0.35 ​ max ⁡ ( 0 , − z ˙ f − 0.35 ) 2 ] } g_{\\mathrm{skill}}\\min\\{6,\\sum_{f}I_{\\mathrm{land},f}[(\\max(0,F_{f}-300)/600)^{2}+0.35\\max(0,-\\dot{z}_{f}-0.35)^{2}]\\} -0.01 joint_limit p joint ​ limit ​ ( q ) p_{\\mathrm{joint\\ limit}}(q) -20.0 joint_pos_upper_body ‖ q upper − q 0 , upper ‖ 2 \\|q_{\\mathrm{upper}}-q_{0,\\mathrm{upper}}\\|^{2} -0.1 termination_penalty I terminated ​ ( 1 − I timeout ) I_{\\mathrm{terminated}}(1-I_{\\mathrm{timeout}}) -200.0 torso_upright_reward exp ⁡ [ − 10 ​ ‖ z torso x ​ y ‖ 2 ] \\exp[-10\\|z_{\\mathrm{torso}}^{xy}\\|^{2}] 0.5 stand_still_reward I ‖ v c ‖ < 0.05 ​ g ball ​ exp ⁡ [ − ( ‖ v r ‖ 2 + 0.5 ​ ‖ ω r ‖ 2 + 0.05 ​ ‖ q ˙ ‖ 2 + 0.5 ​ ‖ q − q 0 ‖ 2 ) ] I_{\\|v_{c}\\|<0.05}g_{\\mathrm{ball}}\\exp[-(\\|v_{r}\\|^{2}+0.5\\|\\omega_{r}\\|^{2}+0.05\\|\\dot{q}\\|^{2}+0.5\\|q-q_{0}\\|^{2})] 2.0",
+      "url": "https://arxiv.org/html/2611.06564v1#A2.T2.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "4e6570e93ccd2e90",
+      "section": "Appendix C Training, Transition State Initialization, and Robustness",
+      "location": "Appendix C Training, Transition State Initialization, and Robustness",
+      "text": "We train the soccer actor with PPO in Isaac Lab/Isaac Sim using 8192 8192 parallel environments. The actor samples residual latents, and the frozen decoder maps them to joint position targets tracked by the robot low-level controller. The critic can use privileged simulation information during training, whereas the deployed actor only requires the policy observation terms in Table A.1 .",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "526bb133d8a2d862",
+      "section": "C.1 Transition State Initialization",
+      "location": "C.1 Transition State Initialization",
+      "text": "Transition state initialization (TSI) improves cross-skill recovery and skill switching. For each skill c c , we maintain a circular buffer ℬ c \\mathcal{B}_{c} of terminal states. A stored state contains the robot root state, joint positions and velocities, and the ball state. At reset, an episode starts either from the canonical task initialization or from a sampled terminal state:",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "79caa3562cf1f3a8",
+      "section": "C.1 Transition State Initialization",
+      "location": "C.1 Transition State Initialization",
+      "text": "s 0 ∼ { p init ​ ( s 0 ∣ c ) , with probability ​ 1 − p TSI , ℬ c ′ , with probability ​ p TSI . s_{0}\\sim\\begin{cases}p_{\\mathrm{init}}(s_{0}\\mid c),&\\text{with probability }1-p_{\\mathrm{TSI}},\\\\ \\mathcal{B}_{c^{\\prime}},&\\text{with probability }p_{\\mathrm{TSI}}.\\end{cases} (A.3)",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "f40c0a36e7fe8b5d",
+      "section": "C.1 Transition State Initialization",
+      "location": "C.1 Transition State Initialization",
+      "text": "Here c ′ c^{\\prime} is a predecessor skill of the sampled target skill c c : dribbling can follow trapping; kicking can follow trapping and dribbling; moving can follow dribbling and kicking; and trapping can follow dribbling. The target command is then sampled and executed from the inherited robot and ball state. We use p TSI = 0.3 p_{\\mathrm{TSI}}=0.3 and a buffer of 256 256 states per skill. The buffer stores only terminal states of episodes that end without failure. This expands the reset distribution without injecting falls or physically invalid configurations.",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "34003169ec3300cc",
+      "section": "C.2 Domain Randomization and Observation Corruption",
+      "location": "C.2 Domain Randomization and Observation Corruption",
+      "text": "The robustness design targets two deployment gaps: contact-rich robot–ball dynamics and noisy state estimation. Observation corruption is included directly in the Corruption column of Table A.1 . The implementation also supports a perception-stress setting that holds the previous ball observation and injects larger ball velocity noise for ball-interaction skills.",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "19624b090c6e5750",
+      "section": "C.2 Domain Randomization and Observation Corruption",
+      "location": "C.2 Domain Randomization and Observation Corruption",
+      "text": "For dynamics mismatch, we randomize robot–ground and ball–ground friction and restitution, ball mass, ball angular damping, torso center of mass, default joint position offsets, actuator latency, external pushes, and initial reset states. Ball angular damping is applied by PhysX once per physics step ( Δ ​ t = 5 \\Delta t=5 ms):",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c7caf9a5d4a5214c",
+      "section": "C.2 Domain Randomization and Observation Corruption",
+      "location": "C.2 Domain Randomization and Observation Corruption",
+      "text": "𝝎 t + Δ ​ t = ( 1 − c a ​ Δ ​ t ) ​ 𝝎 t , \\boldsymbol{\\omega}_{t+\\Delta t}=(1-c_{a}\\Delta t)\\,\\boldsymbol{\\omega}_{t}, (A.4)",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "73db613297940a1c",
+      "section": "C.2 Domain Randomization and Observation Corruption",
+      "location": "C.2 Domain Randomization and Observation Corruption",
+      "text": "where c a c_{a} is the angular damping coefficient sampled once per environment. The full randomization ranges are summarized in Table A.3 .",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "e8e033db2a2cc075",
+      "section": "C.2 Domain Randomization and Observation Corruption",
+      "location": "C.2 Domain Randomization and Observation Corruption",
+      "text": "Table A.3: Domain randomization and reset perturbations. Ranges are sampled uniformly unless otherwise stated.",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2041d2093f7a9050",
+      "section": "C.2 Domain Randomization and Observation Corruption",
+      "location": "C.2 Domain Randomization and Observation Corruption",
+      "text": "Term Unit Range Robot static friction – [ 0.3 , 1.6 ] [0.3,1.6] Robot dynamic friction – [ 0.3 , 1.2 ] [0.3,1.2] Robot restitution – [ 0.0 , 0.15 ] [0.0,0.15] Soccer static friction – [ 0.35 , 0.75 ] [0.35,0.75] Soccer dynamic friction – [ 0.25 , 0.55 ] [0.25,0.55] Soccer restitution – [ 0.45 , 0.85 ] [0.45,0.85] Soccer angular damping – [ 0.3 , 0.6 ] [0.3,0.6] Soccer mass kg [ 0.38 , 0.45 ] [0.38,0.45] Actuator latency ms { 0 , 5 , 10 } \\{0,5,10\\} Push interval s [ 1.0 , 3.0 ] [1.0,3.0] Default joint position offset rad [ − 0.01 , 0.01 ] [-0.01,0.01] Torso CoM offset, x x m [ − 0.025 , 0.025 ] [-0.025,0.025] Torso CoM offset, y , z y,z m [ − 0.05 , 0.05 ] [-0.05,0.05] Push linear velocity, x , y x,y m/s [ − 0.5 , 0.5 ] [-0.5,0.5] Push linear velocity, z z m/s [ − 0.2 , 0.2 ] [-0.2,0.2] Push angular velocity, roll/pitch rad/s [ − 0.52 , 0.52 ] [-0.52,0.52] Push angular velocity, yaw rad/s [ − 0.78 , 0.78 ] [-0.78,0.78] Initial root yaw rad [ − π , π ] [-\\pi,\\pi] Initial joint reset scale – [ 0.5 , 1.5 ] [0.5,1.5]",
+      "url": "https://arxiv.org/html/2611.06564v1#A3.T3.2.1",
+      "kind": "table"
+    }
+  ]
+}

@@ -1,0 +1,468 @@
+{
+  "item_id": "arxiv:2611.07513",
+  "document_id": "50d661f38c283c4734d38fde7506f791984e6e45a965a9619902beb9f0b2a208",
+  "source_url": "https://arxiv.org/html/2611.07513v1",
+  "paper_version": "2611.07513v1",
+  "paper": {
+    "id": "arxiv:2611.07513",
+    "title": "Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model",
+    "url": "https://arxiv.org/abs/2611.07513v1",
+    "summary": "Most vision-language-action (VLA) policies decouple manipulation from cognition by bolting an external action mechanism onto a vision-language model (VLM)--either quantizing actions into discrete tokens whose errors bear no stable correspondence to physical displacements, or delegating continuous trajectory generation to a separate action expert whose gradients compete with or are blocked from updating the VLM backbone. We argue that manipulation and cognition should instead be embodied in the same model, shifting from a decoupled VLA to an Embodied Vision-Language Model (eVLM). We introduce Concertina, an eVLM that places continuous trajectory representation, blockwise generation, and physical-coordinate supervision directly on the computation and parameter path of a shared diffusion VLM backbone. Each control timestep is encoded as one continuous latent action token in the backbone hidden space, and the shared Transformer reconstructs temporally ordered action blocks via the same corrupt-and-reconstruct operator used for multimodal pretraining. Active action projections account for only 0.21% of parameters in the 4.46B model with zero separate action-generator layers, compared with 16.5%-35.1% dedicated action-expert capacity in representative continuous VLAs. Using our proposed Action Interface Audit, we confirm that cross-time trajectory coupling emerges in the middle and late layers of the shared backbone rather than at the action interfaces. On standard benchmarks, Concertina achieves 98.15% average success on regular LIBERO, 85.9% on the 10,030-task LIBERO-Plus benchmark, and 4.142 average completed chain length on CALVIN ABC-D. Code: https://github.com/lose4578/Concertina Hugging Face: https://huggingface.co/collections/Traly/concertina",
+    "topics": [
+      "vla",
+      "control",
+      "evaluation"
+    ],
+    "published": "2026-11-05",
+    "updated": "2026-11-05"
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-09T14:45:46+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 113,
+    "total": 113,
+    "evidence_ids": [
+      "a3225d9116e0fb6b",
+      "a568dc70ec05c2c9",
+      "49d541dc0aca5027",
+      "2893b9f1c4cedbc0",
+      "2d3c905b9060449c",
+      "0f841d7f7146287c",
+      "996d7a7154667ccc",
+      "d566473640993481",
+      "e274ec6125a0ed3e",
+      "931b2dcdf5313b61",
+      "681143ca69aa9f69",
+      "ec8f95da5e2ccf9a",
+      "13f2a4b817f71ce8",
+      "398739b0d50277d5",
+      "92b6640e42b1c22a",
+      "5c66568ddb8d3ce7",
+      "6039743cb7b7533e",
+      "b3787d80a61c445e",
+      "ef0430a3157924a0",
+      "f8c5b1be82450bcc",
+      "8cd8e42da3c1866a",
+      "bffd505412f8194d",
+      "c190862e82b71d78",
+      "f1e1f0f114377c7b",
+      "d29b11fd5b4d9433",
+      "bb2664e82d6f4475",
+      "7f22a7fc17ec71db",
+      "73c0f90935d87fe8",
+      "938c76468b291350",
+      "96ac271e5649295a",
+      "844639dd1e307e7b",
+      "af9e56e5d9844437",
+      "a78a01f802cd363c",
+      "9c4e546cdd18a05d",
+      "c205d6317a7f4e36",
+      "0bcc8a07b7783e4b",
+      "f0c47cbad1c11abd",
+      "066a5c6cd37dd9e8",
+      "07ded76a3f0f0362",
+      "8d6dbe067d15b36c",
+      "9dcdc61c716534e7",
+      "2ff67603897595cf",
+      "51260512991f3b95",
+      "679e0918ea7c56f8",
+      "d4bed3ac75566a17",
+      "5b6646cba7accf8f",
+      "3f3273f5e87e9bce",
+      "8b7c6240d8268df3",
+      "aad760de963e67eb",
+      "3279c8a6abd10476",
+      "9f2bce2eecc818fc",
+      "4c36f718538781a3",
+      "568ea0112baebefe",
+      "72b7a701250bd143",
+      "fe095d17d38d0479",
+      "0f3ef9fbd417a368",
+      "43d8b0b953f021ad",
+      "d87a5cd931aac096",
+      "3b3fcb734545bcba",
+      "430f9671e718498c",
+      "987e319ff47b5899",
+      "f7757f4bff79067a",
+      "34cd78fa0538bd29",
+      "3a0911bb28a0a97f",
+      "195d0d53db3dfe02",
+      "7cea02b28726fda2",
+      "54bdf8faca9dfadf",
+      "bdcdd170e80ab84a",
+      "9a6507ce565e80a9",
+      "408e090e305ab7d2",
+      "263cc1f527cac814",
+      "83f229bd3de492e8",
+      "830cdc27d64ce81b",
+      "4d812b1e88ea0e38",
+      "beec1ceb5db8d9a6",
+      "08f40170d82ca18a",
+      "c4824121a15ae7c7",
+      "10fced35add84812",
+      "928cc6cd2f0dd5d9",
+      "51d6c9291cb71a95",
+      "0e4b31b641573152",
+      "93436cbb0163d6bf",
+      "983e622c2c911a07",
+      "070b5babc76c3077",
+      "3cab00853cbdf45a",
+      "83638a7d5eefc586",
+      "9e859d1ac483aef4",
+      "d5d640c3a2b489ae",
+      "defd390c6e4ac658",
+      "7093a99780c9b7cf",
+      "b3d5a8901784014e",
+      "c42253c730a47329",
+      "a78f7cb6dbce7d63",
+      "3b9bc6c4caa36048",
+      "285f0d28c918f067",
+      "083a663f44c1a784",
+      "4970932a678c86ae",
+      "5346ade1169a88af",
+      "bc68123da940ba25",
+      "9571ba4b6bbee2cc",
+      "ebc1c68eaf973358",
+      "f9cca92714c3bae1",
+      "68c207f001950ef9",
+      "43cc89b8f5d24a83",
+      "f54f27303e41eed2",
+      "63fda21dc66695b5",
+      "f2d09588feb78445",
+      "581ce92c8c6b9ade",
+      "aec79a6561ed8041",
+      "44c7008419d686c5",
+      "8e0f8a1823ae826b",
+      "225c0d02b4721a04",
+      "d4f3d0e3be464574"
+    ]
+  },
+  "overview": "每时刻一个连续latent动作token，逐位置MLP进出共享BARD；块间因果、块内双向，打包干净/遮蔽分支并用物理坐标损失端到端训练，推理按风险在同一骨干重构。 作者实验未复现；模拟主表未隔离架构，缺独立认知保留与实机证据。0.21%不是总成本降幅，单次65.8ms不对应全评测4.142；发布协议及分数与论文有差异，清洗预训数据未发布。",
+  "notice": "作者结果未复现；模型精读与编辑判断，仍需研究者判断。",
+  "findings": [
+    {
+      "kind": "method",
+      "text": "一个完整控制时刻映射成一个连续hidden token，由共享36层BARD-VL直接混合时序并读出物理坐标；20D槽位由每臂平移3+旋转6+夹爪1构成，单臂无效维度置零且不计损失。四层逐位置MLP不是轨迹生成器，但仍是新增动作接口；只沿用预训练骨干和遮蔽重构算子，不等于完全零改动。前向prefix不读动作，动作各层读取prefix，反向动作损失更新共享权重；由此不能推出任意认知与操控任务互相提升。",
+      "evidence_ids": [
+        "f8c5b1be82450bcc",
+        "8cd8e42da3c1866a",
+        "f1e1f0f114377c7b",
+        "bb2664e82d6f4475",
+        "7f22a7fc17ec71db",
+        "08f40170d82ca18a",
+        "c4824121a15ae7c7"
+      ],
+      "quote": "position-wise"
+    },
+    {
+      "kind": "method",
+      "text": "训练把prefix、噪声动作、干净动作打包为P+2H位置；噪声query只读同噪声块与严格更早的干净块，避免偷看当前目标，干净分支只提供后续块上下文。跨块因果、块内双向不等于全轨迹双向。推理prefill后同块多轮读取只读KV，完成块重编码再入缓存；风险头输入detach，不把辅助置信度梯度注入骨干。论文说可按置信度接受精修；发布评测文档则规定每轮接受并保留末态，复现必须钉住具体解码配方。",
+      "evidence_ids": [
+        "73c0f90935d87fe8",
+        "96ac271e5649295a",
+        "844639dd1e307e7b",
+        "af9e56e5d9844437",
+        "a78a01f802cd363c",
+        "2ff67603897595cf",
+        "679e0918ea7c56f8",
+        "070b5babc76c3077",
+        "defd390c6e4ac658",
+        "7093a99780c9b7cf"
+      ],
+      "quote": "teacher-forced"
+    },
+    {
+      "kind": "method",
+      "text": "按块分层采样遮蔽率、随机分配各块，每个时刻整向量置零，逆遮蔽率只校正被选监督机会；不是用高斯连续扩散替代原算子。正文主目标是加权归一物理坐标Smooth-L1，夹爪用概率BCE减目标熵；减熵不改变梯度，推理先sigmoid后重编码。500:10:1权重依动作量纲与本配方，不能当作所有本体通用常数。Stage1亦支持三态随机替换，最终续训是mask-only inverse-t；反事实不是把所有配置视同一种损失。",
+      "evidence_ids": [
+        "9c4e546cdd18a05d",
+        "0bcc8a07b7783e4b",
+        "f0c47cbad1c11abd",
+        "066a5c6cd37dd9e8",
+        "07ded76a3f0f0362",
+        "8d6dbe067d15b36c",
+        "9dcdc61c716534e7",
+        "928cc6cd2f0dd5d9",
+        "0e4b31b641573152",
+        "93436cbb0163d6bf",
+        "3cab00853cbdf45a",
+        "83638a7d5eefc586",
+        "9e859d1ac483aef4"
+      ],
+      "quote": "masking probability"
+    },
+    {
+      "kind": "evidence",
+      "text": "固定H50、预训练与微调更新数时，K5/M10换成K10/M5，短预算LIBERO由77/200到146/200（38.5→73.0%），32任务升、7平、1降；不是最终2000例98.15%的独立增益。CALVIN短配方0.055→1.945，低起点使35倍不宜当常规提升。999830帧/680段34任务30Hz的动作方向相关支持块宽选择：lag10为0.663，块内正相关质量9.8→21.3%；这是相关性解释，未因果隔离‘语义原语完整性’，且改K同时改因果边界和块数量，非跨数据通用最佳K。",
+      "evidence_ids": [
+        "9f2bce2eecc818fc",
+        "4c36f718538781a3",
+        "568ea0112baebefe"
+      ],
+      "quote": "2,400 finetuning"
+    },
+    {
+      "kind": "evidence",
+      "text": "表3每组4800 AgiBot预训+2600 CALVIN微调、1000链：有state mask时，均匀权重换500:10:1使AvgLen0.406→1.837；无mask为0.535→1.093。加state mask在物理权重下1.093→1.837，但均匀权重下反从0.535降至0.406，存在交互，不能泛称state mask总更好。全36层可训练、无state mask时RRC0.607→1.589。早层冻结、裁剪和权重条件不同，不把这些差额相加成主表提升。",
+      "evidence_ids": [
+        "72b7a701250bd143",
+        "fe095d17d38d0479",
+        "0f3ef9fbd417a368"
+      ],
+      "quote": "proprioceptive"
+    },
+    {
+      "kind": "evidence",
+      "text": "表4同60k预训、各5000微调时，H50/执行10为3.535；H20执行20/10为3.768/3.924；H10执行10为4.135，说明训练预测范围需配合闭环反馈。两块30k续训后4.142，相比单块40k续训冻结接口3.934差+0.208，作者链级配对区间[0.119,0.298]；对可训练接口3.786差更大。续训步数、每样本动作token数和接口状态并未全部匹配，区间不是训练种子方差；4.142对未续训4.135仅+0.007，不证明追加预算在该点显著有益。",
+      "evidence_ids": [
+        "43d8b0b953f021ad",
+        "d87a5cd931aac096",
+        "3b3fcb734545bcba"
+      ],
+      "quote": "receding-horizon"
+    },
+    {
+      "kind": "evidence",
+      "text": "相对动作主目标叠加权重0.5的冻结绝对动作decoder，使8.35B/H25反事实中1000链AvgLen2.970→0.237，8固定窗口隐状态梯度余弦-0.891，99%槽位方向相反，更新大小几乎同但方向分叉。此实验不同于4.46B主模型与表5；只能说明这个冻结读出、坐标组合与权重损害控制，不能证明所有多目标监督冲突、外部专家必然较差，或视觉语言认知本身退化。未报告独立VQA/语义保留曲线来证实后者。",
+      "evidence_ids": [
+        "430f9671e718498c",
+        "987e319ff47b5899",
+        "f7757f4bff79067a"
+      ],
+      "quote": "single-objective"
+    },
+    {
+      "kind": "evidence",
+      "text": "表5在4.46B/60k预训/H50初始化，三因素2×2×2各5000更新、1000链，共8000次评测。BCE替代全坐标Smooth-L1的四配对平均+0.427 AvgLen，每对为+0.715/+0.141/+0.270/+0.581；接口共同训练平均+0.311。最佳配方全36层可训练3.525、冻结前2层3.535，说明不用专家梯度隔离也能训练稳定，但近似点差不证明等效。每格是不同配置，不是8个独立随机种子；该因子试验也未用等预算外部专家对照直接隔离共享骨干架构价值。",
+      "evidence_ids": [
+        "34cd78fa0538bd29",
+        "3a0911bb28a0a97f",
+        "195d0d53db3dfe02"
+      ],
+      "quote": "probability-valued"
+    },
+    {
+      "kind": "evidence",
+      "text": "TCA以固定11个时刻/维度探针、float32确定性中央差分测至少6步外响应。逐位置接口NLR为0由结构可预期，完整H50路径预训/CALVIN/LIBERO为4.058/4.103/1.217%，packed BD3则2.595/3.163/1.078%，不同mask口径应分开。epsilon0.01–0.04基本稳定，中后层形成响应支持时序混合发生位置；局部敏感性不是语义推理或长期规划质量指标，NLR大也不是越好。探针H50不同于部署H10，π0/π0.5更高NLR不构成能力排名。",
+      "evidence_ids": [
+        "54bdf8faca9dfadf",
+        "bdcdd170e80ab84a",
+        "263cc1f527cac814",
+        "83f229bd3de492e8",
+        "830cdc27d64ce81b",
+        "44c7008419d686c5",
+        "8e0f8a1823ae826b",
+        "225c0d02b4721a04"
+      ],
+      "quote": "deterministic"
+    },
+    {
+      "kind": "evidence",
+      "text": "EGC在512个CALVIN H30/D7窗口对随机单token替换评估：均匀量化p95/p05=25.14；FAST+与修复Molmo在该扰动下82.23/77.93%形状失效，扩样和多seed重采样仍类似。连续坐标EGC=1是单位坐标误差定义所得，零round-trip不是模型零预测误差；随机替换不代表真实策略错误分布，不能据此宣称FAST闭环失败率80%。Jacobian在0–15k预训有效秩19.78→18.63/20支持未塌缩的局部表示，不自动证明最终控制精度。",
+      "evidence_ids": [
+        "9a6507ce565e80a9",
+        "408e090e305ab7d2",
+        "f54f27303e41eed2",
+        "63fda21dc66695b5",
+        "f2d09588feb78445",
+        "581ce92c8c6b9ade",
+        "aec79a6561ed8041"
+      ],
+      "quote": "single-token"
+    },
+    {
+      "kind": "evidence",
+      "text": "固定checkpoint的100条CALVIN子集，单次/仅proposal/带精修分别3.92/3.90/4.04 AvgLen，median65.8/91.7/223.0ms，平均骨干次数1/2/7；精修降低25/32离线窗口MAE，但SR@5单次与精修同59%。6.58ms是10动作摊销，不是逐新观测实时决策延迟，且不能把65.8ms单次速度和全1000链4.142捆为同一工作点。50例LIBERO-Spatial执行10单次与精修均50/50，每步重规划46/50；π0.5执行50比10降48→42/50。小子集不证明所有任务更慢反馈更好；计时未充分明确batch、预处理/传输及GPU，仓库列训练/评测卡型不能追溯为表10计时卡型。",
+      "evidence_ids": [
+        "bc68123da940ba25",
+        "9571ba4b6bbee2cc",
+        "ebc1c68eaf973358",
+        "f9cca92714c3bae1",
+        "68c207f001950ef9",
+        "43cc89b8f5d24a83"
+      ],
+      "quote": "single-pass parallel"
+    },
+    {
+      "kind": "evidence",
+      "text": "主表LIBERO四suite各500例共1963/2000=98.15%，比文献X-VLA98.1%只高0.05个百分点且Long94.8低于X97.6，未作多种子显著性推断。Plus为8615/10030=85.89%加权总体，对EFFVLA79.8%差6.1点，但后者是suite均值，聚合口径不完全相同；正文未说明近期指令修复协议，不能与La-JEPA纠正指令结果直接排总榜。CALVIN ABC训练后D环境1000链AvgLen4.142，低于X4.43与Uni4.41；仅SR@1/@2及相对LLaDA部分领先，非所有链深度或全局最优。基线多来自已发表分数，不是同数据、骨干和预算重训，无法把主表优势纯归于架构。",
+      "evidence_ids": [
+        "5b6646cba7accf8f",
+        "8b7c6240d8268df3",
+        "aad760de963e67eb",
+        "3279c8a6abd10476"
+      ],
+      "quote": "10,030-task benchmark"
+    },
+    {
+      "kind": "limitation",
+      "text": "80.2M帧/146433 episodes经清洗，60k+30k预训再各5000微调；8GPU，预训/CALVIN全局batch1536、LIBERO448、seed42。9.49M接口占约4.448B active参数0.213%，计660993风险头为0.228%；78–167倍是动作专用参数份额比，不是总参数/FLOPs/显存/训练成本下降倍数，每轮仍需大共享骨干。未给独立真实机器人实验或视觉语言认知保留评测，也无多训练seed主表。仓库有实现/配置及权重链接，本轮仅阅读，未运行或验证权重；清洗预训练数据和60k中间checkpoint未发布。发布自验LIBERO97.80%、重微调97.45%、CALVIN4.153不同于原论文；CALVIN动态四worker顺序及LIBERO成功后额外推进初态使逐例不可直接对齐，作者自验不等于本轮复现。",
+      "evidence_ids": [
+        "3f3273f5e87e9bce",
+        "4d812b1e88ea0e38",
+        "b3d5a8901784014e",
+        "c42253c730a47329",
+        "a78f7cb6dbce7d63",
+        "3b9bc6c4caa36048",
+        "285f0d28c918f067",
+        "083a663f44c1a784",
+        "4970932a678c86ae",
+        "5346ade1169a88af",
+        "d4f3d0e3be464574"
+      ],
+      "quote": "multi-embodiment"
+    }
+  ],
+  "hypotheses": [
+    {
+      "text": "在匹配总训练与推理预算后，共享骨干的动作重构能否优于外部动作专家并保留视觉语言能力，仍待验证。固定同一BARD预训练、清洗数据与采样、20D表示/物理权重/夹爪BCE和H10执行，以共享重构、外部expert耦合、外部expert隔离三臂比较；各做三训练seed，匹配可训练参数后另按GPU小时和完整调用延迟匹配，不把参数相等视为算力相等。固定未参与选点的1000链CALVIN顺序和LIBERO初态，增加一致指令的Plus及预训前后冻结VQA/空间关系集，报告AvgLen、成功差区间、认知保留、显存与p50/p95延迟。若共享收益在算力匹配后消失、认知下降超预注册容差或满足时延需显著牺牲成功率，则推翻联合优势假设；先以单次和精修分开运行，区分模型结构与搜索预算。本草案未执行，不创建选题，未声称查新后的研究空白。",
+      "evidence_ids": [
+        "f8c5b1be82450bcc",
+        "43d8b0b953f021ad",
+        "3a0911bb28a0a97f",
+        "bc68123da940ba25",
+        "d4f3d0e3be464574",
+        "3b3fcb734545bcba"
+      ],
+      "quote": "receding-horizon"
+    }
+  ],
+  "frontier_brief": {
+    "title": "把整步连续动作放进共享扩散VLM，用块重构代替外部专家",
+    "change_type": "共享骨干动作生成与坐标监督配方",
+    "delta": "每时刻一个连续latent动作token，逐位置MLP进出共享BARD；块间因果、块内双向，打包干净/遮蔽分支并用物理坐标损失端到端训练，推理按风险在同一骨干重构。",
+    "before": "外部专家路线把连续轨迹混合留给独立模块；离散token路线以符号损失学习。Concertina选择在原扩散VLM隐空间生成连续控制，不额外增加时序生成层。",
+    "after": "动作接口9.49M，仅占4.46B总模型约0.21%，风险头计入为0.228%；表5夹爪BCE四配对平均+0.427链长，部署精修仍反复跑大骨干。",
+    "relevance": "适合研究共享动作/语言骨干时参考：先核坐标量纲、夹爪目标、块宽和训练执行范围，再做耦合/隔离专家的等预算对照；参数份额与完整调用成本应分别量。",
+    "caveat": "作者实验未复现；模拟主表未隔离架构，缺独立认知保留与实机证据。0.21%不是总成本降幅，单次65.8ms不对应全评测4.142；发布协议及分数与论文有差异，清洗预训数据未发布。",
+    "question": "等总算力和真实延迟时，共享重构能否比外部expert提升控制并保留VLM能力？",
+    "evidence": [
+      {
+        "label": "块宽对照",
+        "value": "LIBERO 77/200→146/200",
+        "context": "H50、相同预训及2400步微调，K5→10；200例短预算，不能当最终98.15%主表的可相加贡献。时序相关支持机制但未隔离因果解释。"
+      },
+      {
+        "label": "完整三因素消融",
+        "value": "夹爪BCE平均+0.427 AvgLen",
+        "context": "4.46B、60k初始化、8配置各5000微调/1000链，接口可训练另+0.311；8000评测不是八训练seed，也非等预算外部expert对照。"
+      },
+      {
+        "label": "训练与执行范围",
+        "value": "3.535→4.135；续训后4.142",
+        "context": "同60k预训从H50微调/执行10转H10/10；两块30k续训对单块40k冻结接口3.934差0.208，但预算、token与接口状态未完全匹配。"
+      },
+      {
+        "label": "解码代价",
+        "value": "单次65.8ms/3.92链；精修223ms/4.04链",
+        "context": "同checkpoint、100链子集，平均1对7次骨干；SR@5均59%。摊销6.58ms不等于逐观测反应，GPU及计时边界未充分明确，不与全1000链4.142混用。"
+      },
+      {
+        "label": "最终模拟主表",
+        "value": "1963/2000；8615/10030；4.142链",
+        "context": "LIBERO/Plus/CALVIN不同指标。LIBERO对文献X98.1%差0.05点，CALVIN低于X4.43；异构基线、Plus聚合/指令口径与发布初态差异限制架构归因。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "一个动作时刻，一个连续token",
+        "text": "20D统一槽位及有效维度掩码，逐位置接口不混时间；36层共享骨干承担时序混合。prefix前向独立，动作梯度仍可更新共享参数。"
+      },
+      {
+        "title": "同一遮蔽重构算子",
+        "text": "训练packed teacher forcing只开放更早干净块，逆遮蔽率校正监督选择；平移/旋转/夹爪500:10:1，夹爪概率BCE配合共同训练接口。"
+      },
+      {
+        "title": "缓存与重构预算",
+        "text": "块内多轮读取只读KV、结束重编码入缓存；下游H10执行10。可单次或风险精修，应分别报告成功与延迟，专用参数少不保证总推理便宜。"
+      }
+    ]
+  },
+  "attention": {
+    "level": "priority",
+    "reason": "共享骨干的连续块重构、坐标与夹爪目标对照可影响VLA架构和训练配方选择，但小动作接口不等于低总成本，认知保留、真机及等预算架构优势仍待验证。",
+    "basis": [
+      "training_change",
+      "controlled_comparison",
+      "compute_shift"
+    ],
+    "evidence_ids": [
+      "f8c5b1be82450bcc",
+      "a78a01f802cd363c",
+      "4c36f718538781a3",
+      "72b7a701250bd143",
+      "43d8b0b953f021ad",
+      "3a0911bb28a0a97f",
+      "9571ba4b6bbee2cc",
+      "d4f3d0e3be464574"
+    ]
+  },
+  "source_checks": {
+    "fixed_pdf_url": "https://arxiv.org/pdf/2611.07513v1",
+    "pdf_pages": 22,
+    "pdf_bytes": 2140505,
+    "pdf_sha256": "d192d28c236b686d13564d5f7c73dfc48ed0e4c062e0a03395fccd7679078b2e",
+    "read_scope": "All 113 extracted passages including methods, experiments and appendices A-B; PDF references pages14-17 additionally read.",
+    "visually_checked_pdf_pages": [
+      3,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      20,
+      21,
+      22
+    ],
+    "visually_checked_figures": [
+      1,
+      3,
+      4,
+      5
+    ],
+    "visually_checked_tables": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "repository": "https://github.com/lose4578/Concertina",
+    "repository_scope": "Read public README and reproduction/eval docs; code folders and checkpoint links visible, but no author code/weights/simulation executed. README states cleaned pretraining data and 60k checkpoint not released. HF browser page failed; weight availability not independently verified.",
+    "reproduction": "Paper and release author self-checks, not independent replication.",
+    "evidence_gaps": [
+      "No separate cognitive-retention or real-robot experiment in paper.",
+      "Literature comparisons do not isolate architecture with matched external experts; no multi-training-seed main scores or full training cost.",
+      "Latency GPU/batch and complete timing boundaries not fully stated; resource docs training/eval GPU models do not identify Table10 timer.",
+      "Release CALVIN sequence order and LIBERO init-state handling differ from original.",
+      "Public docs were fetched from mutable main URLs; GitHub commit API HTTP403 prevented commit identity verification."
+    ],
+    "fixed_html_url": "https://arxiv.org/html/2611.07513v1",
+    "resources": [
+      {
+        "url": "https://github.com/lose4578/Concertina/blob/main/docs/reproduction.md",
+        "fetched_at": "2026-11-09T14:45:46+08:00",
+        "sha256": "bdd518899561e15dbc703fa7752b4de5f622566150f20de412b459f97fef4d3e",
+        "bytes": 14683
+      },
+      {
+        "url": "https://github.com/lose4578/Concertina/blob/main/docs/eval.md",
+        "fetched_at": "2026-11-09T14:45:46+08:00",
+        "sha256": "d5926e659a61f5de78f7e44306e2e8f09566bfc0e9f0cd561cdf3bbf1a53e1cd",
+        "bytes": 11432
+      }
+    ]
+  }
+}

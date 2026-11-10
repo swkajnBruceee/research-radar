@@ -1,0 +1,286 @@
+[
+  {
+    "id": "vla",
+    "title": "视觉语言动作模型（VLA）",
+    "tagline": "让机器人把“看到的场景”和“听到的指令”变成动作。",
+    "category": "理解与行动",
+    "topics": [
+      "vla",
+      "planning"
+    ],
+    "why": "它把通用视觉语言知识接入机器人控制，是理解通用操作模型的一条核心主线。",
+    "update": "异步 VLA 把低频语义推理与高频动作控制拆开，让大模型思考时，小型动作模型仍能持续响应。",
+    "update_label": "近期进展",
+    "update_date": "2026-11-03",
+    "mechanism": [
+      {
+        "title": "看场景、听指令",
+        "text": "相机图像与语言指令进入模型，形成与任务相关的表示。"
+      },
+      {
+        "title": "生成动作",
+        "text": "动作模块根据任务表示与当前观测预测机器人动作。"
+      },
+      {
+        "title": "边做边更新",
+        "text": "执行后继续观察。异步架构分别更新语义记忆与动作，训练时考虑记忆滞后。"
+      }
+    ],
+    "example": "以“把红杯放进盒子”为例：模型需要把杯子的颜色、盒子的位置与抓取动作联系起来。这个例子用于说明任务流程。",
+    "boundary": "理解指令与可靠执行需要分别评测；异步系统还要处理旧语义记忆与新场景不一致的问题。",
+    "question": "在相同数据和控制频率下，语义更新变慢到什么程度会影响动态任务？",
+    "sources": [
+      {
+        "item_id": "arxiv:2611.05155",
+        "title": "Asynchronous Robot Policies",
+        "url": "https://arxiv.org/abs/2611.05155v1",
+        "published": "2026-11-03",
+        "role": "近期进展",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      },
+      {
+        "item_id": "arxiv:2406.09246",
+        "title": "OpenVLA",
+        "url": "https://arxiv.org/abs/2406.09246v3",
+        "published": "2024-06-13",
+        "role": "方法基础",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      }
+    ],
+    "keywords": [
+      "vision-language-action",
+      "vision language action",
+      "vla",
+      "asynchronous robot"
+    ],
+    "checked_at": "2026-11-05",
+    "selection_reason": "按理解通用操作、预测、数据、控制和动作表示的学习价值组织；属于编辑导读顺序，不是性能排名。"
+  },
+  {
+    "id": "world-action",
+    "title": "世界动作模型（WAM）",
+    "tagline": "预测动作会造成什么变化，用对未来的判断帮助机器人行动。",
+    "category": "预测与规划",
+    "topics": [
+      "world",
+      "planning"
+    ],
+    "why": "多步任务既要知道接下来做什么，也要处理眼前的接触和运动；预测模型把这两类信息带入动作生成。",
+    "update": "HiLo-WAM 用稀疏的长时视觉流描述任务演进，用密集的短时视觉流描述局部交互，再把两者与动作连接。",
+    "update_label": "近期进展",
+    "update_date": "2026-11-03",
+    "mechanism": [
+      {
+        "title": "理解长时目标",
+        "text": "较稀疏的视觉序列覆盖更长时间，提供任务历史与未来变化的线索。"
+      },
+      {
+        "title": "预测局部变化",
+        "text": "较密集的短时视觉序列描述机器人与物体的具体交互。"
+      },
+      {
+        "title": "共同指导动作",
+        "text": "两种时间尺度交换信息，并与机器人动作一起建模。"
+      }
+    ],
+    "example": "整理桌面时，长时信息描述清理进度，短时信息描述手靠近杯子后会发生什么。这个例子用于理解时间尺度。",
+    "boundary": "看起来合理的预测仍可能误导控制。相关的 TIF 工作研究用真实执行反馈审计预测奖励，避免只凭高预测分选择训练轨迹。",
+    "question": "固定推理预算时，更多算力应该分给更远的未来，还是更细的局部交互？",
+    "sources": [
+      {
+        "item_id": "arxiv:2611.05023",
+        "title": "HiLo-WAM",
+        "url": "https://arxiv.org/abs/2611.05023v1",
+        "published": "2026-11-03",
+        "role": "近期进展",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      },
+      {
+        "item_id": "arxiv:2611.04873",
+        "title": "Trusting Imagined Futures",
+        "url": "https://arxiv.org/abs/2611.04873v1",
+        "published": "2026-11-03",
+        "role": "相关边界",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      }
+    ],
+    "keywords": [
+      "world model",
+      "world action model",
+      "wam",
+      "latent foresight",
+      "imagined"
+    ],
+    "checked_at": "2026-11-05",
+    "selection_reason": "按理解通用操作、预测、数据、控制和动作表示的学习价值组织；属于编辑导读顺序，不是性能排名。"
+  },
+  {
+    "id": "human-video",
+    "title": "从人类视频学习机器人技能",
+    "tagline": "把人的示范转成机器人能学习的数据，减少逐项遥操作采集。",
+    "category": "数据与迁移",
+    "topics": [
+      "data",
+      "imitation"
+    ],
+    "why": "适配新任务常受机器人示范成本限制。利用人类视频，研究的是如何把更易获得的经验转成可执行技能。",
+    "update": "RoboTryOn 保留任务、物体和背景，把示范者替换成目标机器人，再用包含深度特征的逆动力学模型推断动作标签。",
+    "update_label": "近期进展",
+    "update_date": "2026-11-03",
+    "mechanism": [
+      {
+        "title": "取得人类示范",
+        "text": "从人的任务视频中提取运动线索。"
+      },
+      {
+        "title": "合成机器人视频",
+        "text": "用目标机器人参考图和手部骨架等条件生成对应视频。"
+      },
+      {
+        "title": "补动作、训练策略",
+        "text": "逆动力学模型推断动作标签，再将合成数据用于策略学习。"
+      }
+    ],
+    "example": "看到人演示双手搬放物体后，系统尝试构造目标机器人执行该动作的训练材料。这是流程示意，不表示任意视频都能直接使用。",
+    "boundary": "生成画面中的运动还需要满足真实机器人的动作约束；合成数据的收益应结合本体、任务和真实执行条件判断。",
+    "question": "哪些任务最容易出现“视频看起来正确，但动作标签不可执行”的问题？",
+    "sources": [
+      {
+        "item_id": "arxiv:2611.05163",
+        "title": "RoboTryOn",
+        "url": "https://arxiv.org/abs/2611.05163v1",
+        "published": "2026-11-03",
+        "role": "近期进展",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      }
+    ],
+    "keywords": [
+      "human video",
+      "human-to-robot",
+      "human-centric",
+      "human demonstration",
+      "handheld data",
+      "robotryon",
+      "pixel-umi"
+    ],
+    "checked_at": "2026-11-05",
+    "selection_reason": "按理解通用操作、预测、数据、控制和动作表示的学习价值组织；属于编辑导读顺序，不是性能排名。"
+  },
+  {
+    "id": "learned-control",
+    "title": "强化学习驱动的精密控制",
+    "tagline": "通过交互与反馈，学会把机械臂移到目标并稳定保持。",
+    "category": "反馈与控制",
+    "topics": [
+      "control",
+      "imitation"
+    ],
+    "why": "高层模型给出目标后，底层仍需准确落地。稳定的反馈控制关系到精细操作与动作迁移。",
+    "update": "PolicyIK 用目标条件强化学习更新关节参考位置，同时观察参考与实际关节的偏差，并用到达、保持奖励训练精度。",
+    "update_label": "近期进展",
+    "update_date": "2026-11-03",
+    "mechanism": [
+      {
+        "title": "测量目标误差",
+        "text": "比较末端当前姿态与目标姿态，同时保留不同精度尺度的误差信息。"
+      },
+      {
+        "title": "更新关节参考",
+        "text": "策略根据反馈逐步调整关节位置参考，接近目标时缩小动作增益。"
+      },
+      {
+        "title": "奖励到达与保持",
+        "text": "训练既关注到达目标，也关注持续留在容差范围内。"
+      }
+    ],
+    "example": "把物体放到指定位置后还要稳住，不能只在某一帧碰巧达到目标。这个例子说明“到达”与“保持”的差别。",
+    "boundary": "仿真与真机结果要分别看；控制器比较还需对齐时间预算、容差、机器人模型与任务分布。",
+    "question": "接近目标时的精度收益，分别来自误差表示、动作增益还是保持奖励？",
+    "sources": [
+      {
+        "item_id": "arxiv:2611.05372",
+        "title": "PolicyIK",
+        "url": "https://arxiv.org/abs/2611.05372v1",
+        "published": "2026-11-03",
+        "role": "近期进展",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      }
+    ],
+    "keywords": [
+      "reinforcement learning",
+      "inverse kinematics",
+      "policyik",
+      "online rl",
+      "precise manipulation"
+    ],
+    "checked_at": "2026-11-05",
+    "selection_reason": "按理解通用操作、预测、数据、控制和动作表示的学习价值组织；属于编辑导读顺序，不是性能排名。"
+  },
+  {
+    "id": "generative-action",
+    "title": "扩散与流匹配动作生成",
+    "tagline": "像生成图像一样生成一段连续动作，表达同一任务的多种做法。",
+    "category": "动作表示",
+    "topics": [
+      "imitation",
+      "vla",
+      "control"
+    ],
+    "why": "连续控制经常有多种合理动作。生成式策略提供了表示动作分布、预测一段动作序列的方法。",
+    "update": "Diffusion Policy 用条件去噪生成动作序列并滚动执行；π₀ 在视觉语言模型上构建流匹配动作架构。",
+    "update_label": "方法基础",
+    "update_date": "2024-10-31",
+    "mechanism": [
+      {
+        "title": "以当前观测为条件",
+        "text": "图像、任务等信息约束要生成的动作。"
+      },
+      {
+        "title": "逐步生成动作序列",
+        "text": "扩散策略通过迭代去噪生成动作；流匹配通过学习的流生成连续动作。"
+      },
+      {
+        "title": "执行后重新预测",
+        "text": "动作序列与反馈频率要一起设计。Diffusion Policy 使用滚动时域执行。"
+      }
+    ],
+    "example": "同一个杯子可以从不同方向抓取。策略需要保留多种有效做法，避免简单平均动作产生无效路线。这个例子解释多模态动作。",
+    "boundary": "生成质量、推理时延和反馈频率共同影响部署。基础方法的发布时间已标明，不能把它们当成本周的新论文。",
+    "question": "固定推理与数据预算时，生成步骤数、动作块长度和反馈频率怎样配合？",
+    "sources": [
+      {
+        "item_id": "arxiv:2303.04137",
+        "title": "Diffusion Policy",
+        "url": "https://arxiv.org/abs/2303.04137v5",
+        "published": "2023-03-07",
+        "role": "方法基础",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      },
+      {
+        "item_id": "arxiv:2410.24164",
+        "title": "π₀",
+        "url": "https://arxiv.org/abs/2410.24164v4",
+        "published": "2024-10-31",
+        "role": "方法基础",
+        "checked": "2026-11-05",
+        "evidence_level": "原始摘要已核对"
+      }
+    ],
+    "keywords": [
+      "diffusion policy",
+      "flow matching",
+      "flow-matching",
+      "action chunk",
+      "action diffusion"
+    ],
+    "checked_at": "2026-11-05",
+    "selection_reason": "按理解通用操作、预测、数据、控制和动作表示的学习价值组织；属于编辑导读顺序，不是性能排名。"
+  }
+]

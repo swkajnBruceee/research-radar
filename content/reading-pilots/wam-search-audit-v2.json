@@ -1,0 +1,475 @@
+{
+  "item_id": "arxiv:2610.41970",
+  "document_id": "8f79dad30acd1b4e52b1f72a66d3d017d8e464b9e6ca057fdefaeb63eb0f2f8d",
+  "source_url": "https://arxiv.org/html/2610.41970v2",
+  "paper_version": "2610.41970v2",
+  "paper": {
+    "id": "arxiv:2610.41970",
+    "title": "When Does Test-Time Search Help World Action Models? An Empirical Audit of Candidate Selection and Simulator Integrity",
+    "url": "https://arxiv.org/abs/2610.41970v2",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "evaluation"
+    ],
+    "summary": "arXiv:2610.41970v2 Announce Type: cross Abstract: World-action models increasingly apply test-time scaling, spending extra inference computation on candidate selection and adaptive allocation to improve control. Such gains are credible only when candidates carry exploitable signal, nominal compute savings become real speedup, and evaluation stays reliable. We audit all three on Cosmos Policy and RoboCasa with a premise-first, pre-registered methodology. On clean data, a learned value selector is 1.66 pp worse than random; a hindsight oracle gains only 1.40 pp, with an episode-level interval spanning zero; and 82% of states show identical candidate outcomes, leaving little selection headroom. Token pruning cuts per-forward FLOPs by up to 47% but yields at most a measured 1.15$\\times$ end-to-end speedup on the deployed path (1.25$\\times$ on a decode-excluded path), short of a 1.5$\\times$ target, and our adaptive-allocation experiment is inconclusive under a power gate. We further identify and fix a silent rendering corruption whose rate rises sharply along compute-heavy planning paths while leaving the official direct-policy result unaffected, and release a detector, fix, and scripts. These findings show why test-time scaling should be audited as a chain of premises (decision signal, realized efficiency, evaluationintegrity) rather than by success rate alone. Conclusions are scoped to the tested configuration."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-09T05:33:57.134069+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 91,
+    "total": 91,
+    "evidence_ids": [
+      "37c4565b2b299f9f",
+      "91fdb0d0e6d7fb90",
+      "678c9f43a9c83985",
+      "2e39fad2370d9078",
+      "10b2a1ae44165aaf",
+      "0a4558c55ea37a6c",
+      "5e023fbf3276fcb5",
+      "74794d6b2ca580c1",
+      "65d945ffda89724e",
+      "1291577c0c58c3f8",
+      "939605d8a8b27b8e",
+      "aa3fcc980891b466",
+      "775fe57c3eeb9384",
+      "9739211f379b3463",
+      "12f1da0e4d80bafd",
+      "1af19bce8ebd20e7",
+      "1db677ac4bf00bd9",
+      "d9d6afdf1c3eaa23",
+      "ba74e52c2ed4abd0",
+      "517a37452a63df9f",
+      "cb96a3509280f227",
+      "7652e1d63945dd0d",
+      "da298e1a344a4486",
+      "90957c15c3552073",
+      "bcb64a28fb6bb921",
+      "aa0a04a241972411",
+      "c55a581e14f5e50d",
+      "42b49e1e2ad4d1f6",
+      "3903c3f61b5f28b5",
+      "5418896071e07bc0",
+      "15440c19087ad466",
+      "3242c4d5bb77206b",
+      "2e527ceefe139ef4",
+      "9f1dd61a0cd8ab3e",
+      "547f41c1bbcd2d90",
+      "71b2813065c7e5ae",
+      "564fa322f5bcb672",
+      "937833287e31506a",
+      "01fc8010a4e6bbb4",
+      "f0c243066b3adcae",
+      "78da8da3204e3b41",
+      "9f5fbafcfdc9babc",
+      "e1b55e0d98a746fb",
+      "bd117931bbc913ef",
+      "df5fa523113612d9",
+      "357d9ef51f7a3c79",
+      "87606ba0313cd60d",
+      "5fa997a1819b6635",
+      "f1448be24225644e",
+      "e531407011aed36e",
+      "5bf6e1b2c7a8919c",
+      "d034b201bb34a1f6",
+      "12f292e05153e189",
+      "6acd92a34f312d06",
+      "f167da084cb05f48",
+      "5d6a403a6f909383",
+      "afe2c85529c424d9",
+      "86de1290ec5d8d94",
+      "56beb79c974dc88c",
+      "650d66b80c618422",
+      "5054d3cc9b18480c",
+      "57e692c956701e70",
+      "8669492a1e396b20",
+      "4136ef81c9798e7f",
+      "7f0bcceeb4d9c0fe",
+      "3c59fc5b5b32d059",
+      "f2cb375acc1ba16b",
+      "5f329c7448567335",
+      "a24a5fd742a75c58",
+      "d014e54769858440",
+      "bb8a24ce65604ec8",
+      "e14f32137df818b8",
+      "18bbd2b6977c6f78",
+      "6390bbdae394c554",
+      "7563c1d4b2e13a62",
+      "aaa31148ddbd6788",
+      "0e4a9c9a3a8fabfa",
+      "22c568f3bbe55d77",
+      "e651d1d6b4da52c3",
+      "6c86cb0bec5710f7",
+      "73b5896d4794c5f1",
+      "7de66c88efc65e41",
+      "59f27e96cc98ffe7",
+      "64354ebcd5c0729d",
+      "81d27afef6c315de",
+      "5da3d3331fcf4848",
+      "56f487a8ce3cc407",
+      "241d90790223babb",
+      "1842c0102c9f44e4",
+      "4b9514380d68df4a",
+      "47773e8ef31bdb91"
+    ],
+    "pdf_pages_visually_checked": [
+      1,
+      4,
+      5,
+      6,
+      7,
+      11,
+      12,
+      13
+    ],
+    "pdf_sha256": "f73d00b1274ae90e7bd599d09ea096c72fc2aed713fe7f0350b61b61027063ca"
+  },
+  "overview": "本文把WAM测试时扩算拆为三个先决条件：候选是否存在可复现的结果差异、FLOPs节省能否转为完整查询加速、评测渲染是否可靠。Cosmos Policy/RoboCasa配置中，价值选择低于随机1.66个百分点，交叉拟合oracle仅+1.40个百分点且episode级区间跨零；两次重复不足以确定真实上限。整帧裁剪省47.9%单前向FLOPs，完整部署查询仅1.152倍加速且未测动作质量。16状态分配实验未过统计功效门槛，结论是无定论。另有与重置/GL上下文有关的静默渲染错误，重规划路径较易暴露，但官方直接策略结果只小幅低报。本轮核对还纠正加速倍数与耗时下降百分比的混用。",
+  "notice": "当前会话代理完整阅读固定HTML证据91/91片段，涵盖正文与补充9–13节。另读固定PDF全文补查图1说明、相关工作与参考文献；PDF13物理页、2000113字节。目视物理页1/4/5/6/7/11/12/13，核图1、3–5、表1–4及主要公式；图2从PDF提取文字读取，未称目视。作者实验未复现，本轮未运行模型、仿真、修复或复现脚本，未独立审计原始计时、候选矩阵、预注册时间戳或代码发布可获取性。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "先验证扩算前提，分别记录负结果与统计无定论",
+      "text": "本文提出的是诊断协议而非新规划器：在归因测试时扩算收益前，先检验可选择信号、实际端到端效率及渲染完整性。方法包括配对候选闭环回放、不可部署的事后oracle、统计功效门槛和帧缓冲哨兵。固定检验规则后再读数据是作者的预注册主张，本轮未独立核其事前时间戳。价值选择器表现差、达不到设定时延目标、未过功效门槛，是三种不同判断，不能统一写成规划或自适应分配无效。可迁移的是审计思路，经验结论限该Cosmos Policy/RoboCasa配置。",
+      "evidence_ids": [
+        "37c4565b2b299f9f",
+        "2e39fad2370d9078",
+        "10b2a1ae44165aaf",
+        "1291577c0c58c3f8",
+        "12f1da0e4d80bafd",
+        "1af19bce8ebd20e7",
+        "1db677ac4bf00bd9",
+        "d9d6afdf1c3eaa23",
+        "ba74e52c2ed4abd0",
+        "517a37452a63df9f",
+        "cb96a3509280f227",
+        "937833287e31506a",
+        "bd117931bbc913ef",
+        "56beb79c974dc88c",
+        "650d66b80c618422",
+        "7563c1d4b2e13a62",
+        "aaa31148ddbd6788",
+        "0e4a9c9a3a8fabfa",
+        "22c568f3bbe55d77"
+      ],
+      "quote": "premise-first"
+    },
+    {
+      "kind": "method",
+      "title": "候选只切换一次，后续统一由稠密基础策略继续",
+      "text": "在渲染核验后的状态上比较8个候选，执行生成32步chunk的前16步，成功即停；之后每16步重规划，使用1样本、全token、10去噪步、无价值头的固定基础策略，直到成功或500步。所有选择器共享结果矩阵和continuation seeds，每候选仅R=2重复。该协议控制首次候选选择的局部效应，并不等于整段episode不断用价值选择/规划的部署分布。分配诊断另用2与5去噪步，不能把10步continuation同其5步稠密参考D(5,F)混为一个实验。263是查询状态数，同episode状态相关，不能当263条独立完整任务。",
+      "evidence_ids": [
+        "1db677ac4bf00bd9",
+        "517a37452a63df9f",
+        "7652e1d63945dd0d",
+        "90957c15c3552073",
+        "bcb64a28fb6bb921",
+        "c55a581e14f5e50d",
+        "241d90790223babb",
+        "47773e8ef31bdb91"
+      ],
+      "quote": "snapshot replay"
+    },
+    {
+      "kind": "evidence",
+      "title": "价值选择器低于随机，且不是只由一个任务造成",
+      "text": "图3：价值选择减随机为−1.66个百分点，95%状态bootstrap区间[−2.97,−0.31]、episode bootstrap[−2.49,−0.71]，两者均在零下。TurnOnStove贡献较大（−3.87个百分点）；去该任务后状态加权均差仍−0.77，episode区间[−1.27,−0.21]，状态区间[−1.54,−0.03]。支持该价值排序在本候选/续行配置下比随机差，不能扩展成所有critic或所有WAM无法选动作。没有呈现跨更多模型、候选生成方式或完整持续规划的等预算验证。",
+      "evidence_ids": [
+        "7652e1d63945dd0d",
+        "90957c15c3552073",
+        "bcb64a28fb6bb921",
+        "aa0a04a241972411",
+        "3903c3f61b5f28b5",
+        "56beb79c974dc88c",
+        "47773e8ef31bdb91"
+      ],
+      "quote": "value selector"
+    },
+    {
+      "kind": "evidence",
+      "title": "oracle的1.40个百分点仍不确定，不能锁成确定天花板",
+      "text": "事后交叉拟合oracle相对随机+1.40个百分点，状态bootstrap95%区间[+0.31,+2.60]，episode级[−0.25,+3.40]；未过重复一致性门槛。因此不能仅挑状态区间宣称显著可用收益，也不能把含噪点估计当所有选择器的硬上限。样本内取最大+7.1同样不是可部署或可复现收益。ICC0.20、两次重复的Spearman–Brown可靠性约0.33，说明oracle的排序基准本身不稳。48/263状态有候选/重复结果变化，215/263约82%均一；20个稳定可分状态中，两次重复都成功/都失败的结构在标签置乱null下也预期出现约14.8个，故20并非20个已证实可利用机会。",
+      "evidence_ids": [
+        "1db677ac4bf00bd9",
+        "7652e1d63945dd0d",
+        "c55a581e14f5e50d",
+        "42b49e1e2ad4d1f6",
+        "3903c3f61b5f28b5",
+        "e14f32137df818b8",
+        "18bbd2b6977c6f78",
+        "6390bbdae394c554",
+        "56f487a8ce3cc407",
+        "241d90790223babb",
+        "1842c0102c9f44e4",
+        "4b9514380d68df4a",
+        "47773e8ef31bdb91"
+      ],
+      "quote": "cross-fitted"
+    },
+    {
+      "kind": "evidence",
+      "title": "动作几何多样性不等于任务结果可分性",
+      "text": "补充13节将执行的16步×7维动作按数据集z-score后展开112维，8候选两两距离最小离散度仍0.18，没有完全相同候选。无结果变化状态的绝对离散度中位数0.78，反而高于有变化的0.48，主要由TurnOnStove驱动；尺度无关变异系数无显著组差（p约0.07–0.10），不能把原始距离差当独立结构效应。价值分数标准差中位约3×10⁻⁴，与结果变化无明显关系。48变化状态中20稳定可分、28未达标准；0.5值来自重复结果的分级统计，不能当单次任务半完成。检验未作多重比较校正且同episode相关，均为探索性；不能据此宣称增加动作分散就提高成功率。",
+      "evidence_ids": [
+        "42b49e1e2ad4d1f6",
+        "81d27afef6c315de",
+        "5da3d3331fcf4848",
+        "56f487a8ce3cc407",
+        "241d90790223babb",
+        "1842c0102c9f44e4",
+        "4b9514380d68df4a",
+        "47773e8ef31bdb91"
+      ],
+      "quote": "action-space dispersion"
+    },
+    {
+      "kind": "evidence",
+      "title": "47.9%单前向FLOPs下降，部署查询耗时只下降约13.2%",
+      "text": "核表1/3：RTX A6000、bf16、batch1、eager、每查询5次DiT，11帧×196=2156token；裁去全部未来帧和value剩1176token，单前向8.535→4.446TFLOP，省47.9%。完整部署查询中位1254.9→1088.9ms，加速1.152×；同时去未来图像解码的有利路径812.7→648.6ms，为1.253×，均未到作者预设1.5×。按毫秒值计算耗时分别降13.2%和20.2%，补充12节把15.2%/25.3%写成耗时节省混淆了speedup−1与1−1/speedup，本卡采用毫秒重算。稠密分解DiT五次合530.7ms，VAE编码238.0、解码434.4ms，后两项不随token裁剪减少。计时为完整真实查询，包含切片/scatter，但丢弃帧以零输出、只测延迟，未验证策略质量，不能当保持成功率的可用加速。独立CUDA Graph单forward1.73×不是eager完整查询结果。",
+      "evidence_ids": [
+        "15440c19087ad466",
+        "3242c4d5bb77206b",
+        "2e527ceefe139ef4",
+        "9f1dd61a0cd8ab3e",
+        "547f41c1bbcd2d90",
+        "71b2813065c7e5ae",
+        "564fa322f5bcb672",
+        "01fc8010a4e6bbb4",
+        "57e692c956701e70",
+        "8669492a1e396b20",
+        "4136ef81c9798e7f",
+        "7f0bcceeb4d9c0fe",
+        "3c59fc5b5b32d059",
+        "f2cb375acc1ba16b",
+        "e651d1d6b4da52c3",
+        "6c86cb0bec5710f7",
+        "73b5896d4794c5f1",
+        "7de66c88efc65e41",
+        "59f27e96cc98ffe7",
+        "64354ebcd5c0729d"
+      ],
+      "quote": "latency-only"
+    },
+    {
+      "kind": "evidence",
+      "title": "分配交互的完整实验未启动，不能称已经验证无收益",
+      "text": "16状态smoke诊断交叉2/5去噪与全/key/uniform-token，uniform交互I_U=D(2,U)−D(2,F)−D(5,U)+D(5,F)，精确可加时均值0。作者给有效相关0.92、逐状态噪声平均0.0066、90分位0.0173；去噪声偏置后的系统项约0.0045，时间主效应0.0053。该smoke量级未能分辨，完整factorial因功效门槛失败未运行；不代表所有样本数和检验下都不可识别。锁定θ_B=max(2σ_seed,0.3D(2,F))对应最小可检测0.0265–0.0583，正文又明确其阈值校准仍待签核、终稿将重算。需将不依赖该阈值的当前信噪观察与仍待校准的数值门槛分开；数百至约两千状态只是作者外推，非已验证功效或已完成实验。",
+      "evidence_ids": [
+        "d9d6afdf1c3eaa23",
+        "ba74e52c2ed4abd0",
+        "517a37452a63df9f",
+        "5418896071e07bc0",
+        "937833287e31506a",
+        "f0c243066b3adcae",
+        "78da8da3204e3b41",
+        "9f5fbafcfdc9babc",
+        "e1b55e0d98a746fb",
+        "bd117931bbc913ef",
+        "df5fa523113612d9",
+        "a24a5fd742a75c58",
+        "d014e54769858440",
+        "bb8a24ce65604ec8"
+      ],
+      "quote": "systematic component"
+    },
+    {
+      "kind": "method",
+      "title": "渲染哨兵检测未写入目标，根因归属限作者的栈诊断",
+      "text": "作者解释hard reset新建sim后，旧孤立实例延迟GC，在另一个GL context活跃时释放旧context，导致当前framebuffer失效；画面可冻结或噪声化且不抛异常。哨兵先用标记填充render target，再检查render后是否大面积仍未覆盖。PDF图1补充了提取包未列的画面：左右/腕三相机拼图被重复成马赛克，作者以修复重跑的同状态对照展示。作者称修复消除故障，但脚注明确尚未获维护者确认根因；本轮未运行复现器或修复、未独立检查源码。可以采用完整性检测原则，不可把栈特定GL修复当跨渲染后端通用安全保障，也不能认为哨兵覆盖所有视觉失真。",
+      "evidence_ids": [
+        "10b2a1ae44165aaf",
+        "65d945ffda89724e",
+        "9739211f379b3463",
+        "cb96a3509280f227",
+        "357d9ef51f7a3c79",
+        "87606ba0313cd60d",
+        "650d66b80c618422",
+        "7563c1d4b2e13a62",
+        "0e4a9c9a3a8fabfa"
+      ],
+      "quote": "framebuffer sentinel"
+    },
+    {
+      "kind": "evidence",
+      "title": "官方直接策略受影响很小，200配对子集与1200总体需区分",
+      "text": "核表2：先选原基线出现损坏的四任务，各50条连续episode，共200对bug/fix，成功102→105，8条损坏，全3次翻转均从失败到成功，其余192条完全一致。该选中子集损坏8/200，而论文0.67%用整个24任务×50=1200条bug臂作分母8/1200，两者不同，不能混写。按全协议外推+3/1200=0.25个百分点，作者称官方67.1%结果基本不受影响，且方向是修复前低报；这不是官方分数被大幅虚增的证据。完整24任务两条件配对未展示，不能把子集外推说成全1200对都重跑验证。",
+      "evidence_ids": [
+        "5fa997a1819b6635",
+        "f1448be24225644e",
+        "e531407011aed36e",
+        "5bf6e1b2c7a8919c",
+        "12f292e05153e189",
+        "5d6a403a6f909383"
+      ],
+      "quote": "official direct-policy"
+    },
+    {
+      "kind": "evidence",
+      "title": "至多65%属于非标准重规划路径，不是所有加算力都会损坏",
+      "text": "直接策略总体约0.67%损坏；直接模式8候选简单forward的40例为0损坏且bug/fix都29/40成功；分开调用未来状态/value的某重计算规划配置至多65%。后者没有完整分母/配置扫描，且RoboCasa无原生规划模式，此为非标准风险示例，不能叫标准基准腐坏率，也不能仅凭配置相关性证明FLOPs是唯一因果变量。40例无损坏不等于风险为零。作者明确官方真实机器人规划不经robosuite，故这一路错误不影响该官方规划数字；LIBERO因其先销毁旧sim的代码路径推断无触发条件，但作者没有运行LIBERO，不能写成实测无故障。",
+      "evidence_ids": [
+        "d034b201bb34a1f6",
+        "12f292e05153e189",
+        "6acd92a34f312d06",
+        "f167da084cb05f48",
+        "5d6a403a6f909383",
+        "afe2c85529c424d9",
+        "56beb79c974dc88c"
+      ],
+      "quote": "compute-heavy"
+    },
+    {
+      "kind": "limitation",
+      "title": "优先复用审计设计，保留原始记录与统计校准缺口",
+      "text": "实证仅一个模型/仿真栈：选择诊断四任务，附录称three episodes，逐任务episode分配需原始日志确认；仅R=2、执行前16步、固定continuation，未测其他候选数、温度、难度分布或实机。作者声明发布detector/fix/scripts并给相对脚本/结果路径，本轮未验证独立下载、原始矩阵和预注册时间戳；统计阈值尚待校准，不视作完整锁定认证。计时正文称每cell30，表有6档×2路径=360次，而附录又称420次计时，是否额外dense对照未说明，保留记录数映射缺口；不擅改原表。FLOPs与完整耗时、单步与整任务、oracle估计与硬上限、未过功效与真负结果都需分开。该方法学可影响研究预算判断，不能据单栈审计否定测试时搜索的普遍价值。",
+      "evidence_ids": [
+        "1291577c0c58c3f8",
+        "d9d6afdf1c3eaa23",
+        "517a37452a63df9f",
+        "cb96a3509280f227",
+        "bcb64a28fb6bb921",
+        "3903c3f61b5f28b5",
+        "15440c19087ad466",
+        "e1b55e0d98a746fb",
+        "bd117931bbc913ef",
+        "5d6a403a6f909383",
+        "56beb79c974dc88c",
+        "650d66b80c618422",
+        "8669492a1e396b20",
+        "4136ef81c9798e7f",
+        "3c59fc5b5b32d059",
+        "5f329c7448567335",
+        "59f27e96cc98ffe7",
+        "64354ebcd5c0729d",
+        "81d27afef6c315de",
+        "47773e8ef31bdb91"
+      ],
+      "quote": "pre-registered"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：增加独立episode与候选重复后，原配置仍无实用选择余量吗？",
+      "text": "待验证假设：保持原候选生成和single-switch续行协议时，增加独立episode与候选重复后，可复现oracle收益仍低于预设的2个百分点实用门槛，价值选择器也不会优于随机。仅公开仿真实验草案：固定Cosmos Policy权重、RoboCasa版本/任务、8候选和10去噪步续行，渲染固定版及哨兵在所有条件一致；每任务至少30个独立episode，从预设时间网格抽状态，不能因候选是否可分才挑样本。先用独立smoke估episode级方差/功效，在预算上限内预注册最终状态数及R=2/4/8重复设计，若功效不足则如实无定论。比较同一候选池上的随机、部署价值排序、样本内最大值和训练/评估重复分离的交叉拟合oracle，不把后两者当可部署算法。以episode为bootstrap重采样单位、按任务分层，报oracle/价值减随机95%区间、稳定可分比例、重复一致性及完整查询墙钟与总回放预算；预先定义连续规划为另一独立实验，不混入本single-switch效应。只有oracle区间上界低于2个百分点才支持缺少实用余量；若下界超过2个百分点或价值排序在独立评估上显著为正，则推翻假设；区间跨门槛时不能硬判无效。对任何渲染损坏用预注册规则整对重跑或留作失效，不按结果删样本。实验未执行，未创建选题，未全面查新；即使支持也只适用于所测试任务与候选数，仍不否定新候选生成器或其他WAM。",
+      "evidence_ids": [
+        "1db677ac4bf00bd9",
+        "d9d6afdf1c3eaa23",
+        "ba74e52c2ed4abd0",
+        "517a37452a63df9f",
+        "90957c15c3552073",
+        "bcb64a28fb6bb921",
+        "aa0a04a241972411",
+        "c55a581e14f5e50d",
+        "42b49e1e2ad4d1f6",
+        "3903c3f61b5f28b5",
+        "87606ba0313cd60d",
+        "56beb79c974dc88c",
+        "e14f32137df818b8",
+        "18bbd2b6977c6f78",
+        "6390bbdae394c554",
+        "5da3d3331fcf4848",
+        "56f487a8ce3cc407",
+        "241d90790223babb",
+        "1842c0102c9f44e4",
+        "4b9514380d68df4a",
+        "47773e8ef31bdb91"
+      ],
+      "quote": "candidate counts"
+    }
+  ],
+  "attention": {
+    "level": "priority",
+    "reason": "候选信号、实际加速和渲染完整性分别提供可复用审计与受控反例，直接影响WAM扩算预算和证据解释，值得优先读；oracle与分配仍无定论，不能推广为所有规划无效。",
+    "basis": [
+      "compute_shift",
+      "controlled_comparison",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "1db677ac4bf00bd9",
+      "517a37452a63df9f",
+      "90957c15c3552073",
+      "bcb64a28fb6bb921",
+      "aa0a04a241972411",
+      "c55a581e14f5e50d",
+      "2e527ceefe139ef4",
+      "547f41c1bbcd2d90",
+      "01fc8010a4e6bbb4",
+      "bd117931bbc913ef",
+      "87606ba0313cd60d",
+      "f1448be24225644e",
+      "e531407011aed36e",
+      "5bf6e1b2c7a8919c",
+      "6acd92a34f312d06",
+      "5d6a403a6f909383",
+      "4136ef81c9798e7f",
+      "64354ebcd5c0729d",
+      "241d90790223babb",
+      "4b9514380d68df4a"
+    ]
+  },
+  "frontier_brief": {
+    "title": "给WAM扩算先验信号、再测完整查询，并核渲染完整性",
+    "change_type": "测试时搜索与评测审计",
+    "delta": "对同状态候选做配对闭环续行，以随机和交叉拟合oracle分开检验排序质量与可选择余量；计完整查询时延，用功效门槛区分负结果和无定论，以framebuffer哨兵保护评测。",
+    "before": "仅报规划成功率、动作差异或单前向FLOPs，难区分候选同质、排序无效、固定编解码开销和无报错的渲染失真。",
+    "after": "Cosmos Policy/RoboCasa该配置下，价值选择低于随机1.66个百分点；oracle+1.40但episode级区间跨零。裁剪省47.9%单前向FLOPs，完整部署查询仅1.152倍且未测动作质量；分配完整实验未过功效门槛。",
+    "relevance": "在投入WAM best-of-N或自适应去噪/裁剪前，先估候选可复现结果差异、按真实调用路径核算延迟，再验证渲染与统计单位，避免把低可用信号或无定论当明确收益。",
+    "caveat": "作者实验未复现，仅一个模型/栈、四任务选择诊断、两次重复和一次候选切换；不是持续规划或所有WAM的判决。65%是非标准重规划风险示例，官方直接策略仅小幅低报。预注册/脚本未独立审计，计时次数映射与阈值校准仍有缺口。",
+    "question": "更多独立episode与候选重复能否确认至少2个百分点可复现选择余量，还是只有当前噪声下的点估计？",
+    "evidence": [
+      {
+        "label": "排序质量与选择余量",
+        "value": "价值−1.66pp；oracle+1.40pp",
+        "context": "图3，8候选、263查询状态、R=2，先执行16步后固定策略续行。价值episode95%区间[−2.49,−0.71]，oracle[−0.25,+3.40]；后者不能称确定收益上限。"
+      },
+      {
+        "label": "可分性与重复噪声",
+        "value": "215/263无变化；20稳定可分",
+        "context": "表4，48状态有任意变化，20达双重复稳定分离，但置乱null预期约14.8；可靠性约0.33。动作多样不等于结果可选，20不是已证实可利用机会。"
+      },
+      {
+        "label": "真实延迟对FLOPs",
+        "value": "47.9% FLOPs下降；1254.9→1088.9ms",
+        "context": "表1/3，A6000、bf16、batch1、eager、5去噪步；完整部署查询1.152×，耗时按表算降13.2%。不解码路径1.253×、降20.2%，均不到1.5×；裁剪只测时延未测动作质量。"
+      },
+      {
+        "label": "分配结果性质",
+        "value": "16状态smoke，完整factorial未启动",
+        "context": "图4，初步系统项0.0045小于逐状态噪声均值0.0066；功效门槛失败，阈值校准仍待签核。不能称自适应分配已验证无效。"
+      },
+      {
+        "label": "渲染与官方结果",
+        "value": "选中200对成功102→105",
+        "context": "表2，四个已出现故障任务，8/200损坏；全1200条协议损坏8/1200、外推修复约+0.25pp。非标准重规划至多65%仅风险示例，官方直接策略67.1%基本不受影响。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "同候选池固定续行",
+        "text": "8候选共享结果矩阵与continuation seeds，只切换首个16步动作，后续全token基础策略；比较排序质量，另估不可部署的事后余量。"
+      },
+      {
+        "title": "按瓶颈测效率",
+        "text": "整帧裁剪降低DiT计算，VAE编码/未来图像解码仍固定；分别直接计部署和不解码路径，CUDA Graph单forward不冒充端到端。"
+      },
+      {
+        "title": "统计与渲染均有失效分支",
+        "text": "功效不足报告无定论；渲染前填标记检查是否被覆盖。GL上下文修复是栈特定实现，图像完整性未证时不能将任务得分变化全归于搜索。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/html/2610.41970v2",
+      "checked": "全文91/91证据片段，正文与补充9–13全部读取。逐字引文与证据匹配。"
+    },
+    {
+      "url": "https://arxiv.org/pdf/2610.41970v2",
+      "checked": "固定PDF13物理页、2000113字节；目视页1/4/5/6/7/11/12/13，核图1/3/4/5、表1–4及主要公式；另补读图1说明、图2提取文字和参考文献。按原始ms重算耗时降13.2%/20.2%，不沿用附录15.2%/25.3%的混用；未复现，未改论文或修复代码。"
+    }
+  ]
+}

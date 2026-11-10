@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.07748",
+    "source_signature": "f12ada95668b5022c54839f949f34b21737ae748c1d09841c6c7c5b52ac74c4a",
+    "level": 1,
+    "reason": "楔面几何改变线式阻塞机构的方向保持性能，有实测可复用机械选择；影响主要是可变刚度结构而非通用策略路线。",
+    "quote": "Wedge-Jamming"
+  },
+  {
+    "item_id": "arxiv:2611.07621",
+    "source_signature": "6397480d27bd1bd1b0e0b842169a8b3aa5f1b9dadcfa148820f98beccb130ca1",
+    "level": 1,
+    "reason": "两工业单元有占据场与效率量化结果，适合协作区域配置；方案须人工风险评估，不能当自动安全保证或通用训练增益。",
+    "quote": "Data-Driven Configuration"
+  },
+  {
+    "item_id": "arxiv:2611.07470",
+    "source_signature": "8f6de59361585a66d8846bcf691aa8bc0ad16d6d905fbb817dcae19bd0eb7556",
+    "level": 0,
+    "reason": "闭链腿Jacobian和奇异性分析配单腿演示，属于特定机构运动学开发，摘要缺强对照与广泛复用证据。",
+    "quote": "Kinematic analysis"
+  },
+  {
+    "item_id": "arxiv:2611.07293",
+    "source_signature": "40d2219538dc87aec4cd90114a3b94d81c0fc06a3f34d91518c65766c4914350",
+    "level": 0,
+    "reason": "GA排序与动态路径点为常见收获整合，实测是目标靠近而非完整采收且碰撞仍多，路线改变依据不足。",
+    "quote": "An Ordering Optimization"
+  },
+  {
+    "item_id": "arxiv:2611.07163",
+    "source_signature": "7dbd3705c112cffd017ec41c3a1fa9b580e51e6fd12a339e48d505b2b3d6388a",
+    "level": 1,
+    "reason": "单锚加绝对航向条件下的分布式估控有收敛分析和五机器人实测，适合特定编队，但信息前提限制迁移。",
+    "quote": "Distributed Geometric"
+  },
+  {
+    "item_id": "arxiv:2611.07091",
+    "source_signature": "d76f12085b9c2a679a80db51f7c86a1c24f55cdb9e0585407faa55f2b2cf8278",
+    "level": 1,
+    "reason": "用机械耦合实现规定曲率而非只补模型误差，有形状精度对照，影响连续体机构设计但应用范围较窄。",
+    "quote": "Curvature by"
+  },
+  {
+    "item_id": "arxiv:2610.41970",
+    "source_signature": "7d19e9786e931830455a9e650eb8c36bd0f4183a96f0bbb8835740adf263c583",
+    "level": 2,
+    "reason": "候选选择上限、实际加速与静默渲染错误分别受控审计，可能推翻测试时扩算的收益解释并提供检测修复资源。",
+    "quote": "When Does Test-Time"
+  },
+  {
+    "item_id": "arxiv:2611.07881",
+    "source_signature": "b01024b2ebcbc83264d5cceb0a70fc27dabf49afb7e5db129b7ce39f35f83e7b",
+    "level": 1,
+    "reason": "刚体估计切向流替代软体触觉仿真并做真实映射，有多任务部署；摘要缺数值预算与受控对比，先核技术增量。",
+    "quote": "TactileLab: Sim-to-Real"
+  },
+  {
+    "item_id": "arxiv:2611.03825",
+    "source_signature": "9397310d91b95dd0813d65445b30849a22059046132ee54ca72844ff5c8f70ee",
+    "level": 0,
+    "reason": "形变Jacobian的高级教程有诊断价值，但摘要未给新机制的比较实验证据，不优先于训练评测路线工作。",
+    "quote": "A Tutorial on"
+  },
+  {
+    "item_id": "arxiv:2611.03850",
+    "source_signature": "9bb0fc5110f4be4696bd6c5f89fe6d26fc9f44459c0ae28c25502ba49c417198",
+    "level": 2,
+    "reason": "评测器与模型池解耦、按需渲染有同GPU加速与等结果对照，跨六类基准可降低重复实验资源门槛。",
+    "quote": "RoboScope Kit:"
+  },
+  {
+    "item_id": "arxiv:2611.04016",
+    "source_signature": "64b0d25ed16669850983ddf55242a012ffff0e8b076f6ad7dc04a461e891a8ec",
+    "level": 1,
+    "reason": "结构变化记忆在无预测信息时优势消失，是持续世界模型的有效边界；目前物理迷宫范围及量化强度待核。",
+    "quote": "Physical Experience"
+  },
+  {
+    "item_id": "arxiv:2611.04080",
+    "source_signature": "c03db34222752f4c7aeca45c326f57868d05005f5b970656b89970b0404f5b65",
+    "level": 1,
+    "reason": "按任务查询感知并用可达性和效果验证恢复，有103查询及50次Spot对照；适合移动操作代理，广泛路线收益仍待消融。",
+    "quote": "FEIJOA: Task-Driven"
+  },
+  {
+    "item_id": "arxiv:2611.04083",
+    "source_signature": "47bae8b2894c1c985e723aed3efc20135b421c583cb357b4b5ebfa05ffd98036",
+    "level": 1,
+    "reason": "8.1千美元移动双臂平台含共享控制与遥操作接口，可降低硬件门槛；缺跨平台学习对照，先作资源工程增量。",
+    "quote": "MABEL: An Open"
+  },
+  {
+    "item_id": "arxiv:2611.04096",
+    "source_signature": "d7ce1c25e1f117197611910235c03544a97c5803ffa11b29855428354472d197",
+    "level": 2,
+    "reason": "匹配精度与参考实现的实时GPU HJ求解、嵌入端结果可改变低维在线安全计算预算，需核网格与全时域成本。",
+    "quote": "Online Hamilton-Jacobi"
+  },
+  {
+    "item_id": "arxiv:2611.04166",
+    "source_signature": "fda2c0846a237b77fecb71f585abb710ad4a915763e1be745a4b476cdc6e8d15",
+    "level": 2,
+    "reason": "两个推理VLA的等范数扰动对照显示文本不变而动作改变，直接影响通用可解释性与监测路线，应核安全结论边界。",
+    "quote": "Say the Same,"
+  },
+  {
+    "item_id": "arxiv:2611.04176",
+    "source_signature": "c591d2a357ebe275fc4935363f7873804518a04e39c1b3089acb54463c72dc9a",
+    "level": 0,
+    "reason": "旋转基座同步与抓后最优控制仅特定空间捕获案例，缺广泛可复用数据或比较，和当前策略学习方向较远。",
+    "quote": "Grasping and"
+  },
+  {
+    "item_id": "arxiv:2611.07532",
+    "source_signature": "756eb411f16d6bcd5b41d2be8c48dfa083b6bfbf9b00f474c7a61bc99e971409",
+    "level": 1,
+    "reason": "语义定位加力反馈残差RL及物体中心增强针对视觉泛化，六实机任务相关，但摘要缺量化消融与人介入成本。",
+    "quote": "Semantics-to-Contact:"
+  },
+  {
+    "item_id": "arxiv:2611.01844",
+    "source_signature": "b49f48f86301ad531f14befa51a03fd0ad7cd31c8d8e4f04e4e53f75804c3741",
+    "level": 1,
+    "reason": "动作自由视频的潜动作预训练及1750万观察有数据扩展潜力，但摘要未列具体对照规模和开放承诺，先核实效。",
+    "quote": "OpenNWM: A Generalist"
+  },
+  {
+    "item_id": "arxiv:2611.07441",
+    "source_signature": "829a7c3b7e1f98485555680ee4de6f456776e329e23e815d573bc3df96b6ec07",
+    "level": 1,
+    "reason": "低价并行评测与多checkpoint负结果有复用价值，但机制仅部分控制、稀疏数据设置较窄，不能泛化否定chunking。",
+    "quote": "Closed-Loop Physics-Based"
+  },
+  {
+    "item_id": "arxiv:2611.07651",
+    "source_signature": "9626849086e380bcee053bf3a17f1ef251f533ca1427c4eed783cc234f266bdb",
+    "level": 1,
+    "reason": "完整IK规划执行和聚类配对区间改进抓取对比口径，但仅五物体四本体固定场景，不等于生成器内在排名。",
+    "quote": "GraspBench: Execution-Aware"
+  },
+  {
+    "item_id": "arxiv:2611.07513",
+    "source_signature": "577a9976352f1585484dee56ae0b44c9375d2f8ddad70ec4dfe55d01559a3d01",
+    "level": 2,
+    "reason": "动作生成直接进入共享扩散VLM、取消独立专家的参数路径改变有多基准结果，可能改变VLA架构与训练选择。",
+    "quote": "Concertina: Embodying"
+  },
+  {
+    "item_id": "arxiv:2611.07272",
+    "source_signature": "f67b445695e02db21760c017b3677ae728321093d1fdbca66fce4b61a545dedb",
+    "level": 0,
+    "reason": "消费VR采集可复用但仅一操作者两模拟任务，后续规则依赖仿真真值且开发评估共布局，泛化依据不足。",
+    "quote": "VREgo: Consumer"
+  },
+  {
+    "item_id": "arxiv:2611.07411",
+    "source_signature": "8537a88e1cdd3292a997dfd691be47a2ae23a30cd29a678f3b450af4f23cdbb5",
+    "level": 2,
+    "reason": "用两端运动学零比特上下文节省码率，在容量匹配及等码率闭环对照改善多个策略，可能降低远程执行带宽门槛。",
+    "quote": "Kinematic Hypothesis"
+  },
+  {
+    "item_id": "arxiv:2611.07403",
+    "source_signature": "059650f9489f1e48182fedb26b2b530a3137887585cf643eee2c16a2be97bd24",
+    "level": 1,
+    "reason": "动作水印加潜动态残差与自适应强度提供明确检测机制，但仅UR5任务且摘要缺量化基线，影响范围暂窄。",
+    "quote": "Dynamic Watermarking"
+  }
+]

@@ -1,0 +1,530 @@
+{
+  "item_id": "arxiv:2611.08449",
+  "document_id": "06a4644bb56a2dd69d7bc8b984f1d0a23a7285513a8846c3db50fb439c7c5e05",
+  "source_url": "https://arxiv.org/html/2611.08449v1",
+  "paper_version": "2611.08449v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-07T20:19:24.336630+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.08449",
+    "title": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
+    "url": "https://arxiv.org/abs/2611.08449v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "planning"
+    ],
+    "summary": "arXiv:2611.08449v1 Announce Type: new Abstract: Models for physical AI tasks, such as robotics and autonomous driving, need not reason solely in language. They can use visual plans--points, bounding boxes, and trajectories--to represent spatial goals and anticipate motion. However, autoregressive vision-language models generate these plans one coordinate token at a time, making richer predictions increasingly costly. We introduce VFlash, a method for fast, accurate visual planning through Flash Primitive Decoding. VFlash exploits the known structure of visual primitives to predict their coordinates jointly, using a lightweight drafter that generates an entire primitive in one forward pass. The layout adapts to the primitive's type, dimensionality, and length, supporting compact boxes and long, variable-length trajectories. Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence. VFlash therefore trains on annotated primitives and directly accepts structurally valid predictions without target-token agreement. Across the evaluated 2D and 3D robot trajectory tasks, VFlash consistently reduces prediction errors relative to autoregressive decoding. Preliminary single-rollout measurements indicate approximately 25x faster generation for 3D point motion forecasting. A world action model conditioned on VFlash plans achieves 70.2% average success across four MolmoSpaces task suites, compared with 62.6% for the baseline."
+  },
+  "overview": "VFlash将投机解码的接受目标从“逐token符合AR目标”改为“整块视觉基元结构有效”，用额外训练的537M drafter一次预测完整轨迹，文字仍验证。该选择在同target的机器人轨迹上有受控精度提升，并显著降低所测推理阶段耗时，值得优先核查。它同时改变学习目标和额外训练量，不是无损且免费的解码插件；框检测需置信回退，密集运动部分指标更差。MolmoSpaces70.2%来自重训动作头及仿真暂停条件，25倍只是单rollout密集运动计时，不能直接写为真机闭环收益。",
+  "coverage": {
+    "read": 139,
+    "total": 139,
+    "evidence_ids": [
+      "2f30d21e002c5e61",
+      "457cc7139e23004e",
+      "3a836ec4133e24cf",
+      "6c72b7658f82b393",
+      "b5c979712115aa0c",
+      "5511b3de838fd8ec",
+      "1c28d949b5f633fc",
+      "2e890140e1692093",
+      "a71c46e5a30798d3",
+      "f8584c02ca29f6aa",
+      "d2486f77444f414b",
+      "2ae22a8b7a9109fc",
+      "17d7cea3bf25d794",
+      "518b1040d301b3bd",
+      "0958b3492c25f86f",
+      "c59c04555d22aa61",
+      "02e62ce176eff718",
+      "c55db30834745d8d",
+      "d6778edf84bc2c40",
+      "b949c582a047c824",
+      "72aa92a5ea0afe78",
+      "7baae0e71c4ba9bd",
+      "b04104cc608ba487",
+      "7767555328c3369e",
+      "46cea628965c3405",
+      "0e9e425edafb8d0c",
+      "3ec14dc90588f00a",
+      "d0dc7261c5798b16",
+      "0de5814de04f3da6",
+      "f57cb94ad58304f4",
+      "93a00aadb820f53f",
+      "3e3434ca1841b055",
+      "c7e1bb15145b0dc5",
+      "033c44e3a8a59e01",
+      "f57986635bc83521",
+      "0284c79630803908",
+      "938691db7a4cab26",
+      "0c6a6423b7e94346",
+      "b71819979705f791",
+      "91898e74832c3424",
+      "2318bd36576b5b2b",
+      "fe523db4822ba983",
+      "133cac60688f2fe0",
+      "6f9b6e6fe666c43b",
+      "ef564d0dfa364e37",
+      "2f2660fa1a2772bf",
+      "eb4fb6c65d3d969a",
+      "14a203a536638a63",
+      "0994dd101d1198c8",
+      "77bd42321a525a89",
+      "0bd74aee992f58ad",
+      "00eb6ad65a43c391",
+      "d51853937016fe6b",
+      "7dab6414576592db",
+      "c816361cd2cfb4ad",
+      "a85af91081fe8a35",
+      "6f55a09539621cc4",
+      "5ecf9213a6deb496",
+      "94febd3d89d9665f",
+      "7322cfb8cb51111b",
+      "8dcdd32223360c63",
+      "cf62c979860dc663",
+      "e51a50a4c9695a1a",
+      "7dc9f5331d1eca7e",
+      "ef7a6e1b3ec0a898",
+      "6695760e1955cdd1",
+      "5ceb7fb80ba13f93",
+      "9f24f3668301af96",
+      "071c0f8ca18df690",
+      "5acd32e4e7867306",
+      "235502b1c26c96d9",
+      "7347098ce63778bd",
+      "941bc2a990ab24c5",
+      "75a5525f9e219a31",
+      "c551cab31746a0ea",
+      "bd9158cebf0b607a",
+      "ee98718725d2e6a2",
+      "38d69831026c00e5",
+      "1a98ba32ccc2781d",
+      "65df748621ec78c8",
+      "fd292728e947cd0f",
+      "ed429f72c5be86d7",
+      "59cef2123496c923",
+      "e582b28846807a1d",
+      "ae04634ac83fd5f9",
+      "09ad250ce2a747fa",
+      "c5d854172828bf87",
+      "f7753006bc414fb9",
+      "64d57c7b67ae2762",
+      "699c7daeffc38021",
+      "c29c9b9f914073d0",
+      "66da4414242c36fc",
+      "00a713d225e8709b",
+      "129749b75afcf024",
+      "93dda8042bc96da1",
+      "9945bfe0dcbc9ea8",
+      "3b6b815757aec8f3",
+      "d0b54205d46f6a48",
+      "23726a6a1db599e7",
+      "99f25816ff336384",
+      "498efa6c5b1eff28",
+      "71dec2a07d695815",
+      "2b8390b44a2a2440",
+      "e46c804ddda9d25a",
+      "9652095f2f5cff1a",
+      "db6d646139bff79c",
+      "c130abb7d27270c5",
+      "bb24696309f6dce1",
+      "17c8d8dcbe1e0d32",
+      "9d83fe64b9e384bd",
+      "dacda2167a2f3ef7",
+      "be49ebaf85fe910a",
+      "1998ecccbceeb0a7",
+      "5848531b8ff1512e",
+      "352dc20cb663c7b1",
+      "89188dcf4541b53a",
+      "3a02a5cd19ed4ef5",
+      "4928bf9f37f73273",
+      "38dd2e11c71727ff",
+      "226347f6ef708241",
+      "1ef5eb16c731c00d",
+      "c00d0e5a2e4b5f31",
+      "b23491c8edbd52a1",
+      "6d799ff8402d8bf6",
+      "0ce545e386310d32",
+      "5ebda002bb725704",
+      "194981402f8db7e7",
+      "0e9c57cbf82ea463",
+      "0fb63ae0137ffe1b",
+      "787eb2fc8c109665",
+      "048adecdc48fea53",
+      "9208bdcadfa44017",
+      "6f7c33c861cb0c44",
+      "ca47d5c7e25b5c38",
+      "65200cf36bfc7b23",
+      "0740ab1f6842f226",
+      "dba029562cade4bb",
+      "2635207793c24350",
+      "1379ce9724ce0f5b"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      6,
+      7,
+      8,
+      10,
+      21,
+      25,
+      26
+    ],
+    "pdf_sha256": "dc70ae56a2b9a2741aa7c415b0ef7c1f4a280b530cc357b8f84ed74dea2b3749"
+  },
+  "notice": "完整阅读139个提取片段，覆盖正文与附录A–F；另读取原PDF算法1及相关实验协议文本。固定版本PDF28页，目视核对物理页4/6/7/8/10/21/25/26的图2/3/4、表2–7和11/12、算法与计时边界。其他图像、参考文献所引各论文、源码与运行结果未独立复核，作者实验未复现。摘要初筛仅为排序，全文后的attention判断基于本报告方法与实验；无真机闭环或多训练seed置信保证。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "改变接受标准：空间预测不再以AR逐token一致为质量上限",
+      "text": "DFlash在首个不同token处停止接受，即便坐标只差一个bin也会打断整块。VFlash保留target特征和drafter架构，对视觉基元直接接受结构有效的整块预测，普通文字仍用最长一致前缀验证。因此它主动放弃视觉输出的AR分布保持保证，以标注几何与下游效果评价；不是无损投机解码。一次并行预测只针对一个已知schema的基元，后续target上下文仍需更新。",
+      "evidence_ids": [
+        "b5c979712115aa0c",
+        "5511b3de838fd8ec",
+        "1c28d949b5f633fc",
+        "a71c46e5a30798d3",
+        "17d7cea3bf25d794",
+        "518b1040d301b3bd",
+        "0958b3492c25f86f",
+        "c59c04555d22aa61",
+        "f57986635bc83521",
+        "7347098ce63778bd"
+      ],
+      "quote": "target distribution"
+    },
+    {
+      "kind": "method",
+      "title": "块边界与坐标槽位同时对齐，长度由schema决定",
+      "text": "工具调用声明block_size（含起始和分隔token），类型决定轴、点数和分隔符位置：单臂联合2D+3D长度5P+4，P10即54。专用坐标token有1001档；机器人XYZ范围[-5,5]/[-5,5]/[0,10]m、1cm栅格，摄像机OpenCV坐标。普通文字数值target则固定sign+5digit并填mask，再还原原格式。固定布局减少可变分词错位，不等于连续坐标精度无限或自动满足2D/3D重投影几何一致。",
+      "evidence_ids": [
+        "c59c04555d22aa61",
+        "02e62ce176eff718",
+        "c55db30834745d8d",
+        "d6778edf84bc2c40",
+        "72aa92a5ea0afe78",
+        "7baae0e71c4ba9bd",
+        "b04104cc608ba487",
+        "7767555328c3369e",
+        "46cea628965c3405",
+        "0e9e425edafb8d0c",
+        "3ec14dc90588f00a",
+        "65df748621ec78c8",
+        "fd292728e947cd0f",
+        "ed429f72c5be86d7",
+        "59cef2123496c923",
+        "e582b28846807a1d",
+        "ae04634ac83fd5f9",
+        "09ad250ce2a747fa",
+        "c5d854172828bf87",
+        "64d57c7b67ae2762"
+      ],
+      "quote": "serialization"
+    },
+    {
+      "kind": "method",
+      "title": "冻结target后另训537M草稿器，标签来自标注而非target续写",
+      "text": "主要target是MoonViT-SO400M+Qwen3-4B，先按任务完整微调，再冻结，五层非因果drafter融合target第1/9/17/25/33层特征，537M可训参数，共享冻结embedding/output。对完整primitive做均匀CE，文字位置权重衰减，没有soft-logit蒸馏或hidden regression。机器人target约521.6万repeat-weighted样本，drafter再训3遍；腕视角变体约790.3万weighted样本且预算更高。Dense target用已发布MolmoMotion不再微调，但drafter在32 H100上以1270万采样窗口训练。因而准确度优势同时涉及标注目标、全块建模和新增训练，不能单归为推理时并行。",
+      "evidence_ids": [
+        "d0dc7261c5798b16",
+        "0de5814de04f3da6",
+        "f57cb94ad58304f4",
+        "93a00aadb820f53f",
+        "b71819979705f791",
+        "91898e74832c3424",
+        "699c7daeffc38021",
+        "c29c9b9f914073d0",
+        "66da4414242c36fc",
+        "00a713d225e8709b",
+        "129749b75afcf024",
+        "93dda8042bc96da1",
+        "9945bfe0dcbc9ea8",
+        "3b6b815757aec8f3",
+        "d0b54205d46f6a48"
+      ],
+      "quote": "architecture"
+    },
+    {
+      "kind": "method",
+      "title": "有效性检查管格式，失败才回退；target仍做特征完成",
+      "text": "约束覆盖delimiters、数值词表、点数、成对oof标记，box另要求角点顺序和空间置信guard；未含碰撞、动力学或通用空间误差验证。有效块提交后还要一次target forward更新KV并提取动作头特征，非完全跳过target。轨迹失败r=0、整段约束AR重生；box保留不确定坐标前缀。Dense每未来帧一个块、帧间仍顺序，最多30帧；时间戳修复和全mask帧保留最高margin点是额外规则。不能把schema通过率等同预测准确度。",
+      "evidence_ids": [
+        "3e3434ca1841b055",
+        "c7e1bb15145b0dc5",
+        "033c44e3a8a59e01",
+        "f57986635bc83521",
+        "0284c79630803908",
+        "938691db7a4cab26",
+        "0c6a6423b7e94346",
+        "f7753006bc414fb9",
+        "23726a6a1db599e7",
+        "99f25816ff336384",
+        "498efa6c5b1eff28",
+        "71dec2a07d695815",
+        "2b8390b44a2a2440",
+        "65200cf36bfc7b23"
+      ],
+      "quote": "schema-valid"
+    },
+    {
+      "kind": "evidence",
+      "title": "2D同target小幅改善，40%跨模型差距多已来自更强target",
+      "text": "表2对同4B AR：ShareRobot DFD/HD/RMSE0.202/0.175/0.142→0.194/0.162/0.133；VABench0.130/0.125/0.093→0.126/0.116/0.089。200与300条query，按waypoint index插值到参考点数后评分，距离除1000归一化。相对LoHo-Manip约40%的跨模型差距不能全算解码收益，因为AR target本来已更好；ShareRobot上RoboBrain-2.0仍优于VFlash。所有本地输出均可解析，未用格式失败筛掉差例，但没有多run差值区间。",
+      "evidence_ids": [
+        "fe523db4822ba983",
+        "133cac60688f2fe0",
+        "14a203a536638a63",
+        "0fb63ae0137ffe1b"
+      ],
+      "quote": "normalized image"
+    },
+    {
+      "kind": "evidence",
+      "title": "3D最清楚的对照：联合2D+3D时AR更易退化，整块预测缓解",
+      "text": "表4联合2D+3D：InternA1 ADE0.153→0.062m、AgiBot0.105→0.041、MolmoBot0.076→0.055；对应3D-only AR0.101/0.083/0.066，VFlash0.065/0.042/0.054，说明AR加2D段后3D误差增大而VFlash保持接近。评估1000/999/4221 records，所有配置只看primary view；腕相机仅训练增强，另有更多数据/更新，不能当测试时多相机收益。SR@5/10是waypoint误差阈值比例，不是机器人成功率。十点参考按3D弧长重采样，是路径几何而非等时间控制命令。",
+      "evidence_ids": [
+        "2f2660fa1a2772bf",
+        "eb4fb6c65d3d969a",
+        "77bd42321a525a89",
+        "93dda8042bc96da1",
+        "9945bfe0dcbc9ea8",
+        "787eb2fc8c109665",
+        "048adecdc48fea53"
+      ],
+      "quote": "path geometry"
+    },
+    {
+      "kind": "limitation",
+      "title": "框检测反例：只验格式掉约21点，回退仍损高IoU",
+      "text": "表3 Dense200 mean F1：AR60.10、直接39.09、带AR fallback61.78；IoU0.95则16.95→6.59/12.11，回退也未恢复精定位。COCO mean48.68→41.32/47.79；fallback boxes/s3.15→8.76，Dense6.73→17.46。Guard检查每坐标全词表top5的numeric candidates：空集或top数值概率<0.9且候选跨度>60bins则回退。两数据集F1协议不同，COCO每预测置信固定0.2，不能称COCO AP；BPS还受输出box数量影响，非单query延迟。",
+      "evidence_ids": [
+        "6f9b6e6fe666c43b",
+        "ef564d0dfa364e37",
+        "0994dd101d1198c8",
+        "ca47d5c7e25b5c38",
+        "65200cf36bfc7b23",
+        "0740ab1f6842f226"
+      ],
+      "quote": "spatial-confidence"
+    },
+    {
+      "kind": "evidence",
+      "title": "密集运动25倍只是单rollout，质量收益并非全面",
+      "text": "表5 DAVIS ADE/FDE1.227/2.108→0.893/1.716m，但HOT3D ADE0.109→0.122更差，WorldTrack FDE0.261→0.300更差；PWT三集0.444/0.445/0.153→0.391/0.408/0.143均下降。固定8点/3历史帧/最多30未来帧，采样限制为三帧皆可见，HOT3D仅1/5clips；三集491/144/88clips、1473/412/257records。F.3单H100 batch1的一次VFlash/AR rollout耗时3.21/79.8、3.86/90.6、3.78/99.6s，约23.5–26.4倍；不是全数据重复profile均值、p95或实时机器人速度。",
+      "evidence_ids": [
+        "0bd74aee992f58ad",
+        "00eb6ad65a43c391",
+        "d51853937016fe6b",
+        "64d57c7b67ae2762",
+        "d0b54205d46f6a48",
+        "2b8390b44a2a2440",
+        "9208bdcadfa44017",
+        "6f7c33c861cb0c44"
+      ],
+      "quote": "single-rollout"
+    },
+    {
+      "kind": "evidence",
+      "title": "MolmoSpaces先看AR计划61.0对VFlash70.2，原生62.6对照还改编码器",
+      "text": "表6原生WAM62.6→70.2%同时把Cosmos-Reason换成自建VLM，并输入Q+subtask+trajectory，因此非纯解码对照。表7更接近：同规划VLM与同WAM架构，AR2D+3D61.0、VFlash70.2；VFlash image-context63.7、3D-only69.3。五组从同预训练WAM起点各自训练100k更新，51.2M样本/模型，不能称动作权重完全相同。3915仿真episode，四suite等权平均，单训练seed24/评测42；20动作chunk、每三chunk同步重规划，推理时simulator暂停。成功提升支持计划条件化，但不能证明低延迟在不停表闭环中带来该提升。",
+      "evidence_ids": [
+        "7dab6414576592db",
+        "c816361cd2cfb4ad",
+        "a85af91081fe8a35",
+        "6f55a09539621cc4",
+        "5ecf9213a6deb496",
+        "94febd3d89d9665f",
+        "7322cfb8cb51111b",
+        "8dcdd32223360c63",
+        "e46c804ddda9d25a",
+        "9652095f2f5cff1a",
+        "db6d646139bff79c"
+      ],
+      "quote": "simulator pauses"
+    },
+    {
+      "kind": "evidence",
+      "title": "LIBERO-PRO总+6.8点，单独加入轨迹只贡献额外1.7点",
+      "text": "目视图3：baseline/自建VLM仅subtask/完整计划为LIBERO93.4/93.4/94.2%，Plus60.7/62.6/62.6%，PRO40.2/45.3/47.0%。因此PRO相对Qwen3-VL底座的6.8点中，subtask-only配置已高5.1点，轨迹额外1.7点；Plus完整与subtask均62.6，不应称所有扰动均因轨迹而改善。PIv3+projection约634M可训参数、同1693episode/273463步训练80k updates，无proprio；两图像+每8动作重规划。评估标准LIBERO2000、Plus10030、PRO8000次且排除environment扰动，单训练/评测seed，不含真机。",
+      "evidence_ids": [
+        "cf62c979860dc663",
+        "e51a50a4c9695a1a",
+        "7dc9f5331d1eca7e",
+        "c130abb7d27270c5",
+        "bb24696309f6dce1"
+      ],
+      "quote": "Visual Primitives"
+    },
+    {
+      "kind": "evidence",
+      "title": "驾驶RL只更新动作头，不能归因于更好的VFlash计划",
+      "text": "表8 NAVSIM PDMS87.1→90.7、Waymo RFS7.79→7.86来自head-only DiffGRPO，VLM与生成plans完全固定；这是动作头优化效果，不是FPD精度又提高。测试NAVSIM12146场景用non-reactive PDM、Waymo官方test，每scene一次固定噪声；各外部模型非同底座训练预算。NAVSIM action-head内部验证按log留出，但这些clip曾用于上游VLM微调；Waymo479validation既供RL reward又选checkpoint，选择分数in-sample，最终test未用于训练/选择。不能把公开test成绩称真实道路安全验证。",
+      "evidence_ids": [
+        "ef7a6e1b3ec0a898",
+        "6695760e1955cdd1",
+        "5ceb7fb80ba13f93",
+        "9f24f3668301af96",
+        "071c0f8ca18df690",
+        "9d83fe64b9e384bd",
+        "dacda2167a2f3ef7",
+        "be49ebaf85fe910a",
+        "1998ecccbceeb0a7",
+        "5848531b8ff1512e",
+        "352dc20cb663c7b1",
+        "89188dcf4541b53a",
+        "3a02a5cd19ed4ef5",
+        "dba029562cade4bb",
+        "2635207793c24350",
+        "1379ce9724ce0f5b"
+      ],
+      "quote": "non-reactive"
+    },
+    {
+      "kind": "evidence",
+      "title": "实际加速取决于target调用数：Thor Molmo请求3.55→0.70秒",
+      "text": "表11 batch1，MolmoSpaces Thor total3552.7→703.3ms约5.05倍、Spark3356.5→649.9约5.16倍、H100516.1→142.3约3.63倍；均含表列视觉/prefill/解码/动作阶段均值。Thor纯解码3107.6→258.2ms约12倍，不是25倍。NAVSIM Thor1842.5→534.4ms，Waymo H100617.3→136.6ms。表12 DFlash轨迹平均仅2.2tokens/target-pass、文字5.5；VFlash一次提交53预测位置，drafter12.9ms仍需target68.4ms完成特征。target没有消失，收益来自摊薄其调用，长块也有长度成本。",
+      "evidence_ids": [
+        "5acd32e4e7867306",
+        "235502b1c26c96d9",
+        "7347098ce63778bd",
+        "4928bf9f37f73273",
+        "226347f6ef708241",
+        "6d799ff8402d8bf6",
+        "0ce545e386310d32",
+        "5ebda002bb725704",
+        "194981402f8db7e7",
+        "0e9c57cbf82ea463"
+      ],
+      "quote": "Tokens committed"
+    },
+    {
+      "kind": "limitation",
+      "title": "计时是阶段均值相加，排除系统外输入输出并依赖定制部署",
+      "text": "测量用CUDA events含host launch gap，total=sum(stage means)，其他阶段均值在decoders间共享，解码分别profile；非整请求wall-clock尾分布。排除model load/build/capture/warmup、图像载入、仪表模块外CPU预处理及detokenization；Molmo AR来自早期output-only engine profile而VFlash含all-layer feature completion。Thor/Spark/H100各有不同定制TensorRT-Edge-LLM版本与kernel，FP16权重/KV无量化，跨硬件不代表通用开箱性能。Thor robotics24records×10passes、Spark/H100仅24records一遍、driving5records×10，均未给p95/p99或功耗。",
+      "evidence_ids": [
+        "38dd2e11c71727ff",
+        "1ef5eb16c731c00d",
+        "c00d0e5a2e4b5f31",
+        "b23491c8edbd52a1",
+        "0ce545e386310d32",
+        "5ebda002bb725704"
+      ],
+      "quote": "detokenization"
+    },
+    {
+      "kind": "limitation",
+      "title": "性能协议预先提供工具调用，质量用五步动作头、计时用十步",
+      "text": "方法支持AR文字生成schema工具调用；但E.1所有计时decoder共用预给JSON、已知primitive长度，驾驶只profile primitive，未测自主选schema/长度的全部代价。Driving latency把head展开10DDIM步以对齐Qwen-Drive，而表8质量用5步，不能把速度和质量拼成同一未经说明的运行配置。Fast-dDrive665ms取自其论文、未在本栈实测。论文所有控制/驾驶结果为仿真或数据benchmark，无真实机器人闭环、持续传感-执行延迟与schema失配外推验证；“一遍草稿”不等于整个感知到动作只一遍网络。",
+      "evidence_ids": [
+        "c59c04555d22aa61",
+        "3e3434ca1841b055",
+        "94febd3d89d9665f",
+        "e51a50a4c9695a1a",
+        "ef7a6e1b3ec0a898",
+        "db6d646139bff79c",
+        "bb24696309f6dce1",
+        "226347f6ef708241",
+        "1ef5eb16c731c00d",
+        "c00d0e5a2e4b5f31",
+        "b23491c8edbd52a1",
+        "2635207793c24350",
+        "1379ce9724ce0f5b"
+      ],
+      "quote": "fixed tool-call JSON"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：轨迹的低置信回退能否改善格式正确但空间错误的尾部？",
+      "text": "待验证假设：少量schema有效但几何错误的轨迹可由校准后的草稿置信度识别，并在保留大部分速度收益时降低空间长尾误差。先冻结同一robot target–drafter和全部训练权重，在按episode隔离的开发集校准每primitive的置信分数及回退阈值；测试比较全直接FPD、原DFlash、校准后按整块回退AR、以及随机同回退比例对照。固定schema、点数、上下文和精度；先用InternA1/AgiBot同记录做配对，记录ADE/FDE均值与p95/p99、SR@5、schema通过率、回退比例、请求wall-clock p50/p95/p99和target总调用数，再冻结同一动作策略做仿真计划替换诊断，单列分布变化。计时包含工具调用、特征完成与detokenization，驾驶若扩展则速度/质量采用相同DDIM步数。至少3搜索/运行seed，置信阈值不看test。若置信回退不比随机相同比例更改善长尾，或其调用开销吃掉主要延迟收益，则推翻这种选择性回退可用的假设；若仅框有效而轨迹无效，结论限于基元类型。实验未执行，未全面检索相关工作，不能称为已发现研究空白或保证正确性的验证器。",
+      "evidence_ids": [
+        "c7e1bb15145b0dc5",
+        "f57986635bc83521",
+        "6f9b6e6fe666c43b",
+        "ef564d0dfa364e37",
+        "eb4fb6c65d3d969a",
+        "d51853937016fe6b",
+        "71dec2a07d695815",
+        "b23491c8edbd52a1",
+        "787eb2fc8c109665",
+        "048adecdc48fea53",
+        "65200cf36bfc7b23"
+      ],
+      "quote": "confidence guard"
+    }
+  ],
+  "attention": {
+    "level": "priority",
+    "reason": "值得优先理解其把坐标逐token验证改为整基元直接预测的推理选择：同target轨迹对照与阶段计时支持收益，但新增训练、框回退和密集运动反例限制外推；作者实验未复现。",
+    "basis": [
+      "training_change",
+      "compute_shift",
+      "controlled_comparison"
+    ],
+    "evidence_ids": [
+      "c59c04555d22aa61",
+      "f57cb94ad58304f4",
+      "3e3434ca1841b055",
+      "f57986635bc83521",
+      "eb4fb6c65d3d969a",
+      "ef564d0dfa364e37",
+      "5ecf9213a6deb496",
+      "5ebda002bb725704"
+    ]
+  },
+  "frontier_brief": {
+    "title": "VFlash：视觉基元整块预测，跳过坐标逐token一致性验证",
+    "change_type": "推理与训练 · 结构化视觉规划",
+    "delta": "用标注空间目标训练五层drafter，按schema一次预测整条视觉轨迹；格式有效就整块接受，target仅完成特征/缓存，普通文字仍投机验证。",
+    "before": "DFlash对每个坐标要求与AR目标逐token一致，微小bin差异也截断接受；Thor轨迹段仅平均提交2.2tokens/target-pass。",
+    "after": "VFlash整块提交十点2D+3D计划；同target在AgiBot联合轨迹ADE0.105→0.041m，Thor Molmo推理阶段总均值3552.7→703.3ms。",
+    "relevance": "空间预测若可按几何误差评价，应考虑直接训练并行基元解码器，而非把AR token一致当质量上限；先按基元类型验证尾部精度和回退成本，再决定采用。",
+    "caveat": "额外537M drafter需训练，视觉路径非无损分布保持。Dense200直接接受mean F1掉约21点；密集运动有指标退化。Molmo成功率在暂停仿真下测得，计时工具JSON预给、部分阶段均值共享；无真机闭环。",
+    "question": "对schema正确但空间误差大的轨迹做校准置信回退，能否保留速度同时改善长尾？",
+    "evidence": [
+      {
+        "label": "同target空间精度",
+        "value": "AgiBot联合2D+3D ADE 0.105→0.041m",
+        "context": "同主相机输入、同任务AR target与额外训练drafter，999records；SR@5为waypoint比例，非执行成功率。"
+      },
+      {
+        "label": "反例与回退",
+        "value": "Dense200 mean F1：60.10→39.09→61.78",
+        "context": "AR→直接FPD→带guard回退；高IoU0.95的16.95→12.11仍下降，不能只检查schema。"
+      },
+      {
+        "label": "计划条件化对照",
+        "value": "Molmo：AR计划61.0%，FPD计划70.2%",
+        "context": "同VLM/动作架构，各自从同WAM起点重训100k更新；3915episode，单训练seed，推理时仿真暂停。原生62.6%对照还换了encoder。"
+      },
+      {
+        "label": "阶段耗时",
+        "value": "Thor Molmo：3552.7→703.3ms",
+        "context": "batch1阶段均值之和，含target特征完成；预给工具JSON，部分输入输出不计入，非wall-clock尾延迟或25倍密集运动单rollout。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "对齐完整基元和槽位",
+        "text": "schema决定块边界、坐标轴/waypoint位置和长度；专用数值token或固定宽数值文本支持一遍非因果草稿。"
+      },
+      {
+        "title": "接受目标从token改为空间任务",
+        "text": "标注坐标均匀CE训练，直接接受schema有效视觉块；文字保留DFlash最长一致前缀，box另加空间置信回退。"
+      },
+      {
+        "title": "target仍承担上下文与动作特征",
+        "text": "提交后一次target pass完成KV和hidden states，动作头交叉注意这些计划特征；省的是坐标串行调用数，不是删掉整个VLM。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08449v1",
+      "checked": "固定版本28页PDF、1779619字节；本机渲染目视页4/6/7/8/10/21/25/26，核对schema结构、算法1、表2–7及11/12、LIBERO柱图和延迟图。密集运动单rollout耗时另核对F.3原文。未运行源码或独立复现实验。"
+    }
+  ]
+}

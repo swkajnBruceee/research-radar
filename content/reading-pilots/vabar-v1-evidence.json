@@ -1,0 +1,583 @@
+{
+  "id": "b6b8122e2b6dd63238ee7b72b7668cddb9a533e4732a5271bd69dc8d7b0d8b88",
+  "url": "https://arxiv.org/html/2611.06881v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "49437d142407abf8",
+      "section": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+      "location": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+      "text": "For robots to operate reliably in commercial and industrial applications, they must persistently perform specific tasks with known variations in object shape and pose. We call this Variational Automation (VA) to differentiate these settings from fixed automation. Inspired by recent papers on Agentic Robotics, where pretrained LLM and VLM coding agents combine interpretable robot programming with the open-world adaptability of model free policies, we propose a general set of agentic robotics benchmark design criteria that includes accessibility, repeatability, diversity, relevance to agentic robotics and practical applications, physical realizability, resistance to benchmark saturation, and computational efficiency. We instantiate these principles in six manipulation task classes spanning industrial, medical, and infrastructure applications: tool sorting, tool hanging, gear meshing, syringe packing, cable insertion, and cable routing. We introduce the Variational Automation Benchmark for Agentic Robotics (VABAR), an open, easily replicable, simulation-based manipulation benchmark to systematically evaluating agentic robotics systems. Built fully on open-source tools, VABAR features detailed implementations using the Newton physics engine, standardized task variations, difficulty tiers, success metrics, and a library of 33 generalizable skills with human-authored programmatic reference solutions. We provide initial baseline evaluations using an open agentic manipulation harness, Graph-as-Policy (GaP), and Isaac Lab Arena.",
+      "url": "https://arxiv.org/html/2611.06881v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0c5d4bb7e89094a9",
+      "section": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+      "location": "VABAR: A Variational Automation Benchmark for Agentic Robotics",
+      "text": "Fig. 1 : Overview. Inspired by industrial applications, VABAR includes six manipulation task classes: (1) Tool Sorting, (2) Tool Hanging, (3) Gear Meshing, (4) Syringe Packing, (5) Cable Insertion, and (6) Cable Routing. The benchmark includes both single-arm and bimanual robot embodiments and evaluates manipulation under specific tiers of geometric and physical variations. VABAR is open access and runs on GPU workstations and on Isaac Lab Arena.",
+      "url": "https://arxiv.org/html/2611.06881v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "72222bd204c94099",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "For robots to operate reliably in commercial and industrial applications, they must solve Variational Automation (VA) tasks, where operational objectives and workspace persist with structured variations in objects, layouts, task parameters, and execution conditions across instances. In fixed automation , robots repeatedly execute carefully engineered programs in highly structured environments, often achieving high reliability and throughput but requiring substantial human effort to design, deploy, and retune when conditions change [ 1 ] . In comparison, generalist robotics aims to perform a broad range of open-ended tasks, but current model-free end-to-end approaches struggle to achieve the speed and reliability required for commercial and industrial adoption. VA tasks lie between fixed automation and fully generalist robotics.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f122bc25249901de",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Recent advances in agentic robotics provide a promising approach to implementing VA by combining the reliability and interpretability of classical robot programming with the adaptability of learned policies. Rather than directly mapping observations to low-level actions through a monolithic model-free policy, agentic robotic systems use multiple LLM agents to reason about task instances, generate and modify executable robot programs, and invoke perception, planning, and control modules named skills.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8a2afe6c7dbc2299",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Existing robot manipulation benchmarks (e.g., LIBERO [ 2 ] , ManiSkill [ 3 ] , and SimplerEnv [ 4 ] ) evaluate the robustness and generalization of language-conditioned deep visuomotor policies by offering simulation environments, human-teleoperated training episodes, and success metrics across new scene configurations. Many of these have recently been saturated by systems that achieve very high success rates and they primarily focus on household pick-and-place tasks.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "966a0a5d35bb9be8",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We introduce VABAR , a Variational Automation Benchmark for Agentic Robotics . VABAR provides six application-oriented manipulation task classes spanning industrial, medical, and infrastructure settings: tool sorting, tool hanging, gear meshing, syringe packing, cable insertion, and cable routing. Each task is defined with a set of instances with explicit variation axes, difficulty levels, and success conditions. For each task, we provide a physics and photorealistic simulation environment, a set of generalizable skills to facilitate execution, and a human-authored reference solution expressed as a computation graph over the same skill library. The reference solution is executed with the same perception, planning, and execution stack available to coding agents.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "eff3c33955e78ec8",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We evaluate VABAR using GaP, an open agentic manipulation baseline [ 5 ] , and with Isaac Lab Arena to establish baselines and to study how performance scales with task difficulty and structured variation.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee1f0f6f60a0ccd6",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "This paper makes 5 contributions:",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "df30905ba9b35f62",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Variational Automation task formulation. We introduce and formalize Variational Automation , a manipulation class between fixed automation and unconstrained general-purpose manipulation, in which persistent operational objectives must be achieved across a structured distribution of task instances.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.I1.ix1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3ede752c8f1bb737",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Design principles for agentic robotics benchmarks. We define practical criteria for evaluating agentic systems, emphasizing accessibility, repeatability, controlled diversity, application relevance, physical realizability, resistance to saturation, and computational efficiency.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.I1.ix2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d9c12269dc2fd4e1",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "VABAR task definition We instantiate these principles in six application-oriented manipulation task classes—(1) tool sorting, (2) tool hanging, (3) gear meshing, (4) syringe packing, (5) cable insertion, and (6) cable routing—with standardized task variations, difficulty levels, success metrics, and support for single-arm Franka and bimanual YAM embodiments.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.I1.ix3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8e152e898e7edf44",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "VABAR simulation, Agentic Skills and Human-authored solutions For each task, we provide a photorealistic simulation environment, 33 generalizable skills that facilitate solving the tasks, and a human-authored code solution.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.I1.ix4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0de12ce26998a3eb",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Initial agentic manipulation baselines. We provide initial baseline evaluations using an open agentic robotic system and characterize performance as task complexity and instance variation increase, establishing reference results and identifying remaining challenges for agentic manipulation.",
+      "url": "https://arxiv.org/html/2611.06881v1#S1.I1.ix5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "36f2384edeff1cff",
+      "section": "II-A Robot Manipulation Benchmarks",
+      "location": "II-A Robot Manipulation Benchmarks",
+      "text": "Robot manipulation benchmarking has roots in early efforts to evaluate robotic assembly. In its discussion of benchmark tests for comparing manipulators, the U.S. National Institute of Standards and Technology defines benchmark for robotics such as the Robot Characterization Testing report [ 6 ] references Nof and Paul’s work on planning robotic assembly [ 7 ] . The Cranfield Assembly Benchmark [ 8 ] provided a standardized physical assembly test, while YCB [ 9 ] later broadened evaluation through shared object sets and protocols. NIST assembly task boards [ 10 ] further standardized tests of insertion, fastening, and gear meshing. Alongside these physical benchmarks, reusable simulation suites emerged to evaluate manipulation algorithms and learned policies. Meta-World [ 11 ] and RLBench [ 12 ] provide diverse manipulation task suites, while ManiSkill [ 13 , 3 ] emphasizes generalization across manipulation skills and object geometries. CALVIN [ 14 ] studies long-horizon language-conditioned manipulation, and LIBERO [ 2 ] focuses on knowledge transfer and lifelong robot learning. VIMA-Bench [ 15 ] , ARNOLD [ 16 ] , and VLABench [ 17 ] further evaluate multimodal prompting, language grounding, and generalization. Beyond tabletop manipulation, BEHAVIOR [ 18 , 19 ] , RoboCasa [ 20 ] , and ManiSkill-HAB [ 21 ] consider household and mobile manipulation, while FurnitureBench [ 22 ] and RoboTwin [ 23 , 24 ] emphasize contact-rich, assembly, and bimanual tasks. RoboLab [ 25 ] provides language-guided scene and variation generation and can perform sensitivity analysis of robot policies, and RoboDojo [ 26 ] provides a comprehensive simulation and real evaluation to robot Vision-Language-Action policies. These benchmarks enable systematic evaluation across increasingly diverse tasks, environments, and embodiments, but are primarily organized around general-purpose manipulation, household activities, individual skills, or generalization across distinct tasks. VABAR focuses on application-oriented automation, where a persistent operational objective must be achieved across structured variations of the same task class over time.",
+      "url": "https://arxiv.org/html/2611.06881v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c886fb7bc8497698",
+      "section": "II-B Robustness and Variation in Manipulation Evaluation",
+      "location": "II-B Robustness and Variation in Manipulation Evaluation",
+      "text": "A growing class of benchmarks explicitly evaluates robustness under controlled variation and distribution shift. LIBERO-Plus [ 27 ] introduces perturbations across object layouts, camera viewpoints, robot initial states, language instructions, lighting, textures, and sensor noise; LIBERO-PRO [ 28 ] varies manipulated objects, initial states, task instructions, and environments; and LIBERO-X [ 29 ] evaluates increasingly challenging spatial, object, and instruction-level shifts. Rather than treating variation as a perturbation around a nominal task, VABAR defines structured variation as an intrinsic part of a Variational Automation task: a persistent operational objective is paired with an expected distribution of variation in objects, geometry, layout, task parameters, and execution conditions. Success therefore requires reliable performance across the intended operating range of an automation application, where variation is expected rather than anomalous.",
+      "url": "https://arxiv.org/html/2611.06881v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cc181122f8ab5a69",
+      "section": "II-C Agentic Robotics and Executable Robot Policies",
+      "location": "II-C Agentic Robotics and Executable Robot Policies",
+      "text": "Recent work has explored robotic systems in which foundation models reason over task instances, invoke external tools, and generate executable robot behaviors. Code-as-Policies [ 30 ] demonstrated that language models can compose perception and control APIs into executable programs, while subsequent agentic approaches extend this paradigm toward task decomposition, planning, tool use, execution feedback, and iterative refinement. CaP-X [ 31 ] extends this paradigm by systematically evaluating and improving coding agents for robot manipulation, emphasizing executable policy generation across diverse manipulation tasks. Recent approaches iteratively improve robot programs through feasibility checking and execution feedback. GaP [ 5 ] operates offline; it explicitly represents policies as computation graphs and refines their structure and parameters through parallel simulation rehearsal and generates ROS2-like graph for repeated online execution. ENPIRE [ 32 ] extends agentic policy improvement to repeated real-world trials, and ASPIRE [ 33 ] accumulates reusable skills through iterative program repair and exploration.",
+      "url": "https://arxiv.org/html/2611.06881v1#S2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "22e971e25da8b555",
+      "section": "II-C Agentic Robotics and Executable Robot Policies",
+      "location": "II-C Agentic Robotics and Executable Robot Policies",
+      "text": "Agentic robotics is particularly relevant to Variational Automation because agentic systems can retain the interpretability and modularity of classical robot programming while adapting behavior across task instances. However, comparing such systems is difficult because they may differ substantially in internal representations, tools, perception interfaces, planning methods, and controllers. VABAR evaluates externally measurable task objectives and structured variation distributions rather than prescribing a particular agent architecture, enabling generated-code, computation-graph, tool-use, learned-policy, and hybrid systems to be compared under common conditions.",
+      "url": "https://arxiv.org/html/2611.06881v1#S2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "53a9079c31acc39c",
+      "section": "II-C Agentic Robotics and Executable Robot Policies",
+      "location": "II-C Agentic Robotics and Executable Robot Policies",
+      "text": "Fig. 2 : Overview of the VABAR evaluation framework. Left: Tasks are specified by initial and goal configurations, an asset library, and robot definitions. Top right: Admissible task variations span objects, arrangements, and positions, with examples at two levels. Bottom right: Robot policies are evaluated across diverse manipulation tasks, including object sorting, tool hanging, gear assembly, insertion, and cable routing.",
+      "url": "https://arxiv.org/html/2611.06881v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b78d83f6d30bd507",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "1. Relevance to agentic robotics. The benchmark should support evaluating agents that construct, test, and revise robot programs from task specifications. It should provide documented robot and tool interfaces for composing perception, planning, and manipulation capabilities, together with execution feedback for program and skill refinement during development. Evaluation should assess reliable task completion across variations without prescribing a particular program representation or agent architecture.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "761fcb4b1443f243",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "2. Application relevance. Tasks and variations should reflect realistic operating requirements, with benchmark results predictive of real-world success, cycle time, and intervention needs.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e21074a6a8cf6adb",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "3. Accessibility and clarity. Benchmark environments, task specifications, assets, evaluation metrics, and variation parameters should be publicly available and clearly documented so that independent researchers can reproduce and extend the evaluation.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4c66dafab1c6cf38",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "4. Controlled diversity. Each task should specify explicit variation axes and difficulty levels rather than rely solely on unconstrained randomization.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "af160f051e60ae3c",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "5. Repeatability. Task generation and evaluation should use controlled random seeds and standardized success criteria to support repeatable experiments and meaningful comparisons between methods.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "711efabcaa4e6958",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "6. Computational efficiency. Evaluation should be computationally efficient enough to support repeated experimentation, sensitivity analysis, and large-scale benchmarking.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "33751010631678c8",
+      "section": "III-A Agentic Robotics Benchmark Design Criteria",
+      "location": "III-A Agentic Robotics Benchmark Design Criteria",
+      "text": "7. Durability. The benchmark should support systematic extensions of variation ranges and task complexity to remain informative as robotic systems improve. Extensions should be versioned to preserve comparability with previously reported results.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "0cb63a9844462e35",
+      "section": "III-B Task Definition",
+      "location": "III-B Task Definition",
+      "text": "We define a Variational Automation (VA) task class as 𝒯 = ( ℰ , ℛ , 𝒜 , 𝒪 , p 𝒪 , 𝒮 ) , \\mathcal{T}=(\\mathcal{E},\\mathcal{R},\\mathcal{A},\\mathcal{O},p_{\\mathcal{O}},\\mathcal{S}), where ℰ \\mathcal{E} defines environmental coordinate frames, ℛ \\mathcal{R} denotes the robot and gripper specification, 𝒜 \\mathcal{A} denotes the set of admissible initial assets, each with physical properties and collision mesh, and 𝒪 \\mathcal{O} denotes the space of admissible object configurations. p 𝒪 p_{\\mathcal{O}} defines a distribution over admissible object configurations, and 𝒮 \\mathcal{S} denotes the measurable success condition. Each task instance configuration τ i = { ( a j , 𝐱 j ) } j = 1 N i ∈ 𝒪 , \\tau_{i}=\\left\\{(a_{j},\\,\\mathbf{x}_{j})\\right\\}_{j=1}^{N_{i}}\\in\\mathcal{O}, specifies each instantiated a j ∈ 𝒜 a_{j}\\in\\mathcal{A} and its initial pose 𝐱 j ∈ S ​ E ​ ( 3 ) \\mathbf{x}_{j}\\in SE(3) for each of the N i N_{i} objects and fixtures in the scene.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d00b391ba87b2f04",
+      "section": "III-B Task Definition",
+      "location": "III-B Task Definition",
+      "text": "Importantly, 𝒪 \\mathcal{O} is not defined by unconstrained scene randomization. Instead, the variation space and its sampling distribution are designed to represent meaningful changes in the operating conditions of an automation task.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "afbe2ba2d9a4a5be",
+      "section": "III-B Task Definition",
+      "location": "III-B Task Definition",
+      "text": "We use the following principles to define admissible variations: a. Task invariance. All generated instances remain instances of the same VA task. b. Physical feasibility. Generated configurations satisfy physical constraints on object support, collision, and geometric consistency, preventing inadmissible initial scene configurations. c. Robot feasibility. Variations are bounded by the operational workspace of the specified robot ℛ \\mathcal{R} . Object and fixture configurations are restricted to reachable regions, to avoid failures caused solely by physically inaccessible configurations. d. Controlled difficulty. Each task has levels of difficulty variation regimes. Increasing difficulty progressively broadens difficulty for the robot to solve. e. Skill preservation. Variations are designed such that instances across the same difficulty levels can be solved using the same underlying set of manipulation skills or extensions.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d4328c8f2e73f79c",
+      "section": "III-B Task Definition",
+      "location": "III-B Task Definition",
+      "text": "These principles define the admissible configuration space 𝒪 \\mathcal{O} and constrain the support of p 𝒪 p_{\\mathcal{O}} . An individual task instance is τ i ∼ p 𝒪 . \\tau_{i}\\sim p_{\\mathcal{O}}.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "64edf69ee083e630",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "Task-level success indicates whether an execution achieves its objective, but does not explain where or why it fails. This is particularly important for agentic robotics, where execution feedback may be used to diagnose failures, revise programs, and introduce recovery behaviors. VABAR therefore records the execution evidence needed to relate task outcomes to both the program’s decisions and the resulting physical interaction. For agentic robotics, we define the task execution record as decomposition mapping between components.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fe5e6b8096acb57e",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "Fig. 3 : Diagnostic execution flow. VABAR records observations and estimated state, system actions, resulting physics states and contacts, and verification outcomes. Dashed boxes denote privileged simulator state and dotted box denote the physics object contact information used for diagnosis.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "80e9c8c25735a04b",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "Here, we define 𝐬 t \\mathbf{s}_{t} as the true physical state of the robot and scene, available only to a “privileged” observer; 𝐨 t \\mathbf{o}_{t} is the sensor observation; 𝐬 ^ t \\hat{\\mathbf{s}}_{t} is the system’s estimated task state; 𝐚 t \\mathbf{a}_{t} is the action produced by the policy, program, or execution graph; 𝒞 t \\mathcal{C}_{t} records physical contacts generated during execution; and 𝐞 t + 1 \\mathbf{e}_{t+1} denotes the resulting verification or execution event. We define the following mapping that forms the diagnostic flow, as shown in Fig. 3 :",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5f70800aca777d19",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "𝐨 t → 𝐬 ^ t \\mathbf{o}_{t}\\rightarrow\\hat{\\mathbf{s}}_{t} : perception or state-estimation failures;",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "894e20c6a0161e71",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "𝐬 ^ t → 𝐚 t \\hat{\\mathbf{s}}_{t}\\rightarrow\\mathbf{a}_{t} : program-generation, planning, skill-selection, or decision failures;",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d004308c3077ada8",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "𝐚 t → ( 𝐬 t + 1 , 𝒞 t ) \\mathbf{a}_{t}\\rightarrow(\\mathbf{s}_{t+1},\\mathcal{C}_{t}) : grasping, motion-execution, collision, contact, or other physical-interaction failures;",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "375b1fbf9646a477",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "( 𝐬 t + 1 , 𝒞 t ) → 𝐞 t + 1 (\\mathbf{s}_{t+1},\\mathcal{C}_{t})\\rightarrow\\mathbf{e}_{t+1} : task verification, failure detection, and recovery triggering.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1c787077cd23c0c8",
+      "section": "III-C Task Execution Records",
+      "location": "III-C Task Execution Records",
+      "text": "The distinction between physical state and contact is important. Object poses and velocities describe the resulting scene configuration, whereas contact records describe how that configuration arose through physical interaction. For example, a failed placement may leave an object in an incorrect pose, while its contact history can reveal whether it collided with a fixture, was supported by another object, or became jammed. VABAR records both forms of evidence so that failure attribution can be grounded in the resulting physical execution rather than only in task-level success or software error messages.",
+      "url": "https://arxiv.org/html/2611.06881v1#S3.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9a9cf76369b810df",
+      "section": "IV VABAR",
+      "location": "IV VABAR",
+      "text": "VABAR spans six tasks across rigid-object manipulation, contact-rich assembly, and deformable-object manipulation, covering challenges in semantic perception, geometric reasoning, precision contact, and deformable-object interaction. To support these tasks with a consistent and reproducible benchmark, VABAR integrates four key components: a standardized asset library, representative single- and dual-arm robot embodiments, a unified task specification, and multi-physics simulation support.",
+      "url": "https://arxiv.org/html/2611.06881v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "63dd7e6bf5539ec5",
+      "section": "IV VABAR",
+      "location": "IV VABAR",
+      "text": "Asset Library. VABAR provides a library of over 55 assets, spanning industrial tools, mechanical components, medical supplies, fixtures, connectors, and deformable objects. Assets are normalized in format, scale, appearance, and collision geometry to support controlled object and geometric variation across task instances.",
+      "url": "https://arxiv.org/html/2611.06881v1#S4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "35b0aa2d8162c4b0",
+      "section": "IV VABAR",
+      "location": "IV VABAR",
+      "text": "Robot Embodiment. VABAR supports the single-arm Franka and bimanual YAM platforms, covering two representative manipulation settings. Franka provides a widely adopted platform for reproducible tabletop manipulation, while YAM enables tasks requiring coordinated bimanual interaction, particularly deformable-object manipulation.",
+      "url": "https://arxiv.org/html/2611.06881v1#S4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4845cf1cd1b18f1f",
+      "section": "IV VABAR",
+      "location": "IV VABAR",
+      "text": "Task Specification. VABAR represents tasks declaratively to specify task objects, initial configurations, variations, and success conditions.",
+      "url": "https://arxiv.org/html/2611.06881v1#S4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "29a042e8fac2afb9",
+      "section": "IV VABAR",
+      "location": "IV VABAR",
+      "text": "Unified Multi-physics Support. VABAR provides unified support for rigid-body and deformable-body simulation and their interactions, with NVIDIA Newton enabling multi-physics dynamics. This allows the benchmark to span rigid manipulation, contact-rich assembly and insertion, and deformable-object tasks such as cable routing.",
+      "url": "https://arxiv.org/html/2611.06881v1#S4.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "b7bf86e1c377e13c",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "Fig. 4 : VABAR skill library. The 33 skills span perception, grasping, motion planning and execution, and verification. Colored cards marked “+” identify 25 added skill bundles relative to the May Graph-as-Policy library; white cards denote eight retained counterparts. Additions support functional-feature manipulation, constrained placement, cable handling, and execution checks.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6d83fcab17515908",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "(1) Tool Sorting The robot must place industrial tools into corresponding bins. Instance variation is introduced by changing the tools, their poses, and tool density.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2ab1f29e01e45652",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "(2) Tool Hanging The robot must pick up one or more industrial tools and hang or insert them into designated hooks, clips, or slots on a pegboard. Tools may include wrenches, screwdrivers, hammers, scissors. Task instance variation is based on tool type, the number of tools, initial tool pose, and holder pose.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "75c86743f22dc64b",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "TABLE I : Task difficulty levels. 1. TS: Tool Sorting; 2. TH: Tool Hanging; 3. GM: Gear Meshing; 4. SP: Syringe Packing; 5. CI: Cable Insertion; 6. CR: Cable Routing.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "82f8a99be3ff8894",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "Task Level 1 Level 2 1 TS Singulated tools; no distractors Cluttered tools 2 TH One tool; known fixture pose Multiple tools and fixture types; randomized poses 3 GM Assemble two gears Assemble three gears 4 SP Singulated targets Cluttered scenes 5 CI Fixed, visible port; nearby connector with small misalignment Randomized port pose; moderate connector misalignment 6 CR 2–3 widely spaced pegs; short route; low turning angle 4–6 moderately spaced pegs; multiple turns; moderate initial cable variation",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.T1.5",
+      "kind": "table"
+    },
+    {
+      "id": "6459898eeefc7183",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "(3) Gear Meshing The task input is gears and axles. The single-arm robot must pick up multiple gears, assemble them onto a axles, such that they properly mesh, and press a button to activate the mechanism. The task varies the number of gears, gear size, and initial gear poses. To ensure physically valid instances, scenes can be initialized from a valid assembled configuration before selected gears are removed and repositioned.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6cefc31c1f48a5c2",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "(4) Syringe Packing The robot must place syringes into a disposal container while avoiding distractor objects. Instance variation includes the number object and disposal box type.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0ae449b809108f80",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "(5) Cable Insertion The YAM robot must pick up a connector, align it with its a USB-C port, and fully insert it. Instance variation includes the position and orientation of the connector and the port.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "38a2d96c31988e65",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "(6) Cable Routing The bimanual YAM robot must route a flexible cable around a specified ordered sequence of cylindrical fixtures mounted on a planar routing board. The task varies the number, position, and spacing of pegs; the ordered target sequence; cable length; initial cable configuration; cable slack and curvature; endpoint position; and the 3D pose of the routing board.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "646992d8cd7ddab2",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "TABLE II : Task performance comparison across VABAR tasks and difficulty levels.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "10a92c9404c8a8c4",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "a-i. GaP [-1pt] (Human w/ Newton) a-ii. GaP [-1pt] (Human w/ ILA) b. Claude [-1pt] w/ Newton c. GaP [-1pt] w/ Newton Task Diff. Succ. (%) Cyc. (s) Succ. (%) Cyc. (s) Succ. (%) Cyc. (s) Succ. (%) Cyc. (s) Tool Sorting Level 1 47.1 421.6 20.0 555.0 0.0 N/A 26.7 134.2 Level 2 33.7 913.8 – – 0.0 N/A 13.3 232.3 Tool Hanging Level 1 86.7 86.1 67.5 98.3 16.7 96.2 33.3 81.5 Level 2 81.7 158.4 50.0 138.3 10.0 190.8 10.0 270.9 Gear Meshing Level 1 100.0 165.9 87.5 198.9 0.0 N/A 70.0 156.6 Level 2 90.0 235.5 80.0 381.3 0.0 N/A 60.0 284.1 Syringe Packing Level 1 87.0 228.8 52.5 939.0 0.0 N/A 33.3 371.1 Level 2 63.0 472.3 40.0 1810.0 0.0 N/A 12.1 652.2 Cable Insertion Level 1 86.7 78.8 97.5 104.9 0.0 N/A 36.7 79.0 Level 2 30.0 74.2 17.5 118.8 0.0 N/A 23.3 80.5 Cable Routing Level 1 46.7 116.0 50.0 145.9 3.3 120.7 36.7 50.8 Level 2 46.7 189.8 5.0 151.5 0.0 N/A 13.3 120.3",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.T2.5",
+      "kind": "table"
+    },
+    {
+      "id": "f5dc63a14dd7cb25",
+      "section": "V VABAR Tasks",
+      "location": "V VABAR Tasks",
+      "text": "Metrics: Succ. : success rate (%); Cyc. : median cycle time (s) among successful trials.",
+      "url": "https://arxiv.org/html/2611.06881v1#S5.T2.6",
+      "kind": "p"
+    },
+    {
+      "id": "eb7a156788797008",
+      "section": "VI VABAR Skills",
+      "location": "VI VABAR Skills",
+      "text": "To support the evaluation of agentic robotics systems in the VABAR task sandbox, we extend the Modular Open Robot Skill Library(MORSL) [ 5 ] with reusable procedures for functional-feature manipulation, constrained placement, and deformable cable handling (Fig. 4 ). Building on existing perception, grasp generation, and collision-aware planning primitives, the extensions provide metric feature localization, source–destination correspondence, in-hand registration, and staged feature mating. Cable-related skills estimate and track ordered 3D centerlines and support anchoring, routing, and terminal placement.",
+      "url": "https://arxiv.org/html/2611.06881v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1e8d4f3324a1cb9d",
+      "section": "VII Baseline Experiments",
+      "location": "VII Baseline Experiments",
+      "text": "We focus on three questions: (1) how does agentic robotics success rate and cycle time change as the magnitude and dimensionality of task variation increase? (2) what are failure modes: perception, grasping, and motion? (3) can agentic systems reuse skills as task difficulty changes?",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "161a664211ec64a6",
+      "section": "VII-A Robot Simulation Implementation",
+      "location": "VII-A Robot Simulation Implementation",
+      "text": "We provide two implementations of VABAR: on Newton and on Isaac Lab-Arena (ILA). The implementations have different texture, lighting, asset and robot implementations.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b1bb6faf5f313d05",
+      "section": "VII-A Robot Simulation Implementation",
+      "location": "VII-A Robot Simulation Implementation",
+      "text": "Newton: We develop VABAR with Newton Physics engine. To determine the success conditions, we extend Behavior Domain Definition Language (BDDL) [ 18 ] to represent both rigid and deformable objects as a common specification across the full task suite.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8b2a2aa7f1439361",
+      "section": "VII-A Robot Simulation Implementation",
+      "location": "VII-A Robot Simulation Implementation",
+      "text": "Isaac Lab-Arena (ILA): We provide an implementation of VABAR on top of NVIDIA Isaac Lab-Arena, a framework for composing, executing and analyzing policy evaluation benchmarks with GPU-acceleration. Isaac Lab-Arena provides tools for environment composition, including object placement based on semantic spatial relationships, multiple physics backends including Newton. It also enables running parallel evaluation on GPUs and analysis of policy robustness across environment and task variations. We execute VABAR on a cluster of NVIDIA L40 GPU nodes.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6eaab2138dae1e35",
+      "section": "VII-B Evaluation Protocol",
+      "location": "VII-B Evaluation Protocol",
+      "text": "We report the success rate, cycle time, and failure mode rates. Success is determined by the dependency structure of each task. For tasks composed of repeated manipulation attempts that are independent by construction, such as sorting or hanging independently sampled objects, each object-level attempt is treated as a trial and success rate is the fraction of objects successfully manipulated. This avoids assigning zero success to an otherwise largely successful multi-object execution.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e7bf74a9bd2c3cbc",
+      "section": "VII-B Evaluation Protocol",
+      "location": "VII-B Evaluation Protocol",
+      "text": "In tasks such as Gear Meshing, later insertions are conditioned on the states produced by earlier insertions: inserting one gear changes the geometry and contact configuration encountered by subsequent gears. Similarly, multiple cable insertions are treated as separate trials only when each insertion is independently initialized or reset; otherwise, their outcomes remain coupled through the evolving task state. We retain the complete task instance as the evaluation unit for sequential, state-dependent tasks, while optionally reporting subgoal-level success (e.g., success for each gear position) as a diagnostic measure. Cycle time is the simulated time elapsed from policy start until success, failure, or timeout.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3f1d30d8f7af25cb",
+      "section": "VII-B Evaluation Protocol",
+      "location": "VII-B Evaluation Protocol",
+      "text": "For each unsuccessful execution, we record the observed failure outcome and assign a primary failure source when supported by execution evidence. For cascading failures, we attribute the execution to the earliest supported failure that explains the subsequent outcome. Failure-source percentages are conditioned on unsuccessful executions.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d62c51a464558d3",
+      "section": "VII-C Baselines",
+      "location": "VII-C Baselines",
+      "text": "We integrate VABAR with GaP baselines. GaP is a multi-agent harness that represents a robot policy as a computation graph whose nodes are skills from MORSL [ 5 ] . We evaluate the following systems, labeled as in Table II : (a) GaP (Human) , a manually specified computation graph connecting MORSL skills, executed on both the Newton and ILA implementations (Human–Newton and Human–ILA); (b) Claude Code , a general-purpose coding agent (Claude Code with Claude Opus 5 [ 34 ] ) without a robotics-specific harness or skill library; (c) GaP , where the computation graph is autonomously generated by the same model and connected to MORSL. Systems (a) and (c) share the same perception, skill, planning, and execution modules, so their gap reflects graph composition and parameterization alone. Each task–difficulty combination contains N = 30 N=30 independently generated instances per evaluation condition.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f7524cea1d8da3f9",
+      "section": "VII-C Baselines",
+      "location": "VII-C Baselines",
+      "text": "TABLE III : Failure modes across VABAR difficulty levels.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "36f81b5fb5b950ea",
+      "section": "VII-C Baselines",
+      "location": "VII-C Baselines",
+      "text": "Task Difficulty Perception Grasp Motion (%) (%) (%) Tool Sorting Level 1 37.8 51.4 10.8 Level 2 56.4 28.7 14.9 Tool Hanging Level 1 0.0 0.0 100.0 Level 2 21.4 28.6 50.0 Gear Meshing Level 1 N/A N/A N/A Level 2 7.1 21.4 71.4 Syringe Packing Level 1 0.0 0.0 100.0 Level 2 57.9 0.0 42.1 Cable Insertion Level 1 50.0 0.0 50.0 Level 2 0.0 4.0 96.0 Cable Routing Level 1 27.3 45.5 27.3 Level 2 5.3 31.6 63.2",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.T3.5",
+      "kind": "table"
+    },
+    {
+      "id": "434682d5619a854b",
+      "section": "VII-C Baselines",
+      "location": "VII-C Baselines",
+      "text": "Failure modes: Perc. : perception; Grasp : grasp generation or execution; Motion : motion planning or trajectory execution, including insertion, placement, and routing. Percentages are conditioned on failures.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.T3.6",
+      "kind": "p"
+    },
+    {
+      "id": "0fe93dad4d76a0cb",
+      "section": "VII-D Performance",
+      "location": "VII-D Performance",
+      "text": "Table II summarizes performance. Across all evaluated tasks, system performance exhibits a consistent inverse relationship with task difficulty: transitioning from low-variation regimes to multi-object, cluttered environments induces notable performance degradation alongside increased execution cycle times. This drop is particular in precision alignment and deformable object tasks, such as USB-C insertion and cable routing, where introducing geometric variation and tight physical constraints significantly decreases overall task completion. In contrast, discrete item-level manipulation tasks like tool hanging maintain relatively stable per-object success rates across difficulty tiers, though total episode times scale with object count. Overall, execution duration closely reflects task geometry and physical complexity, with single-object hanging tasks completing rapidly while multi-stage routing and cluttered tray operations require substantially longer execution windows. In addition, the same graph running in two different framework (Newton and ILA) has different object texture, scene configuration and lighting.",
+      "url": "https://arxiv.org/html/2611.06881v1#S7.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "445d461d48b61363",
+      "section": "VIII Discussion",
+      "location": "VIII Discussion",
+      "text": "(a) Agentic harness and skill library enabling better performance. Using the same underlying language model, GaP achieves higher success rates than Claude Code in 11 of 12 task–difficulty conditions, supporting the value of a robotics-specific harness coupled with reusable manipulation skills. For example, GaP achieves 70.0% and 60.0% success on Level 1 and Level 2 Gear Meshing, respectively, whereas Claude Code achieves no successful trials. However, GaP remains below the human-authored graphs on Newton across all conditions, despite sharing the same perception, skill, planning, and execution stack. This gap suggests that reliable skill composition and parameterization remain important challenges for autonomous policy generation. These comparisons evaluate the combined system; they do not isolate the contributions of the harness and skill library.",
+      "url": "https://arxiv.org/html/2611.06881v1#S8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e691e27102f6f963",
+      "section": "VIII Discussion",
+      "location": "VIII Discussion",
+      "text": "(b) Most errors are due to motion planning. We decompose unsuccessful GaP executions into perception, grasp, and motion-planning failures. Table III reports failure sources across tasks and difficulty levels. In low-variation settings, perception and grasp generation operate with high reliability across most tasks, leaving motion planning and trajectory execution as the primary source of failure. However, as task variation increases, the dominant failure modes branch based on physical task characteristics. In cluttered scenes and deformable-object manipulation—such as syringe packing and cable routing—perception and grasping degrade significantly due to visual occlusions and unmodeled cable mechanics. Conversely, in precision contact tasks like USB-C insertion, state estimation remains robust under variation, but motion planning and fine insertion alignment overwhelmingly account for nearly all observed failures.",
+      "url": "https://arxiv.org/html/2611.06881v1#S8.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d8b30251813cd490",
+      "section": "VIII Discussion",
+      "location": "VIII Discussion",
+      "text": "Fig. 5 : Example: Agent inspects Newton physics model to diagnose and fix failure due to syringes jamming inside disposal box . Left: simulated syringe-disposal scene with a top-down inset. Right: Netwon ground-truth front and side internal views of jammed episodes t01 and t29 . Red segments highlight syringes straddling the lid plane; blue segments show other syringes.",
+      "url": "https://arxiv.org/html/2611.06881v1#S8.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2d593fcebbd15a06",
+      "section": "VIII Discussion",
+      "location": "VIII Discussion",
+      "text": "(c) Detailed physics model supports failure diagnosis. By pairing task-level verification with simulator-ground-truth inspection, VABAR helps identify the physical conditions associated with execution failures. Fig. 5 illustrates two jammed syringe-disposal episodes, t01 and t29 , which terminate with final verification reporting blocked and 7/8 and 6/8 syringes recorded as posted, respectively. In both examples, a syringe straddles the lid plane, with its needle end inside the cavity and its opposite end above the opening, consistent with incomplete passage into the container. The surrounding syringes occupy different configurations, highlighting execution-induced variation: earlier placements alter the geometry encountered by later insertions.",
+      "url": "https://arxiv.org/html/2611.06881v1#S8.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "838a4bce0fadb719",
+      "section": "VIII Discussion",
+      "location": "VIII Discussion",
+      "text": "(d) Skill reuse is extensive across diverse task classes. Despite spanning rigid-object manipulation, contact-rich assembly, precision insertion, and deformable-object manipulation, VABAR policies exhibit substantial reuse of underlying skills and tools. Core robot and perception capabilities, including end-effector pose retrieval and SAM3 [ 35 ] -based segmentation, are shared across all six task classes. Higher-level semantic skills are also reused across tasks with different objects and applications but similar manipulation structure. For example, Tool Hanging and Syringe Packing both rely on skills for held-object motion, functional-feature perception, object registration, and feature mating. This reuse suggests that increasing task diversity does not necessarily require an entirely new set of skills. Instead, VABAR exposes a central challenge for agentic robotics on selecting appropriate skills, parameterizing them for the current geometry and task state, and composing them into effective task-specific behaviors. We hope VABAR will be used by others to facilitate and compare research progress worldwide.",
+      "url": "https://arxiv.org/html/2611.06881v1#S8.p4.1",
+      "kind": "p"
+    }
+  ]
+}

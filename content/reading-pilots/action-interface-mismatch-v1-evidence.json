@@ -1,0 +1,1303 @@
+{
+  "id": "427099489804469098165a5328265565570f407f869f66c6db2479e75cb53d12",
+  "url": "https://arxiv.org/html/2611.06653v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "229754b85bd9b6ba",
+      "section": "Detecting Silent Action-Interface Mismatch with Calibrated Relational World Models",
+      "location": "Detecting Silent Action-Interface Mismatch with Calibrated Relational World Models",
+      "text": "A robot action can satisfy shape and range constraints yet carry the wrong semantics: axes may be permuted, signs inverted, rotations rescaled, or gripper polarity reversed. We study learned state–action–effect relations as offline contracts for detecting these mismatches and ranking their likely fields. Clean held-out transitions calibrate alarms; a fixed inverse vocabulary supports closed-set localization. On ten LIBERO Spatial tasks comprising 432 source episodes, a capacity-controlled comparison at 2.5% empirical clean false-positive rate gives 46.1% recall for a ridge forward residual, 61.0% for a four-component joint Gaussian mixture, and 65.7% for the exact conditional of that same mixture. The joint score retains a 14.9 percentage-point advantage over ridge, while conditioning improves recall by a further 4.7 points. Joint scoring instead has higher localization: 95.8% versus 94.6%. These matched-rate comparisons are retrospective diagnostics, not deployment calibration guarantees. Earlier Object/Goal results broaden tasks within the LIBERO convention; DROID, all three HYDRA tasks, short temporal faults, small offsets, exact repair, and simulated mitigation fail their respective gates, while xArm contributes one task only. The evidence supports a bounded offline diagnostic and a detection–localization tradeoff, rather than joint-density superiority or cross-robot safety.",
+      "url": "https://arxiv.org/html/2611.06653v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d35f32e10e7527fb",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "World models usually predict dynamics or support planning. At a controller boundary, they can also ask whether an action’s semantics agree with the observed transition. A seven-dimensional action vector may mix normalized translation, axis-angle rotation and gripper commands. Components can agree on shape and bounds while disagreeing about scale, axes, signs, rotation units or polarity. Such a command is numerically legal but inconsistent with the recorded state change.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "130aa8ab192fb653",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We study whether recorded state–action–next-state tuples can supply an executable contract for this failure class. A detector is trained on clean transitions, a disjoint clean split fixes its alarm threshold, and in-range semantic mutations are applied only after that calibration is frozen. After an alarm, the system evaluates a declared set of inverse transformations and reports the one that best restores relational consistency. This separates two questions that aggregate anomaly scores often conflate: whether the transition should be inspected and which contract field is the most plausible explanation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d2e35feccb7acfbc",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "The diagnostic addresses interface semantics, not perception, planning, contact or task progress. Replay supplies the factual next state of the original action, not the physical outcome of executing a corrupted action. We evaluate offline alarms and closed-set localization; they do not measure task success or safe correction.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "89bf5a21c892abcd",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "The study separates three sources of apparent advantage: using the observed transition, representing multimodal clean behavior, and choosing an alarm operating point. The original joint-mixture comparison outperformed a ridge forward residual, but those methods had different achieved false-positive rates. A post-decision capacity-controlled analysis addresses both confounds. At matched empirical clean FPR, the exact conditional of the fitted mixture has higher detection recall than the joint score; the joint score retains better closed-set localization. We report that reversal alongside episode-level uncertainty and the external and closed-loop failures that bound the method’s use.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "eec50de68b092a67",
+      "section": "2 Relation to prior work",
+      "location": "2 Relation to prior work",
+      "text": "World models learn compact predictive representations for control ( Ha & Schmidhuber, 2018 ) ; here prediction is used as evidence about an interface, not as a rollout planner. Learned runtime monitors instead anticipate broad policy failures. Model-based monitoring uses interactive imitation learning ( Liu et al., 2023b ) ; Sentinel combines temporal action consistency with task progress ( Agia et al., 2024 ) ; and RAPT uses calibrated predictive deviation for deployment-time detection and diagnosis ( Munn et al., 2026 ) . These systems address general failure or distribution shift. Our scope is a declared vocabulary of controller-semantics transformations and attribution to a contract field.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9124dc3bd329df65",
+      "section": "2 Relation to prior work",
+      "location": "2 Relation to prior work",
+      "text": "Model-security work supplies a scope boundary. Backdoor detectability depends on nominal/hidden-task relation and detector assumptions ( Tang et al., 2022 ; Zhu et al., 2024 ) ; TrojAI distinguishes detection, diagnosis and mitigation ( Reese et al., 2026 ) . Backdoor suppression ( Zhu et al., 2023 ; Jiang et al., 2026 ) and model-lifecycle risks ( Chen et al., 2024 ; Wang et al., 2025 ; Zhu et al., 2026 ) concern different interventions. They provide no evidence for this fixed-weight interface diagnostic, and inverse ranking is neither model purification nor adaptive-attack robustness.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e6e22a793719e379",
+      "section": "2 Relation to prior work",
+      "location": "2 Relation to prior work",
+      "text": "Action Mahalanobis distance is a natural cheap out-of-distribution baseline ( Lee et al., 2018 ) . It cannot, by construction, use the observed state change: a transformed action may remain marginally plausible while becoming inconsistent with the transition. A field-aligned static comparator can couple translation, rotation, and gripper coordinates to measured displacement, but public benchmark metadata omit the controller gains and absolute-versus-delta semantics needed for a faithful executable specification. We include both checks so that improvement is not measured only against range validation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ad48335116dcbf14",
+      "section": "2 Relation to prior work",
+      "location": "2 Relation to prior work",
+      "text": "Robot-testing work explores a complementary axis. VLATest generates diverse manipulation scenes ( Wang et al., 2024 ) , FATE-VLA searches for failure-prone scenes ( Kanwal et al., 2026 ) , and metamorphic testing compares related executions without a task-specific oracle ( Valle et al., 2026 ) . ContractFuzz mutates action semantics rather than observations or scenes. The motivating deployment observation is that weights alone do not specify normalization and controller conventions ( Tai, 2026 ) ; our experiments test when a learned state–action relation can expose that missing contract.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0906916ba51b978b",
+      "section": "3.1 Threat model and supported vocabulary",
+      "location": "3.1 Threat model and supported vocabulary",
+      "text": "Let s t ∈ ℝ d s s_{t}\\in\\mathbb{R}^{d_{s}} , a t ∈ ℝ d a a_{t}\\in\\mathbb{R}^{d_{a}} , and s t + 1 s_{t+1} be a clean recorded transition. A fault k k applies a transform T k : ℝ d a → ℝ d a T_{k}:\\mathbb{R}^{d_{a}}\\rightarrow\\mathbb{R}^{d_{a}} . We evaluate only changed rows whose transformed action remains inside clean training bounds,",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4a087255d6f60fcc",
+      "section": "3.1 Threat model and supported vocabulary",
+      "location": "3.1 Threat model and supported vocabulary",
+      "text": "𝒱 k = { t : T k ( a t ) ≠ a t , ℓ ≤ T k ( a t ) ≤ u } . \\mathcal{V}_{k}=\\{t:T_{k}(a_{t})\\neq a_{t},\\;\\ell\\leq T_{k}(a_{t})\\leq u\\}. (1)",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "e9de6fc92d92cb5c",
+      "section": "3.1 Threat model and supported vocabulary",
+      "location": "3.1 Threat model and supported vocabulary",
+      "text": "The supported set contains halving the six motion coordinates, swapping the X and Y axes, reversing the X-axis sign, shrinking rotation units, and reversing gripper polarity. A fixed X-offset is retained as an unsupported stress test. Temporal delay, half-frequency hold, and chunk reversal are evaluated separately and fail the main detector gate.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "326e62466c487700",
+      "section": "3.1 Threat model and supported vocabulary",
+      "location": "3.1 Threat model and supported vocabulary",
+      "text": "This is a controlled counterfactual on recorded data: the detector receives ( s t , T k ​ ( a t ) , s t + 1 ) (s_{t},T_{k}(a_{t}),s_{t+1}) , but s t + 1 s_{t+1} is the recorded outcome of a t a_{t} . That design isolates relational inconsistency and supplies a known mutation label. It does not simulate contact dynamics, policy adaptation, or the task outcome of executing T k ​ ( a t ) T_{k}(a_{t}) .",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "483f63fbbc772470",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "From clean training transitions, we fit a ridge forward model",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f0d533aa109927bb",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "f θ ​ ( s t , a t ) ≈ s t + 1 − s t f_{\\theta}(s_{t},a_{t})\\approx s_{t+1}-s_{t} (2)",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "dce1799d2f1fdb68",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "and normalize each residual dimension by its training root-mean-square error. The conditional score is",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "deaae1858de0e82e",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "R f ​ ( s t , a , s t + 1 ) = mean ⁡ [ ( f θ ​ ( s t , a ) − ( s t + 1 − s t ) σ f ) 2 ] . R_{f}(s_{t},a,s_{t+1})=\\sqrt{\\operatorname{mean}\\left[\\left(\\frac{f_{\\theta}(s_{t},a)-(s_{t+1}-s_{t})}{\\sigma_{f}}\\right)^{2}\\right]}. (3)",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "b7303159fa350c71",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "We also standardize the joint vector z = [ s t , a , s t + 1 − s t ] z=[s_{t},a,s_{t+1}-s_{t}] . A regularized joint Gaussian gives",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "797ad8e8ade92507",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "R j ​ ( z ) = ( z − μ ) ⊤ ​ ( Σ + 10 − 2 ​ I ) † ​ ( z − μ ) . R_{j}(z)=\\sqrt{(z-\\mu)^{\\top}(\\Sigma+10^{-2}I)^{\\dagger}(z-\\mu)}. (4)",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "b3ab8359fca2d87e",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "The original selected score is the negative log likelihood of a full-covariance mixture,",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p1.4",
+      "kind": "p"
+    },
+    {
+      "id": "6f0b3c69bf9b092d",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "R G ( z ) = − log ∑ m = 1 M π m 𝒩 ( z ; μ m , Σ m + 10 − 3 I ) , R_{G}(z)=-\\log\\sum_{m=1}^{M}\\pi_{m}\\mathcal{N}(z;\\mu_{m},\\Sigma_{m}+10^{-3}I), (5)",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "58c956bf6c09b60e",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "with M = 4 M=4 and deterministic split-seed initialization. To control model capacity, we also evaluate the exact conditional of this fitted mixture. With x = [ s t , a ] x=[s_{t},a] and y = s t + 1 − s t y=s_{t+1}-s_{t} ,",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p1.5",
+      "kind": "p"
+    },
+    {
+      "id": "4c5cde464ce12cba",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "R C ​ ( y ∣ x ) = R G ​ ( x , y ) + log ⁡ p G ​ ( x ) . R_{C}(y\\mid x)=R_{G}(x,y)+\\log p_{G}(x). (6)",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "cfe63d715140139a",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "The marginal p G ​ ( x ) p_{G}(x) uses the same weights, component input means and covariance blocks as p G ​ ( x , y ) p_{G}(x,y) . The conditional mixture therefore has input-dependent component weights and conditional means, without adding parameters or fitting a separate model. Its comparison with R G R_{G} isolates the contribution of the input marginal to the score; it does not compare independently optimized model classes. A disjoint clean calibration split sets each detector’s threshold to an empirical upper quantile targeting 2.5% false positives. No mutation outcome enters model selection or threshold fitting.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p1.6",
+      "kind": "p"
+    },
+    {
+      "id": "072daedaa506c29e",
+      "section": "3.2 Calibrated relational scores",
+      "location": "3.2 Calibrated relational scores",
+      "text": "For attribution, each inverse hypothesis U j U_{j} , including identity, maps the observed action back into a candidate convention. The reported candidate is the one with the lowest relational score on ( s t , U j ​ ( a ) , s t + 1 ) (s_{t},U_{j}(a),s_{t+1}) . We call Top-1 agreement with the injected field localization ; earlier logs use repair_top1 , but a correct ranking does not demonstrate executable repair.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3ca69886ba258fe5",
+      "section": "Data and partitions.",
+      "location": "Data and partitions.",
+      "text": "The primary benchmark is public LIBERO ( Liu et al., 2023a ) , pinned to data revision e5907374380b8f96511957e6ba5582be52a1e179 . Episodes, not transitions, are partitioned 60/20/20 into training, calibration, and test sets for each deterministic split seed; at most 2,000 transitions are sampled per seed. The audit contains 1,243 task–episode clusters and 160,414 transitions across 30 retained Spatial, Object, and Goal tasks. Repeated split seeds reduce algorithmic Monte Carlo variation but do not create new trajectories.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8f05aafc6cdfc65d",
+      "section": "Data and partitions.",
+      "location": "Data and partitions.",
+      "text": "External-convention screens use low-dimensional data only. DROID-100 ( Khazatsky et al., 2024 ) contributes 100 episodes and 32,112 transitions, but 46/47 task labels are singletons, so its frozen screen is pooled and episode-disjoint. The FOWM xArm Lift conversion ( Feng et al., 2023 ) contains 800 repeated episodes and 19,200 source-semantic XYZ-plus-gripper transitions from one task. Stanford HYDRA ( Belkhale et al., 2023 ) contains 570 episodes, three tasks, and 357,664 valid transitions with source-defined 7D end-effector-delta and gripper actions. Video and simulator assets are excluded. Conflicting HYDRA mirror metadata are handled conservatively by retaining the source-specific CC-BY-4.0 notice rather than interpreting license terms.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.SS0.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f0e7f81d22fb1cfc",
+      "section": "Metrics, baselines, and gates.",
+      "location": "Metrics, baselines, and gates.",
+      "text": "We report clean false-positive rate (FPR), mutation recall, recall gain over the named comparator, and closed-set localization Top-1. The cheap baseline is the better of a full-covariance action Mahalanobis detector and static range legality. A structured field-aligned displacement model independently fits clean affine maps from the named action coordinates to next-frame translation, relative axis-angle, and gripper aperture. The ridge forward score R f R_{f} is the original conditional baseline; the capacity-controlled conditional mixture R C R_{C} is added in the post-decision validation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "410c7ba85c9d647d",
+      "section": "Historical gates and uncertainty.",
+      "location": "Historical gates and uncertainty.",
+      "text": "The original task gate requires FPR at most 0.05, recall gain at least 0.10 over action/static checks, and localization at least 0.70. Later mixture confirmation requires a task-median recall gain of 0.10 over ridge, wins on at least eight tasks, and both methods below 0.05 FPR. These are historical study gates, not matched-FPR comparisons. The supplement retains the aggregate gates, multiplicity correction, sensitivity results, and a run whose FPR of 0.0500375 exceeds the limit. Repeated split seeds are collapsed within source episode before paired task/episode inference; they do not create new trajectories.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "82295af6c00e1051",
+      "section": "Post-decision validation.",
+      "location": "Post-decision validation.",
+      "text": "A fixed protocol evaluates all ten Spatial tasks and five supported families on 100 episode-disjoint partitions per task (seeds 33001–33100), retaining the original fitting, preprocessing, transition cap and valid-row rule. No new source episodes are introduced. Each method is first evaluated at clean-calibration quantiles targeting 1%, 2.5%, and 5% FPR, with achieved test FPR reported separately. A second, retrospective diagnostic derives thresholds from held-out clean scores and interpolates adjacent clean-score cutoffs to match empirical FPR exactly. Mutation labels do not select those cutoffs. This curve compares scores; it cannot supply a test-free deployment threshold.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7502a8e573793a17",
+      "section": "Post-decision validation.",
+      "location": "Post-decision validation.",
+      "text": "The primary endpoint is recall at 2.5% matched FPR, with two paired comparisons: joint minus ridge and joint minus conditional GMM. Repeated test appearances are averaged within episode–fault cells, then faults within episode, episodes within task, and ten tasks with equal weights. A paired hierarchical bootstrap uses 20,000 task/episode resamples. The reported 95% intervals are conditional on fitted scores and clean-reference thresholds; they exclude refitting and threshold-estimation uncertainty. Bonferroni 97.5% intervals for the two primary comparisons are retained in the supplement. Other FPRs and localization are descriptive endpoints.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.SS0.SSS0.Px4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "eae9602198a330a6",
+      "section": "5.1 Matched FPR and model capacity",
+      "location": "5.1 Matched FPR and model capacity",
+      "text": "Table 1 and Figure 1 compare the three scores without changing model capacity or empirical clean alarm rate. At 2.5% FPR, joint GMM recall is 0.6096 versus 0.4608 for ridge: the paired advantage is 0.1488, with 95% interval [ 0.1207 , 0.1798 ] [0.1207,0.1798] . The exact conditional GMM instead reaches 0.6566, exceeding joint recall on all ten tasks. Joint-minus-conditional recall is − 0.0470 -0.0470 with interval [ − 0.0632 , − 0.0350 ] [-0.0632,-0.0350] ; its two-comparison 97.5% interval [ − 0.0658 , − 0.0339 ] [-0.0658,-0.0339] also excludes zero. The conditional advantage is 0.0422 at 1% FPR and 0.0422 at 5%. The result supports multimodal relational modeling over the ridge residual, but rejects the claim that joint scoring has the best detection recall among the tested scores.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "93aaf0b6ba294837",
+      "section": "5.1 Matched FPR and model capacity",
+      "location": "5.1 Matched FPR and model capacity",
+      "text": "Table 1: Post-decision Spatial comparison over 432 source episodes. Recall is at 2.5% matched empirical clean FPR; brackets are conditional paired task/episode bootstrap 95% intervals. Achieved FPR uses a separate, calibration-only 2.5% nominal threshold and equal-episode weighting. Matched FPR uses clean rows within each split. Localization includes all valid fault rows, not just alarms.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "130f1a02be6712e9",
+      "section": "5.1 Matched FPR and model capacity",
+      "location": "5.1 Matched FPR and model capacity",
+      "text": "Score Matched recall (%) Calibration FPR (%) Localization (%) Ridge forward 46.08 [41.58, 50.17] 2.63 92.70 Joint GMM 60.96 [56.90, 64.28] 3.22 95.81 Conditional GMM 65.66 [62.61, 68.40] 2.85 94.62",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.T1.2",
+      "kind": "table"
+    },
+    {
+      "id": "4516be8aca831986",
+      "section": "5.1 Matched FPR and model capacity",
+      "location": "5.1 Matched FPR and model capacity",
+      "text": "Figure 1: Retrospective clean-reference FPR comparison on the same Spatial episodes. All methods use the same train/calibration/test partitions. Bands are pointwise 95% task/episode bootstrap intervals conditional on fitted scores and reference thresholds. They are not simultaneous bands or deployment-FPR guarantees.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5535eb414da018a1",
+      "section": "5.2 Calibration and localization answer different questions",
+      "location": "5.2 Calibration and localization answer different questions",
+      "text": "At calibration-only thresholds targeting 2.5% FPR, the achieved equal-episode clean rates are 0.0263 for ridge, 0.0322 for joint GMM and 0.0285 for conditional GMM; corresponding recalls are 0.4413, 0.6086 and 0.6504. Sharing a nominal quantile or satisfying the same 5% cap therefore does not establish a matched operating point. The matched analysis removes that confound for this finite reference set while leaving clean-only deployment calibration as a separate task.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "257d998875c3ade7",
+      "section": "5.2 Calibration and localization answer different questions",
+      "location": "5.2 Calibration and localization answer different questions",
+      "text": "Detection and attribution also rank the models differently. Closed-set localization is 0.9581 for joint GMM, 0.9462 for conditional GMM and 0.9270 for ridge. These accuracies use all valid mutated rows under the fixed inverse vocabulary. The joint score’s higher localization does not establish an end-to-end benefit after alarm selection, and its extra input-marginal term does not improve recall here.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7a3d59bafb7c0b1d",
+      "section": "5.2 Calibration and localization answer different questions",
+      "location": "5.2 Calibration and localization answer different questions",
+      "text": "All 1,000 GMM fits converge. Each episode–fault cell has at least 12 held-out appearances, averaged before inference. The supplement reports independent conditional-density and exact-FPR interpolation checks.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "079ec7a020fe097a",
+      "section": "5.3 Relation to the retained results",
+      "location": "5.3 Relation to the retained results",
+      "text": "The original calibration-only comparison reports a task-median joint-minus-ridge recall difference of 0.15663. A previous 432-episode analysis estimates 0.16753 [ 0.13642 , 0.20297 ] [0.13642,0.20297] . Those values remain in the supplement with their original operating points; the matched-FPR estimate of 0.1488 above is the appropriate comparison for the present detection claim. Its different seeds and estimand mean that subtracting the two estimates does not identify a causal “FPR contribution.”",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bec0700b20486993",
+      "section": "5.3 Relation to the retained results",
+      "location": "5.3 Relation to the retained results",
+      "text": "Earlier joint-GMM advantages over ridge also recur within LIBERO Object and Goal, with recall differences 0.21183 and 0.17956 under their original calibration protocols. They share LIBERO’s action convention. The new conditional and matched-FPR comparisons are restricted to Spatial; they have not been repeated on those suites. A field-aligned static displacement comparator has median recall 0.32020 and localization 0.84245, below the historical joint-GMM result, but absent controller gains prevent a faithful manufacturer-specification interpretation. Complete earlier operating-point, ablation and sensitivity values remain in the supplement as historical evidence.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bdb4f35394aefa2a",
+      "section": "6 Where the contract fails",
+      "location": "6 Where the contract fails",
+      "text": "Table 2: Material boundaries retained in the main paper. “Pass” always refers to the frozen gate for that row; proxy and simulator rows are not physical trials.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f61e43532dd56d49",
+      "section": "6 Where the contract fails",
+      "location": "6 Where the contract fails",
+      "text": "Scope Gate Result Supported interpretation Small X-offset 0/10 GMM recall 0.0340 Explanation may rank well below alarm threshold Temporal faults 0/10 median gain 0.0421 Short latency/hold/chunk order unsupported DROID-100 fail recalls 0.0193–0.0865 Structural compatibility is not detector transfer xArm Lift 1 task GMM recall 0.6016 One-task offline sanity only HYDRA 0/3 recalls 0.1063–0.1213 Multi-task external convention fails Exact repair 0/10 median within-0.01 0.4930 Localization is not reliable action repair Simulated fallback fail ties ridge; GMM FPR misses gate No ContractFuzz-specific closed-loop gain",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "c69150071ab3cbda",
+      "section": "6.1 Detection, explanation, and abstention are different decisions",
+      "location": "6.1 Detection, explanation, and abstention are different decisions",
+      "text": "Fault families vary materially. Supported transformations have median recall gains 0.300–0.452 and localization 0.878–0.966. The fixed X-offset stress test has only 0.0047 gain and 0.555 localization under the original score; the GMM also passes 0/10 offset gates with median recall 0.0340. Yet seven-candidate localization is 0.7340. In a task/episode-clustered mechanism analysis, alarm recall is 0.0328, localization is 0.7304, and localization among non-alarmed rows is 0.7388; AUROC is only 0.5475. Relative candidate evidence can therefore be informative even when the absolute clean-versus-fault distributions overlap too strongly for a high-precision alarm.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "da1d5375ee886477",
+      "section": "6.1 Detection, explanation, and abstention are different decisions",
+      "location": "6.1 Detection, explanation, and abstention are different decisions",
+      "text": "A selection-frozen descriptive reuse of the same 432 episodes places 74.01% of offset episodes in an explanation-only false-negative stratum. For supported families, 75.51% of episode–fault cells are detected and localized, 1.05% are localized without detection, none are joint failures, and 23.43% lie in a mixed boundary region. These values explain an existing result; they are not an independent confirmation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "dc864edc44aba83f",
+      "section": "6.1 Detection, explanation, and abstention are different decisions",
+      "location": "6.1 Detection, explanation, and abstention are different decisions",
+      "text": "An omitted-family audit cross-fits confidence thresholds between fixed task halves using only the other four supported families. Aggregate rejection of a deliberately hidden family is 0.7411, but omitted X-sign rejection is only 0.3720 and 64.67% of those rows are forced into the XY-swap label. This rejects a universal open-set guarantee. The operational rule is consequently asymmetric: an alarm can request inspection for a represented family, but no alarm cannot certify a correct interface, and a high relative score cannot safely remap an unknown fault.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9e481b6c86995c4d",
+      "section": "6.2 External conventions do not validate transfer",
+      "location": "6.2 External conventions do not validate transfer",
+      "text": "DROID-100 passes low-dimensional schema checks, yet pooled scale, swap, and sign recalls are only 0.0193, 0.0777, and 0.0865. Its sparse task identity also prevents a multi-task replication. One xArm Lift task passes a separately frozen screen: GMM recall is 0.6016 versus 0.5046 for forward, with 0.0245 mean FPR. Because all 800 episodes repeat one task, it supports only a bounded one-task offline sanity check.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5e6e1ad4d2365e60",
+      "section": "6.2 External conventions do not validate transfer",
+      "location": "6.2 External conventions do not validate transfer",
+      "text": "HYDRA is the decisive negative external screen. It passes compatibility gates and provides three repeated tasks with auditable action semantics, but coffee, dish-rack, and toast GMM recalls are only 0.1063, 0.1097, and 0.1213; zero tasks pass. Three bounded rescues do not reverse that outcome. The final SAGE-R sequence-aware redesign also passes 0/3 and underperforms the strongest sequence baseline on every task. These failures are immutable evidence: the workshop rewrite neither tunes on the HYDRA test set nor turns the one xArm result into cross-robot validation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4c825a724f951310",
+      "section": "6.3 Replay evidence does not establish consequence or repair",
+      "location": "6.3 Replay evidence does not establish consequence or repair",
+      "text": "Replay uses the factual next state produced by the clean action. A deterministic clean-trained response proxy lowers median task GMM recall from 0.6379 to 0.2381 on LIBERO and mean recall from 0.6105 to 0.0972 on xArm, but factual-minus-proxy recall on HYDRA is − 0.0978 / + 0.0604 / − 0.0440 -0.0978/+0.0604/-0.0440 . These learned-response diagnostics are not environment rollouts or causal effects.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "71e4124ff07fad07",
+      "section": "6.3 Replay evidence does not establish consequence or repair",
+      "location": "6.3 Replay evidence does not establish consequence or repair",
+      "text": "A small controlled simulator connects the detector to reject/hold/fallback under a fixed fault and delay budget. GMM fallback can recover success relative to no monitor, but it ties a ridge monitor and misses the GMM clean-FPR gate. It therefore does not demonstrate ContractFuzz-specific closed-loop success improvement. A separate continuous-offset repair sweep passes 0/10 gates, and linear, shrunk, quadratic, random-feature, and disjoint-task selectors all fail. Candidate ranking is useful diagnostic evidence; it is not a license to modify commands online.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "fb3dafbc21c88e1e",
+      "section": "7 Sensitivity and finite-source limits",
+      "location": "7 Sensitivity and finite-source limits",
+      "text": "Earlier ablations reject a universal best score. Forward-only and inverse-plus-forward scores both pass the original action/static gate, but their paired recall difference includes zero and forward-only localizes better. Four and eight GMM components pass the historical recall gate while two fail; calibration budgets of 100, 200 and 400 clean transitions pass. Family rankings differ, and small-offset or temporal severity sweeps cannot rescue the failed short-fault gates. The supplement retains the full numerical ablations and the distinction between predeclared comparisons and explanatory reuse.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f4b1b10f9c4df37d",
+      "section": "7 Sensitivity and finite-source limits",
+      "location": "7 Sensitivity and finite-source limits",
+      "text": "The new conditional score is an analytic normalization of the same joint mixture. Its advantage does not establish superiority of every conditional architecture, and a separately optimized conditional mixture could behave differently. The post-decision analysis reuses the same 432 episodes, conditions uncertainty on the fitted scores and reference thresholds, and adds no robot, policy, or controller convention. Matched empirical FPR describes this finite offline reference set; production calibration and natural fault prevalence remain outside the evidence.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c1e44537d4f83908",
+      "section": "8 Implications for uncertain world models",
+      "location": "8 Implications for uncertain world models",
+      "text": "A multimodal state–action–effect relation can expose declared interface faults that remain numerically legal. The new comparison changes the interpretation of that result: a joint-mixture advantage over linear prediction error does not imply that modeling the joint density is better than conditioning. Here conditioning the same mixture improves recall, while the joint score ranks inverse candidates more accurately. Score choice should therefore follow the diagnostic decision and its alarm budget rather than an aggregate claim of model dominance.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ca2867c212cf6da1",
+      "section": "8 Implications for uncertain world models",
+      "location": "8 Implications for uncertain world models",
+      "text": "A practical offline audit can pair clean calibration transitions with a declared inverse vocabulary and request inspection when an alarm occurs. It must report achieved clean FPR, detection recall and localization separately. Meeting a common FPR ceiling constrains the operating point but cannot replace a matched-rate comparison. No alarm cannot certify a correct interface, and candidate ranking cannot justify automatic command remapping. Independent robot conventions and actual counterfactual rollouts remain necessary to support broader deployment or safety claims.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a22fc8d080b1aed8",
+      "section": "Reproducibility.",
+      "location": "Reproducibility.",
+      "text": "The artifact records pinned data, splits, calibration rules, commands, checksums and CPU resources. The supplement retains all historical runtime and portability evidence, including the inconclusive exact-CPython-3.12.4 cross-host replay. The post-decision analysis adds no source data: 1,000 GMM fits and the conditional/ matched-FPR analysis take 40.40 seconds on one local CPU process with one BLAS/OpenMP thread (Python 3.11.2, NumPy 1.26.4, SciPy 1.13.1, scikit-learn 1.4.2). Its protocol, score arrays, episode metrics, hashes and independent aggregation audit are preserved separately from the original results.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bd5f842341595eac",
+      "section": "Ethics and scope.",
+      "location": "Ethics and scope.",
+      "text": "This diagnostic could be misread as a safety certificate. We publish failures, restrict the claim to recorded replay, and do not recommend automatic correction. The evaluation uses public low-dimensional robot demonstrations. Physical deployment would require independent safety controls and oversight. Dataset license metadata are provenance facts, not legal conclusions.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0be7f004e322a093",
+      "section": "AI-use disclosure.",
+      "location": "AI-use disclosure.",
+      "text": "Generative AI assisted research planning, software development, analysis and manuscript drafting. This revision used AI assistance for the post-decision code, mathematical checks, result interpretation, prose and figures. Authors remain responsible for verifying the evidence, citations and final text.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1ea1b72f38f0abba",
+      "section": "10 Conclusion",
+      "location": "10 Conclusion",
+      "text": "On locked LIBERO replay, calibrated relational scores detect and localize five numerically legal action-interface transformations. At matched empirical clean FPR, a joint GMM retains its recall advantage over ridge prediction error, but the exact conditional of that same mixture has still higher recall. Joint scoring instead has higher closed-set localization. The resulting detection–localization tradeoff, finite-episode uncertainty and negative external results support an auditable offline diagnostic for a declared vocabulary. They do not establish cross-robot generalization, closed-loop success improvement, causal safety or automatic repair.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a97d7c03aaaab5db",
+      "section": "References",
+      "location": "References",
+      "text": "Detecting Silent Action-Interface Mismatch with Calibrated Relational World Models",
+      "url": "https://arxiv.org/html/2611.06653v1#p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "14597d67d27d05e0",
+      "section": "References",
+      "location": "References",
+      "text": "Evidence and Reproducibility Supplement",
+      "url": "https://arxiv.org/html/2611.06653v1#p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "d3687b446994323a",
+      "section": "References",
+      "location": "References",
+      "text": "Rui Zhu 1 , Xurui Li 2 , Haixu Tang 3",
+      "url": "https://arxiv.org/html/2611.06653v1#p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "4de95b1a79871eae",
+      "section": "References",
+      "location": "References",
+      "text": "1 Yale University 2 Ant Group 3 Indiana University",
+      "url": "https://arxiv.org/html/2611.06653v1#p2.4",
+      "kind": "p"
+    },
+    {
+      "id": "a21d207fdbdc06d6",
+      "section": "References",
+      "location": "References",
+      "text": "rui.zhu.rz399@yale.edu , xurui.lxr@antgroup.com , hatang@iu.edu",
+      "url": "https://arxiv.org/html/2611.06653v1#p2.5",
+      "kind": "p"
+    },
+    {
+      "id": "a19c3369048627fb",
+      "section": "1 Scope and evidence hierarchy",
+      "location": "1 Scope and evidence hierarchy",
+      "text": "This supplement separates the retained original study from the post-decision matched-FPR and conditional-score validation in Section 9 . The latter reuses existing source episodes and introduces new scoring/operating-point results; all other reported values retain their original evaluation contracts and are linked to project-local commands and machine-readable results in Section 7 . The positive claim remains restricted to offline replay of five declared, numerically legal action-interface transformations within the LIBERO convention . DROID and HYDRA remain negative; xArm remains a one-task sanity check; simulator mitigation, exact repair, open-set rejection, small offsets, and short temporal faults remain unsupported.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8b61dc9582eb53b2",
+      "section": "1 Scope and evidence hierarchy",
+      "location": "1 Scope and evidence hierarchy",
+      "text": "Table 1 defines how each evidence level may affect the paper. Repeated split seeds characterize an algorithm under different episode-disjoint partitions; they are not independent robot executions. The episode-clustered analysis is the inferential anchor. Analyses that reuse those episodes after inspecting earlier outcomes are explicitly descriptive. External screens probe convention transfer but do not become positive replications unless their predeclared gate passes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bb65e57590444398",
+      "section": "1 Scope and evidence hierarchy",
+      "location": "1 Scope and evidence hierarchy",
+      "text": "Table 1: Evidence hierarchy. “May support” is deliberately narrower than what the underlying metric could be used to suggest.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c00b3809caf7b56f",
+      "section": "1 Scope and evidence hierarchy",
+      "location": "1 Scope and evidence hierarchy",
+      "text": "Level Statistical unit May support Fresh locked replay task summaries over unseen split seeds Detector ordering and clean-FPR compliance on recorded tasks Clustered confirmation task, then immutable source episode Finite-source Spatial effect and paired uncertainty Selection-frozen reuse previously used task–episodes Mechanism, heterogeneity, and failure description only Post-hoc severity task summaries at fixed severities Explanatory sensitivity, not rescue of a failed family External convention source-defined episodes and tasks Transfer only when the independently frozen gate passes Simulator proxy simulator episodes under matched budgets Only the specified mitigation comparison, never physical safety",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.T1.2",
+      "kind": "table"
+    },
+    {
+      "id": "b34b3b26ab77eab2",
+      "section": "Decision vocabulary.",
+      "location": "Decision vocabulary.",
+      "text": "An alarm is a thresholded clean-versus-mutated decision. Localization is Top-1 ranking among a fixed inverse-candidate set after an alarm score has been computed. Open-set rejection asks whether a held-out family should be rejected rather than forced into a known label. Repair asks whether an inferred continuous magnitude is accurate enough to modify an action. These are four different estimands. The paper supports the first two for represented LIBERO families and does not collapse them into a claim about open-set coverage, action correction, or task success.",
+      "url": "https://arxiv.org/html/2611.06653v1#S1.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "65ccc5b9c7ba2362",
+      "section": "2.1 Source units and episode firewall",
+      "location": "2.1 Source units and episode firewall",
+      "text": "LIBERO is pinned to revision e5907374380b8f96511957e6ba5582be52a1e179 . Table 2 reports the source units before any repeated split generation. Each deterministic split assigns whole episodes 60/20/20 to train, clean calibration, and test. At most 2,000 transitions are sampled per seed. Calibration uses an empirical upper quantile with method=higher ; mutation labels and outcomes are unavailable to fitting, model selection, and threshold choice.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "53de92486336fa61",
+      "section": "2.1 Source units and episode firewall",
+      "location": "2.1 Source units and episode firewall",
+      "text": "Table 2: Immutable source units. A task–episode is the inferential cluster; a transition is not treated as an independent trial.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "052424f4e9c76d84",
+      "section": "2.1 Source units and episode firewall",
+      "location": "2.1 Source units and episode firewall",
+      "text": "Suite Tasks Transitions Task–episodes Episodes/task LIBERO Spatial 10 52,538 432 35–47 LIBERO Object 10 56,262 383 31–41 LIBERO Goal 10 51,614 428 33–50 Total 30 160,414 1,243 31–50",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "ee509c93df967d52",
+      "section": "2.1 Source units and episode firewall",
+      "location": "2.1 Source units and episode firewall",
+      "text": "An independent coverage audit generates 3,000 episode-disjoint partitions with 1,200/400/400 sampled train/calibration/test transitions. Every source episode appears in every role across the audit, with minimum assignment counts 40, 9, and 10; each task has 100 unique role assignments. These checks establish split coverage, not additional data breadth.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa752ffe09509851",
+      "section": "2.2 Supported vocabulary and valid-row rule",
+      "location": "2.2 Supported vocabulary and valid-row rule",
+      "text": "The seven-dimensional action contains six motion coordinates and one gripper coordinate. Table 3 fixes the five supported hypotheses and the unsupported offset control. A row is valid only if the transformation changes its action and every transformed coordinate stays inside the clean-training bounds. Scoring uses every valid corrupted test row; it does not retain only examples that are easy to classify. The inverse-candidate set contains identity and one inverse per declared family.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "979cca07f42358e0",
+      "section": "2.2 Supported vocabulary and valid-row rule",
+      "location": "2.2 Supported vocabulary and valid-row rule",
+      "text": "Table 3: Frozen mutation vocabulary. Motion transformations act on the first six coordinates unless a smaller coordinate set is named.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "eba962af1d5acc8b",
+      "section": "2.2 Supported vocabulary and valid-row rule",
+      "location": "2.2 Supported vocabulary and valid-row rule",
+      "text": "Status Family Exact transformation Supported Motion scale a 1 : 6 ← 0.5 a 1 : 6 a_{1:6}\\leftarrow 0.5a_{1:6} Supported XY permutation ( a x , a y ) ← ( a y , a x ) (a_{x},a_{y})\\leftarrow(a_{y},a_{x}) Supported X sign a x ← − a x a_{x}\\leftarrow-a_{x} Supported Rotation units a 4 : 6 ← a 4 : 6 / 57.2957795 a_{4:6}\\leftarrow a_{4:6}/57.2957795 Supported Gripper polarity a 7 ← 1 − a 7 a_{7}\\leftarrow 1-a_{7} Stress test Fixed X offset a x ← a x + 0.05 a_{x}\\leftarrow a_{x}+0.05",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.T3.2",
+      "kind": "table"
+    },
+    {
+      "id": "e3963c600f18b3ec",
+      "section": "2.2 Supported vocabulary and valid-row rule",
+      "location": "2.2 Supported vocabulary and valid-row rule",
+      "text": "The locked per-task gate requires clean FPR ≤ 0.05 \\leq 0.05 , recall gain over the action/static comparator ≥ 0.10 \\geq 0.10 , and localization ≥ 0.70 \\geq 0.70 . The Spatial aggregate requires at least 8/10 task passes, median gain ≥ 0.15 \\geq 0.15 , median localization ≥ 0.75 \\geq 0.75 , and maximum task FPR ≤ 0.05 \\leq 0.05 . The later GMM comparison requires GMM-minus-forward median recall ≥ 0.10 \\geq 0.10 , wins on at least 8/10 tasks, and both maximum task FPRs ≤ 0.05 \\leq 0.05 . No rounded value is used for a gate.",
+      "url": "https://arxiv.org/html/2611.06653v1#S2.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8c1b62a727f94d7f",
+      "section": "3 Task-level mixture confirmation",
+      "location": "3 Task-level mixture confirmation",
+      "text": "Table 4 exposes all ten primary Spatial task summaries rather than only their median. The recall comparison uses 1,000 fresh episode-split seeds (21971–22970). The localization columns use a separate 500-seed confirmation. GMM recall exceeds forward on 10/10 tasks; the median gain is 0.15663 and maximum GMM clean FPR is 0.03994. Median GMM localization is 0.95926, with median advantages 0.02932 over forward and 0.01728 over the joint Gaussian. One convergence warning occurs among 5,000 fits and does not alter the frozen result.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d3bc7fe6889037ba",
+      "section": "3 Task-level mixture confirmation",
+      "location": "3 Task-level mixture confirmation",
+      "text": "Table 4: Fresh Spatial task results for the four-component GMM. Δ ​ R \\Delta R is GMM-minus-forward recall; Δ ​ L f \\Delta L_{f} and Δ ​ L j \\Delta L_{j} are localization gains over forward and joint Gaussian.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ab188c941d283455",
+      "section": "3 Task-level mixture confirmation",
+      "location": "3 Task-level mixture confirmation",
+      "text": "Task Δ ​ R \\Delta R GMM loc. Δ ​ L f \\Delta L_{f} Δ ​ L j \\Delta L_{j} 0 0.1605 0.9632 0.0281 0.0151 1 0.2431 0.9656 0.0232 0.0172 2 0.1555 0.9577 0.0310 0.0181 3 0.2653 0.9466 0.0414 0.0287 4 0.0826 0.9417 0.0305 0.0197 5 0.1035 0.9650 0.0315 0.0129 6 0.1527 0.9530 0.0247 0.0148 7 0.1772 0.9561 0.0275 0.0173 8 0.1421 0.9642 0.0401 0.0197 9 0.1578 0.9608 0.0243 0.0127 Median 0.1566 0.9593 0.0293 0.0173",
+      "url": "https://arxiv.org/html/2611.06653v1#S3.T4.2",
+      "kind": "table"
+    },
+    {
+      "id": "0d9ada6e53d07df0",
+      "section": "3 Task-level mixture confirmation",
+      "location": "3 Task-level mixture confirmation",
+      "text": "The first 200-seed GMM screen is retained separately: recall wins on 10/10 tasks, but task 4 has clean FPR 0.0500375, exceeding 0.05 by 0.0000375. Its classification is inconclusive/near-boundary , not pass. The fresh 1,000-seed run was predeclared before its outcomes were inspected and passes without relying on rounding.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f020e441731b2863",
+      "section": "3 Task-level mixture confirmation",
+      "location": "3 Task-level mixture confirmation",
+      "text": "The frozen extension within LIBERO changes task content but not action convention. On Object, GMM-minus-forward recall is 0.21183 with task-bootstrap interval [ 0.2016 , 0.2218 ] [0.2016,0.2218] ; GMM localization is 0.9521, advantage 0.02888, and maximum FPR 0.0346. On Goal, the corresponding values are 0.17956 [ 0.1743 , 0.1849 ] [0.1743,0.1849] , 0.9525, 0.02758, and 0.0288. These are within-convention suite confirmations, not independent robot evidence.",
+      "url": "https://arxiv.org/html/2611.06653v1#S3a.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "762904f290c8dd1a",
+      "section": "4 Episode-clustered inference and multiplicity",
+      "location": "4 Episode-clustered inference and multiplicity",
+      "text": "The predeclared estimand first averages repeated test appearances for each episode–fault cell, then averages faults within episode and episodes within task, and finally assigns equal weight to each of ten Spatial tasks. The paired hierarchical bootstrap resamples tasks and then source episodes within task for 100,000 draws. Split-randomization replicates are collapsed and are never counted as independent clusters.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2454e10a4d9ccb97",
+      "section": "4 Episode-clustered inference and multiplicity",
+      "location": "4 Episode-clustered inference and multiplicity",
+      "text": "The family contains exactly three directional comparisons: GMM-minus-forward recall, GMM-minus-forward localization, and GMM-minus-joint localization. Table 5 reports ordinary paired 95% intervals, one-sided family-wise lower bounds using α / 3 \\alpha/3 , and exact task-sign-flip tests with Holm correction. All three lower bounds are positive. Each immutable episode appears in at least 11 test splits; all 1,000 task-level GMM fits converge; maximum task-mean clean FPR is 0.0444.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b84e7bb924fd82ef",
+      "section": "4 Episode-clustered inference and multiplicity",
+      "location": "4 Episode-clustered inference and multiplicity",
+      "text": "Table 5: Fresh 432-episode Spatial effects. The sign-flip family has ten paired task summaries, so its smallest attainable unadjusted one-sided value is 1/1024.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ae66bb504355c619",
+      "section": "4 Episode-clustered inference and multiplicity",
+      "location": "4 Episode-clustered inference and multiplicity",
+      "text": "Effect Estimate Paired 95% CI FWER lower Holm p p GMM − - forward recall 0.16753 [0.13642, 0.20297] 0.13401 0.00293 GMM − - forward loc. 0.03089 [0.02679, 0.03541] 0.02645 0.00293 GMM − - joint loc. 0.01837 [0.01522, 0.02198] 0.01497 0.00293",
+      "url": "https://arxiv.org/html/2611.06653v1#S4.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "1395fd46c3ef0939",
+      "section": "4 Episode-clustered inference and multiplicity",
+      "location": "4 Episode-clustered inference and multiplicity",
+      "text": "An unchanged attempt to extend this clustered protocol to all suites aborts before inference because Object task 5, split seed 25221, contains zero valid gripper-polarity test rows under the locked valid-row rule. The evaluator is not altered after that observation. Consequently, no episode-clustered Object/Goal claim is made; only the earlier locked task-bootstrap suite confirmation is reported.",
+      "url": "https://arxiv.org/html/2611.06653v1#S4a.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2261f3ac06a0e82e",
+      "section": "5.1 Why the mixture was selected in the original study",
+      "location": "5.1 Why the mixture was selected in the original study",
+      "text": "In a fresh Gaussian comparison, the conditional forward score has higher recall than a joint Gaussian on every Spatial task (median advantage 0.1033), while its localization is lower on every task (median forward-minus-joint − 0.0118 -0.0118 ). The predeclared dominance gate passes only 6/10 tasks and therefore fails. This is a real falsification of the earlier forward-dominance hypothesis, not an ablation removed after the mixture became favorable.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS1a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5e38c353ada7c7e2",
+      "section": "5.1 Why the mixture was selected in the original study",
+      "location": "5.1 Why the mixture was selected in the original study",
+      "text": "The tradeoff is family-specific (Table 6 ). Forward wins both metrics for scale, joint wins both for X-sign, and only rotation satisfies the material Pareto gate. Aggregate rankings must therefore be read as decisions for a fixed family mixture rather than universal detector dominance.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS1a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c1c7f6960683d4c9",
+      "section": "5.1 Why the mixture was selected in the original study",
+      "location": "5.1 Why the mixture was selected in the original study",
+      "text": "Table 6: Forward-minus-joint Gaussian effects by transformation family. Positive localization favors forward; negative localization favors joint.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "691d3d1e7ac4cc48",
+      "section": "5.1 Why the mixture was selected in the original study",
+      "location": "5.1 Why the mixture was selected in the original study",
+      "text": "Family Recall effect Loc. effect Interpretation Scale 0.2620 0.0098 Forward wins both XY permutation 0.0353 -0.0248 Recall–location tradeoff X sign -0.0242 -0.0277 Joint wins both Rotation units 0.0990 -0.0168 Only family passing Pareto gate Gripper polarity 0.1054 -0.0036 Recall–location tradeoff",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.T6.2",
+      "kind": "table"
+    },
+    {
+      "id": "4837173fbeb1061c",
+      "section": "5.1 Why the mixture was selected in the original study",
+      "location": "5.1 Why the mixture was selected in the original study",
+      "text": "The historical static comparator fits clean affine maps from named action fields to next-frame translation, relative axis-angle motion, and gripper aperture. Its task-median recall is 0.32020, localization 0.84245, and maximum FPR 0.029825, but it passes 0/10 noninferiority gates against GMM. Metadata-minus-GMM recall is − 0.31196 -0.31196 with paired interval [ − 0.33328 , − 0.24729 ] [-0.33328,-0.24729] ; localization is − 0.10914 -0.10914 [ − 0.12655 , − 0.09866 ] [-0.12655,-0.09866] . The source metadata do not expose controller gains and absolute-versus-delta semantics, so this is a faithful field-aligned empirical comparator, not a claimed implementation of a complete manufacturer contract.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS1a.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "cccc88990a795192",
+      "section": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "location": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "text": "Table 7 reports the two frozen one-factor sensitivity families. Four and eight components pass; two components fail the recall-advantage gate. Nested clean calibration caps all pass. Neither result justifies arbitrary mixture-count invariance or eliminating the held-out calibration split.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS2a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "68edaff64e243d6f",
+      "section": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "location": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "text": "Table 7: GMM sensitivity. Intervals apply to GMM-minus-forward recall; FPR is the largest task value.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1e9904f2def4f3cd",
+      "section": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "location": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "text": "Factor Setting Recall gain 95% interval Loc. Max FPR Components 2 0.0725 [0.0407,0.1149] 0.9561 0.0443 (fail) 4 0.1609 [0.1264,0.2049] 0.9585 0.0458 8 0.1634 [0.1274,0.2118] 0.9566 0.0424 Calibration cap 100 0.1453 [0.1194,0.1892] 0.9607 0.0412 200 0.1540 [0.1269,0.1983] 0.9607 0.0353 400 0.1482 [0.1271,0.2024] 0.9607 0.0362",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.T7.2",
+      "kind": "table"
+    },
+    {
+      "id": "94732f01a5276e2d",
+      "section": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "location": "5.2 Mixture, calibration, and operating-point sensitivity",
+      "text": "The earlier forward OFAT audit shows the same need to bind claims to an operating point. The locked baseline has gain 0.3763, localization 0.9297, and FPR 0.0314. Budgets of 500 and 1,000 preserve the ordering (gains 0.3639 and 0.3678). A 1% target lowers gain to 0.2858 and FPR to 0.0162. A nominal 5% target raises gain to 0.4389 but produces FPR 0.0601 and fails. Ridge values 10 − 4 10^{-4} and 10 − 2 10^{-2} are identical at reported precision. Mild versus severe transformations yield gains 0.2790 and 0.4362. Threshold and severity are therefore experimental factors, not post-hoc knobs.",
+      "url": "https://arxiv.org/html/2611.06653v1#S5.SS2a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "444c60969874e248",
+      "section": "6.1 Unsupported offset, temporal faults, and open set",
+      "location": "6.1 Unsupported offset, temporal faults, and open set",
+      "text": "The fixed + 0.05 +0.05 X offset is an intentionally unsupported family. In the fresh episode-clustered audit, alarm recall is 0.03282, localization 0.73042, localization among non-alarmed rows is 0.73881, and alarm AUROC is 0.54746. Thus a relative candidate can rank correctly even when the absolute score cannot separate clean from corrupted rows. A selection-frozen reuse places 74.01% of episodes in an explanation-only false-negative stratum. This mechanism result is descriptive , not independent confirmation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b8b9b295f67b5d00",
+      "section": "6.1 Unsupported offset, temporal faults, and open set",
+      "location": "6.1 Unsupported offset, temporal faults, and open set",
+      "text": "For supported families, a descriptive reuse reports 75.51% detected-and-localized episode–fault cells, 1.05% localized without detection, 0% joint failures, and 23.43% mixed boundary cells. The true candidate is Top-1 on 95.83% of supported cells; identity confusion is 2.685%. These proportions explain where the closed-set score succeeds and do not add source episodes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e29df3ac9c85101a",
+      "section": "6.1 Unsupported offset, temporal faults, and open set",
+      "location": "6.1 Unsupported offset, temporal faults, and open set",
+      "text": "In a cross-fitted leave-one-family-out audit, known-family acceptance is 0.90007 and unknown-family rejection is 0.74115 (Holm p = 0.001953 p=0.001953 ). The aggregate hides a material failure: omitted X-sign rejection is only 0.37200, and 64.67% of its rows are forced into the XY label. The system therefore has no universal open-set guarantee.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1a.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "43ae0ca6c5cf415a",
+      "section": "6.1 Unsupported offset, temporal faults, and open set",
+      "location": "6.1 Unsupported offset, temporal faults, and open set",
+      "text": "Short temporal faults also fail: forward-minus-action gains are 0.0055 for one-frame delay, 0.0364 for two-frame delay, 0.0061 for half-frequency hold, and 0.1277 for chunk reversal; the all-family median is 0.0421 and 0/10 tasks pass. A clean-trained temporal feature model reaches recalls 0.0253/0.0247/0.0000 for the first three families and is worse than the strongest static comparator by 0.0113/0.0391/0.0373. A post-hoc delay severity curve rises sharply at four, eight, and sixteen frames (gains 0.2926/0.7179/0.9209), but it explains rather than rescues the frozen short-delay failure.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS1a.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "32421c5a12a22e41",
+      "section": "6.2 External conventions and bounded redesigns",
+      "location": "6.2 External conventions and bounded redesigns",
+      "text": "Table 8 contains every independent-convention outcome. DROID’s structural gate passes, but sparse task identity (46/47 labels are singletons) limits the frozen analysis to pooled, episode-disjoint screens. Only one xArm Lift task is available, so its positive result cannot support multi-task or cross-robot generalization. HYDRA supplies three auditable repeated tasks and is the decisive negative screen.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS2a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "18e00de6f3f0f50b",
+      "section": "6.2 External conventions and bounded redesigns",
+      "location": "6.2 External conventions and bounded redesigns",
+      "text": "Table 8: External-convention outcomes. All use low-dimensional source-semantic actions; video and simulator assets are excluded.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "69a27b9dcccedd3a",
+      "section": "6.2 External conventions and bounded redesigns",
+      "location": "6.2 External conventions and bounded redesigns",
+      "text": "Source Units Detector result Classification DROID-100 100 ep.; pooled scale/swap/sign recall 0.019/0.078/0.087 fail transfer; sparse identity xArm Lift 800 ep.; 1 task GMM/forward recall 0.602/0.505; loc. 0.929; FPR 0.024 One-task offline sanity HYDRA 570 ep.; 3 tasks GMM recall 0.106/0.110/0.121; loc. 0.728–0.792 0/3, fail transfer",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.T8.2",
+      "kind": "table"
+    },
+    {
+      "id": "cf769c6afe9e4cfe",
+      "section": "6.2 External conventions and bounded redesigns",
+      "location": "6.2 External conventions and bounded redesigns",
+      "text": "Three bounded, predeclared rescue candidates fail to turn any HYDRA task positive. A subsequent nontrivial SAGE-R sequence-aware redesign also passes 0/3 and underperforms the strongest sequence baseline on all tasks: its attribution values are 0.3000/0.2576/0.1111 and its gains over that baseline are − 0.2933 / − 0.0909 / − 0.3175 -0.2933/-0.0909/-0.3175 . These failures terminated the ICLR expansion. The workshop retarget preserves them as historical evidence and does not reinterpret the rewrite as another rescue candidate.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS2a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c78023a21807b5f",
+      "section": "6.3 Factual replay is not counterfactual consequence",
+      "location": "6.3 Factual replay is not counterfactual consequence",
+      "text": "In replay, the next state is the factual outcome of the original clean action, not the outcome that the transformed command would have produced. A deterministic clean-trained response proxy reduces median GMM recall from 0.6379 to 0.2381 on LIBERO and mean recall from 0.6105 to 0.0972 on xArm, but HYDRA factual-minus-proxy effects are − 0.0978 / + 0.0604 / − 0.0440 -0.0978/+0.0604/-0.0440 . This inconsistency prevents a causal reading.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS3a.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d65abf6f26015b58",
+      "section": "6.3 Factual replay is not counterfactual consequence",
+      "location": "6.3 Factual replay is not counterfactual consequence",
+      "text": "The smallest controlled simulator compares no monitor, ridge, GMM, and oracle under the same injected faults and response-delay budget. Ridge and GMM both improve success from 0.333 to 1.000, so the ContractFuzz-specific difference is exactly zero; GMM clean FPR is 0.08 and misses the 0.05 gate. Continuous-offset repair also passes 0/10 gates (median within-0.01 accuracy 0.4930). These results support neither a detector-specific closed-loop benefit nor automatic action correction.",
+      "url": "https://arxiv.org/html/2611.06653v1#S6.SS3a.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "dc15e473bb7b5efd",
+      "section": "7.1 Main-evidence resource accounting",
+      "location": "7.1 Main-evidence resource accounting",
+      "text": "All retained scientific evidence is CPU-only. Table 9 reports full-workload wall time and exact maximum resident set size (RSS) for the ten headline paths after schema-aware replay. Historical runtimes sum to 959.860 seconds. RSS is process maximum, not machine reservation; these runs were executed one at a time.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "02db546f65c73592",
+      "section": "7.1 Main-evidence resource accounting",
+      "location": "7.1 Main-evidence resource accounting",
+      "text": "Table 9: Exact CPU resource evidence for the ten retained main-evidence paths.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bacd26caa584b1fd",
+      "section": "7.1 Main-evidence resource accounting",
+      "location": "7.1 Main-evidence resource accounting",
+      "text": "ID Role Wall (s) Max RSS (bytes) 042b fresh GMM recall 465.445 220,004,352 043 fresh localization 225.377 250,036,224 044 Object/Goal GMM 43.810 960,430,080 051 static metadata baseline 51.542 241,270,784 053a split coverage 0.899 42,762,240 054a clustered effects 46.422 588,038,144 055 offset failure 29.123 752,975,872 056 false-negative strata 1.765 554,205,184 057 supported heterogeneity 32.804 760,741,888 058 open-set audit 62.673 482,066,432",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.T9.2",
+      "kind": "table"
+    },
+    {
+      "id": "50bddc26dd45c865",
+      "section": "7.1 Main-evidence resource accounting",
+      "location": "7.1 Main-evidence resource accounting",
+      "text": "A relocation audit copied an existing environment prefix and reproduced the artifact in 150.34 seconds with 593,002,496 bytes maximum RSS; the relocated prefix occupies 4,345,249,565 bytes. It establishes path relocation of the captured environment, not an independent dependency installation. Six core tests, synthetic smoke, archive unpack/checksum, warning checks, and final consistency pass under that interpretation. A separate CPython 3.12.3 host passes the tests but does not satisfy an exact-3.12.4 contract. The exact CPython 3.12.4 standalone tail is inconclusive: its first harness had a parser defect, and the authorized one-shot continuation ended at DNS transport before SSH. We therefore make no exact-patch cross-host portability claim.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "966d017ca1fde38a",
+      "section": "7.1 Main-evidence resource accounting",
+      "location": "7.1 Main-evidence resource accounting",
+      "text": "The original main-text summary additionally records the 4,000-seed Spatial and Object/Goal stages at 499.45 and 96.24 seconds, respectively, and a full replay of the original clustered analysis at 48.83 seconds with 588,038,144 bytes maximum RSS. These historical measurements are distinct from the new 40.40-second local validation and are not added as independent scientific evidence.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "b9ddce5ed0db0c0f",
+      "section": "7.2 Command-to-result locator",
+      "location": "7.2 Command-to-result locator",
+      "text": "Table 10 is a compact human index. The project-local file artifact/table-command-map.md contains all 31 table rows with exact commands; artifact/evidence-ledger-052.tsv is the append-only disposition ledger. Result JSONs store the complete numeric payload, contract, seed range, and gate classification. Running a command is not permission to replace a frozen result: reproduction writes a new output path and a schema-aware verifier compares the scientific payload.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9e843e655161fc93",
+      "section": "7.2 Command-to-result locator",
+      "location": "7.2 Command-to-result locator",
+      "text": "Table 10: Key evidence locators. Paths are relative to the private project root.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e4c7b48e2135b451",
+      "section": "7.2 Command-to-result locator",
+      "location": "7.2 Command-to-result locator",
+      "text": "Claim Command/script locator Result locator GMM recall run-gmm-confirmation-042b.sh gmm-joint-confirmation-042b.json GMM localization run-gmm-localization-043.sh gmm-localization-confirmation-043.json Suite repeat run-cross-suite-gmm-044.sh gmm-cross-suite-confirmation-044.json Static comparator run-metadata-displacement-baseline-051.sh metadata-displacement-baseline-051.json Split coverage run-statistical-unit-audit-053a.sh statistical-unit-audit-053a.json Clustered effects run-clustered-effect-intervals-054a.sh clustered-effect-intervals-054a.json Offset failure run-offset-episode-mechanism-055.sh offset-episode-mechanism-055.json Failure strata run-offset-episode-trajectories-056.sh offset-episode-trajectories-056.json Heterogeneity run-supported-family-episode-traces-057.sh supported-family-episode-traces-057.json Open-set audit run-open-set-candidate-rejection-058.sh open-set-candidate-rejection-058.json DROID screen run-droid100-sanity-069b.sh droid100-cross-convention-sanity-069b.json xArm screen run-xarm-lift-sanity-077b.sh xarm-lift-cross-convention-sanity-077b.json HYDRA screen run-stanford-hydra-sanity-080b.sh stanford-hydra-cross-task-sanity-080b.json",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.T10.2",
+      "kind": "table"
+    },
+    {
+      "id": "703ac4ce80c7137d",
+      "section": "7.2 Command-to-result locator",
+      "location": "7.2 Command-to-result locator",
+      "text": "The short names above are reading aids, not substitutes for the exact map; the audit verifies each named result against the actual registered path. The original review artifact excludes raw demonstrations, videos, simulator assets, caches, model weights, credentials, hostnames, home-directory paths, and author metadata. It includes evaluation code, tests, small aggregate results, manifests, licenses and notices, command maps, and the frozen split/evaluator contract.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e57258a45dc90ef7",
+      "section": "7.3 Minimal reproduction order",
+      "location": "7.3 Minimal reproduction order",
+      "text": "The fail-closed order is: (1) verify archive SHA-256 and unpack into a fresh local directory; (2) verify the dependency manifest and data revision/checksum manifest; (3) run the bundled core test suite; (4) run the data-free synthetic smoke; (5) execute a chosen evidence command with a new output path and fixed seed contract; (6) compare the resulting scientific payload with its registered JSON using the schema-aware verifier; and (7) record wall time, RSS, warnings, and the final consistency result. Missing data or dependency evidence is a reproduction failure, not permission to fetch a different revision or relax the evaluator.",
+      "url": "https://arxiv.org/html/2611.06653v1#S7.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "62177afca191fea8",
+      "section": "Authorship and disclosure.",
+      "location": "Authorship and disclosure.",
+      "text": "This camera-ready uses the author-confirmed names, order, affiliations and emails. Generative AI assisted planning, software development, analysis and manuscript drafting, including the post-decision validation and revision. Authors remain responsible for the evidence, citations and final text. License entries report provenance and are not legal conclusions.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c3a40826a4899157",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "A reviewer should be able to answer yes to each of the following directly from the paper and supplement:",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "20f2ecd9ea18064a",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "Episode-disjoint fitting; clean calibration separated from retrospective reference thresholds? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d726767506ee7ee3",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "Positive unit is LIBERO tasks/episodes, not split seeds? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7fcf0135b9383fe4",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "Matched-FPR results and the conditional-GMM reversal visible for all ten tasks? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cebb58951ea24319",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "Multiplicity and failed all-suite cluster extension disclosed? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c89a5812042f54a",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "Near-boundary and detector/family/repair/mitigation failures retained? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1cdf50132407262b",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "DROID/HYDRA negative; xArm one-task-only? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "27ba5650501f7cd7",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "Runtime, RSS, locators, and portability limitation available? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d77ff450446b822",
+      "section": "Reviewer-verifiable boundaries.",
+      "location": "Reviewer-verifiable boundaries.",
+      "text": "No cross-robot, physical closed-loop, causal-safety, or repair claim? Yes.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.I1.i8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3b665af439b96ce3",
+      "section": "What would change the scientific conclusion.",
+      "location": "What would change the scientific conclusion.",
+      "text": "Widening requires new evidence: multiple independent tasks under a second auditable action convention, predeclared advantage over the strongest sequence baseline, and a real counterfactual environment where mitigation improves task success under the same fault and delay budget. These nontrivial extensions are outside this rewrite; more split seeds, post-failure threshold changes, or descriptive trajectory selection cannot substitute for them.",
+      "url": "https://arxiv.org/html/2611.06653v1#S8.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3c616781d32614ba",
+      "section": "9.1 Protocol, data reuse, and exact conditional score",
+      "location": "9.1 Protocol, data reuse, and exact conditional score",
+      "text": "This analysis was specified after the PC decision and before observing its new outputs. It reuses all 432 original Spatial source episodes and is not an independent replication. Ten tasks, five supported fault families, the original valid-row rule, training standardization, ridge regularization and four-component full-covariance GMM are unchanged. Each task uses 100 episode-disjoint 60/20/20 partitions with seeds 33001–33100 and the original 2,000-transition cap. All 1,000 GMM fits converge; each episode–fault cell has at least 12 held-out appearances. No mutation outcome selects a seed, component count, threshold or reported family.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e975456afd8e1e4b",
+      "section": "9.1 Protocol, data reuse, and exact conditional score",
+      "location": "9.1 Protocol, data reuse, and exact conditional score",
+      "text": "For standardized x = ( s , a ) x=(s,a) and y = s ′ − s y=s^{\\prime}-s , let p G ​ ( x , y ) p_{G}(x,y) be the already fitted joint GMM. Its input marginal uses the same weights and covariance blocks:",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8ea249fcc18fdb14",
+      "section": "9.1 Protocol, data reuse, and exact conditional score",
+      "location": "9.1 Protocol, data reuse, and exact conditional score",
+      "text": "p G ​ ( x ) = ∑ m π m ​ 𝒩 ​ ( x , μ x , m , Σ x ​ x , m ) , R C = − log ⁡ p G ​ ( x , y ) + log ⁡ p G ​ ( x ) . p_{G}(x)=\\sum_{m}\\pi_{m}\\mathcal{N}(x;\\mu_{x,m},\\Sigma_{xx,m}),\\qquad R_{C}=-\\log p_{G}(x,y)+\\log p_{G}(x).",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "d67200799d71cb11",
+      "section": "9.1 Protocol, data reuse, and exact conditional score",
+      "location": "9.1 Protocol, data reuse, and exact conditional score",
+      "text": "Equivalently, the conditional mixture has weights proportional to π m ​ 𝒩 ​ ( x , μ x , m , Σ x ​ x , m ) \\pi_{m}\\mathcal{N}(x;\\mu_{x,m},\\Sigma_{xx,m}) , conditional component means μ y , m + Σ y ​ x , m ​ Σ x ​ x , m − 1 ​ ( x − μ x , m ) \\mu_{y,m}+\\Sigma_{yx,m}\\Sigma_{xx,m}^{-1}(x-\\mu_{x,m}) , and covariance Σ y ​ y , m − Σ y ​ x , m ​ Σ x ​ x , m − 1 ​ Σ x ​ y , m \\Sigma_{yy,m}-\\Sigma_{yx,m}\\Sigma_{xx,m}^{-1}\\Sigma_{xy,m} . Thus joint and conditional scores have identical fitted capacity and parameters. This is a scoring ablation; it does not optimize a separate conditional likelihood. An independent block-conditional calculation agrees to 2.3 × 10 − 15 2.3\\times 10^{-15} .",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "e923d1569880ddae",
+      "section": "9.2 Clean-reference FPR and deployment calibration",
+      "location": "9.2 Clean-reference FPR and deployment calibration",
+      "text": "Calibration-only thresholds use the original upper empirical clean-calibration quantile with method=higher . Achieved test FPR is reported, not assumed from the nominal target. Separately, each fitted score is evaluated against its held-out clean reference: adjacent clean-score cutoffs are interpolated to give exact empirical FPR at the specified targets. The interpolation coefficients use clean scores only; no mutant score chooses a cutoff. The maximum numerical FPR error is 1.2 × 10 − 16 1.2\\times 10^{-16} , including tied-score self-checks.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b33fd4c93887302e",
+      "section": "9.2 Clean-reference FPR and deployment calibration",
+      "location": "9.2 Clean-reference FPR and deployment calibration",
+      "text": "Matched FPR is transition-weighted within each held-out clean split. Mutation recall averages within episode–fault cells across repeated held-out appearances, then equally over faults, episodes and tasks. Calibration-only test FPR in Table 12 uses that equal-episode aggregation. These weighting choices are explicit: a 2.5% matched clean-reference rate is not a claim that each episode individually has a 2.5% alarm rate. Reference thresholds are used only for retrospective score comparison, not proposed as deployable thresholds.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "cfe06d34d3055e54",
+      "section": "9.2 Clean-reference FPR and deployment calibration",
+      "location": "9.2 Clean-reference FPR and deployment calibration",
+      "text": "Table 11: Matched empirical clean FPR: mutation recall in percent. All rows use the same finite source episodes, so different FPRs are correlated descriptive views.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e6adfa28969191a3",
+      "section": "9.2 Clean-reference FPR and deployment calibration",
+      "location": "9.2 Clean-reference FPR and deployment calibration",
+      "text": "FPR (%) Ridge forward Joint GMM Conditional GMM 1.00 34.13 52.27 56.49 2.50 46.08 60.96 65.66 5.00 58.41 68.62 72.83",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T11.2",
+      "kind": "table"
+    },
+    {
+      "id": "7d89b89486bf2121",
+      "section": "9.2 Clean-reference FPR and deployment calibration",
+      "location": "9.2 Clean-reference FPR and deployment calibration",
+      "text": "Table 12: Calibration-only operating points in percent. Each cell gives achieved clean FPR / mutation recall; calibration targets are nominal, not achieved rates.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6ff4e92bffee0570",
+      "section": "9.2 Clean-reference FPR and deployment calibration",
+      "location": "9.2 Clean-reference FPR and deployment calibration",
+      "text": "Score Nominal 1% Nominal 2.5% Nominal 5% Ridge forward 1.16 / 31.34 2.63 / 44.13 5.05 / 57.26 Joint GMM 1.71 / 51.09 3.22 / 60.86 5.62 / 68.50 Conditional GMM 1.34 / 54.76 2.85 / 65.04 5.32 / 72.64",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T12.2",
+      "kind": "table"
+    },
+    {
+      "id": "a4f1cb1159eca9ac",
+      "section": "9.3 Paired uncertainty and endpoints",
+      "location": "9.3 Paired uncertainty and endpoints",
+      "text": "For the primary 2.5%-FPR endpoint, the two declared comparisons are joint minus ridge and joint minus conditional. Repeated split appearances are collapsed before 20,000 paired hierarchical task/episode bootstrap draws (seed 20261017). Ordinary 95% intervals and two-sided 97.5% intervals for the two-comparison Bonferroni family are shown below. These intervals are conditional on fitted models and clean reference thresholds. They do not propagate training refits or reference-threshold estimation, and cannot establish population-level deployment-FPR control.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "59bb6fabd786d80a",
+      "section": "9.3 Paired uncertainty and endpoints",
+      "location": "9.3 Paired uncertainty and endpoints",
+      "text": "Table 13: Primary matched-FPR paired effects, in percentage points. The wider intervals control the two declared comparisons by Bonferroni under the stated conditional bootstrap interpretation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "43867994e8c1c123",
+      "section": "9.3 Paired uncertainty and endpoints",
+      "location": "9.3 Paired uncertainty and endpoints",
+      "text": "Comparison Effect 95% interval 97.5% interval Joint − - ridge 14.88 [12.07, 17.98] [11.72, 18.43] Joint − - conditional -4.70 [-6.32, -3.50] [-6.58, -3.39]",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T13.2",
+      "kind": "table"
+    },
+    {
+      "id": "0791c2131804fb85",
+      "section": "9.3 Paired uncertainty and endpoints",
+      "location": "9.3 Paired uncertainty and endpoints",
+      "text": "Table 14: Task-level recall at matched 2.5% empirical clean FPR, in percent. Task means equal-weight their source episodes and five represented families.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "8071c35aec47ce1f",
+      "section": "9.3 Paired uncertainty and endpoints",
+      "location": "9.3 Paired uncertainty and endpoints",
+      "text": "Spatial task Episodes Ridge Joint Conditional 0 46 47.98 62.57 67.76 1 42 45.12 66.84 69.45 2 39 45.59 61.01 65.07 3 35 30.80 54.84 57.54 4 45 39.22 46.67 57.66 5 43 58.18 67.80 72.93 6 47 46.26 60.49 65.23 7 45 47.87 63.86 66.87 8 46 50.85 64.07 68.52 9 44 48.97 61.50 65.60",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.T14.2",
+      "kind": "table"
+    },
+    {
+      "id": "ba7956bf362a1048",
+      "section": "9.3 Paired uncertainty and endpoints",
+      "location": "9.3 Paired uncertainty and endpoints",
+      "text": "The conditional score has higher detection recall than joint on all ten tasks. Joint nevertheless has higher overall closed-set localization: 95.81% [ 95.23 , 96.31 ] [95.23,96.31] , versus 94.62% [ 94.07 , 95.12 ] [94.07,95.12] for conditional and 92.70% [ 91.93 , 93.40 ] [91.93,93.40] for ridge (descriptive 95% intervals). Localization is calculated over all valid fault rows. It is neither localization conditional on detection nor successful detection-and-localization, and does not establish safe correction.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d3e128a59ce308d1",
+      "section": "9.4 Resources, provenance, and reproduction",
+      "location": "9.4 Resources, provenance, and reproduction",
+      "text": "The run took 40.40 seconds on one local CPU process with one BLAS/OpenMP thread; no GPU was used. Software was Python 3.11.2, NumPy 1.26.4, SciPy 1.13.1, scikit-learn 1.4.2, and threadpoolctl 3.6.0. An environment-only preflight using the old threadpoolctl 2.2.0 failed before any fit because it could not inspect the local OpenBLAS library; that failure is retained, and only this runtime-control package was upgraded before the scientific run. No historical experiment file was changed.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "134390891656b693",
+      "section": "9.4 Resources, provenance, and reproduction",
+      "location": "9.4 Resources, provenance, and reproduction",
+      "text": "8b6a2145cb7523ebbae1dc2f0374b712366385bd15cca37a18a9dc6b6da0968b",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS4.p2.2.1",
+      "kind": "p"
+    },
+    {
+      "id": "cf93a76fde0d1b66",
+      "section": "9.4 Resources, provenance, and reproduction",
+      "location": "9.4 Resources, provenance, and reproduction",
+      "text": "The protocol is paper/pc_validation_2026-10-17.md ; code is src/run_pc_validation_20261017.py . Score arrays, per-episode metrics, convergence diagnostics, environment and code/protocol hashes are in results/pc_validation_20261017/ . Input data remain subject to the original dataset terms and are excluded from the manuscript-source ZIP.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS4.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "45e86289962ede1f",
+      "section": "9.4 Resources, provenance, and reproduction",
+      "location": "9.4 Resources, provenance, and reproduction",
+      "text": "The fixed four-component joint model is not refitted differently for the conditional score. Neither favorable point estimates nor failed historical gates are used to select a new model. The new comparison changes the interpretation of the original result: it supports multimodal relational scoring over ridge, while joint-density detection superiority is unsupported.",
+      "url": "https://arxiv.org/html/2611.06653v1#S9.SS4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "72e541bc24ee4933",
+      "section": "10 Retained operating-point and ablation details",
+      "location": "10 Retained operating-point and ablation details",
+      "text": "Table 15: Locked replay evidence. Gains are absolute recall differences. “Seeds” are repeated episode-split seeds over fixed data, not independent trajectories.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.T15",
+      "kind": "figcaption"
+    },
+    {
+      "id": "35c9fb7447e67e15",
+      "section": "10 Retained operating-point and ablation details",
+      "location": "10 Retained operating-point and ablation details",
+      "text": "Evaluation Pass Gain vs. action/range Loc. Max FPR Spatial, 2,000 seeds/task 10/10 0.3157 0.8567 0.0279 Object + Goal, 500/suite 2/2 0.2989 0.8474 0.0286 Five-family Spatial, 4,000/task 10/10 0.3793 0.9134 0.0279 Five-family Object + Goal, 4,000/suite 2/2 0.3579 0.8993 0.0284 Forward Spatial, fresh 2,000/task 10/10 0.3739 0.9285 0.0287 Forward Object + Goal, fresh 2,000/suite 2/2 0.3474 0.9092 0.0279",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.T15.2",
+      "kind": "table"
+    },
+    {
+      "id": "bf5c3c566edfb179",
+      "section": "10.1 Task and suite confirmation",
+      "location": "10.1 Task and suite confirmation",
+      "text": "Table 15 summarizes the locked feasibility evaluator. All ten Spatial tasks pass. In the held-out LIBERO suites, relational recall is 0.3442 versus 0.0411 for the action/static comparator on Object and 0.4632 versus 0.0506 on Goal; localization is 0.9050 and 0.8936. These suites change task content but retain the LIBERO data collection and action convention. They provide within-source task breadth, not cross-dataset or cross-robot generalization.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec8a3ec8b370355f",
+      "section": "10.1 Task and suite confirmation",
+      "location": "10.1 Task and suite confirmation",
+      "text": "The earlier six-family 2,000-seed confirmation gives hierarchical-bootstrap 95% intervals [ 0.2805 , 0.3406 ] [0.2805,0.3406] for median recall gain and [ 0.8433 , 0.8598 ] [0.8433,0.8598] for median localization; maximum clean FPR lies in [ 0.0272 , 0.0287 ] [0.0272,0.0287] . Restricting the headline claim to five supported families increases the central values. Because that restriction followed a family audit, we retain the six-family result and describe the five-family result as evidence-driven claim narrowing, not a replacement of the predeclared aggregate.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "cbbe40c370fb2f16",
+      "section": "10.2 Historical joint-mixture comparison with ridge",
+      "location": "10.2 Historical joint-mixture comparison with ridge",
+      "text": "The forward model has median recall 0.4504 versus 0.3560 for the joint Gaussian and wins recall on all ten tasks, but it has lower localization on all ten: medians are 0.9285 and 0.9420. Maximum FPR is 0.0282 for forward and 0.0439 for joint. Thus the joint comparison rejects the original notion that a conditional residual dominates on both metrics; it reveals a calibrated recall–localization Pareto tradeoff.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "da20411d45fa8e82",
+      "section": "10.2 Historical joint-mixture comparison with ridge",
+      "location": "10.2 Historical joint-mixture comparison with ridge",
+      "text": "Under this original ridge comparison, a deterministic four-component GMM is stronger. On 1,000 fresh split seeds, it beats forward recall on all ten tasks by 0.15663 in the task median while keeping maximum FPR at 0.03994. A separate localization confirmation reaches 0.95926 and beats forward by 0.02932, with paired-task 95% interval [ 0.02472 , 0.03553 ] [0.02472,0.03553] ; it beats joint Gaussian by 0.01728 [ 0.01398 , 0.01971 ] [0.01398,0.01971] . Frozen replications within Object and Goal yield recall advantages of 0.21183 and 0.17956 and localization advantages over the better comparator of 0.02888 and 0.02758. Again, these suites share the LIBERO convention.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c5b2e24a40aee00",
+      "section": "10.2 Historical joint-mixture comparison with ridge",
+      "location": "10.2 Historical joint-mixture comparison with ridge",
+      "text": "Component sensitivity is not uniform. Four and eight components pass with median recall advantages 0.16093 and 0.16341, but two components reach only 0.07252 with interval [ 0.04073 , 0.11486 ] [0.04073,0.11486] and fail the frozen gate. Localization remains above 0.956. By contrast, nested calibration caps of 100, 200, and 400 clean transitions all pass: recall advantages are 0.14526–0.15400, localization is 0.96069, and the largest FPR is 0.04123. The evidence supports a multimodal density under modest calibration budgets, not mixture-count invariance.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "c9ebf00c12cdce25",
+      "section": "10.2 Historical joint-mixture comparison with ridge",
+      "location": "10.2 Historical joint-mixture comparison with ridge",
+      "text": "Table 16: Paired historical evidence for the four-component GMM. Achieved FPR is not matched. The clustered rows first average repeated split appearances within each source episode.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.T16",
+      "kind": "figcaption"
+    },
+    {
+      "id": "20a6cf16242c9bec",
+      "section": "10.2 Historical joint-mixture comparison with ridge",
+      "location": "10.2 Historical joint-mixture comparison with ridge",
+      "text": "Evidence Comparison Effect 95% interval Spatial splits GMM − - forward recall 0.15663 task median Spatial splits GMM − - forward loc. 0.02932 [0.02472, 0.03553] 432 episodes GMM − - forward recall 0.16753 [0.13642, 0.20297] 432 episodes GMM − - forward loc. 0.03089 [0.02679, 0.03541] 432 episodes GMM − - joint loc. 0.01837 [0.01522, 0.02198] Metadata baseline metadata − - GMM recall -0.31196 [-0.33328, -0.24729] Metadata baseline metadata − - GMM loc. -0.10914 [-0.12655, -0.09866]",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.T16.2",
+      "kind": "table"
+    },
+    {
+      "id": "cfb92872e7d31709",
+      "section": "10.3 Episode-clustered effect and matched static comparator",
+      "location": "10.3 Episode-clustered effect and matched static comparator",
+      "text": "The fresh clustered analysis uses 100 new partitions per Spatial task but collapses repeated appearances within 432 immutable task–episode clusters before inference. The equal-task/equal-episode GMM-minus-forward recall effect is 0.16753 with paired 95% interval [ 0.13642 , 0.20297 ] [0.13642,0.20297] . Localization effects are 0.03089 over forward and 0.01837 over joint Gaussian. Exact task-sign-flip p = 1 / 1024 p=1/1024 for each direction; Holm-adjusted p = 0.00293 p=0.00293 across the frozen three-comparison family. All 1,000 GMM fits converge, maximum task FPR is 0.0444, and every episode appears in at least 11 test splits. This analysis supports the Spatial ordering without treating split runs as independent trajectories. An unchanged Object/Goal extension crashes because one Object task has no valid gripper-polarity rows; we make no clustered claim for those suites.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "63935759a55f3191",
+      "section": "10.3 Episode-clustered effect and matched static comparator",
+      "location": "10.3 Episode-clustered effect and matched static comparator",
+      "text": "The field-aligned displacement contract is non-degenerate: task-median recall is 0.32020, localization 0.84245, and maximum FPR 0.02983. Nevertheless, it passes 0/10 GMM-noninferiority gates. Metadata-minus-GMM recall is − 0.31196 -0.31196 [ − 0.33328 , − 0.24729 ] [-0.33328,-0.24729] , and localization is − 0.10914 -0.10914 [ − 0.12655 , − 0.09866 ] [-0.12655,-0.09866] . This comparison rejects a range-check-only explanation, while its missing controller specification prevents us from presenting it as a faithful third-party implementation.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "dc96c8d467bc53a0",
+      "section": "Which relation matters?",
+      "location": "Which relation matters?",
+      "text": "The earliest detector combined a forward residual with an inverse model that predicts a t a_{t} from ( s t , s t + 1 ) (s_{t},s_{t+1}) . On 500 unseen split seeds per Spatial task, forward-only, inverse-only, and combined variants all pass the action/static gate. The combined score raises paired median recall by only 0.0065 over forward, with a task-bootstrap 95% interval [ − 0.0042 , 0.0282 ] [-0.0042,0.0282] that includes zero. Forward-only localization is higher on all ten tasks: combined-minus-forward has paired median − 0.0053 -0.0053 , interval [ − 0.0094 , − 0.0026 ] [-0.0094,-0.0026] . The original study therefore retained forward-only as its parsimonious ridge conditional baseline. This ablation does not privilege a deterministic mechanism, because the later GMM comparison shows an advantage over ridge under the original calibration contract. The post-decision conditional comparison does not support joint-density superiority.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8c59403d91b0430",
+      "section": "Which relation matters?",
+      "location": "Which relation matters?",
+      "text": "The original methods share a calibration quantile and a 5% test-FPR ceiling, but their achieved operating points differ. Forward and joint-Gaussian maximum clean FPRs are 0.0282 and 0.0439; forward and mixture maxima in the passing confirmation are 0.02763 and 0.03994. These ceilings do not establish a matched-FPR advantage. Section 9 supplies that comparison and the capacity-controlled conditional baseline. The earlier 200-split mixture screen reaches 0.0500375 and remains inconclusive under its frozen gate.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS4.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "33d06e61e7ed7511",
+      "section": "Family and severity sensitivity.",
+      "location": "Family and severity sensitivity.",
+      "text": "The forward-versus-joint tradeoff is transformation-dependent. Forward is better on both recall and localization for scale, with +0.2620 recall and +0.0098 localization; joint is better on both for X-sign, with +0.0242 recall and +0.0277 localization. Only rotation shrink satisfies the frozen material Pareto gate. A paired task bootstrap makes the limits sharper: scale recall remains directional at [ 0.2263 , 0.3125 ] [0.2263,0.3125] , but its localization interval [ − 0.0181 , 0.0019 ] [-0.0181,0.0019] crosses zero; for X-sign, joint localization remains directional at [ 0.0207 , 0.0319 ] [0.0207,0.0319] , while the recall interval crosses zero. Aggregate detector rankings therefore should not be read as uniform family dominance.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f859220d4c5f7af5",
+      "section": "Family and severity sensitivity.",
+      "location": "Family and severity sensitivity.",
+      "text": "Fault magnitude changes explanation before it changes detection. For X offsets of 0.01, 0.025, 0.05, 0.10, and 0.20, GMM recall is 0.0305/0.0314/0.0330/0.0424/0.1518 while exact-magnitude localization rises from 0.4710 to 0.9490. The curve is monotone but was run after the failed offset screen, so it is mechanism evidence rather than a rescued supported family. Temporal severity behaves similarly: forward-minus-action recall gain rises from 0.0049/0.0359 at one/two frames to 0.2926/0.7179/0.9209 at four/eight/sixteen frames. Severe misalignment becomes detectable, while the short, smoother latency most relevant to deployment remains unsupported. A learned temporal baseline using ( s t , a t − 1 ) (s_{t},a_{t-1}) also passes 0/10 short-temporal gates, which rules out only that simple feature omission, not richer sequence monitoring.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS4.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "423d09b8b6b16f32",
+      "section": "Task breadth and finite-source limits.",
+      "location": "Task breadth and finite-source limits.",
+      "text": "Task-held-out triplets pass 3/3 with median recall gain 0.1740, localization 0.7760, and maximum FPR 0.0143. Object and Goal repeats strengthen within-LIBERO task breadth. They do not change the action representation or data-collection convention. For the same reason, 4,000 deterministic split seeds cannot substitute for 4,000 new episodes. The 432-episode clustered estimand was the original headline interval because it makes that dependency explicit. The attempted all-task clustered extension is retained as a protocol failure rather than silently changing its fault vocabulary when one Object task has no valid gripper-polarity rows.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS4.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3624b0dc2c7d91de",
+      "section": "Task breadth and finite-source limits.",
+      "location": "Task breadth and finite-source limits.",
+      "text": "We use an evidence hierarchy to prevent reuse from widening the claim. Fresh splits under the frozen evaluator establish algorithmic ordering on recorded tasks. Episode-clustered analyses change the inferential unit and support only the Spatial effect for which the gate is well-defined. Selection-frozen reuses diagnose heterogeneity, false negatives, and candidate confusion. Post-hoc severity curves explain a failed family. External screens test whether the same contract survives a new convention. These levels answer different questions; none converts a descriptive mechanism audit into an independent robot or task replication.",
+      "url": "https://arxiv.org/html/2611.06653v1#S10.SS4.SSS0.Px3.p2.1",
+      "kind": "p"
+    }
+  ]
+}

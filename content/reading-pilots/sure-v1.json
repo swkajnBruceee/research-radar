@@ -1,0 +1,421 @@
+{
+  "item_id": "arxiv:2611.09684",
+  "document_id": "a90dcf18c2924c9d5dac6fb465a69ee9646efa84e1774f7d7d1f9d40cfd169ae",
+  "source_url": "https://arxiv.org/html/2611.09684v1",
+  "paper_version": "2611.09684v1",
+  "paper": {
+    "id": "arxiv:2611.09684",
+    "title": "SURE:Spatiotemporal Uncertainty Representation for Efficient Vision-Language-Action Learning",
+    "url": "https://arxiv.org/abs/2611.09684v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "vla",
+      "imitation",
+      "data"
+    ],
+    "summary": "Vision-language-action (VLA) policies have become a promising paradigm for end-to-end robot control, but their effectiveness still depends heavily on large volumes of demonstration data. In manipulation tasks, this dependence is compounded by structured spatiotemporal uncertainty in the action space: multiple nearby actions or trajectories may successfully solve the same task, while semantically equivalent demonstrations often unfold at different speeds. Standard pointwise supervision treats each demonstrated action as an exact target, imposing an unnecessary learning burden under such uncertainty. We present SURE, a data-efficient VLA training framework that explicitly models both spatial and temporal uncertainty. SURE augments a VLA backbone with a lightweight transposed-convolutional probabilistic action decoder that captures spatial uncertainty through local correlations among neighboring action bins. It further introduces Soft-DTW alignment supervision to accommodate local timing variations between predicted and demonstrated action chunks. Together, these two components reduce sensitivity to demonstrator-specific poses and execution timing, enabling more data-efficient action learning. We evaluate SURE on LIBERO, RoboTwin 2.0, and real-world manipulation tasks. Even with only 10% of the demonstration data or 20% of the training steps, SURE achieves manipulation success rates that match or surpass baseline VLAs."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-09T17:43:06+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 98,
+    "total": 98,
+    "evidence_ids": [
+      "9cad12b1fc21b642",
+      "f4d80b29c837ed9c",
+      "9eba6ea20a17b13d",
+      "5471934ec5827b99",
+      "26cf3c3f040d988e",
+      "aa6bddaab67fb3aa",
+      "7268e3473e27f8a0",
+      "87acd2610ac7c832",
+      "d5f9b6b86c6b6215",
+      "df8de5bb98ace73b",
+      "54484f834c72d258",
+      "50c0b427a26408af",
+      "fb9f7fa602fcc2ad",
+      "e675980630af07cb",
+      "0a36913be14b8b31",
+      "600a4aa835d840a9",
+      "74d898db1b08c311",
+      "22d9018003a37b47",
+      "5dc35dae818b4b0c",
+      "0b395a2bb1a36555",
+      "410738783d8c41f0",
+      "8c49058b9a326eb3",
+      "25cc9bd662659b98",
+      "4d933211b06d0a84",
+      "59300808b875e23e",
+      "b95648cedf605e2d",
+      "2ad0ca703d1fa811",
+      "88ed0370014553ae",
+      "5c51ae4db44e26fd",
+      "3645af9e9111cbdb",
+      "676407978534d711",
+      "09a11383abe7dbb5",
+      "0647946133041dfa",
+      "c0fe55520d4471f6",
+      "db7c639a5c4cfe3d",
+      "9379ea25e6e45893",
+      "5bcd81a9a1e4f907",
+      "a5317f6b622e2ab0",
+      "9739e3f6b09759b4",
+      "c8fc292a30080aaf",
+      "080e325ded931a17",
+      "ac1557d9e1dd130a",
+      "4b32e1312910736e",
+      "93a3790b0b77c967",
+      "7cc5bcceb636d36c",
+      "2420cee2e65718da",
+      "711b62067ed6d091",
+      "d29b88868d0b69f0",
+      "51298b6b46374e62",
+      "e39416746bb6a395",
+      "3982c3e2ffac9d1c",
+      "36501255b7ee17d9",
+      "c1d7da96ee92c043",
+      "3852eef93a687d9b",
+      "e9dde73c81854385",
+      "5a29f28f384a928a",
+      "93bb8c6d4f39d3db",
+      "a7addaccb3b938f7",
+      "28809181eb728b98",
+      "b36932930f152e40",
+      "e0254a1be7da3e9f",
+      "42c879d61c4b6058",
+      "fd6c49f00e4cf3fd",
+      "a4333d8d27780b92",
+      "7ea7b2c13db47cbe",
+      "b25e6004df2aecf1",
+      "05f30d6dc4671f3d",
+      "b258350c5fe90d6d",
+      "c42dcc82f11c873f",
+      "b4451e1e480df7a2",
+      "98983c067d8b41be",
+      "0e9a3d1a2e04a4aa",
+      "62bbcf7c0fbe86b4",
+      "303ca29b17116d57",
+      "41cfbbecfd31d65f",
+      "92e123d284fe6750",
+      "139d83ffcee56f3b",
+      "2675fd4d18ffe8bb",
+      "a29231e379963457",
+      "8efba3de65279b9c",
+      "1f784d325cd7b4ca",
+      "531bed3504b709e3",
+      "cdc07ce0484c8551",
+      "c52ab01dafbe60fe",
+      "7e20fa6221f73fb8",
+      "b152eb405152c0aa",
+      "9c32f1ce427e89aa",
+      "f1d84bc3e9595c67",
+      "e70b014f95f81ba9",
+      "a970c4f065d8aa80",
+      "83e1bd76a3becbf8",
+      "ba90ad9e39fea0e3",
+      "b007a30251460aa0",
+      "42977288b2b04f6c",
+      "6685fdaff1e5df2a",
+      "9ec5149338c816c8",
+      "3033fadec537a06f",
+      "b369c56868924f78"
+    ]
+  },
+  "overview": "在OpenVLA-7B后以转置卷积预测256-bin逐轴分布并取期望；保留逐点L1，加入弱高斯KL、Soft-DTW divergence与终点约束，训练时允许单调时序错位。 作者实验未复现，全文后列为值得关注：单骨干单评测seed，数据比例仅Spatial；RoboTwin仅5个Easy独立task模型，倒水实机退步。28.8倍只计JAX动作头且OFT头更快，缺端到端计时和概率校准。",
+  "notice": "作者结果未复现；模型精读与编辑判断，仍需研究者判断。",
+  "findings": [
+    {
+      "kind": "method",
+      "text": "SURE在OpenVLA-7B动作token后，先分组1×1卷积融合，再分平移/旋转与夹爪分支。前两者用两级depthwise转置卷积沿有序bin轴1→64→256上采样，softmax后对bin中心取期望，夹爪另用小MLP；卷积邻域共享是空间归纳偏置，不是增加视频世界模型或迭代去噪。输出是每轴分布的确定性期望，能表示多峰logits不等于执行时采样多种有效行为；均值可能落在峰间，这是一项待测试边界，论文未证明多峰动作选择或完整联合轨迹分布。",
+      "evidence_ids": [
+        "e675980630af07cb",
+        "0a36913be14b8b31",
+        "600a4aa835d840a9",
+        "5dc35dae818b4b0c",
+        "0b395a2bb1a36555",
+        "410738783d8c41f0",
+        "25cc9bd662659b98",
+        "4d933211b06d0a84",
+        "59300808b875e23e",
+        "b95648cedf605e2d"
+      ],
+      "quote": "transposed-convolutional"
+    },
+    {
+      "kind": "method",
+      "text": "主时序目标将不含末维夹爪的动作累加为轨迹，按候选对齐点的坐标MSE作Soft-DTW，再减两条自匹配分数得到divergence；加终点L1保持块末进度。总损失仍保留全动作逐时刻L1，加0.05 KL与0.5×(DTW divergence+endpoint)，并非完全取消精确时序监督。KL以示范动作中心、σ1.5 bins的离散高斯弱约束逐轴概率；γ由0.1退火至LIBERO0.005/其他0.001。允许单调时间扭曲不保证接触事件或夹爪时机正确；归一坐标累计也不是SE(3)刚体积分。",
+      "evidence_ids": [
+        "2ad0ca703d1fa811",
+        "88ed0370014553ae",
+        "5c51ae4db44e26fd",
+        "3645af9e9111cbdb",
+        "676407978534d711",
+        "09a11383abe7dbb5",
+        "0647946133041dfa",
+        "c0fe55520d4471f6",
+        "db7c639a5c4cfe3d",
+        "9379ea25e6e45893",
+        "5bcd81a9a1e4f907",
+        "a5317f6b622e2ab0",
+        "9739e3f6b09759b4",
+        "c8fc292a30080aaf",
+        "ac1557d9e1dd130a",
+        "4b32e1312910736e",
+        "93a3790b0b77c967",
+        "7cc5bcceb636d36c",
+        "2420cee2e65718da",
+        "711b62067ed6d091",
+        "a29231e379963457",
+        "8efba3de65279b9c",
+        "1f784d325cd7b4ca"
+      ],
+      "quote": "self-similarity"
+    },
+    {
+      "kind": "method",
+      "text": "实现按动作语义改头，不能把末端增量公式原样推广到所有本体。RoboTwin用12条绝对关节轴各256bin、双夹爪MLP，重排为两组关节加末尾夹爪后做joint-action Soft-DTW；附录未明确这一路是否也累加绝对关节及如何处理双夹爪/endpoint，复现需核代码，不自行补写。LoRA rank32/α16、AdamW decay0.01；LIBERO每suite4×H20、batch48、10k、k8；Robo每task单B300、batch16、20k、k25；实机2×A100、batch16、20k、k8。小动作头不意味着整个7B模型小或训练无需大卡；未报告完整训练GPU小时。",
+      "evidence_ids": [
+        "a29231e379963457",
+        "8efba3de65279b9c",
+        "1f784d325cd7b4ca",
+        "531bed3504b709e3",
+        "cdc07ce0484c8551"
+      ],
+      "quote": "absolute joint angles"
+    },
+    {
+      "kind": "evidence",
+      "text": "LIBERO四suite分别训练checkpoint，各500评测例；SURE10k/batch48为99.0/99.2/98.8/91.0，均值97.0%。同骨干本地重训OFT10k同batch为87.1%，50k为94.3%，差9.9/2.7个百分点。20%指相对50k的优化步数及同batch下样本呈现数，不等于实测墙钟、FLOPs或GPU小时减少80%，新增DTW有训练开销。SURE和OFT为单评测seed，其他多项文献基线三seed且协议不同；最高仅限此表比较集合，未证明最新全领域SOTA。四suite模型也不是统一40任务单checkpoint。",
+      "evidence_ids": [
+        "51298b6b46374e62",
+        "e39416746bb6a395",
+        "3982c3e2ffac9d1c",
+        "36501255b7ee17d9",
+        "c1d7da96ee92c043",
+        "8efba3de65279b9c"
+      ],
+      "quote": "optimization steps"
+    },
+    {
+      "kind": "evidence",
+      "text": "图3只在LIBERO-Spatial、单seed、各数据比例同10k更新：OFT在10/25/50/100%数据为72.4/90.8/92.4/94.4%，SURE为93.8/95.0/96.6/99.0%。同10%数据差21.4个百分点，但相对全数据基线仍低0.6；25%数据才高0.6，未提供等效性检验或置信区间。因此不能泛称10%示范已超全数据，更不能推到全部LIBERO、RoboTwin或实机。固定步数提高小数据重复使用次数，论文未说明各比例抽样方差与任务分层细节。",
+      "evidence_ids": [
+        "b258350c5fe90d6d",
+        "c42dcc82f11c873f",
+        "b4451e1e480df7a2"
+      ],
+      "quote": "demonstrations"
+    },
+    {
+      "kind": "evidence",
+      "text": "表5同LIBERO-Spatial10k更新：两项全有99.0%，去DTW97.4，去概率头96.8，两项都去94.4；相对完整模型各少1.6/2.2个百分点，支持组合在该条件下有收益。相对无两项时概率头单独+3.0、DTW单独+2.4，而合用+4.6，差分交互-0.8个百分点，不能称超加性交互。DTW项实际捆绑divergence、endpoint与退火，概率头也含结构/期望/KL改变，未分别隔离。没有纯endpoint、参数匹配MLP分布头、σ/γ敏感性、多seed或人为时序错位实验，未充分证实所有增益都来自不确定性建模。",
+      "evidence_ids": [
+        "98983c067d8b41be",
+        "0e9a3d1a2e04a4aa",
+        "62bbcf7c0fbe86b4",
+        "303ca29b17116d57"
+      ],
+      "quote": "Subtractive ablation"
+    },
+    {
+      "kind": "evidence",
+      "text": "RoboTwin50任务中仅选5项，每项50条clean示范、独立checkpoint，在Easy无随机化环境各100次评测。SURE55/100/98/26/82%平均72.2（由逐项可得361/500），对文献π0平均60.2差12点、OFT59.2差13点；BeatHammer55低于RDT77，Stack82低于π91，PlaceFan虽表内最高仍仅26。OFT来自JEPA-VLA、其他来自RoboTwin，非全部本地重训。20k/batch16对100k/batch8是20%更新、40%样本呈现量，不能混成总成本降80%；也不支持全50任务、多任务统一模型、random或跨本体泛化。",
+      "evidence_ids": [
+        "3852eef93a687d9b",
+        "e9dde73c81854385",
+        "5a29f28f384a928a",
+        "93bb8c6d4f39d3db",
+        "a7addaccb3b938f7",
+        "1f784d325cd7b4ca",
+        "531bed3504b709e3"
+      ],
+      "quote": "non-randomized"
+    },
+    {
+      "kind": "evidence",
+      "text": "SO-101前视+腕视六桌面任务各50示范，多位作者操作者，共300段混合训练为单checkpoint；每策略每任务20次，共120。表3SURE69/120=57.5%，OFT50/120=41.7%，差19次、15.8个百分点，训练20k对50k；没有多seed或明确配对布局/操作者留出说明。五项改善、Toy Duck9→19/20，但倒水11→8/20退步，叠碗仍5/20，不能说全面改善或稳定解决接触。多操作者自然变化不是受控时间扰动，缺专门实机组件消融。图7是另加旁侧相机的代表帧，不是策略低分辨率前视输入或120次完整成功证据。",
+      "evidence_ids": [
+        "28809181eb728b98",
+        "b36932930f152e40",
+        "e0254a1be7da3e9f",
+        "42c879d61c4b6058",
+        "fd6c49f00e4cf3fd",
+        "cdc07ce0484c8551",
+        "f1d84bc3e9595c67",
+        "e70b014f95f81ba9",
+        "a970c4f065d8aa80",
+        "83e1bd76a3becbf8",
+        "ba90ad9e39fea0e3",
+        "b007a30251460aa0",
+        "42977288b2b04f6c",
+        "6685fdaff1e5df2a",
+        "9ec5149338c816c8",
+        "b369c56868924f78"
+      ],
+      "quote": "mixed-task real-world"
+    },
+    {
+      "kind": "evidence",
+      "text": "表4固定k8，只测动作头排除VLA骨干，20次warmup后100次平均：SURE16.93M/10.96G/1.57ms，JAX版0.69ms；π0.5 JAX头430.10M/79.13G/19.88ms，得12.7或28.8倍头部加速，未证明端到端policy响应同倍提升。相对OFT151.12M/2.42G/0.37ms，SURE仅11.2%头部参数，却约4.53倍FLOPs、标准实现4.24倍延迟，JAX版也慢于OFT。Stochastic列指显式分布，不代表SURE执行随机采样。计时GPU、batch、精度、编译边界及π0.5去噪步数未充分给出；各模拟训练卡型不能当计时卡型。",
+      "evidence_ids": [
+        "a4333d8d27780b92",
+        "7ea7b2c13db47cbe",
+        "b25e6004df2aecf1",
+        "05f30d6dc4671f3d"
+      ],
+      "quote": "framework-matched"
+    },
+    {
+      "kind": "limitation",
+      "text": "结论应落在单OpenVLA骨干上的训练配方增量。图4/5是选定轨迹的逐轴热图，图5色条还标明按峰值增强显示；没有校准、coverage/NLL或可靠拒答测试，不把热图宽度当经验证的风险概率。L1期望与弱高斯KL不能单独识别所有多模态成功动作，需检验均值落在无效模式间的情况。实机成功率亦非操作安全指标。固定论文未给明确作者代码/权重链接，本轮公开搜索未确认官方资源，不断言永久不存在；未执行代码、下载数据或复现实验。细节还缺RoboTwin时序实现、完整计时环境、训练耗时及多seed，跨骨干/高精接触推广仍待验证。",
+      "evidence_ids": [
+        "41cfbbecfd31d65f",
+        "139d83ffcee56f3b",
+        "2675fd4d18ffe8bb",
+        "c52ab01dafbe60fe",
+        "7e20fa6221f73fb8",
+        "b152eb405152c0aa",
+        "9c32f1ce427e89aa",
+        "b369c56868924f78"
+      ],
+      "quote": "task selection"
+    }
+  ],
+  "hypotheses": [
+    {
+      "text": "SURE在新操作者与时间节奏变化上的收益，可能来自容忍时间对齐而不只是额外终点正则，仍待验证。先固定OpenVLA、LoRA、数据抽样、k8和每臂相同训练更新数，在OFT头/参数与FLOPs匹配的256-bin MLP头/转置卷积头上比较L1、L1+endpoint、L1+Soft-DTW divergence、完整时间项，固定KL及预注册γ与σ，再用三训练seed；另记录实测GPU小时做等成本对照。训练与测试按操作者/示范轨迹隔离，预设安全的节奏扰动，报告新操作者成功率、终点误差、夹爪事件时差、平均动作是否落峰间及完整policy p50/p95延迟。若endpoint单独取得全部收益、等GPU小时后收益消失，或时间容忍使接触/夹爪错时增加并损伤成功，则推翻时间对齐的独立贡献假设。本草案未执行、未创建选题，也未声称查新后的研究空白。",
+      "evidence_ids": [
+        "88ed0370014553ae",
+        "c0fe55520d4471f6",
+        "4b32e1312910736e",
+        "7cc5bcceb636d36c",
+        "2420cee2e65718da",
+        "98983c067d8b41be",
+        "303ca29b17116d57"
+      ],
+      "quote": "endpoint loss"
+    }
+  ],
+  "frontier_brief": {
+    "title": "用逐轴有序概率头和Soft-DTW，放宽动作监督的姿态与节奏偏差",
+    "change_type": "动作头与时间对齐训练配方",
+    "delta": "在OpenVLA-7B后以转置卷积预测256-bin逐轴分布并取期望；保留逐点L1，加入弱高斯KL、Soft-DTW divergence与终点约束，训练时允许单调时序错位。",
+    "before": "对照OFT直接回归连续动作、逐点拟合示范；相同观察下的近邻姿态和不同示范速度仍承受精确标签误差。",
+    "after": "同LIBERO10k/batch48平均87.1→97.0%；Spatial25%数据95.0%超过全数据OFT94.4%，但10%93.8%仍低0.6点。新增头16.93M，非整个模型规模。",
+    "relevance": "适合少示范、操作者节奏不同的OpenVLA适配；先验证概率头和时间项的受控贡献，再按GPU小时与完整调用评估，不能把更新步数或头部延迟当总预算。",
+    "caveat": "作者实验未复现，全文后列为值得关注：单骨干单评测seed，数据比例仅Spatial；RoboTwin仅5个Easy独立task模型，倒水实机退步。28.8倍只计JAX动作头且OFT头更快，缺端到端计时和概率校准。",
+    "question": "新操作者/新节奏下，Soft-DTW是否在纯终点正则和等预算分布头之外仍有独立收益？",
+    "evidence": [
+      {
+        "label": "同更新预算",
+        "value": "LIBERO 87.1→97.0%",
+        "context": "同OpenVLA、10k更新、batch48；SURE四suite各自checkpoint，各500评测，单seed。OFT50k为94.3%；20%更新不是实测80%算力节省。"
+      },
+      {
+        "label": "数据比例边界",
+        "value": "10%为93.8%；25%为95.0%",
+        "context": "只LIBERO-Spatial，所有比例10k更新。全数据OFT94.4%，10%低0.6点、25%高0.6点；没有等效性检验，不推到全基准。"
+      },
+      {
+        "label": "组件对照",
+        "value": "完整99.0；无DTW97.4；无Prob96.8",
+        "context": "Spatial表5，无两项94.4%，均10k。时间项含endpoint/退火，头结构含KL/期望，单seed下未隔离纯DTW或邻域归纳偏置。"
+      },
+      {
+        "label": "实机范围",
+        "value": "SO-101 69/120对50/120",
+        "context": "六任务每项50示范、20评测，共300示范混训一个模型；20k对50k。倒水8/20低于OFT11/20，叠碗5/20，未测广泛稳健泛化。"
+      },
+      {
+        "label": "解码代价与反例",
+        "value": "SURE头1.57ms；JAX0.69ms；OFT0.37ms",
+        "context": "k8，排除7B骨干，20 warmup+100均值。π0.5 JAX19.88ms才构成28.8倍头部差；SURE对OFT参数更少但FLOPs和头延迟更高，缺完整调用边界。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "局部bin共享与连续读出",
+        "text": "转置卷积沿有序动作bin上采样，softmax后期望读出；平移/旋转分支与夹爪MLP分开。概率表示不等于执行多模态采样或概率已校准。"
+      },
+      {
+        "title": "保留逐点目标，再加时间容忍",
+        "text": "累计非夹爪轨迹作Soft-DTW divergence加终点L1，总目标保留L1+0.05KL+0.5时间项；既不是只用DTW，也不是任意时间错位均无代价。"
+      },
+      {
+        "title": "按动作语义迁移",
+        "text": "LIBERO用末端分解，RoboTwin换12绝对关节轴和双夹爪，k从8变25；关节时序计算需单独核实现，不能把动作空间适配说成无需改动。"
+      }
+    ]
+  },
+  "attention": {
+    "level": "notable",
+    "reason": "逐轴概率头与时间容忍监督有可复用的组件对照和少示范价值，但单骨干单种子、Spatial数据比例及头部计时不足支持广泛成本改变，全文后列为值得关注。",
+    "basis": [
+      "training_change",
+      "controlled_comparison",
+      "real_robot",
+      "compute_shift"
+    ],
+    "evidence_ids": [
+      "5dc35dae818b4b0c",
+      "88ed0370014553ae",
+      "2420cee2e65718da",
+      "c1d7da96ee92c043",
+      "fd6c49f00e4cf3fd",
+      "05f30d6dc4671f3d",
+      "c42dcc82f11c873f",
+      "303ca29b17116d57"
+    ]
+  },
+  "source_checks": {
+    "fixed_pdf_url": "https://arxiv.org/pdf/2611.09684v1",
+    "pdf_pages": 19,
+    "pdf_bytes": 8104300,
+    "pdf_sha256": "24a9e6fb473c7c0d808044e25bb45b3a7a812c678536306f652fa9096cbd5b3c",
+    "read_scope": "All 98 extracted passages including methods, experiments, AI/ethics/reproducibility statements and appendices A-C; PDF references physical pages10-14 additionally read.",
+    "visually_checked_pdf_pages": [
+      2,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      15,
+      17,
+      18,
+      19
+    ],
+    "visually_checked_figures": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "visually_checked_tables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "resource_check": "Fixed arXiv HTML/PDF read; no explicit author implementation or weights URL identified in paper. Exact-title public web search did not confirm an official repository; search result aggregators not used as scientific evidence. This does not prove resources do not exist. No code, weights, datasets or simulation executed.",
+    "reproduction": "Author-reported results only; no independent reproduction.",
+    "evidence_gaps": [
+      "No multiple-training-seed result/interval or operator-held-out controlled timing test.",
+      "Subtractive DTW intervention bundles divergence, endpoint and smoothing schedule; no endpoint-only or parameter-matched MLP distribution-head control.",
+      "Data-ratio evidence only on LIBERO-Spatial; RoboTwin only 5/50 tasks Easy, separate checkpoints.",
+      "RoboTwin absolute joint trajectory accumulation, both-gripper exclusion and endpoint details require implementation verification.",
+      "Inference table excludes VLA backbone and omits clear GPU/batch/precision/compiler and pi0.5 diffusion-step configuration; no whole-policy timing or training GPU hours.",
+      "Marginal distribution visualization is not calibration or proof of safe multimodal trajectory selection."
+    ],
+    "fixed_html_url": "https://arxiv.org/html/2611.09684v1"
+  }
+}

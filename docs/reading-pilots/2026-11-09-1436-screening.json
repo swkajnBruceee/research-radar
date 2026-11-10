@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.07493",
+    "source_signature": "37c3084c41a66c3923e143e538bf14baae207e9e5743fdfe26d41eb5e81df7ec",
+    "level": 2,
+    "reason": "两阶段检索与视觉核验兼顾缺失拒答和检测调用成本，摘要以至多9%特异性及八种配置对照提示可复用的评测与部署改变；需核硬件和缺失分布。",
+    "quote": "Fast and Reliable Op"
+  },
+  {
+    "item_id": "arxiv:2611.07417",
+    "source_signature": "32548d0170427adb22091f4c90fbe99fac5d13f1b33835492b66c6b26cc6cbd1",
+    "level": 1,
+    "reason": "显式可供性推理使移动操作按语境清障，实机提升27个百分点，但VLM规划组合与范围依赖较强，需核场景和调用预算。",
+    "quote": "MessyNav: Zero-Shot "
+  },
+  {
+    "item_id": "arxiv:2611.07268",
+    "source_signature": "836c292845dff8f486ce865c38358c356c739ab174757901645da645fd63b872",
+    "level": 1,
+    "reason": "约束乘子显式联合子系统交互力，提供双臂全身NMPC实现路径；摘要缺定量强基线及算力规模，先按特定控制增量处理。",
+    "quote": "CRISP: Constraint-Re"
+  },
+  {
+    "item_id": "arxiv:2610.31661",
+    "source_signature": "cb6eeab0b35457bc11fd2381c2b1fa3e949e71946c1c7ea4362aebd6eb31f5fa",
+    "level": 2,
+    "reason": "可定制触觉硬件与CAD仿真迁移采集组成可复用基础设施，三十余传感器四种实机和力矩标定给具体证据；需核制造成本与跨传感器迁移。",
+    "quote": "OpenTac: An Open Eco"
+  },
+  {
+    "item_id": "arxiv:2610.13373",
+    "source_signature": "3ffaf05dc404b2b012d9bdc26402e4c66f2716406ebb7c8809bc000501466bfd",
+    "level": 1,
+    "reason": "身体部位注意力和端点预测改善动作质量与时长，但实机先仿真筛选再人工选取，不能把26/27视为无筛选泛化。",
+    "quote": "PartiGen: Part-Aware"
+  },
+  {
+    "item_id": "arxiv:2611.07229",
+    "source_signature": "ceb2b565e940ab2a28ce184c1289ad4cab4012e82469994a5c5ccfa07aece0c5",
+    "level": 2,
+    "reason": "度量深度预训练配合跨本体环境分离评测可能改变UMI数据配方，匹配RGB对照差5.75个百分点；5B与605小时构成较高资源门槛。",
+    "quote": "Spatial-UMI-Dream: S"
+  },
+  {
+    "item_id": "arxiv:2611.06908",
+    "source_signature": "45b574eb8b1ff9eb38a50b4a8c19433d1071c06f8e9bee73cdb920b0e2a00a22",
+    "level": 2,
+    "reason": "程序化千住宅生成视觉语言动作数据可改变人形数据获取路线，六个未见实景360试验提供规模化依据；需核算力、技能覆盖和选择口径。",
+    "quote": "Perceptive Humanoid "
+  },
+  {
+    "item_id": "arxiv:2611.06523",
+    "source_signature": "e5bd77cc777a4ed5949afdeddbacb78e336afbc43c4a3d113ab74225ccb60a2f",
+    "level": 1,
+    "reason": "关节物理异质性因子化加层级共同优化改善控制，但目前证据仅模拟且摘要没有量化基线，复用价值需进一步定位。",
+    "quote": "H^2MARL: Hierarchica"
+  },
+  {
+    "item_id": "arxiv:2611.05080",
+    "source_signature": "8edaddf654b6111e05250b4edc2aeef5fd01308755f2bdb7a1b12ff92a7a1579",
+    "level": 2,
+    "reason": "非回合VLA强化学习把人工重置成本纳入核心问题，指出朴素微调失败及定向分配修复，可能改变训练评测默认方式；需核重置预算公平性。",
+    "quote": "CRONOS: Benchmarking"
+  },
+  {
+    "item_id": "arxiv:2611.05093",
+    "source_signature": "29a0fdc858dedb87d0654e85713c02cbb68fbc1d93ecf0973390b41250b8491b",
+    "level": 2,
+    "reason": "同checkpoint层和引擎的闭环量化对照跨四模型三硬件，具体反例区分显存与速度收益，可能改变VLA部署与专用量化选型。",
+    "quote": "LoopQ: Fair, Closed-"
+  },
+  {
+    "item_id": "arxiv:2611.05113",
+    "source_signature": "6003d9e19e72b9e4698c7e8d3295bcdc816cf99c191c133e48dfcce5a5d1072e",
+    "level": 1,
+    "reason": "物体在场的运动先验替代随机末端扰动力并限制高层分布，适用于载荷全身控制；当前实证集中G1搬箱，尚无广泛任务比较。",
+    "quote": "HLO-AMP: Hierarchica"
+  },
+  {
+    "item_id": "arxiv:2611.05119",
+    "source_signature": "bfe53844721c90f27de43cd1492159a4051434849a915c860e7a49125f3e8a9c",
+    "level": 2,
+    "reason": "显式手物配置目标和合成配置对学习构成可组合接口，120物体未见迁移及200次实机支持可复用原语路线；需核任务示范与低层接触泛化。",
+    "quote": "DexHOT: Learning Han"
+  },
+  {
+    "item_id": "arxiv:2611.05129",
+    "source_signature": "0d5cbb529d225370c070f16656a88f1fb9cae9bdd10ae5061ed57d843c703f5f",
+    "level": 1,
+    "reason": "地图到语言到图像轨迹分层有公里级实机证据，但依赖百万标注与外部地图VLM，主要改变城市导航集成，通用策略增量尚需核。",
+    "quote": "WayTrace: A Map-to-L"
+  },
+  {
+    "item_id": "arxiv:2611.05155",
+    "source_signature": "f09687a820b89e587765416c100ce63ddfab33687d1ffe05fd538c4ea5e9e39e",
+    "level": 2,
+    "reason": "异步语义记忆与视觉动作快环以陈旧观测训练，直接影响大VLM实时控制资源分配，动态和降频对照具体；需核延迟匹配与实际硬件。",
+    "quote": "Asynchronous Robot P"
+  },
+  {
+    "item_id": "arxiv:2611.05244",
+    "source_signature": "e1012fd8c8b8839ea45b285d65fb7cedf6a1941483d07c98179244f3e04dc600",
+    "level": 0,
+    "reason": "三种群体艺术表演揭示形态和观众解释差异，相关于人机交互但对当前具身策略训练与成本路线证据较间接，暂不优先。",
+    "quote": "Reality and Perceptu"
+  },
+  {
+    "item_id": "arxiv:2611.05249",
+    "source_signature": "975c3637ceff0934a9091ab246f739853eff1c0f48ceeb8c43c41125f00e05ad",
+    "level": 2,
+    "reason": "独立操纵动作token监督与梯度路由，开闭环及机器人证据挑战默认梯度隔离配方，可能广泛改变MoT VLA训练；需核共训练和预算公平性。",
+    "quote": "Should the Action Ex"
+  },
+  {
+    "item_id": "arxiv:2611.06447",
+    "source_signature": "5c7a8ed10f7f621c5dc1e823b81c4801035dd3bccbe7c8cfd467e17841b3fbe0",
+    "level": 1,
+    "reason": "离线分割引导注意力与对比监督跨多VLA有效，但两损失与候选生成组合，摘要未给资源或严格隔离，先视为感知监督配方增量。",
+    "quote": "$A^3$-VLA: Automatic"
+  },
+  {
+    "item_id": "arxiv:2610.37381",
+    "source_signature": "6c82ad80f5d83390cc8e3e4f9bcf8e5f11d454f89600b9e194234f38877febae",
+    "level": 1,
+    "reason": "未来RGB深度光流辅助物理token避免在线视频生成，但大量合成和标注共同加入，主表高分未隔离模块贡献或资源收益。",
+    "quote": "PDRVLA: A Vision-Lan"
+  },
+  {
+    "item_id": "arxiv:2611.06196",
+    "source_signature": "6a71cda9c9c2f5e0dc404a1d54343974d089a308ae2138e58696ee23d2692677",
+    "level": 1,
+    "reason": "扩展安全集合与预测节点约束有理论及实机依据，但保证依赖内逼近假设，摘要未量化通用范围，先核特定MPC安全增量。",
+    "quote": "Beyond Terminal Cons"
+  },
+  {
+    "item_id": "arxiv:2611.06118",
+    "source_signature": "76df9985e7d8ecb28aefeb39a4adc63520f6e2d8d324fe02a014f75ad84707c1",
+    "level": 1,
+    "reason": "固定策略和动力学只在线更新物性潜变量，实机及模拟展示适应，同时明确未见质心约30%边界，适合小范围自适应研究。",
+    "quote": "Online Adaptation to"
+  },
+  {
+    "item_id": "arxiv:2611.06475",
+    "source_signature": "a016e68df8b34c97e776e6ae78d1976a4e4414ec1345e0c3acd64d222eee1b46",
+    "level": 1,
+    "reason": "按早期行为生成后续评价约束可减固定目标捷径，九任务1800示范提供记忆测试资源；尚缺跨模型定量证据，不据新基准名称判重大。",
+    "quote": "Robocasa-Mem: Benchm"
+  },
+  {
+    "item_id": "arxiv:2611.05936",
+    "source_signature": "a86999d54791d96da0c9693f6ca0d9720730d93cad9633a9917feb372a1e87f7",
+    "level": 1,
+    "reason": "低价小型六轴光电触觉有独立精度和速率测试，可降低硬件门槛，但限具体传感器及条件，需核耐久与批间校准。",
+    "quote": "LumiTac: Compact, Hi"
+  },
+  {
+    "item_id": "arxiv:2610.27616",
+    "source_signature": "1dfbb37511c79335ab518d7d10d52f64a789e727eddf3c606a14290c3b2907ab",
+    "level": 1,
+    "reason": "无深度位姿输入的历史证据BEV在模拟与60次实机有明显收益，但冻结几何特征和补全训练成本需核，先定为导航专门增量。",
+    "quote": "EchoNav: Evidential "
+  },
+  {
+    "item_id": "arxiv:2610.39076",
+    "source_signature": "49663d0a1881c8a50d971d5363df2e60fa165200f232df7e4aa0b5e1fe152b9b",
+    "level": 1,
+    "reason": "薄型触觉姿态手套提供跨商业平台标定比较，有采集复用价值；尚未给下游机器人学习的隔离收益或规模成本。",
+    "quote": "Tactus: Tactile & Po"
+  }
+]

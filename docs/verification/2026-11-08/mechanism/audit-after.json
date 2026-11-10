@@ -1,0 +1,81 @@
+{
+  "as_of": "2026-11-08T15:45:03+00:00",
+  "candidate_count": 1167,
+  "assessed_candidates": 24,
+  "unassessed_candidates": 1143,
+  "pending_levels": {
+    "2": 3,
+    "1": 14,
+    "0": 7,
+    "unassessed": 1143
+  },
+  "oldest_waiting_since": "2026-11-05T08:02:58+00:00",
+  "oldest_priority_waiting_since": "2026-11-05T08:49:04+00:00",
+  "open_batch": {
+    "id": "0696c1fd367744aeb34e8f85fe97922e",
+    "total": 24,
+    "remaining": 0
+  },
+  "published_count": 29,
+  "publication_blocks": {
+    "等待全文精读": 1167
+  },
+  "latest_report_at": "2026-11-08T15:30:16+00:00",
+  "reports_last_24h": 8,
+  "sources": [
+    {
+      "id": "arxiv",
+      "enabled": 1,
+      "last_success": "2026-11-08T12:59:41+00:00",
+      "error": "",
+      "count": 301
+    },
+    {
+      "id": "lerobot",
+      "enabled": 1,
+      "last_success": "2026-11-08T12:59:45+00:00",
+      "error": "",
+      "count": 5
+    },
+    {
+      "id": "isaaclab",
+      "enabled": 1,
+      "last_success": "2026-11-08T12:59:48+00:00",
+      "error": "",
+      "count": 5
+    },
+    {
+      "id": "huggingface",
+      "enabled": 1,
+      "last_success": "2026-11-08T12:59:49+00:00",
+      "error": "",
+      "count": 10
+    },
+    {
+      "id": "pi",
+      "enabled": 1,
+      "last_success": "2026-11-08T12:59:52+00:00",
+      "error": "",
+      "count": 12
+    },
+    {
+      "id": "corl",
+      "enabled": 0,
+      "last_success": null,
+      "error": "",
+      "count": 0
+    },
+    {
+      "id": "intern",
+      "enabled": 0,
+      "last_success": null,
+      "error": "",
+      "count": 0
+    }
+  ],
+  "limits": [
+    "当前采集主要依赖带关键词的 cs.RO arXiv 查询；不是全行业覆盖。",
+    "当前定时任务每3小时完整精读一篇；入库成功不代表及时发现、发布或送达手机。",
+    "摘要初筛和全文优先级都是研究编辑判断，不能保证发现所有重大工作。"
+  ]
+}

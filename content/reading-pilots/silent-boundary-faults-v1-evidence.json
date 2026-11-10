@@ -1,0 +1,527 @@
+{
+  "id": "1212cf73c8767b1f87b76c24e3890a8889162eefdf7c66a7f2c7b4a22b9752da",
+  "url": "https://arxiv.org/html/2611.08144v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "cdb52f268181f2c2",
+      "section": "正文",
+      "location": "正文",
+      "text": "Fig. 1: A value changed at the environment–trainer boundary raises no error, the policy still learns, and only checks of the run itself notice. (a) Schematic: one value is changed on its way to the trainer; a record on each side of the boundary, compared step by step (the step ledger), disagrees at that step. (b) Pendulum, SB3’s PPO through PlugRL (E54): the mean return of each batch of 16 episodes in the trainer’s log. Blue, the median and range of the boundary-fault runs at seeds 0–2 with one value changed, the 57 of 63 that logged all 32 batches (cross: where); grey, the median and range of ten fault-free seeds; dashed, the gain threshold, 500 above the runs’ median start. (c) The 63 runs, one cell each and in the same order in every row, grouped by the field the fault changed: observations, actions, rewards, final observations, episode ends, steps. Filled: the check caught the run (step ledger: E55).",
+      "url": "https://arxiv.org/html/2611.08144v1#p1.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9fb0fa59851f0366",
+      "section": "Detecting Silent Faults at the Environment–Trainer Boundary in Reinforcement Learning",
+      "location": "Detecting Silent Faults at the Environment–Trainer Boundary in Reinforcement Learning",
+      "text": "Robot reinforcement learning increasingly runs environments outside the trainer: in another process, on another machine, in another language. Many faults at this boundary raise no error. We make the boundary a wire protocol and ask what notices a fault in it.",
+      "url": "https://arxiv.org/html/2611.08144v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6d5d250165e69fc4",
+      "section": "Detecting Silent Faults at the Environment–Trainer Boundary in Reinforcement Learning",
+      "location": "Detecting Silent Faults at the Environment–Trainer Boundary in Reinforcement Learning",
+      "text": "On Pendulum, HalfCheetah, Hopper and a 7-joint arm (Pusher), we injected up to 23 faults into what crosses the wire and 2 into the trainer’s log, from one value to every value. Unless every value was wrong, a learning-curve threshold caught at most one run in ten, and a comparison with ten fault-free seeds at most 21%. A clean evaluation of all 1,060 final policies agreed with the curves: of the 728 boundary-fault runs both curve checks passed, 723 scored no more than three standard deviations below fault-free seeds, though nearly all ended on other weights and, for reward faults, logged other returns.",
+      "url": "https://arxiv.org/html/2611.08144v1#abstract1.2",
+      "kind": "p"
+    },
+    {
+      "id": "f0abba28945e43d6",
+      "section": "Detecting Silent Faults at the Environment–Trainer Boundary in Reinforcement Learning",
+      "location": "Detecting Silent Faults at the Environment–Trainer Boundary in Reinforcement Learning",
+      "text": "Checks of the run itself, not of its outcome, saw every fault. A step ledger kept on both sides and compared step by step caught and located every fault that crossed, on Pendulum, Hopper and Pusher on one machine and on Pendulum across two, with no fault-free run and, on Pendulum, a median 3% more training time. An episode record kept at the environment caught the faults in the trainer’s log. We list such faults found in practice, in Gymnasium 1.3 and our own code and, reported by others, in five multi-agent libraries, and recommend a step ledger and episode counts kept at the environment.",
+      "url": "https://arxiv.org/html/2611.08144v1#abstract1.3",
+      "kind": "p"
+    },
+    {
+      "id": "bf1e22d452242da2",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "An RL run has a boundary between the code that steps the environment and the trainer , which collects experience and updates the policy: the agent–environment interface [ 1 ] , drawn in software. In many stacks nobody designs it; it falls where the trainer puts it. A Gymnasium environment [ 2 ] is an object in the trainer’s process. RLlib [ 3 ] , SRL [ 4 ] and RLinf [ 5 ] run environments in workers that install the framework and join its cluster. Robot learning moves the boundary further: to simulators in other languages, machines with no GPU stack, and robots reaching a policy over the network [ 6 , 7 ] .",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9154929b127a68b3",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Many faults at this boundary are silent: they raise no error or warning [ 8 ] . Under its SAME_STEP autoreset mode, Gymnasium 1.3’s vector episode statistics drop the first reward of every episode after an environment’s first, and count its length one short, until 1.4 (Sec. IV ). Training goes on. For environments on another machine, our own evidence that the boundary was right was that the policy still learned.",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c709fbb6d97a1ac5",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We test that evidence. PlugRL makes the boundary an explicit wire protocol (Sec. II ). The environment side sends observations, applies the actions it gets back, and feeds back rewards and episode ends. A written specification and conformance checkers say what each side must do, and lockstep bridges let Stable-Baselines3 (SB3) [ 9 ] , CleanRL [ 10 ] and RLinf train through it. On one machine a run through it is deterministic, so we can compare a run with an injected fault against the same seed without it. We call a difference between what the environment took and gave and what the trainer sent and received a boundary fault . Our method is mutation testing as RLMutation [ 11 ] applies it to deep RL, and the checks that work are the ones production ML uses against training–serving skew [ 12 ] ; what we add is measuring both at the environment–trainer boundary. We find:",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "17af235c5630645a",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Neither a learning curve nor a clean evaluation shows most boundary faults (Sec. III , Fig. Abstract ). We injected stale, zeroed, swapped or rounded observations, actions and rewards, wrong episode ends and skipped steps. On Pendulum, the gain threshold we had relied on caught 1 of 21 faults at doses up to 10% of values, and 9 when every value was wrong. On a clean environment, 723 of the 728 boundary-fault runs that passed the curve checks scored like fault-free runs.",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7088abca2aa0671a",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "A step ledger catches and locates every boundary fault, as it must, and cheaply (Sec. III ). A boundary fault is a difference between the two sides’ records, so comparing them must catch it. We measured that it needs no fault-free run or determinism, works across machines, names the step, environment and field, and on Pendulum costs a median 3% of training time. An episode record kept at the environment catches faults in the trainer’s log.",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6fc48501643425d0",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Such faults occur in practice (Sec. IV ): in Gymnasium 1.3 and our own code, and, reported by others, in five multi-agent libraries.",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cb5e0613a6646375",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "A silent fault, then, mostly changes the run rather than the policy: its weights and, for reward and log faults, the numbers it reports. The record of the experiment stops describing the experiment.",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "530d69c87e4f217a",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Every experiment follows a protocol written before its registered runs, most after a pilot. Changes to it go in a dated amendment. Captions, tables and appendices name each result’s experiment (E43, …), whose protocol, logs and findings are public with the code, specification and checkers: https://github.com/PlugRL .",
+      "url": "https://arxiv.org/html/2611.08144v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "198be1e4a459a730",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "Messages. A connection opens with the server’s metadata (version, chunk length H H , offered features). The client then repeats three messages (Fig. 4 ), msgpack-encoded with NumPy arrays over a WebSocket. An infer carries the observations of n n environments, their indices and their step ids; an action reply carries a chunk of H H actions; after the chunk, a feedback carries the observation it ended on, the summed reward, the termination and truncation flags, and an info map. The client resets its own environments: the feedback that ends an episode carries the terminal observation, and the next infer the reset one. A connection closes with stop (the run is over) or resync (reconnect at once).",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8b2b765d8a5a4c65",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "What the protocol does about faults.",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "290704d7a3a0ca35",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "One convention, written down. The specification fixes one episode-end convention where Gymnasium has several (Sec. IV ), and states every MUST clause. A checker for each side tests against them, with active probes.",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9d04b4189a4eb7dc",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "Structural faults are loud. The bridge rejects a message with the wrong shape, keys or environments and closes the connection. It never fills in a missing step: losing a client stops the run, and a client too many is told to stop.",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "71b9814637d05a8e",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "Runs are deterministic on one machine. The bridge is a lockstep server: each trainer step sends every environment its action, and returns once every client has fed back. So two runs through it can be compared byte for byte.",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c609829a8b5d5e52",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "Each side can keep its records. A wrapper at the env client can keep an episode record and half a step ledger; the bridge keeps a bridge log of the rewards it received.",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "93515f3fd32fa951",
+      "section": "II The Boundary as a Protocol",
+      "location": "II The Boundary as a Protocol",
+      "text": "Adapters present an episode end as RLinf, Gymnasium ( SAME_STEP ) and SB3 expect it, so these trainers use the protocol through the environment interface they already have.",
+      "url": "https://arxiv.org/html/2611.08144v1#S2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "75a2c0845915a4a5",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "Fig. 2: Only the step ledger catches every boundary fault at every dose it ran; byte identity misses only Hopper’s 12 final observations, which training never read. The share of boundary-fault runs each check caught, seeds 0–2: 21 faults, 63 runs per dose (23 and 69 on Hopper). Pendulum and HalfCheetah E54, Hopper E56, Pusher E58; step ledger E55, E56, E58. The ledger was not run on HalfCheetah.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9ee8e741a224daf6",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "The faults. SB3’s PPO trained Pendulum, HalfCheetah, Hopper and Pusher, a 7-joint arm that pushes an object to a goal, through the bridge (Appendix F ), while the env client changed one field of what it sent, in one way. The observation it sent, the action it applied, the reward, or the observation an episode ended on was replaced by zeros, by the previous step’s value or by the next environment’s, or rounded through float16; an action could also be clipped to half its range. An episode end was invented, or a time limit left out or sent as a termination; on Hopper, which ends an episode when it falls, a termination was also left out or sent as a time limit. Or a step was skipped and its feedback filled in. Two log faults sat in the trainer’s own episode log, of the kind we found in Gymnasium (Sec. IV ): each episode’s first reward left out, or its length counted one short. Each fault changed one value, 1% or every value it could reach (on Pendulum also 0.1% and 10%), the same values at every seed, seeds 0–2.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "40995ba019cb3426",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "The checks (Fig. 4 in the appendix). A run’s fault was caught by the gain threshold if its gain , the mean logged return at the end of training minus that at the start, fell below a bar fixed before the runs (on Pendulum, 500); by seed spread if its final return lay more than three standard deviations from the mean of ten fault-free seeds; by byte identity if its final weights differed from the fault-free run’s at the same seed; by the episode record if the trainer’s log disagreed with the env client’s record, kept before any fault, in count, length or return; and by the step ledger if the two sides’ records of any step differed.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4b7267d7ca98303d",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "Learning curves miss them (Fig. 2 ). At doses up to 10% of values, the gain threshold caught at most one run in ten on all four environments. With every value wrong it caught 43%, 35%, 48% and 33%, and mostly faults that broke learning or emptied the log. The seed-spread check raised few false alarms: 0, 1, 0 and 0 of ten fault-free seeds, each judged against the other nine. Yet at doses below every value it caught at most 21%. The spread of seeds explains it. One changed value moved a boundary-fault run’s final return by a median of 15, 85, 197 and 0.7; changing the seed moved it about as much or more, by standard deviations of 11, 146, 259 and 1.9.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a52959a771836ef4",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "Fig. 3: Nearly all policies behind faults that pass both curve checks score like fault-free ones. Each final policy’s clean return, the mean of 50 deterministic episodes on a fresh environment (E57, E58), in standard deviations of ten fault-free seeds. Boundary-fault runs at seeds 0–2, every dose; black, fault-free runs. Points below − 10 -10 sit on the floor, counted.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d7eccb04d1ae49a6",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "So does a clean evaluation. We ran each of the 1,060 final policies for 50 deterministic episodes on a fresh environment (Fig. 3 ). Of the runs that passed both curve checks, 5 of 255 on Pendulum and none of 473 on the other three scored more than three standard deviations below ten fault-free seeds; the other 106 runs that did had all failed a curve check. With every reward zeroed, the log reads 0, the best possible return on Pendulum and on Pusher, while the policies score − 1196 -1196 to − 1639 -1639 and − 99 -99 to − 129 -129 .",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "22c5ccc5a5a133c3",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "A step ledger sees every boundary fault. A wrapper around each environment, outside the env client’s code, recorded each step: the observation it had given, the action it was handed, and what it returned. A second wrapper, around the vector environment SB3 trained on, recorded what it sent and received. A boundary fault is a difference between the two, so the comparison must catch it; the test is whether it does so in practice, and at what cost. Compared step by step, the two halves caught all 189 boundary-fault runs on Pendulum, 207 on Hopper and 189 on Pusher, each at its first changed value and field, and found no difference in the 27 runs on each without one. The two added a median 3% to Pendulum’s training time ( − 5 -5 to + 9 +9 %, each run’s learn_s against the same run without them) and left all 216 runs’ weights unchanged. With the env client on a laptop and SB3 on a workstation, they caught and located all 21 faults at one value, and found no difference in the fault-free run. That run ended on other weights than on the workstation: byte identity cannot judge across machines.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "8d2553275eb08dde",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "The episode record sees the books. It caught every log fault, and every boundary fault that changed a reward beyond its tolerance, an episode end or some steps. It missed faults in observations, final observations and actions, ends sent as the wrong kind, and every step skipped: none changes the episodes it compares. The bridge log, kept on the trainer’s side of the wire, caught only the log faults. A record that is to catch a client’s faults has to be kept at the environment.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "057edf764cf7a0f7",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "Byte identity sees what training reads. On one machine the weights changed in all 504 boundary-fault runs on Pendulum and HalfCheetah, and in none of 48 runs with a 1 ms delay, a float64 wire or a log fault. On Pusher, whose episodes all end at the time limit, they changed in 189 of 189. On Hopper they changed in 195 of 207, and in none of its 24 such runs. In the other 12, one final observation changed, at a fall. SB3 bootstraps from it only at a time limit, so training never read it, and the weights stayed byte-identical. The fault was real, and the step ledger caught all 12; a trainer that reads that value would have learned from it. The two faults the bridge rejects, rows out of order and a reward missing, raised within 10 s.",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "9acc0d292d56981f",
+      "section": "III What Notices a Fault",
+      "location": "III What Notices a Fault",
+      "text": "Why it matters when the policy learns. What these faults do, no curve check sees. They change the record: in 888 of 900 runs the final weights differ from the fault-free run’s at the same seed, and a reward or log fault changes the returns the trainer logs, as Gymnasium’s SAME_STEP statistics did (Sec. IV ). They can cost the policy: 5 of the 255 Pendulum runs that passed both curve checks, under five different faults and doses, scored more than three standard deviations below fault-free seeds, though 13 fault-free runs cannot tell that from a rare bad seed. In one arm of a comparison, a reward or log fault would read as a difference between methods [ 13 ] . Whether a fault reaches the weights depends on how the trainer bootstraps, as Hopper’s final observations show under SB3; on harder tasks such faults can change what is learned, as time-limit handling does [ 14 ] .",
+      "url": "https://arxiv.org/html/2611.08144v1#S3.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "eaf4e1a090089b5f",
+      "section": "IV Faults Found in Practice",
+      "location": "IV Faults Found in Practice",
+      "text": "The faults of Sec. III are not hypothetical (Table I ). We found some while building and checking PlugRL, many by reconciliation or a controlled comparison, and none by an error. Others were reported in multi-agent libraries, where agents that act in turn or leave early add conventions to get wrong. Every boundary fault among them is a kind we injected. Faults in a run’s lifecycle and cost, which fall outside the boundary, are in Appendix B .",
+      "url": "https://arxiv.org/html/2611.08144v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "190340f12215b41a",
+      "section": "IV Faults Found in Practice",
+      "location": "IV Faults Found in Practice",
+      "text": "TABLE I: Faults that raised no error, found in practice.",
+      "url": "https://arxiv.org/html/2611.08144v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "87e05bef30267a49",
+      "section": "IV Faults Found in Practice",
+      "location": "IV Faults Found in Practice",
+      "text": "kind where what was wrong reward RLlib [ 15 ] an agent with no last observation got reward 0, not the environment’s Tianshou 0.4.2 [ 16 ] rewards earned while the opponent moved were dropped action PettingZoo 1.22 [ 17 ] one-dimensional continuous actions were cast to integers final obs. SuperSuit [ 18 ] the reset’s info overwrote the terminal observation episode end MAPPO’s SMACv2 wrapper [ 19 ] dead agents’ padded steps were trained on as real log Gymnasium 1.3 (E51) under SAME_STEP , every episode after an env’s first lost its first reward and a step (fixed in 1.4 [ 20 ] ) CleanRL [ 10 ] (E51) on Gymnasium 1.3, not the 0.29 it pins, no episode was logged RLlib 2.53 [ 21 ] a shared module logged one agent’s return, not the sum our specification (E44) for a client written from it, the server logged a return of 0",
+      "url": "https://arxiv.org/html/2611.08144v1#S4.T1.2",
+      "kind": "table"
+    },
+    {
+      "id": "b2203e9a008f8fb8",
+      "section": "V Moving the Boundary",
+      "location": "V Moving the Boundary",
+      "text": "We applied the checks to the protocol itself (Table III , Appendix C ). On one machine, SB3 trained 16 Pendulum, HalfCheetah or Atari environments in its own process and behind the bridge: all nine pairs ended on byte-identical weights and logged identical episodes, and all 12 Pendulum runs behind a proxy that held every byte 0–25 ms each way ended on the in-process weights. The env client waits for each action, so latency decides when a step happens, not what it produces. The bridge added 0.4–0.6 ms a step for 16 state vectors and 2.6–3.0 ms for 16 frames. Across machines a seed no longer reproduces: two MuJoCo builds differ in the last bit at the first step. Every seed passed its gain threshold across machines, with env clients on a Windows laptop with no torch, Ray or RLinf, and on one machine, in a C++ program of under 900 lines and under RLinf, SB3 and CleanRL. Sec. III shows that threshold to be weak; the step ledger’s one fault-free run across machines, clean at every step, is the stronger evidence.",
+      "url": "https://arxiv.org/html/2611.08144v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "86ebf721b940f9d5",
+      "section": "VI The Price of the Boundary",
+      "location": "VI The Price of the Boundary",
+      "text": "On one machine an exchange costs 0.1 ms with states only and under 1 ms at 588 KiB. Between two machines it costs a latency s s plus k k copies of the observation’s P P bytes over the bandwidth B B , t = s + k ​ P / B t=s+kP/B [ 22 ] , which predicted the measured times within 3–10%. The negotiated reuse-feedback-obs feature sends each observation once instead of twice: at 588 KiB the round trip fell from 49.8 to 27.1 ms, with byte-identical weights (Appendix D ). A 184 KiB camera observation crosses our Wi-Fi path in 11.6 ms, 12% of the 100 ms we measured for one action chunk from a full-size π 0.5 \\pi_{0.5} [ 23 ] in openpi [ 24 ] . A full-size π 0.5 \\pi_{0.5} with LIBERO weights took one learning step through the protocol on LIBERO, which says nothing of how well RL tunes it.",
+      "url": "https://arxiv.org/html/2611.08144v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6cc79bd085cff25d",
+      "section": "VII Conventions We Recommend",
+      "location": "VII Conventions We Recommend",
+      "text": "Do not take a learning curve alone as evidence that the boundary is right (Sec. III ). Instead:",
+      "url": "https://arxiv.org/html/2611.08144v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "41444baa26d688c4",
+      "section": "VII Conventions We Recommend",
+      "location": "VII Conventions We Recommend",
+      "text": "Keep a step ledger. Record what each environment took and gave, in a wrapper around it, and what the trainer sent and received, and compare the two step by step. Wherever we kept one (Pendulum, Hopper, Pusher), it caught and located every boundary fault we injected, on one machine and on Pendulum across two, for a median 3% of training time on Pendulum.",
+      "url": "https://arxiv.org/html/2611.08144v1#S7.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3ff115dd9e638379",
+      "section": "VII Conventions We Recommend",
+      "location": "VII Conventions We Recommend",
+      "text": "Count episodes at the environment. Keep the episode record next to the environment, not on the trainer’s side of the wire, and check the trainer’s log against it.",
+      "url": "https://arxiv.org/html/2611.08144v1#S7.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a235e44d1fd07414",
+      "section": "VII Conventions We Recommend",
+      "location": "VII Conventions We Recommend",
+      "text": "On one machine, show that a change beneath the policy leaves the weights alone , byte for byte: a change of placement, transport, latency, scheduler or protocol version (Secs. V – VI , Table II ). If it cannot, say why.",
+      "url": "https://arxiv.org/html/2611.08144v1#S7.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0bf1b8d768690390",
+      "section": "VII Conventions We Recommend",
+      "location": "VII Conventions We Recommend",
+      "text": "Report the boundary : where the environments ran, how they reached the trainer, the bytes per step and the time per step. State the episode-end convention, distinguish stop from resync , and never fill in a missing step.",
+      "url": "https://arxiv.org/html/2611.08144v1#S7.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b45ca1d4d80543b3",
+      "section": "VIII Related Work",
+      "location": "VIII Related Work",
+      "text": "What beneath the algorithm changes results. Implementation details change PPO’s results [ 25 , 26 ] , time limits change what is learned [ 14 ] , reporting practice changes what can be concluded [ 13 , 27 ] , and a one-bit change moves a run as far as a new seed [ 28 ] . We add the environment–trainer boundary to that list. Our faults are silent [ 8 ] , of kinds found in DRL programs [ 29 ] . Our design is mutation testing [ 30 ] as DeepCrime [ 31 ] and RLMutation [ 11 ] apply it, and RLMutation found that comparing mean rewards misses mutants because training is stochastic. The step ledger is an end-to-end check [ 32 ] that bridges what each side perceives [ 33 ] , TFX’s training–serving skew check [ 12 ] applied to the boundary.",
+      "url": "https://arxiv.org/html/2611.08144v1#S8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "51b7714899e00254",
+      "section": "VIII Related Work",
+      "location": "VIII Related Work",
+      "text": "Environments behind a channel. RL-Glue [ 34 ] made the interface language-independent. ML-Agents [ 35 ] , Godot RL Agents [ 36 ] and RLlib [ 3 ] reach environments outside the trainer; SEED RL [ 37 ] , SRL [ 4 ] and RLinf [ 5 ] keep them inside the framework. dm_env_rpc [ 38 ] has a compliance suite, the closest precedent for our checkers, but no trainer side. Gymnasium’s check_env [ 39 ] and EnvPool’s tests [ 40 ] check an environment against its API or a reference, before training; range and NaN checks would pass a stale or rounded value. openpi [ 24 ] serves policies for inference only; LeRobot’s HIL-SERL [ 7 ] runs the policy beside the robot. None of these checks a run’s record against one kept at the environment.",
+      "url": "https://arxiv.org/html/2611.08144v1#S8.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5f342ab959e3c913",
+      "section": "IX Limitations",
+      "location": "IX Limitations",
+      "text": "We chose the faults, to cover every field but info and the ways Table I shows it going wrong, and injected them into four simulated, state-based environments with dense rewards, under one trainer (SB3’s PPO) at three seeds. That the faults the curves miss leave the policy intact may not hold for sparse rewards, long horizons, replay buffers, images or real robots. The step ledger needs a wrapper around the environment, and sees nothing that goes wrong inside it; a robot reached only through its own client can be wrapped no closer than that client. We compared ledgers after each run (150 MB a run on Hopper); checking a digest of each step as the run goes is future work. The same people wrote the specification and the C++ client. We do not study environments that keep moving while the env client waits for an action, as a real robot does.",
+      "url": "https://arxiv.org/html/2611.08144v1#S9.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d608bb2e85f36df",
+      "section": "Acknowledgment",
+      "location": "Acknowledgment",
+      "text": "We thank Zilin Kang, who helped build PlugRL, and the reviewers for their comments.",
+      "url": "https://arxiv.org/html/2611.08144v1#Sx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9d4f0b89b4b2512e",
+      "section": "Appendix A What Each Check Caught, Fault by Fault",
+      "location": "Appendix A What Each Check Caught, Fault by Fault",
+      "text": "Fig. 4: The boundary and the checks. Filled boxes run code; outlines are records; the dashed outline is other runs. Three messages cross the boundary. Faults ( ⊗ \\otimes ) were injected in the env client, after its episode record, and in the trainer’s log. Each row marks what a check compares; only the episode record and the step ledger reach across the boundary.",
+      "url": "https://arxiv.org/html/2611.08144v1#A1.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f8bb78e2b66d92ff",
+      "section": "Appendix A What Each Check Caught, Fault by Fault",
+      "location": "Appendix A What Each Check Caught, Fault by Fault",
+      "text": "Fig. 6 breaks Fig. 2 ’s Pendulum panel down by fault and adds the log faults and the bridge log.",
+      "url": "https://arxiv.org/html/2611.08144v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f424d7c60d9069d9",
+      "section": "Appendix B Faults Outside the Boundary",
+      "location": "Appendix B Faults Outside the Boundary",
+      "text": "Two more kinds of fault raised no error while we built and checked PlugRL: in a run’s lifecycle and in its cost (Table II ).",
+      "url": "https://arxiv.org/html/2611.08144v1#A2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e9f426977dbeba4d",
+      "section": "Appendix B Faults Outside the Boundary",
+      "location": "Appendix B Faults Outside the Boundary",
+      "text": "TABLE II: Faults outside the boundary that raised no error.",
+      "url": "https://arxiv.org/html/2611.08144v1#A2.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "78fabeaea03a432d",
+      "section": "Appendix B Faults Outside the Boundary",
+      "location": "Appendix B Faults Outside the Boundary",
+      "text": "kind where what was wrong lifecycle RLinf (E48) environments never closed; outside clients reconnected 3,190 times in 25 minutes our bridge (E48) a surplus client was told to resync, not stop: 2 million reconnects in 10 minutes cost our scheduler (E47) a 0.1 ms sleep that the event loop rounds to 1 ms made collection 1.87 × \\times slower; the fix left the weights byte-identical",
+      "url": "https://arxiv.org/html/2611.08144v1#A2.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "df81fa1c63c8b6aa",
+      "section": "Appendix C Moving the Boundary in Full",
+      "location": "Appendix C Moving the Boundary in Full",
+      "text": "E43 found the two machines’ MuJoCo builds differ by 8.9 × 10 − 16 8.9\\times 10^{-16} at the first step. The bridge added 0.37–0.58 ms per vector step of 16 state vectors (E50) and 2.60–2.99 ms of 16 frames (E53). On one machine, E49 also compared every trainer’s log with the bridge log, and they agreed; kept on the trainer’s side, the bridge log rules out log faults, not boundary faults. RLinf learns Pendulum late: its budget was raised to 409,600 steps after its pilot, before the registered runs.",
+      "url": "https://arxiv.org/html/2611.08144v1#A3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4bdf64ed57c20561",
+      "section": "Appendix C Moving the Boundary in Full",
+      "location": "Appendix C Moving the Boundary in Full",
+      "text": "TABLE III: Moving the boundary. Above the line, byte identity with the in-process run; below it, the pre-registered gain threshold (seeds that pass / seeds run).",
+      "url": "https://arxiv.org/html/2611.08144v1#A3.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a638734b26aa8945",
+      "section": "Appendix C Moving the Boundary in Full",
+      "location": "Appendix C Moving the Boundary in Full",
+      "text": "exp. trainer environments ran result E50 SB3, PPO in-process vs. bridge same weights 6/6 E53 SB3, CNN Atari frames, as E50 same weights 3/3 E52 SB3, PPO proxy, 0–25 ms each way same weights 12/12 E43 PlugRL, FPO [ 41 ] same machine passes 6/6 (HalfCheetah [ 42 ] ) laptop, Wi-Fi + Tailscale passes 6/6 E44 PlugRL, PPO [ 43 ] Python env client passes 3/3 (Pendulum) C++, no third-party library passes 3/3 E48 RLinf, PPO same machine passes 3/3 (HalfCheetah) laptop, Tailscale passes 3/3 E49 RLinf, SB3 (PPO) C++ Pendulum passes 6/6 SB3, CleanRL (PPO) HalfCheetah passes 6/6",
+      "url": "https://arxiv.org/html/2611.08144v1#A3.T3.2",
+      "kind": "table"
+    },
+    {
+      "id": "aa7d158c3eceb46f",
+      "section": "Appendix D The Price of Crossing",
+      "location": "Appendix D The Price of Crossing",
+      "text": "E43 checked t = s + k ​ P / B t=s+kP/B on its two machines, and E46 measured what reuse-feedback-obs saves (Fig. 5 ). The 100 ms of Sec. VI is E10’s: the median, over three launches, of one call to openpi’s sample_actions (five denoising steps) for a full-size π 0.5 \\pi_{0.5} with random weights, which change a forward’s output but not its cost, on one GPU. The π 0.5 \\pi_{0.5} learning step is E11’s.",
+      "url": "https://arxiv.org/html/2611.08144v1#A4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6e467518e7f18073",
+      "section": "Appendix D The Price of Crossing",
+      "location": "Appendix D The Price of Crossing",
+      "text": "Fig. 5: Sending each observation once nearly halves a large exchange between machines. Median round trip per exchange, five runs of 1,000 exchanges each (bars: their range), over one Wi-Fi and Tailscale path at 23.7 MB/s and on one machine (E46). Without reuse-feedback-obs each observation is sent twice; with it, negotiated when the connection opens, once. “States only” is plotted at 0.",
+      "url": "https://arxiv.org/html/2611.08144v1#A4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1f6d68d731fce9d3",
+      "section": "Appendix D The Price of Crossing",
+      "location": "Appendix D The Price of Crossing",
+      "text": "Fig. 6: What each check caught on Pendulum, fault by fault (E54; step ledger E55): how many of the three seeds 0–2 it caught, with one value, 1% and every value changed. Rows are grouped by the field the fault changed; the last two rows are log faults.",
+      "url": "https://arxiv.org/html/2611.08144v1#A4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bc453d6b64782665",
+      "section": "Appendix E What the Environment Side Installs",
+      "location": "Appendix E What the Environment Side Installs",
+      "text": "Table IV measures, in fresh environments, what each system’s environment side installs to exchange data with its trainer (E45). A thin environment side is not unique: dm_env_rpc’s [ 38 ] and openpi’s client [ 24 ] are thinner than our full env client. Of the systems here that train through their channel, only PlugRL’s environment side needs no torch.",
+      "url": "https://arxiv.org/html/2611.08144v1#A5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3d48ecefb7bab11a",
+      "section": "Appendix E What the Environment Side Installs",
+      "location": "Appendix E What the Environment Side Installs",
+      "text": "TABLE IV: Environment side of each system (E45): RLlib 2.58, LeRobot 0.6.1, dm_env_rpc 1.1.7. Sizes exclude the interpreter.",
+      "url": "https://arxiv.org/html/2611.08144v1#A5.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "71ed829f8a40516a",
+      "section": "Appendix E What the Environment Side Installs",
+      "location": "Appendix E What the Environment Side Installs",
+      "text": "system trains packages size torch PlugRL, C++ client yes 0 86 KB no PlugRL, minimal Python yes 2 2.6 MB no PlugRL, full env client yes 31 222 MB no RLlib external env [ 3 ] yes 64 6.1 GB CUDA LeRobot HIL-SERL [ 7 ] yes 144 6.1 GB CUDA dm_env_rpc [ 38 ] no trainer 12 81 MB no openpi client [ 24 ] inference only 9 90 MB no",
+      "url": "https://arxiv.org/html/2611.08144v1#A5.T4.2",
+      "kind": "table"
+    },
+    {
+      "id": "64282069fcb3dcd5",
+      "section": "Appendix F E50 in Full",
+      "location": "Appendix F E50 in Full",
+      "text": "SB3 2.9.0 PPO, 16 environments, 16 × \\times 256 frames per rollout, one torch thread, on a 24-core Linux workstation. Pendulum uses rl-zoo’s settings [ 44 ] for 102,400 steps; HalfCheetah uses SB3’s defaults for 409,600 steps. In-process means DummyVecEnv. Bridge means the same 16 environments in another process, on one connection to the bridge’s SB3 adapter, a VecEnv . A vector step is one step of all 16 (Table V ).",
+      "url": "https://arxiv.org/html/2611.08144v1#A6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "19e7fa2619457422",
+      "section": "Appendix F E50 in Full",
+      "location": "Appendix F E50 in Full",
+      "text": "TABLE V: E50 per seed: the final weights’ SHA-256 (first eight digits) and the wall time, in-process and through the bridge.",
+      "url": "https://arxiv.org/html/2611.08144v1#A6.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ffef74d53e485f1d",
+      "section": "Appendix F E50 in Full",
+      "location": "Appendix F E50 in Full",
+      "text": "env seed weights (SHA-256) in-process bridge per vector step Pendulum 0 ec5b8226 both 12.7 s 16.3 s +0.57 ms 1 062e92e3 both 12.7 s 16.5 s +0.58 ms 2 3a8d968f both 12.7 s 16.5 s +0.58 ms HalfCheetah 0 8261c03a both 64.0 s 76.0 s +0.47 ms 1 86564694 both 66.7 s 76.5 s +0.38 ms 2 65cc8843 both 67.0 s 76.5 s +0.37 ms",
+      "url": "https://arxiv.org/html/2611.08144v1#A6.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "7766f02a216f681b",
+      "section": "Appendix F E50 in Full",
+      "location": "Appendix F E50 in Full",
+      "text": "Every pair also logged identical episodes. The bridge log agreed with SB3’s monitor.csv in every bridge run.",
+      "url": "https://arxiv.org/html/2611.08144v1#A6.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "fc600d6540d4abdb",
+      "section": "Appendix G E51 in Full",
+      "location": "Appendix G E51 in Full",
+      "text": "Every counter ran, with Gymnasium 1.3.0, on an environment whose step t t pays reward t t and which terminates at t = 5 t=5 . Every episode therefore has return 15 and length 5. There were 2 environments with 3 episodes each (Table VI ). Gymnasium had already fixed its vector counter on its main branch [ 20 ] ; the fix was released in 1.4.0, after these runs.",
+      "url": "https://arxiv.org/html/2611.08144v1#A7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "96731d47cd30442c",
+      "section": "Appendix G E51 in Full",
+      "location": "Appendix G E51 in Full",
+      "text": "TABLE VI: E51: what each episode counter logged, as (return, length).",
+      "url": "https://arxiv.org/html/2611.08144v1#A7.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "09ca6d429d26a36d",
+      "section": "Appendix G E51 in Full",
+      "location": "Appendix G E51 in Full",
+      "text": "counter autoreset logged Gymnasium vector RecordEpisodeStatistics NEXT_STEP 6 × ( 15 , 5 ) 6\\times(15,5) the same SAME_STEP 2 × ( 15 , 5 ) 2\\times(15,5) , then 4 × ( 14 , 4 ) 4\\times(14,4) single-env RecordEpisodeStatistics per sub-env both 6 × ( 15 , 5 ) 6\\times(15,5) CleanRL’s logging loop, verbatim NEXT_STEP nothing the same SAME_STEP TypeError SB3 VecMonitor ; SB3 Monitor SB3’s 6 × ( 15 , 5 ) 6\\times(15,5) bridge, SB3 and Gymnasium adapters, and the bridge log SAME_STEP 6 × ( 15 , 5 ) 6\\times(15,5) our env client’s counter, as its runner uses it its own 6 × ( 15 , 5 ) 6\\times(15,5) the same, with no explicit resets NEXT_STEP ( 15 , 5 ) (15,5) , ( 30 , 11 ) (30,11) , ( 45 , 17 ) (45,17)",
+      "url": "https://arxiv.org/html/2611.08144v1#A7.T6.2",
+      "kind": "table"
+    },
+    {
+      "id": "b99932b6c035aa3e",
+      "section": "Appendix G E51 in Full",
+      "location": "Appendix G E51 in Full",
+      "text": "The last row breaks that counter’s unwritten contract: only an explicit reset , which its runner always calls, zeroes it.",
+      "url": "https://arxiv.org/html/2611.08144v1#A7.p2.1",
+      "kind": "p"
+    }
+  ]
+}

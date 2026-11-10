@@ -1,0 +1,497 @@
+{
+  "item_id": "arxiv:2611.08338",
+  "document_id": "d3cba2c8cdf60c37ef69ea1d2fa273037889e1fa4cf4da8711e51b919399debd",
+  "source_url": "https://arxiv.org/html/2611.08338v1",
+  "paper_version": "2611.08338v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-07T11:07:14.539384+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.08338",
+    "title": "GPWM: Modeling the World as 3D Particle Motion",
+    "url": "https://arxiv.org/abs/2611.08338v1",
+    "published": "2026-11-05",
+    "updated": "2026-11-05",
+    "topics": [
+      "vla",
+      "world",
+      "control"
+    ],
+    "summary": "We introduce GPWM, a Generative Particle World Model that predicts how 3D scenes evolve by generating the motion of particles and rigid bodies over time. Unlike video world models that generate scene appearance, GPWM operates directly in 3D physical space. A single representation and architecture cover rigid, deformable, cloth, and granular materials, in both passive physics and robotic interaction. GPWM is an object-aware multi-resolution transformer that combines flow matching with diffusion forcing to generate coherent physical trajectories far beyond its training horizon. We train and evaluate GPWM on ParticleWorlds, a 25.5-million-frame corpus spanning diverse geometries, materials, interactions, and robot embodiments. GPWM outperforms the best prior learned-dynamics baseline in each of six physical domains, reducing prediction error by 31% on average. Breaking from the domain-specific setting of prior methods, a single Unified GPWM models these heterogeneous regimes with one set of weights, largely outperforming per-domain baselines and even surpassing our own specialist models in two domains. GPWM further generalizes to unseen geometries, physical properties, object counts, and rollout horizons. Beyond prediction, GPWM enables contact-rich planning by learning a generative prior over joint actuator-object motion. Instead of searching over unconstrained actions, planning searches the model's latent noise for interactions that achieve a desired object-space goal. With the same world model, noise-space planning substantially outperforms action-space search on pushing and picking, where complex contact sequences are hard to discover. Executed open-loop in simulation, the resulting plans achieve goal-directed manipulation without reference action trajectories or goal-specific policies."
+  },
+  "overview": "GPWM把动力学目标改成粒子位移与刚体位姿增量，结合对象内多分辨率压缩和逐帧噪声的流匹配，支持跨材料流式预测。对规划最值得复用的是联合生成执行器与物体轨迹后搜索噪声：同一任务检查点下比逐帧独立动作CEM更能发现接触序列，并减少模型预测进度在仿真执行中落空。但规划仍是任务专用模型、完整跟踪3D状态、单L40S上100–200秒的开环仿真；31%平均预测降幅取自每域较优版本，不代表单一统一模型的收益。",
+  "coverage": {
+    "read": 155,
+    "total": 155,
+    "evidence_ids": [
+      "9aa358fc3dab852a",
+      "cf90c1585823032a",
+      "7fed013308f44c76",
+      "4668be6837ac04fa",
+      "883567a22ef0caef",
+      "1460e023f1cfc278",
+      "39285a54f9f2695c",
+      "0f7504cb7a4ca77b",
+      "591befb099e74eb2",
+      "42384d87ec044a40",
+      "0e8c410cc22cbfb2",
+      "1ca83186d7704b5f",
+      "8a921233ca2d87dd",
+      "eebca214dbd92af4",
+      "825f6bcb3e43fea5",
+      "7c24641f320ce18f",
+      "3b6522a7f3ee098a",
+      "77ed65e08bc59625",
+      "eb7aed679d80e0df",
+      "64e8e4e845037b14",
+      "9ab9df4628c5ce7f",
+      "e16ec3f62f8966b2",
+      "00f618c2eee001f4",
+      "d61cb0dea265ac00",
+      "3c47248f1feebabf",
+      "b2bdf95a812b854f",
+      "54c7c86f6cf3c432",
+      "21c16575ba0c0fb3",
+      "bb0ce8e49488de81",
+      "c464fa6de51cabea",
+      "270b2c62569702d4",
+      "8646c01fa45eba85",
+      "a32e933517baea0c",
+      "be99260e08422301",
+      "428e221e2ed531f2",
+      "6c1b24af68c68d69",
+      "533e02b991750d64",
+      "5d09a8f08b97db97",
+      "f238fa880b9c27aa",
+      "2d943aa46fad484b",
+      "f09cb41a4092ed30",
+      "012bf7029215a854",
+      "92e5daa9e840c121",
+      "bbeb7ab091e105fa",
+      "90691f26b5e3b171",
+      "676d4a6e65594a1d",
+      "49048aeb4d1f9082",
+      "f230cd72975e997f",
+      "a63477b5e3bcb908",
+      "25159f21bbd7b262",
+      "8c893252a3ae7dc1",
+      "f41ef9d28afc9f94",
+      "425410f6923c3e51",
+      "4f83ba52d6c0d3b0",
+      "4b1c53531a82d0fd",
+      "b9001872a08c6a84",
+      "efe7c1c0e35410b7",
+      "052d63452ebb6f4c",
+      "ad302d4f3f78dbdc",
+      "f738d058e096e5f2",
+      "508b1b141a5b0f10",
+      "f04192213b8e3f5a",
+      "c4663834e873436f",
+      "afee900484d1391a",
+      "f1ac094926d2f2e3",
+      "b1e0865d29dea361",
+      "f6df3f2205ff41a4",
+      "8486949a4b04352e",
+      "129450a767568e50",
+      "888a90931a085558",
+      "3d3a6103cc14c5dd",
+      "843c9d5ec614a474",
+      "47ed2c348fac2906",
+      "2103f6683c13d259",
+      "e42481f1d599defe",
+      "bdeb1e1567289283",
+      "da31d7ef64df1504",
+      "ee535ae74a0a2ed7",
+      "43ae097e12c31a85",
+      "3f3c2a3a18a56cc3",
+      "c3ef5b97ecd60ff9",
+      "752cdb00922c05fb",
+      "070ec7b140efa349",
+      "12d602a2a5d3ad55",
+      "3377f695ba7b831c",
+      "eff47d62acad36bd",
+      "13031b00877a6c83",
+      "1f64ba71cd23bc30",
+      "86f34e22c1bd4843",
+      "77ab00324403f187",
+      "0c7b66a019d036df",
+      "8fc5ceaf979c74d6",
+      "19e22ca94ab082e1",
+      "bbd85759226873b4",
+      "339b934165524f34",
+      "004a336f91ec6bef",
+      "fe7a0c76e35e0317",
+      "82fdc0b6f3b21cb5",
+      "33fe7e204434f5ff",
+      "954fc52827c852c9",
+      "f7ebd5b6eeb77c24",
+      "bb707bbdd8c2911f",
+      "7e03c9312adf161c",
+      "8c90b8841d4a72c2",
+      "b2cf81c4e31578f6",
+      "36fc1e2798d02a88",
+      "486646bd00114c77",
+      "b53c99d34a708878",
+      "66e516f323388ba9",
+      "9110d687c3edb5e2",
+      "37c59e40b960bd5b",
+      "1723b41b96a2d49c",
+      "8a381765306b29a2",
+      "2865e1dbb5254b9e",
+      "808a6258b98288f1",
+      "89b6538b255c483c",
+      "a0f086342f3ef981",
+      "1f5256c32c44bffa",
+      "6053897e392a904e",
+      "47c0118bf4be75b7",
+      "c4b31fa73eb5e11b",
+      "1ce221d94dd8524c",
+      "5afce4fc1b8d59c1",
+      "25362ac344262565",
+      "5eb03ed59a5d383f",
+      "80de3195145a3187",
+      "3a35d2aa1a58ee94",
+      "d48e8621c68551af",
+      "655882fe6ec7ed98",
+      "13afcc33cb8f35b7",
+      "4b6862b2069fbb18",
+      "ccf2f0c6f10a472a",
+      "b7b167546d1e4103",
+      "25259327cf695090",
+      "4d77ae8831d4273d",
+      "3b01e8ea7b76823a",
+      "e3c3dd276af59a17",
+      "1cf76da6d5788313",
+      "589254cabe42800e",
+      "aea8ec7a7dcb2443",
+      "886e73f65a0b5400",
+      "2fa4f2e553dc7ed2",
+      "30aa786ec69afb91",
+      "1658fd720f62d23e",
+      "2f59bc4ac41fbbfe",
+      "36101940dd9f6fc1",
+      "3bb27b0cc54812a8",
+      "da0671f0cfe245f5",
+      "acde650b8636d8e4",
+      "184be6a834be78c8",
+      "c8c2265d7078e249",
+      "b2eaafef8d160863",
+      "ce58bfa47ad45ea7",
+      "e22f1adf3a13fb6a",
+      "3ba2b6823446dd99"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      6,
+      8,
+      10,
+      17,
+      19,
+      32,
+      33
+    ],
+    "pdf_sha256": "4a544e4edadf91aea37529356090180186f1cc14c36718e69f0fe886373708a1"
+  },
+  "notice": "完整阅读155个提取片段，覆盖正文与附录A–F；另读取PDF参考文献文本。固定版本PDF39页，目视核对物理页4、6、8、10、17、19、32、33中的结构、公式、表1/2/4/5/6/7、图4/19。其余图像未逐张目视复核，项目视频、源码及数据文件未运行或独立审计，作者实验未复现。图4与表7的Picking动作CEM数值差异保留为未解决缺口。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "关键增量：把接触轨迹的生成分布变成规划搜索先验",
+      "text": "相比先任意提出动作、再让动力学模型打分，GPWM让执行器和被动物体在同一几何变量中联合生成，再用末帧物体位置奖励优化噪声。这同时提供接触提案分布和动力学预测；因此同检查点的噪声/动作搜索对照比跨模型误差排名更能区分“模型更准”与“搜索分布更合适”。这里不声称所有动作优化都会失败。",
+      "evidence_ids": [
+        "0f7504cb7a4ca77b",
+        "8a921233ca2d87dd",
+        "afee900484d1391a",
+        "f1ac094926d2f2e3",
+        "888a90931a085558"
+      ],
+      "quote": "generative prior"
+    },
+    {
+      "kind": "method",
+      "title": "柔性物体逐粒子位移，刚体由共享位姿增量保形",
+      "text": "柔性/颗粒用帧间3D位移，刚体另设3维平移+6维旋转的9维增量pose token。刚体表面点由初始模板随位姿移动，不分别加独立噪声，因此形状保持来自表示约束，而非从粒子误差中自然学得。位移积分恢复绝对位置；条件包括已知材质、可用物性及执行器未来运动。要求粒子对应与对象归属已知。",
+      "evidence_ids": [
+        "825f6bcb3e43fea5",
+        "77ed65e08bc59625",
+        "eb7aed679d80e0df",
+        "64e8e4e845037b14",
+        "ee535ae74a0a2ed7"
+      ],
+      "quote": "rigid-body transformations"
+    },
+    {
+      "kind": "method",
+      "title": "对象内降采样保留几何身份，粗层处理对象间作用",
+      "text": "四级U形网络在初始几何中按对象FPS固定anchor身份，PointNet++聚合与逆距离插值，每帧用当前噪声位移积分后的位置重算邻域；不是每步重新随机选粒子。全分辨率空间注意力限于同对象，粗层跨全场景，时间注意力窗内双向，pose token每级保留。1024点自由落体对象依次压到256/64/32，降采样8邻居、上采样3邻居，配3D RoPE、绝对高度和长跳接。粒子上限12000不等于证明任意密度、对象数都能无损扩展。",
+      "evidence_ids": [
+        "9ab9df4628c5ce7f",
+        "3c47248f1feebabf",
+        "b2bdf95a812b854f",
+        "bb0ce8e49488de81",
+        "c464fa6de51cabea",
+        "270b2c62569702d4",
+        "77ab00324403f187",
+        "8fc5ceaf979c74d6"
+      ],
+      "quote": "multi-resolution"
+    },
+    {
+      "kind": "method",
+      "title": "逐帧不同噪声与错位去噪，使固定窗可持续向前滚动",
+      "text": "模型直接回归干净粒子/刚体增量，损失是两类端点平方误差，gamma=1，无额外物理损失。训练4帧历史+16帧未来，60%窗口各帧独立均匀噪声，40%沿时间线性递增；被动物体历史另加归一化std0.05抖动。推理先提交已去噪的近期帧，远期仍可修订，再右移窗口添新噪声。898帧衣物预测约为16帧的56倍，但不是一次并行预测898帧或物理守恒保证。附录表5另列Pick and Place最长921帧，故正文898不宜当全数据唯一最大时长。",
+      "evidence_ids": [
+        "8646c01fa45eba85",
+        "a32e933517baea0c",
+        "428e221e2ed531f2",
+        "6c1b24af68c68d69",
+        "533e02b991750d64",
+        "5d09a8f08b97db97",
+        "f238fa880b9c27aa",
+        "19e22ca94ab082e1",
+        "bbd85759226873b4",
+        "8c90b8841d4a72c2"
+      ],
+      "quote": "diffusion forcing"
+    },
+    {
+      "kind": "evidence",
+      "title": "ParticleWorlds的25.5M按场景帧计数，物性与成功标签并不齐全",
+      "text": "语料267864条可用训练episode、25463677场景帧，六域八来源；按各loader采样率计一次，含settling前缀，不因重叠窗口、粒子数或重复抽样倍增。MPM物性有记录，但衣物参数及部分刚体质量/摩擦随机化不作条件；衣物为数值筛查轨迹，不是验证成功的折叠。数据含脚本、RL推物及teacher技能，所以“无需目标专用策略/参考动作”指测试规划接口，不能解释成训练未见操作示例。",
+      "evidence_ids": [
+        "676d4a6e65594a1d",
+        "49048aeb4d1f9082",
+        "752cdb00922c05fb",
+        "070ec7b140efa349",
+        "12d602a2a5d3ad55",
+        "3377f695ba7b831c",
+        "eff47d62acad36bd",
+        "13031b00877a6c83",
+        "86f34e22c1bd4843"
+      ],
+      "quote": "ParticleWorlds"
+    },
+    {
+      "kind": "evidence",
+      "title": "主表31%是各域取较优GPWM后的平均，不是Unified统一增益",
+      "text": "表1依次为Free Fall/Dragging/Cloth/Pushing/Pick and Place/Hands：Specialist误差40.0/6.5/10.0/13.3/12.6/18.7，Unified41.5/6.1/10.8/18.0/11.1/22.6。最强既有基线53.0/7.8/10.6/23.9/34.1/24.8。每域取Specialist或Unified较好者，才得到约31%平均相对降幅；Unified仅五域胜既有基线，衣物10.8差于PointWorld10.6，也差于自家10.0。非衣物是被动物体粒子位置mm误差；衣物是对称Chamfer，不能把所有列当同一种逐点对应误差。各GPWM仅采一个未来，单参考轨迹误差不能完整评价生成分布。",
+      "evidence_ids": [
+        "a63477b5e3bcb908",
+        "25159f21bbd7b262",
+        "8c893252a3ae7dc1",
+        "425410f6923c3e51",
+        "4f83ba52d6c0d3b0",
+        "4b1c53531a82d0fd",
+        "b9001872a08c6a84",
+        "f7ebd5b6eeb77c24"
+      ],
+      "quote": "domain-specific"
+    },
+    {
+      "kind": "limitation",
+      "title": "统一模型的跨域收益伴随更大容量，未单独证明迁移因果",
+      "text": "Unified在Dragging6.1优于Specialist6.5、Pick and Place11.1优于12.6；但容量502.2M对103.1M，训练4张RTX PRO6000×600k迭代对每specialist2张×200k。统一按域等概率抽batch，平均每域约100k迭代；并非相同参数、总算力或域内更新数的纯数据混合消融。论文未提供足够逐组件消融来分离多分辨率、刚体保形、diffusion forcing与更大数据的各自贡献。",
+      "evidence_ids": [
+        "b9001872a08c6a84",
+        "ee535ae74a0a2ed7",
+        "77ab00324403f187",
+        "8fc5ceaf979c74d6",
+        "19e22ca94ab082e1",
+        "339b934165524f34"
+      ],
+      "quote": "specialization gap"
+    },
+    {
+      "kind": "evidence",
+      "title": "形状/对象数有外推，刚度测试仅区间内插值",
+      "text": "Free Fall训练1–4对象，测试5–7对象达7168点：specialist从已见形状37.5变为未见形状+更多对象45.2mm，PhysCtrl48.5→120.9。刚度已见10/100/1000kPa，未见30/300仍在区间内，specialist47.3→48.9；Unified54.5→53.1且未见值下不如PhysCtrl51.7。故证据支持specialist的形状/数量稳健性和刚度插值，不能写为所有模型都最优或已验证材料外推。测试物性作为输入提供，不是从视觉推断物性。",
+      "evidence_ids": [
+        "efe7c1c0e35410b7",
+        "052d63452ebb6f4c",
+        "ad302d4f3f78dbdc",
+        "f738d058e096e5f2",
+        "508b1b141a5b0f10",
+        "13031b00877a6c83"
+      ],
+      "quote": "interpolation"
+    },
+    {
+      "kind": "limitation",
+      "title": "基线经同数据适配，但输入与结构仍不完全对等",
+      "text": "作者在同episode/split上重训基线，PhysCtrl约100M、4历史/16未来，动作粒子聚类成区域条件，但无刚体pose接口；PointWorld约100M、voxel15mm改1mm、去颜色法线和sphere crop，仍只看1历史帧而GPWM看4帧。GNS仍为128维10次消息传递单步，PGND需改执行器、扩/缩网格并在拥挤场景冻结出界对象。结果衡量这些适配方案，不等于所有原模型在完全相同信息与容量下的最优上界。",
+      "evidence_ids": [
+        "004a336f91ec6bef",
+        "fe7a0c76e35e0317",
+        "82fdc0b6f3b21cb5",
+        "33fe7e204434f5ff",
+        "954fc52827c852c9"
+      ],
+      "quote": "action-conditioned"
+    },
+    {
+      "kind": "method",
+      "title": "规划模型半数窗口隐藏动作条件，让同权重支持两种搜索",
+      "text": "规划每任务另训约100M、200k steps模型，不使用502M统一模型直接零样本完成全部任务。训练随机一半窗口把给定执行器运动换为learned token，学会联合生成；另一半学给定动作预测，推理两种模式共用同checkpoint。流式采样6步；Noise CEM搜索随机采样器的初始及每步新噪声，不只是一个初始latent。LNO也优化这一噪声，用末帧质心距离反传穿过所有窗口，常规每member5步AdamW、lr0.1、梯度裁剪1.0和高斯性惩罚；低预算可不做梯度。",
+      "evidence_ids": [
+        "012bf7029215a854",
+        "92e5daa9e840c121",
+        "bbeb7ab091e105fa",
+        "90691f26b5e3b171",
+        "1f5256c32c44bffa",
+        "47c0118bf4be75b7",
+        "5eb03ed59a5d383f",
+        "3a35d2aa1a58ee94",
+        "d48e8621c68551af",
+        "13afcc33cb8f35b7",
+        "b7b167546d1e4103"
+      ],
+      "quote": "same checkpoint"
+    },
+    {
+      "kind": "evidence",
+      "title": "同检查点规划对照支持接触先验，但指标是距离进度",
+      "text": "图4在单L40S整次规划预算100秒Pushing、200秒Pile/Picking下，开环仿真执行的LNO/Noise CEM进度分别0.57/0.48、0.23/0.21、0.56/0.40。Pushing与Pile各50场景，Picking5物体×5目标共25；进度是(d0−dT)/d0，不是成功率。动作CEM是逐帧独立采样，逐步裁到训练步长99分位；与Noise CEM同3轮并扫相同候选数，但不含结构化/时序相关提案策略。因此结论局限于所测动作搜索；pile里PointWorld动作CEM可达0.19，噪声空间优势较小。预算数值来自曲线相邻设置插值，图未给置信区间。",
+      "evidence_ids": [
+        "b1e0865d29dea361",
+        "f6df3f2205ff41a4",
+        "8486949a4b04352e",
+        "888a90931a085558",
+        "3d3a6103cc14c5dd",
+        "47ed2c348fac2906",
+        "2103f6683c13d259",
+        "6053897e392a904e",
+        "47c0118bf4be75b7",
+        "c4b31fa73eb5e11b",
+        "25362ac344262565",
+        "4b6862b2069fbb18",
+        "ccf2f0c6f10a472a",
+        "25259327cf695090"
+      ],
+      "quote": "task progress"
+    },
+    {
+      "kind": "evidence",
+      "title": "预测对执行差距：抓取动作搜索在模型里高分，执行几乎不动",
+      "text": "表7 Picking预测→仿真执行：LNO89→56%、Noise CEM70→40%、GPWM动作CEM78→0%、PointWorld动作CEM98→0%。Pushing分别89→57、94→48、23→0、37→1%；Pile27→23、21→21、7→1、29→19%。该对照比纯预测误差更直接支持动作优化利用模型错误的解释，但噪声搜索仍有33或46点等预测落差，未消除模型利用。目视发现图4 Picking的GPWM动作CEM终点−0.03，而表7记0；原文未解释是否截断/汇总差异，保留为缺口，只概括为无正进度。",
+      "evidence_ids": [
+        "e42481f1d599defe",
+        "3b01e8ea7b76823a",
+        "e3c3dd276af59a17",
+        "1cf76da6d5788313",
+        "589254cabe42800e",
+        "3d3a6103cc14c5dd"
+      ],
+      "quote": "task progress"
+    },
+    {
+      "kind": "limitation",
+      "title": "完整状态、浮动执行器和长规划预算限制真机解释",
+      "text": "预测默认完整时序跟踪粒子和对象身份，动作条件任务整个rollout知道未来执行器运动且评分不含执行器；不是从相机端到端闭环。规划只在ManiSkill/Genesis/Isaac Lab仿真开环执行，噪声计划从粒子Kabsch拟合位姿并追踪，抓取用floating Franka hand，渲染全臂不代表满足全臂IK/碰撞/扭矩约束。跨窗口反传随时长增成本，100–200秒不能当快速在线控制；未报告真机、闭环抗扰或边缘功耗。",
+      "evidence_ids": [
+        "25159f21bbd7b262",
+        "ee535ae74a0a2ed7",
+        "f7ebd5b6eeb77c24",
+        "1f5256c32c44bffa",
+        "6053897e392a904e",
+        "47c0118bf4be75b7",
+        "c4b31fa73eb5e11b",
+        "25362ac344262565",
+        "4d77ae8831d4273d",
+        "2fa4f2e553dc7ed2"
+      ],
+      "quote": "temporally tracked"
+    },
+    {
+      "kind": "limitation",
+      "title": "图像重建演示提供几何入口，没有验证物理参数识别",
+      "text": "SAM3分割、SAM3D重建、MoGe2尺度/相机估计后，每对象采1024表面点，手工指定材质/刚度和释放姿态构造四帧历史；桌面图另缩放1.7倍匹配训练点距。部分示例来自生成图，渲染把桌面下sand画回表面，衣物也沿用相似训练衣物尺寸和记录的夹爪动作。没有对应真实动态轨迹定量真值，不能称实物物理验证；柔软elastic gummy bear持续扁平是附录明确反例。",
+      "evidence_ids": [
+        "f04192213b8e3f5a",
+        "c4663834e873436f",
+        "1658fd720f62d23e",
+        "2f59bc4ac41fbbfe",
+        "36101940dd9f6fc1",
+        "3bb27b0cc54812a8",
+        "da0671f0cfe245f5",
+        "acde650b8636d8e4",
+        "184be6a834be78c8",
+        "c8c2265d7078e249",
+        "b2eaafef8d160863",
+        "ce58bfa47ad45ea7",
+        "e22f1adf3a13fb6a",
+        "3ba2b6823446dd99"
+      ],
+      "quote": "reconstructed"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：时序相关动作提案能否缩小噪声搜索优势？",
+      "text": "待验证假设：GPWM噪声搜索在Picking上的部分收益来自接触序列的时间相关先验，逐帧独立动作提案是其优势的重要对照条件。冻结同一任务GPWM检查点、场景/目标与6步采样器，在原有独立动作CEM之外加入仅用训练split拟合的低频样条动作CEM和时序相关动作CEM，对照Noise CEM；各组同时画相同候选模型调用数与相同L40S墙钟预算曲线，不只挑一个终点。保留相同每步幅度限制、控制器和仿真执行设置，在原25个Picking问题与独立目标集上至少3个搜索seed，报告执行距离进度、额外明确定义的抓取成功率、模型预测−执行差、非接触悬空率与总耗时。所有统计用配对场景区间，训练提案不看测试目标。若相关动作提案在两种预算匹配下仍不能提高执行进度或缩小预测−执行差，而Noise CEM优势稳定，则推翻“弱时间相关提案解释大部分优势”的假设；若缩小差距，则应将结论表述为所学接触先验相对原提案的收益。该实验尚未执行，未全面检索相关工作，不能称为已证实机制或研究空白。",
+      "evidence_ids": [
+        "888a90931a085558",
+        "5eb03ed59a5d383f",
+        "3a35d2aa1a58ee94",
+        "4b6862b2069fbb18",
+        "ccf2f0c6f10a472a",
+        "1cf76da6d5788313",
+        "589254cabe42800e"
+      ],
+      "quote": "independently"
+    }
+  ],
+  "frontier_brief": {
+    "title": "GPWM：联合生成执行器与物体轨迹，在噪声空间搜索接触计划",
+    "change_type": "世界模型 · 生成式规划",
+    "delta": "将3D粒子位移/刚体位姿的流式生成器同时训练为动作条件预测与执行器—物体联合生成；规划冻结同一检查点，以物体末帧奖励搜索生成噪声。",
+    "before": "直接在逐帧独立执行器动作上做CEM，再用动作条件世界模型评估，容易遗漏先抓后提等接触序列，也可能找到只在模型预测里有效的动作。",
+    "after": "Noise CEM或LNO沿联合交互分布提出整段计划；同GPWM检查点的Picking在200秒L40S预算下，执行距离进度分别0.40/0.56，原动作CEM无正进度。",
+    "relevance": "若准确的3D动力学模型在规划时被利用，先比较动作提案分布与预测−执行差，再决定是否需要更强预测器；联合执行器表示和同检查点双模式训练可复用。",
+    "caveat": "全部是完整跟踪3D状态下的仿真；规划用任务专用约100M模型，100–200秒开环预算，Picking为浮动手而非全臂执行。31%预测降幅取各域较优版本，统一模型更大且衣物有反例。图4 Picking动作CEM−0.03与表7的0不一致。",
+    "question": "加入匹配预算的时序相关动作提案后，噪声空间对执行进度和模型利用的优势还能保留多少？",
+    "evidence": [
+      {
+        "label": "同检查点搜索空间",
+        "value": "Picking：LNO 0.56，Noise CEM 0.40，动作CEM无正进度",
+        "context": "5物体×5目标；单L40S整次规划200秒，曲线插值；指标是仿真开环距离进度，非成功率。动作提案逐帧独立。"
+      },
+      {
+        "label": "模型利用诊断",
+        "value": "预测→执行：LNO89→56%，动作CEM78→0%",
+        "context": "表7同任务GPWM Picking；图4动作CEM标−0.03，与表7不一致，未擅自合并。噪声搜索仍有预测落差。"
+      },
+      {
+        "label": "优势较小的任务",
+        "value": "Pile：噪声0.21–0.23，对最强动作基线0.19",
+        "context": "50场景、150步，单L40S200秒；最强动作基线是PointWorld，随机接触也可推动颗粒堆。"
+      },
+      {
+        "label": "统一预测的边界",
+        "value": "衣物Unified10.8，Specialist10.0，PointWorld10.6",
+        "context": "20条898帧held-out衣物轨迹，对称Chamfer(mm)；统一502.2M对specialist103.1M，其他域指标为逐点位置误差。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "混合几何状态",
+        "text": "柔性逐粒子增量，刚体共享pose增量保形；对象内压缩anchor、粗层跨对象交互，4帧历史/16帧生成窗。"
+      },
+      {
+        "title": "流式逐帧去噪",
+        "text": "逐帧噪声训练后，先提交近期、保留远期可修订状态，右移窗口持续生成；并非一次生成完整长轨迹。"
+      },
+      {
+        "title": "同权重双模式",
+        "text": "半数训练窗口隐藏动作条件，联合生成执行器与物体；噪声CEM或反传LNO从末帧物体奖励选计划，随后仿真开环执行。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08338v1",
+      "checked": "固定版本39页PDF下载成功，21837305字节；本机渲染并目视检查物理页4/6/8/10/17/19/32/33。核对结构与方程、表1/2/4/5/6/7、图4/19；图4与表7Picking动作CEM不一致已在报告标明。未逐张复核其他附录图或观看项目视频。"
+    }
+  ]
+}

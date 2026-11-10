@@ -1,0 +1,101 @@
+[
+  {
+    "item_id": "arxiv:2611.03815",
+    "source_signature": "55f657651545155a170daf269c75f523befca8f9d3268838fbcc9cffb8cd0aa5",
+    "level": 2,
+    "reason": "相对已有机器人示范增广，纯手持数据的跨本体操作可能改变采集路线；优先核对数据规模、夹爪依赖与同数据基线。",
+    "quote": "no robot data collected at any stage",
+    "profile": {
+      "scope": "route",
+      "area": "data"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.03850",
+    "source_signature": "9bb0fc5110f4be4696bd6c5f89fe6d26fc9f44459c0ae28c25502ba49c417198",
+    "level": 1,
+    "reason": "评测池调度与接口统一有工具价值；需先分离多卡、MPS和观测优化的预算，不与模型训练路线改变同级。",
+    "quote": "simulator workers and Policy replicas as separate pools",
+    "profile": {
+      "scope": "tool",
+      "area": "evaluation"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.04096",
+    "source_signature": "d7ce1c25e1f117197611910235c03544a97c5803ffa11b29855428354472d197",
+    "level": 1,
+    "reason": "GPU实现可降低低维HJ计算延迟，但仍受状态维度和离散误差限制；需核对控制周期与精度口径。",
+    "quote": "matched precision",
+    "profile": {
+      "scope": "tool",
+      "area": "control"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.04166",
+    "source_signature": "fda2c0846a237b77fecb71f585abb710ad4a915763e1be745a4b476cdc6e8d15",
+    "level": 1,
+    "reason": "文本理由保持不变而动作偏离的诊断会影响安全监测设计；比广泛架构路线更聚焦，需核查攻击预算与闭环验证。",
+    "quote": "word-for-word identical",
+    "profile": {
+      "scope": "method",
+      "area": "evaluation"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.04485",
+    "source_signature": "f9e0603f6bb7ed1ed75b556722c11cfb528f4835f895c1af452515314d044a3c",
+    "level": 1,
+    "reason": "把教师视觉基础模型蒸馏成轻量策略可复用；需核查额外教师预算与同基线精度，暂不判为整体路线变化。",
+    "quote": "strictly as privileged information during training",
+    "profile": {
+      "scope": "method",
+      "area": "architecture"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.04870",
+    "source_signature": "7d61235c70db5f4518052cfd946f1d2180afbe2091caddd7f36b6c302011f8f5",
+    "level": 2,
+    "reason": "跨本体动作条件多视角模拟器及自回放训练可能影响世界模型训练和策略优化路线，优先核对动作忠实度、迁移与完整成本。",
+    "quote": "unified cross-embodiment action representation",
+    "profile": {
+      "scope": "route",
+      "area": "architecture"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.05023",
+    "source_signature": "f0835737365f9dccfbebb369bb4c8f1df1ed44c08806471602c69f391be9688d",
+    "level": 1,
+    "reason": "双时间尺度世界动作建模有具体方法增量，需核对双流容量、推理预算和分项消融后判断广泛性。",
+    "quote": "decouples long-horizon task evolution from local visual dynamics",
+    "profile": {
+      "scope": "method",
+      "area": "architecture"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.05080",
+    "source_signature": "8edaddf654b6111e05250b4edc2aeef5fd01308755f2bdb7a1b12ff92a7a1579",
+    "level": 1,
+    "reason": "无频繁场景重置的VLA微调评测关系真实适配条件；当前是基准与训练现象，应核对重置预算而非直接判为新通用能力。",
+    "quote": "non-episodic scene resets",
+    "profile": {
+      "scope": "method",
+      "area": "evaluation"
+    }
+  },
+  {
+    "item_id": "arxiv:2611.05093",
+    "source_signature": "29a0fdc858dedb87d0654e85713c02cbb68fbc1d93ecf0973390b41250b8491b",
+    "level": 1,
+    "reason": "同检查点与引擎对照的量化反例直接影响部署选择，但属于压缩评测方法；先核全流程延迟与扰动可靠性。",
+    "quote": "same checkpoint, layers and engine",
+    "profile": {
+      "scope": "method",
+      "area": "deployment"
+    }
+  }
+]

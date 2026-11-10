@@ -1,0 +1,437 @@
+{
+  "item_id": "arxiv:2611.06863",
+  "document_id": "e4fc62eac084e0cfe0f3091a6a4562c87815b5717fc8a772e27ed13ef6a72f03",
+  "source_url": "https://arxiv.org/html/2611.06863v1",
+  "paper_version": "2611.06863v1",
+  "paper": {
+    "id": "arxiv:2611.06863",
+    "title": "Rethinking Self-Repair in Code-as-Policy Agents: What Drives Retry Success?",
+    "url": "https://arxiv.org/abs/2611.06863v1",
+    "published": "2026-11-04",
+    "updated": "2026-11-04",
+    "topics": [
+      "evaluation",
+      "control"
+    ],
+    "summary": "Code-as-policy agents often use execution feedback to retry failed programs. Additional sampling and task guidance can also improve success, leaving the contribution of failure-specific feedback unclear. We study this question in simulated robot manipulation. A fixed lookup selects feedback templates using failure labels and the API variant. A frozen code model generates a fresh program after each scene reset. On the same 252 initial failures, Qwen2.5-Coder-7B recovers 85.3% within five retries, compared with 68.3% for resampling with the same retry cap. The advantage persists under fixed total-token budgets. Feedback from other episodes and fixed task guidance yield similar recovery point estimates, with no detected benefit from matching the coarse failure label. In a separate study, a fixed guided prompt used from the first attempt achieves an observed overall success rate similar to that of template-based feedback. Template-based feedback also lowers recovery on a nut-insertion task requiring a rim grasp, consistent with an incompatible center-grasp instruction. Evaluations of robot self-repair should include resampling, mismatched feedback, and concise, task-compatible static guidance as baselines."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-05T15:01:54.723665+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "这篇提供的是自修复的评测拆解：恢复可能来自多一次采样、可复用任务指导，或真正针对当前失败的信息。固定代码模型与预算后，匹配粗粒度失败标签没有显示出优于同任务固定提示或不同标签反馈的额外收益。这个结果支持增加更强的对照，不能推广成所有自修复无效；任务不兼容的提示还会反向降低恢复率。",
+  "coverage": {
+    "read": 96,
+    "total": 96,
+    "evidence_ids": [
+      "22188453d3d1738a",
+      "3cc845301a631ed6",
+      "075b28fd8f6f0cb4",
+      "cef427bcf94a1d19",
+      "0fe12a44f9fcb60a",
+      "c09e16167eed4d17",
+      "0b9fa7c841eab306",
+      "1001d824a902b2d5",
+      "fc53e7c06cfec640",
+      "78cf3e8cf2f65879",
+      "2c9bbadd23f4db26",
+      "dc1ed1bdf25a2a10",
+      "d832361991f3f0f2",
+      "29f3acb40f6d5557",
+      "e6235c051a8b5802",
+      "ba5b84e169192698",
+      "be47530ad335031f",
+      "136f3a204f25218c",
+      "e2dab01d1f3247d8",
+      "a02d8f5e6c559739",
+      "b7f200f16bd08855",
+      "03144ab83fdba8a7",
+      "d7020182f82aa136",
+      "133b9a04ee3df3bf",
+      "c9e05a4effdbb552",
+      "e9c1ce0b2f5f5c40",
+      "22c107130abaf470",
+      "3ea7778e82b89f5e",
+      "7c4ad8157a0a1831",
+      "1b45d891d93841b9",
+      "abaf4230889aebb0",
+      "68d276d470c31762",
+      "b3de6dfd4ba88460",
+      "e112909715cec1c6",
+      "225d483ba02194a5",
+      "f0be3048ce844ba9",
+      "824d619a303d1cd6",
+      "75b6a68afdc2c0af",
+      "f655298b59498701",
+      "415cbf7cabc159ad",
+      "c28b59cab2712f18",
+      "843b92154aa9bc8d",
+      "c675bc121579de14",
+      "ea6bb1c370b61e3f",
+      "94ab8e1cdc085519",
+      "7ea970e204c599a8",
+      "abc2e56f2e7e5bbb",
+      "26c5dcb134759df4",
+      "2fbabfec0a78bf14",
+      "ecfc3e1d971bc0d2",
+      "8b445de8746a5d8c",
+      "529b7d88124c417b",
+      "1a47a1190d985892",
+      "cbd56c2a9fd56750",
+      "bef602134ec81abf",
+      "8819a1778497c22b",
+      "2a96619d41d93aac",
+      "42937a0720bf243b",
+      "8b00fb243d4aa961",
+      "c0dc0ad46ec13789",
+      "bcce235dbd907485",
+      "c20e65b7e2777b1d",
+      "435414b81592ce07",
+      "db3eba861cded968",
+      "d5834a679baeef8a",
+      "78b6ae2d4d08ecb8",
+      "11d6ef5eebf714b0",
+      "3c97ca94e8b31726",
+      "1c851f21bea75813",
+      "fd272cfff17e09cd",
+      "12a3fcdd06b1c93d",
+      "2a5722df0c397a69",
+      "e711e9c1dc422c6b",
+      "671069ecabfb27d9",
+      "2ce90e4f8d5b696b",
+      "b9d72d95d593a486",
+      "1557149a38adc958",
+      "9b8139384df57f8b",
+      "d5425ff28edb84b0",
+      "0de887929acab6c4",
+      "15df5fb4b2845f67",
+      "84ce3192ea206590",
+      "545a6a86847e1180",
+      "6ec9ddbbb392e89f",
+      "00664aa1e4981794",
+      "2a93e6efeef7ec53",
+      "27609b974a8290fe",
+      "c33fc22ba4ab7ad4",
+      "64ecd367057aeee8",
+      "a7cbefdfd3d6ada7",
+      "8d79ea7454a0d847",
+      "b63a3d4960f31b1c",
+      "9ce58e07a3613da4",
+      "3471eab506268920",
+      "81d14b9c531be8d3",
+      "b91bc7879567faee"
+    ],
+    "pdf_pages_visually_checked": [
+      5,
+      12,
+      16,
+      17
+    ],
+    "pdf_sha256": "d330b1102a3daad3ff460e8db2c3c89266dd361079bd0a5f2199c7df680c3f3a",
+    "additional_listing_blocks_read": 23,
+    "additional_listing_sha256": "4b7606f573e356cb670f31a38e147d183d1369c0fae0662a9f3168d87ba81956"
+  },
+  "supplementary_reading": {
+    "source_url": "https://arxiv.org/html/2611.06863v1",
+    "description": "从已缓存的固定版本HTML读取的23个公开listing，覆盖附录B提示与附录D全部模板；仅作为研究材料读取，未执行。",
+    "listing_blocks": [
+      {
+        "index": 0,
+        "text": "# API\nCode-as-policy API (privileged state, position control; all positions are (x, y, z)\ntuples in metres in the world frame):\n  get_object_pose(name, return_bbox_extent=False) -> (x, y, z)\n      # object centre position; with return_bbox_extent=True returns\n      # ((x, y, z), (ex, ey, ez)) where e* are half-extents of the object\n  get_gripper_pose() -> (x, y, z)      # current gripper fingertip position\n  goto_pose(position, quat=None, z_approach=0.10)\n      # move the gripper to `position`, approaching from z_approach metres above;\n      # orientation is fixed top-down (quat is accepted but ignored)\n  open_gripper()                       # open the fingers (release)\n  close_gripper()                      # close the fingers (grasp whatever is between them)\n  check_grasped(name) -> bool          # True if `name` is currently held\n  execute_waypoints(waypoints)         # goto_pose each position in the list, in order\n  lift(name, height=0.1)               # raise the HELD object by height metres\n  place_on(source, target)             # move the HELD source above target and release it\n\nExecution rules:\n  - These functions are ALREADY DEFINED in the execution environment. Do not import\n    anything and do not define or redefine any of these functions yourself.\n  - Top-level code runs directly; if you wrap steps in a helper function you must call it.\n  - To grasp an object: goto_pose to its centre position, then close_gripper().\n  - Success is checked on the FINAL state of the scene: a lifted object must still be\n    held at the end (do not call open_gripper() after lifting unless the task says to\n    release); to place an object, move it above the target and open_gripper().\n  - place_on(source, target) positions the held object on the target and\n    releases it automatically; do not call open_gripper() after place_on."
+      },
+      {
+        "index": 1,
+        "text": "# Task\nStack the red cube on top of the green cube.\n\n# Objects\nred_cube, green_cube"
+      },
+      {
+        "index": 2,
+        "text": "# Repair plan\nattempt 0 failed: released_after_lift - The object was lifted but then released, so it was no longer held at the end.\n  MUST: do NOT open the gripper after lifting; keep holding (or place on the target first): use place_on(source, target) as the final action (it releases)\n  NEVER: open_gripper immediately after lifting"
+      },
+      {
+        "index": 3,
+        "text": "# Write a COMPLETE fresh Python program using ONLY the API above, following the same execution rules (no imports, no redefining API functions, call any helper you define). Follow every instruction present in this prompt. Output only code."
+      },
+      {
+        "index": 4,
+        "text": "# Using the repair plan above (compiled from a previous failed attempt), write a COMPLETE fresh Python program using ONLY the API above, following the same execution rules (no imports, no redefining API functions, call any helper you define). Satisfy every must_change item and the verification checklist. Output only code."
+      },
+      {
+        "index": 5,
+        "text": "# Revise the previous program above into a COMPLETE corrected Python program using ONLY the API above, following the same execution rules (no imports, no redefining API functions, call any helper you define). Follow every instruction present in this prompt. Output only code."
+      },
+      {
+        "index": 6,
+        "text": "Diagnosis: The previous program did not compile.\nMUST: write a complete syntactically valid program\nNEVER: truncated statements\nNEVER: markdown or prose inside the code"
+      },
+      {
+        "index": 7,
+        "text": "Diagnosis: The previous program exceeded the execution time budget.\nMUST: remove unbounded loops and retry/polling logic; write a short direct sequence of API calls\nNEVER: while-loops that wait or retry\nNEVER: sleep or polling"
+      },
+      {
+        "index": 8,
+        "text": "Diagnosis: The previous program called functions that do not exist.\nMUST: use ONLY the documented API functions, already defined (no imports, no redefinitions)\nNEVER: import statements\nNEVER: calling functions not in the API doc\nNEVER: redefining API functions"
+      },
+      {
+        "index": 9,
+        "text": "Diagnosis: The previous program executed but made no API calls.\nMUST: make the API calls execute at top level; call any helper function you define\nNEVER: defining functions without calling them"
+      },
+      {
+        "index": 10,
+        "text": "Diagnosis: The previous program never located the target object.\nMUST: look up each object with get_object_pose(name) and move using the returned position\nNEVER: referencing objects not in the scene\nNEVER: guessing positions"
+      },
+      {
+        "index": 11,
+        "text": "Diagnosis: The previous program never attempted a grasp.\nMUST: grasp the object before lifting/placing: goto_pose to the object's centre position, then close_gripper()\nNEVER: lifting or placing before a successful grasp"
+      },
+      {
+        "index": 12,
+        "text": "Diagnosis: The grasp was attempted but did not secure the object.\nMUST: grasp at the object's CENTRE: goto_pose to the object's centre position, then close_gripper(), with the gripper empty\nNEVER: closing the gripper away from the object's centre"
+      },
+      {
+        "index": 13,
+        "text": "Diagnosis: The gripper closed while positioned away from the object.\nMUST: move the gripper to the object's centre BEFORE closing: goto_pose to the object's centre position, then close_gripper()\nNEVER: close_gripper without first moving to the object"
+      },
+      {
+        "index": 14,
+        "text": "Diagnosis: A grasp failed because the gripper was still holding another object.\nMUST: grasp only ONE object; move the held object to its destination instead of grasping another\nNEVER: closing the gripper while already holding an object"
+      },
+      {
+        "index": 15,
+        "text": "Diagnosis: The object was grasped but never lifted.\nMUST: after the grasp, LIFT the object: {lift_hint}\nNEVER: ending the program with the object still on the table"
+      },
+      {
+        "index": 16,
+        "text": "Diagnosis: The object was lifted but then released, so it was no longer held at the end.\nMUST: do NOT open the gripper after lifting; keep holding (or place on the target first): {place_hint}\nNEVER: open_gripper immediately after lifting"
+      },
+      {
+        "index": 17,
+        "text": "Diagnosis: The object was lifted but not placed correctly on the target.\nMUST: place the object ON the target: {place_hint}\nNEVER: releasing the object away from the target"
+      },
+      {
+        "index": 18,
+        "text": "Diagnosis: An object was knocked off the table.\nMUST: approach objects from above with z_approach; avoid sweeping motions near objects\nNEVER: motions that knock objects off the table"
+      },
+      {
+        "index": 19,
+        "text": "Diagnosis: The handle was grasped but the door was never pulled open.\nMUST: after gripping the handle, PULL it sideways away from the door frame: pull('door_handle', dx, dy) with a horizontal vector of at least 0.15 m\nNEVER: releasing the handle without pulling it\nNEVER: lifting the handle instead of dragging it sideways"
+      },
+      {
+        "index": 20,
+        "text": "Diagnosis: The task did not succeed.\nMUST: fix the cause of failure and complete every task step"
+      },
+      {
+        "index": 21,
+        "text": "lift_hint: call lift(name, height=0.1) after the grasp\nplace_hint: use place_on(source, target) as the final action (it releases)"
+      },
+      {
+        "index": 22,
+        "text": "lift_hint: after closing the gripper, goto_pose to a position 0.15 m ABOVE the grasp point with z_approach=0 (the object moves with the gripper)\nplace_hint: while holding, goto_pose above the target position, then open_gripper()"
+      }
+    ]
+  },
+  "notice": "已阅读提取的96个文字片段，覆盖主文、实验、附录A–D；另读取同一缓存HTML中未进入段落索引的23个listing（API、任务、生成/编辑提示、14标签模板、通用回退和API变体替换），并查看PDF第12页算法。固定版本PDF共19页，目视核对第5、12、16、17页的图2、表2、算法1、表A3/A4及泛化/失败案例。没有逐图核查所有图片、重算原始实验、逐篇核查参考文献或执行代码。补充listing原文保存在本报告supplementary_reading中；页面段落引用仍按96个提取片段定位。所有实验来自作者，未独立复现。",
+  "findings": [
+    {
+      "title": "研究增量：把自修复收益拆成三种来源",
+      "kind": "method",
+      "text": "作者在冻结模型下分别控制额外采样、可复用任务指导和匹配当前粗粒度失败标签的信息。主实验用Qwen2.5-Coder-7B-Instruct、robosuite仿真Panda、特权状态和文本API，没有图像输入。每次重试重置到原始场景，主条件从头生成整段程序，隐藏上一份代码；这不是在失败遗留的物理状态下在线恢复，也不是对视觉VLA做新训练。",
+      "evidence_ids": [
+        "cef427bcf94a1d19",
+        "2c9bbadd23f4db26",
+        "dc1ed1bdf25a2a10",
+        "ea6bb1c370b61e3f",
+        "7ea970e204c599a8",
+        "abc2e56f2e7e5bbb"
+      ],
+      "quote": "We do not test recovery from the physical state left by failure"
+    },
+    {
+      "title": "Compiled是标签查表提示，不是额外反思模型",
+      "kind": "method",
+      "text": "规则labeler按优先级分配14类失败标签，结合API变体查表生成诊断和MUST/NEVER指导。累计反馈最新在前、指令去重，上限768个空白分词token；反馈查表无需额外模型调用，也不施加运行时约束检查。默认生成temperature0.7、top-p0.95、completion上限1024。附录D已读23个listing中的模板与API说明，不把这些论文提示当作本轮执行指令。",
+      "evidence_ids": [
+        "ba5b84e169192698",
+        "be47530ad335031f",
+        "529b7d88124c417b",
+        "8b00fb243d4aa961",
+        "c0dc0ad46ec13789",
+        "b91bc7879567faee"
+      ],
+      "quote": "This lookup requires no additional model call"
+    },
+    {
+      "title": "核心消融：标签匹配没有测出额外优势",
+      "kind": "evidence",
+      "text": "同一批252个初始失败、最多5次重试：Compiled恢复85.3%，Different-Label Feedback和Fixed Task Template各86.1%。Compiled减不同标签对照为−0.8个百分点，95%配对bootstrap区间[−6.3,+4.8]；减固定模板为−0.8，[−6.7,+5.2]。区间仍允许条件间差异，不能宣称等效。不同标签仍保留同任务信息，主评测627条选中的记录全部来自不同失败标签；因此这不是完全随机、无关任务的反馈。",
+      "evidence_ids": [
+        "a02d8f5e6c559739",
+        "3ea7778e82b89f5e",
+        "1b45d891d93841b9",
+        "abaf4230889aebb0",
+        "11d6ef5eebf714b0",
+        "d5425ff28edb84b0"
+      ],
+      "quote": "the paired confidence intervals do not establish equivalence"
+    },
+    {
+      "title": "模板确实优于无指导重采样，但不能据此证明读懂失败",
+      "kind": "evidence",
+      "text": "主实验Compiled对Resample的恢复率为85.3%/68.3%，作者按未舍入计数报告差+17.1个百分点，95%CI[+9.9,+24.2]。等上限重试仍未完全匹配token开销，因此另用日志重放的固定token预算：2000/5000 tokens时优势为+15.9/+14.7个百分点。该结果支持指导内容有用，结合固定与不同标签对照后，尚不能证明模型理解或利用了当前执行轨迹。",
+      "evidence_ids": [
+        "e9c1ce0b2f5f5c40",
+        "22c107130abaf470",
+        "abaf4230889aebb0",
+        "225d483ba02194a5",
+        "bef602134ec81abf"
+      ],
+      "quote": "including prompts and completions"
+    },
+    {
+      "title": "Static-from-Start：有用的低成本基线，但有提示混杂",
+      "kind": "evidence",
+      "text": "另一次700个共同新场景评测，Static-from-Start初次成功36.9%，标准提示19.3%；最多6次执行总体成功92.4%，Compiled89.6%、Fixed Task Template90.1%、Resample73.1%。Static与Compiled差+2.9个百分点在Holm校正后p=0.13，未显著。tokens/solved为2087/2578；这个成本口径包含全部场景、首轮和未解决场景。首轮静态方案同时改了指导、较长生成指令和历史“attempt 0 failed”头，不能把全部收益归因于静态指导一句话。",
+      "evidence_ids": [
+        "68d276d470c31762",
+        "b3de6dfd4ba88460",
+        "bef602134ec81abf",
+        "6ec9ddbbb392e89f",
+        "00664aa1e4981794",
+        "2a93e6efeef7ec53",
+        "27609b974a8290fe",
+        "c33fc22ba4ab7ad4"
+      ],
+      "quote": "Their individual contributions remain unresolved"
+    },
+    {
+      "title": "反例：把中心抓取模板搬到边缘抓取会伤害恢复",
+      "kind": "evidence",
+      "text": "螺母插入需要rim grasp，却复用failed_grasp的中心抓取指导。40个初始失败中Compiled恢复82.5%，Resample97.5%，差−15.0个百分点，95%CI[−27.5,−2.5]；程序有效率仍相近85.1%/84.9%。结果与任务不兼容的指导一致，但没有通过单独替换抓取句子来隔离因果；不能把所有差距都确定归于这一句。它说明固定提示需先检查任务适配。",
+      "evidence_ids": [
+        "e2dab01d1f3247d8",
+        "843b92154aa9bc8d",
+        "81d14b9c531be8d3"
+      ],
+      "quote": "required rim grasp"
+    },
+    {
+      "title": "恢复率、整体成功与pass@k是不同指标",
+      "kind": "limitation",
+      "text": "主实验85.3%以attempt0失败为分母，不是所有场景的总体成功率；顺序重试的recovery@k也不等于独立采样估计的pass@k。Static-from-Start改变首轮成功，初始失败442个，其他三组565个，不能把88.0%与87.1%的条件恢复率直接当同一失败集合上的配对胜负。公平的首轮指导比较应以共同场景上的overall@6为主。",
+      "evidence_ids": [
+        "d832361991f3f0f2",
+        "29f3acb40f6d5557",
+        "26c5dcb134759df4",
+        "1a47a1190d985892",
+        "6ec9ddbbb392e89f",
+        "2a93e6efeef7ec53",
+        "27609b974a8290fe"
+      ],
+      "quote": "recovery uses different initial-failure subsets"
+    },
+    {
+      "title": "开发与评测程序分离，不代表场景完全未见",
+      "kind": "limitation",
+      "text": "252评测失败与40开发失败按初始程序hash分离，但159个评测task–API–scene组合中24个也用于开发。主要分析按初始失败计，作者还做159个场景簇的探索性bootstrap，Compiled对Resample仍为+17.1个百分点，CI[+10.1,+24.2]。较早核心比较曾有重置采样器seeding限制，后续实验修正；不应混用早期/中性指令/不同软件构建的数值。失败标签仅审计脚本故障，未人工审计自然失败；固定模板首个held-out比较是探索性的。",
+      "evidence_ids": [
+        "d832361991f3f0f2",
+        "26c5dcb134759df4",
+        "cbd56c2a9fd56750",
+        "8819a1778497c22b",
+        "2a96619d41d93aac",
+        "42937a0720bf243b"
+      ],
+      "quote": "share 24 of the 159 evaluation scene configurations"
+    },
+    {
+      "title": "小模型多任务结果不能自动推广到更强模型",
+      "kind": "limitation",
+      "text": "泛化汇总是7个符合初始成功率10%–70%筛选条件的Qwen3B/7B设置、354个失败，Compiled对Resample+18.1个百分点，但对同任务Other-Episode Feedback仅+2.3，CI[−1.1,+5.6]。32B栈任务两方法都解决同样52/55个初始失败，恢复94.5%；不能把零宽配对区间推广为其他任务等效。温度0.2、lift pose shift另有−19.6个百分点反例，使用90%而非95%区间。",
+      "evidence_ids": [
+        "f655298b59498701",
+        "415cbf7cabc159ad",
+        "c28b59cab2712f18",
+        "2fbabfec0a78bf14",
+        "a7cbefdfd3d6ada7",
+        "8d79ea7454a0d847",
+        "b63a3d4960f31b1c",
+        "9ce58e07a3613da4"
+      ],
+      "quote": "The additional studies below are excluded from this combined estimate"
+    },
+    {
+      "title": "编辑/反思较差不等于这些范式普遍无效",
+      "kind": "limitation",
+      "text": "Direct+Compiled主实验恢复21.4%，但同时让模型看旧代码并改成编辑指令，无法单独归因于代码锚定。Reflection56.0%属于较早原指令评测，对照Resample70.6%，不能与主实验68.3%直接拼成同一消融。反思多用模型tokens与墙钟时间也是所测实现的结果，尚不足以否定更强模型、视觉反馈、真实失败状态或其他反思实现。",
+      "evidence_ids": [
+        "03144ab83fdba8a7",
+        "f0be3048ce844ba9",
+        "824d619a303d1cd6",
+        "7ea970e204c599a8",
+        "84ce3192ea206590",
+        "545a6a86847e1180"
+      ],
+      "quote": "the cause of the lower recovery remains unresolved"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "最小实验：统一指令后，动态反馈还有多少独立收益？",
+      "text": "待验证假设：统一生成指令后，所测代码策略的主要恢复收益仍来自任务兼容的固定指导，而非当前粗粒度失败标签。先在一个lift和一个stack仿真任务上，用同一冻结模型、API版本、采样参数与共同场景种子比较5组：无反馈重采样、首轮即加固定任务提示、首败后固定提示、匹配当前标签提示、同任务不同标签提示。所有组统一中性生成指令，首轮不加入伪造的失败历史；固定文本仅用独立开发场景选择。每次重试重置原场景，最多6次总执行，同时按2000/5000总tokens重放计算预算，包含所有prompt/completion。主要报告共同场景的overall@6、配对差异区间、总tokens/solved和墙钟成本；后三个首败后指导组与无反馈组另在相同初始失败上比较recovery@5。先小规模检查，再增加场景与至少3个生成种子；用场景簇重采样，避免同景程序当独立样本。若匹配反馈相对两种固定指导均提升超过预先约定的5个百分点且差异区间下界大于0，则反对固定指导主导假设。另在需要边缘抓取的任务比较适配/不适配模板，检查负迁移；不把仿真重置恢复外推到真实失败状态。实验尚未运行，未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "a02d8f5e6c559739",
+        "b7f200f16bd08855",
+        "d7020182f82aa136",
+        "ea6bb1c370b61e3f",
+        "bef602134ec81abf",
+        "8819a1778497c22b",
+        "11d6ef5eebf714b0",
+        "6ec9ddbbb392e89f",
+        "00664aa1e4981794",
+        "81d14b9c531be8d3"
+      ],
+      "quote": "changes initial guidance and the generation instruction together"
+    }
+  ],
+  "frontier_brief": {
+    "title": "代码策略自修复：先加固定提示与等预算重采样对照",
+    "change_type": "自修复评测 · 配对消融",
+    "delta": "把失败后的恢复拆成额外采样、可复用任务指导和当前失败信息三部分。固定模型与预算后，匹配粗粒度失败标签没有测出优于固定任务提示的额外收益；评估自修复时，这两种对照都该补上。",
+    "before": "失败后加入反思或修复反馈，再与不重试或无指导的初始程序比较，容易把更多采样和任务提示的收益都算成自修复。",
+    "after": "用同一批初始失败、同一重试上限与总token预算，对照重采样、固定任务提示、同任务不同失败标签反馈；首轮静态指导另按共同场景的总体成功率比较。",
+    "relevance": "研究代码策略或机器人agent修复时，先实现简短、任务兼容的静态指导，再比较动态反馈是否还有增益。记录初始失败分母、场景重置和全部token成本；若关注真实失败后的恢复，需要另做不重置场景的实验。",
+    "caveat": "仅在特权状态输入、文本API和重置仿真中评测。未检出差异不等于等效；首轮静态方案同时改了生成指令。中心抓取指导迁移到边缘抓取任务反而降低恢复。作者实验未复现。",
+    "question": "统一生成指令后，动态失败反馈还能胜过固定任务提示吗？",
+    "evidence": [
+      {
+        "label": "匹配失败标签，没有测出额外收益",
+        "value": "85.3% / 86.1%",
+        "context": "Qwen2.5-Coder-7B，lift/stack同一批252个初始失败，最多5次重试。Compiled/固定任务模板恢复率为85.3%/86.1%；配对差−0.8个百分点，95%CI[−6.7,+5.2]，不证明等效。"
+      },
+      {
+        "label": "有指导优于纯重采样",
+        "value": "+17.1 个百分点",
+        "context": "同一主评测Compiled对Resample为85.3%/68.3%；作者按未舍入计数给出差+17.1，95%CI[+9.9,+24.2]。固定2000/5000总token预算仍有+15.9/+14.7个百分点优势。"
+      },
+      {
+        "label": "不适配的提示会产生负迁移",
+        "value": "82.5% / 97.5%",
+        "context": "螺母插入40个初始失败，Compiled/Resample恢复率82.5%/97.5%，差−15.0个百分点。边缘抓取需求与中心抓取指导冲突；尚未单独替换这一句隔离因果。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "固定重试条件",
+        "text": "同一代码模型与原始场景，每次先重置再生成完整程序，主条件隐藏上一次代码。最多5次重试，另核对总token预算。"
+      },
+      {
+        "title": "替换反馈内容",
+        "text": "以同任务固定模板或其他失败标签反馈替换当前标签指导，保持生成指令中性，区分任务信息和真正的失败匹配。"
+      },
+      {
+        "title": "报告正确的分母",
+        "text": "同一批初始失败比较恢复；首轮加指导会改变失败集合，应按共同场景比较总体成功。再检查任务不兼容提示及更强模型的边界。"
+      }
+    ]
+  }
+}

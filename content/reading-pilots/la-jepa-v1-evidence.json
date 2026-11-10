@@ -1,0 +1,1271 @@
+{
+  "id": "369d294e87e78f0e17324e0ed5a5cbfcf42326069691232981686876407d14a9",
+  "url": "https://arxiv.org/html/2611.08156v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "22c281b0486cb1ce",
+      "section": "La-JEPA: Compact Robot Policies with Latent World Modeling",
+      "location": "La-JEPA: Compact Robot Policies with Latent World Modeling",
+      "text": "World-action models commonly adapt pretrained video generators, and vision-language-action models build on pretrained vision-language backbones; both tie policy architecture and inference cost to large transformers designed for generation rather than control. While the knowledge accumulated through large-scale pretraining is certainly useful, it remains unclear how much generation-oriented architectural choices affect control performance, and whether the trade-off required to access this pretraining is worth it. In this work, we introduce Latent Action JEPA (La-JEPA) , a compact world-action model whose policy transformer is trained from scratch in the feature space of a pretrained V-JEPA 2.1 encoder, so that its architecture and capacity can be chosen for control. Following Fast-WAM, La-JEPA learns to predict future features jointly with actions during training and generates only actions at inference. Among policies without embodied pretraining, La-JEPA achieves state-of-the-art performance in clean and randomized RoboTwin 2.0 scenes and on LIBERO-Plus with correct instructions, while using far fewer parameters than the strongest competing policies. It runs substantially faster than Fast-WAM at comparable performance and outperforms the closest JEPA-based methods, LeapBot-WA and JEPA-WAM, on LIBERO-Plus and RoboTwin 2.0 without their pretrained policy backbones. On four real-robot tasks, including contact-heavy pushing and long-horizon multistep manipulation, its average success is comparable to π 0.5 \\pi_{0.5} , outperforming non-embodied-pretrained baselines. Through a design study of the choices behind La-JEPA, we show that JEPA features outperform video VAE latents, most clearly out of distribution, and that training-time future prediction choices significantly impact the policy even when future prediction is skipped at inference. We also correct the LIBERO-Plus instructions, as the officially released evaluator corrupts them for most variants, and re-evaluate several strong open baselines. These results establish a compact, efficient foundation for JEPA-based world-action modeling: without a generative pretrained policy backbone, La-JEPA is better and faster than far larger policies built on video and language generation models, suggesting that robot foundation models may benefit from architectures designed specifically for control rather than inherited from generation.",
+      "url": "https://arxiv.org/html/2611.08156v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e63523842e9a6e10",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "World-action models increasingly adapt pretrained video-generation transformers to robot control, inheriting useful visual and temporal priors along with the representation space, tokenization, and architecture of a model built for video synthesis ( Yuan et al., 2026b ; Ma et al., 2026 ; Kim et al., 2026 ) . Vision-language-action policies take a similar route using language-generation transformers aligned with visual inputs ( Kim et al., 2024 ; Black et al., 2024 ; Physical Intelligence et al., 2025 ) . The success of these two types of architectures raises two practical questions: must robot policies necessarily inherit the architecture of a generative backbone to be competitive, and can a compact world-action transformer trained from scratch actually reach the performance of these policies?",
+      "url": "https://arxiv.org/html/2611.08156v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c00e28f471444472",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Figure 1: Success against deployed parameters, including frozen encoders, on LIBERO-Plus with corrected instructions (Section 5.2 ) and on RoboTwin 2.0, where the panel reports the equally weighted mean of clean and randomized success of clean-trained policies. S, B, and L denote the La-JEPA sizes. The LIBERO-Plus panel shows the policies without embodied pretraining that we re-evaluated with corrected instructions, and the embodied-pretrained π 0.5 \\pi_{0.5} ; Table 1 lists all scores, including those with the released instructions. ∗ * : success estimated from JEPA-WAM’s 20-task results (Appendix B ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "74467c333dd0145b",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Most world-action models (WAMs) are VAE-based because they build on pretrained video generators, yet better-suited latent spaces are available. Video VAEs retain accurate information but spend much of their capacity on pixel-level fidelity that control does not require. JEPA representations, in contrast, are developed and evaluated for downstream tasks such as video understanding, depth estimation, and segmentation, which are closer to the needs of embodied agents ( Assran et al., 2025 ; Mur-Labadia et al., 2026 ) . Previous work aligns VLMs or video-generation models to the JEPA space ( Lin et al., 2026 ; Liu et al., 2026 ) or learns a JEPA-style latent space jointly with the policy ( Vujinovic & Kovacevic, 2025 ) ; to our knowledge, no prior work trains a compact world-action policy from scratch in a pretrained JEPA feature space.",
+      "url": "https://arxiv.org/html/2611.08156v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bdc54ae322ec9b60",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We introduce Latent Action JEPA (La-JEPA) , a world-action model that learns future-feature prediction and action generation directly in the dense spatial and temporal feature space of a pretrained V-JEPA 2.1 video encoder ( Mur-Labadia et al., 2026 ) . Its World DiT and Action DiT are initialized from scratch, allowing their architecture and capacity to be chosen independently of the visual encoder. Following Fast-WAM and Faster-WAM ( Yuan et al., 2026b ; Ma et al., 2026 ) , actions attend to observed context but not to future tokens, so predictive supervision can shape the policy during training without the cost of generating the future at inference time.",
+      "url": "https://arxiv.org/html/2611.08156v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "488aaf4066affa41",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Among policies without embodied pretraining, La-JEPA achieves the strongest clean and randomized RoboTwin 2.0 results and the strongest LIBERO-Plus results with corrected instructions (Section 5.2 ), with about four times fewer deployed parameters than the next-best policies, while running up to 5 × \\times faster than Fast-WAM, whose design we follow (Figure 1 , Tables 1 and 2 ). With the released instructions, it is second only to NowWAM, which is insensitive to the corrupted text (Table 14 ). It also outperforms the closest JEPA-based methods, LeapBot-WA and JEPA-WAM, on LIBERO-Plus and RoboTwin 2.0 (Table 3 ). On real-robot tasks ranging from cube placement to contact-rich pushing and long-horizon manipulation, La-JEPA trained from scratch on the target demonstrations achieves the highest average success among the compared policies, comparable to the embodied-pretrained π 0.5 \\pi_{0.5} (Table 5 ). Together, these results demonstrate leading benchmark performance, efficient inference, and competitive physical manipulation without requiring a generative backbone.",
+      "url": "https://arxiv.org/html/2611.08156v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "43a86783a841e9ab",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "To understand which design choices enable this performance, we study the impact of the representation space, different targets for predictive supervision, and robustness mechanisms. We adopt a compact first approach, making the architecture viable even for a policy with 0.1B trainable parameters, before increasing policy capacity. Comparisons of JEPA features and VAE latents span both benchmarks and multiple model configurations, showing that JEPA features generally outperform VAE latents, with the clearest gains for out of distribution evaluations (Section 4.1 , Appendix A.1 ). Action-only controls separately confirm the benefit of WAM-style future prediction, and studies of temporal encoding, dropout, augmentation, and encoder adaptation complete the recipe. These analyses support the central contribution: a compact, effective world-action policy, together with evidence to guide its design. As a secondary contribution, we show that the released LIBERO-Plus evaluator appends perturbation parameters to most instructions, so that most variants apply two perturbations at once. This corruption affects policies to very different degrees, from no change to 19 points, and obscures the robustness study that the benchmark is designed for; we therefore re-evaluate the openly available baselines with corrected instructions under a single “clean” protocol that isolates each perturbation as intended (Section 5.2 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee57604be64248e3",
+      "section": "Vision-language-action policies.",
+      "location": "Vision-language-action policies.",
+      "text": "Vision-language-action (VLA) policies extend pretrained vision-language models with action outputs, predicting discretized action tokens ( Kim et al., 2024 ) or attaching a flow-matching action expert ( Black et al., 2024 ) , and broaden their training data to generalize further ( Physical Intelligence et al., 2025 ; Yuan et al., 2026a ) . All inherit the size and inference cost of a multi-billion-parameter vision-language backbone.",
+      "url": "https://arxiv.org/html/2611.08156v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7f8bd142652124b3",
+      "section": "World-action models.",
+      "location": "World-action models.",
+      "text": "World-action models (WAMs) instead build on pretrained video or image generators whose representations drive action generation ( Kim et al., 2026 ; Zhang et al., 2026 ; Wang et al., 2026 ) , reaching the strongest previously reported LIBERO-Plus results among policies without embodied pretraining. Because generating future frames slows inference, recent WAMs predict the future only during training ( Yuan et al., 2026b ) and reduce the action expert to a single layer that reads keys and values cached from all layers of the video backbone ( Ma et al., 2026 ) . All retain the generator backbone in the deployed policy.",
+      "url": "https://arxiv.org/html/2611.08156v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fcbe1a3bf41a7341",
+      "section": "Joint-embedding predictive architectures.",
+      "location": "Joint-embedding predictive architectures.",
+      "text": "Joint-embedding predictive architectures (JEPAs) learn representations by predicting the embeddings of masked inputs rather than reconstructing pixels ( Assran et al., 2023 ) . V-JEPA extends this objective to video ( Bardes et al., 2024 ) , V-JEPA 2 scales it ( Assran et al., 2025 ) , and V-JEPA 2.1 improves the dense features of V-JEPA 2 ( Mur-Labadia et al., 2026 ) , which makes it especially well suited to robotic policies. JEPA representations have since been used in robot policies: ACT-JEPA learns a JEPA-style latent space jointly with the policy ( Vujinovic & Kovacevic, 2025 ) , VLA-JEPA and JEPA-VLA bring V-JEPA targets or features into vision-language-action models ( Sun et al., 2026 ; Miao et al., 2026 ) , and JEPA-WAM and LeapBot-WA build world-action models on V-JEPA features ( Lin et al., 2026 ; Liu et al., 2026 ) . These two world-action models are the closest to La-JEPA, but both initialize their predictors from pretrained vision-language or video generation models.",
+      "url": "https://arxiv.org/html/2611.08156v1#S2.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "09549f59ab5bfe88",
+      "section": "Compact policies.",
+      "location": "Compact policies.",
+      "text": "Policies that are competitive without inheriting either a VLM or video backbone are scarce. While Diffusion Policy ( Chi et al., 2023 ) , DP3 ( Ze et al., 2024 ) and ACT ( Zhao et al., 2023 ) exist, their performance is rarely close to VLAs and World Models. MINT predicts coarse-to-fine action tokens with a separately trained action tokenizer ( Huang et al., 2026 ) and reaches much better success rates, but remains below the strongest WAMs and VLAs. La-JEPA fits in this category as it trains its policy DiTs from scratch while adding WAM-style future prediction in a pretrained JEPA feature space.",
+      "url": "https://arxiv.org/html/2611.08156v1#S2.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "90856612300e7e01",
+      "section": "3 La-JEPA",
+      "location": "3 La-JEPA",
+      "text": "La-JEPA learns action generation jointly with future-feature prediction in a pretrained V-JEPA 2.1 ViT-L representation space, following the separation of training-time world modeling from inference-time action generation in Fast-WAM ( Yuan et al., 2026b ) and Faster-WAM ( Ma et al., 2026 ) . At decision time t t , the policy maps multi-camera observations o t o_{t} , proprioception s t s_{t} , and a language instruction ℓ \\ell to an action chunk A = ( a t , … , a t + H − 1 ) A=(a_{t},\\ldots,a_{t+H-1}) . This section describes the fixed architecture and training procedure (Figure 2 ); Section 4 examines the choices within it.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec0e949ef35405d4",
+      "section": "3.1 Architecture",
+      "location": "3.1 Architecture",
+      "text": "Figure 2: La-JEPA. Left: general architecture. Right: context and future encoding with V-JEPA 2.1.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "19258acd428a04ce",
+      "section": "Visual representations.",
+      "location": "Visual representations.",
+      "text": "The pretrained V-JEPA 2.1 ViT-L encoder ( Mur-Labadia et al., 2026 ) processes each camera independently, producing observation features z ctx z_{\\mathrm{ctx}} from the most recent frames, and future targets z fut z_{\\mathrm{fut}} representing the 32 frames ahead. We normalize and spatially reduce these feature grids before projecting them into the World DiT’s embedding space. They are the model’s only visual input and prediction target, so the model gets no separate RGB pathway. Future predictions are matched to targets directly in V-JEPA space and require no pixel reconstruction.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9a77baa34cc8c22a",
+      "section": "Language and proprioception.",
+      "location": "Language and proprioception.",
+      "text": "A frozen FLAN-T5-large encoder ( Chung et al., 2022 ) embeds the instruction ℓ \\ell , and learned projections map proprioception s t s_{t} to additional tokens; together they form the conditioning sequence z cond z_{\\mathrm{cond}} , which both DiTs read through cross-attention.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bc6109227dae24f9",
+      "section": "World–action architecture.",
+      "location": "World–action architecture.",
+      "text": "The model is made of two diffusion transformers (DiTs) ( Peebles & Xie, 2022 ) : a World DiT over observation and future-feature tokens and an Action DiT over the action chunk. Both are initialized from scratch with separate attention projections and feed-forward layers, so pretrained knowledge enters only through the visual and language encoders. Rotary visual positional encodings ( Su et al., 2021 ) preserve spatial and temporal information. The two DiTs interact at every layer, where action queries read the World DiT’s observation keys and values alongside its own. The attention mask keeps future information out of the action pathway: observation tokens attend only to observations, future tokens to observations and futures, and action tokens to observations and actions. Actions therefore never access future features directly, yet predictive supervision still shapes the observation representations they read through the shared World DiT parameters during training.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "71c7dabae2a71d80",
+      "section": "Joint flow matching.",
+      "location": "Joint flow matching.",
+      "text": "We train both DiTs with future and action-space flow matching ( Lipman et al., 2022 ) . For each training example, we independently sample timesteps τ f , τ a ∼ 𝒰 ⁡ ( 0 , 1 ) \\tau_{f},\\tau_{a}\\sim\\mathcal{U}(0,1) and Gaussian noise ϵ f , ϵ a \\epsilon_{f},\\epsilon_{a} , forming the noisy inputs",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8b22b1ee72a50109",
+      "section": "Joint flow matching.",
+      "location": "Joint flow matching.",
+      "text": "z fut τ f = ( 1 − τ f ) ​ ϵ f + τ f ​ z fut , A τ a = ( 1 − τ a ) ​ ϵ a + τ a ​ A . z_{\\mathrm{fut}}^{\\tau_{f}}=(1-\\tau_{f})\\epsilon_{f}+\\tau_{f}z_{\\mathrm{fut}},\\qquad A^{\\tau_{a}}=(1-\\tau_{a})\\epsilon_{a}+\\tau_{a}A. (1)",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "4e4e4860333c93a6",
+      "section": "Joint flow matching.",
+      "location": "Joint flow matching.",
+      "text": "The model receives ( z ctx , z fut τ f , A τ a , z cond ) (z_{\\mathrm{ctx}},z_{\\mathrm{fut}}^{\\tau_{f}},A^{\\tau_{a}},z_{\\mathrm{cond}}) and predicts velocities v ^ f \\hat{v}_{f} and v ^ a \\hat{v}_{a} under the attention mask as described above. The World DiT is conditioned on τ f \\tau_{f} and the Action DiT on τ a \\tau_{a} . The training objective is",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS2.SSS0.Px1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "c77b17ea00a0f664",
+      "section": "Joint flow matching.",
+      "location": "Joint flow matching.",
+      "text": "ℒ = 𝔼 ⁡ [ MSE ⁡ ( v ^ f , z fut − ϵ f ) + MSE ⁡ ( v ^ a , A − ϵ a ) ] , \\mathcal{L}=\\mathbb{E}\\left[\\operatorname{MSE}(\\hat{v}_{f},z_{\\mathrm{fut}}-\\epsilon_{f})+\\operatorname{MSE}(\\hat{v}_{a},A-\\epsilon_{a})\\right], (2)",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "eb378520e66f3c59",
+      "section": "Joint flow matching.",
+      "location": "Joint flow matching.",
+      "text": "where each mean squared error averages over its supervised elements.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS2.SSS0.Px1.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "a114abfd3e48980a",
+      "section": "Action inference.",
+      "location": "Action inference.",
+      "text": "At inference, we drop the future-feature tokens, initialize the action chunk from Gaussian noise, and integrate the action velocity field from τ a = 0 \\tau_{a}=0 to τ a = 1 \\tau_{a}=1 with Euler steps, holding the World DiT’s timestep conditioning at a fixed value τ ctx = 0 \\tau_{\\mathrm{ctx}}=0 (since we do not predict the futures anyway). Since observation tokens attend only to one another under fixed conditioning, their per-layer keys and values are computed once and cached, and only the Action DiT runs at each denoising step. Like most recent policies, we convert the predicted action tokens to the robot’s action space, execute the first k k actions of the chunk ( k = 10 k=10 on LIBERO and 24 on RoboTwin, as in Fast-WAM), and then predict a new chunk from the latest observations.",
+      "url": "https://arxiv.org/html/2611.08156v1#S3.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee68cc7af1e3dc46",
+      "section": "4 Design Analysis",
+      "location": "4 Design Analysis",
+      "text": "Figure 3: Gain in success (percentage points) from each design choice over its baseline: A, action-only training; B, Wan2.2 VAE latents; C, static encoding; D, no camera dropout (LIBERO: wrist-only dropout); E, no proprioception dropout; F, a plain policy without augmentation or encoder LoRA. Green: LIBERO; orange: RoboTwin 2.0; solid: in-distribution; hatched: out-of-distribution. Block A averages LIBERO-Plus gains over three training seeds. Values and evaluation budgets in Table 6 .",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "da4402f70a742a00",
+      "section": "Experimental setup.",
+      "location": "Experimental setup.",
+      "text": "We test the design choices behind Section 5 with the small (S) policy unless stated otherwise. We ask, in turn, whether to predict future features, in which feature space, how to encode motion (Section 4.1 ), and then how to make the policy robust to observation changes (Section 4.2 ). The studies use LIBERO, LIBERO-Plus, and clean-trained RoboTwin 2.0 ( Liu et al., 2023 ; Fei et al., 2025 ; Chen et al., 2025 ) ; in-distribution (IID) evaluation refers to LIBERO or clean RoboTwin scenes, and out-of-distribution (OOD) evaluation to LIBERO-Plus or randomized scenes. Figure 3 reports each choice’s gain in success in percentage points (hereafter, points), grouped into blocks A to F. Each block has its own reference recipe, so comparisons hold within a block; Table 6 lists baselines and evaluation budgets, and Appendix A documents the protocols.",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "76af5aac5a5e5384",
+      "section": "Predictive supervision.",
+      "location": "Predictive supervision.",
+      "text": "We first test whether predicting future features benefits the policy, comparing joint action and future-feature prediction with action-only training (Figure 3 A). Future prediction raises RoboTwin success by 7.0 points in clean and 3.7 in randomized scenes. On LIBERO-Plus, it improves success for each of three training seeds, by 2.1 points on average, with every paired comparison significant ( p < 0.01 p<0.01 , McNemar; Appendix A.1 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a1fceadb2f037ca6",
+      "section": "Feature space.",
+      "location": "Feature space.",
+      "text": "We next ask in which space prediction should be learned, comparing frozen V-JEPA 2.1 features with latents of the VAE of Wan2.2 ( Team Wan et al., 2025 ) , the video model underlying Fast-WAM, Faster-WAM, and LeapBot-WA (Figure 3 B). Each policy learns action and future-feature prediction with the normalization and projections suited to its representation, so the comparison evaluates each representation together with its interface to the policy. V-JEPA improves success in all four evaluations of this pair: by 15.9 points in clean and 16.0 in randomized RoboTwin scenes, and by 6.0 on LIBERO-Plus and 2.0 on LIBERO. In randomized scenes, the Wan2.2 policy collapses and succeeds in only 1.0% of episodes, close to the video-generator WAMs in Table 2 . In two additional RoboTwin comparisons (Appendix A.1 ), clean success is comparable in one and favors Wan2.2 in the other, whereas randomized success, reported for the second, again strongly favors V-JEPA. These results echo those of LDA-1B, which similarly reports a large gain from replacing VAE latents with DINO features ( Lyu et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a74731951928e203",
+      "section": "Feature space.",
+      "location": "Feature space.",
+      "text": "Table 1: LIBERO and LIBERO-Plus success (%) of policies without embodied pretraining (all use pretrained perception). Parameters in billions. LIBERO-Plus: episode-weighted success over all 10,030 variants with corrected or released instructions (Section 5.2 ); corrected-instruction scores exist only for the policies we re-evaluated. Best in bold, second best underlined unless the best is tied. La-JEPA values are means over three training seeds (Appendix B ). § Scored at the upstream step limits used for all policies; with its own longer limits (400 steps, 700 for LIBERO-Long), NowWAM reports 87.7% on the released instructions.",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b3cea2a1ac05b2d4",
+      "section": "Feature space.",
+      "location": "Feature space.",
+      "text": "Params (B) LIBERO-Plus Method Transformer init. Train. Depl. LIBERO Corrected Released Qwen-RobotManip-scratch VLM (supervised) 4.7 4.7 98.2 — 78.3 StarVLA VLM (supervised) 7.8 7.8 96.9 77.6 76.7 JEPA-WAM VLM (supervised) 0.55 1.35 96.7 77.8 77.1 Fast-WAM video generator 6.0 12.4 97.6 70.8 51.5 Faster-WAM video generator 5.1 11.4 98.5 — 75.1 Cosmos Policy video generator 2.0 7.0 98.5 84.9 80.8 ImageWAM image generator 4.5 8.6 98.4 80.4 79.7 NowWAM § image generator 3.0 7.1 98.4 86.2 86.2 La-JEPA S (ours) scratch 0.10 0.74 97.9 86.3 80.0 La-JEPA B (ours) scratch 0.34 0.98 98.0 87.3 82.5 La-JEPA L (ours) scratch 1.14 1.78 98.1 88.0 84.1",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.T1.4",
+      "kind": "table"
+    },
+    {
+      "id": "117145d4e7c9eb57",
+      "section": "Feature space.",
+      "location": "Feature space.",
+      "text": "Table 2: RoboTwin 2.0 success of clean-trained policies without embodied pretraining, in clean and randomized scenes. Parameters in billions, for the RoboTwin configurations. Mean: equally weighted mean of clean and randomized success. Best in bold, second best underlined. La-JEPA values are means over three training seeds, each evaluated on 5,000 episodes per condition (Appendix B ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7a3ffca49a4cb0a3",
+      "section": "Feature space.",
+      "location": "Feature space.",
+      "text": "Params (B) RoboTwin 2.0 success (%) Method Transformer init. Train. Depl. Clean Randomized Mean Qwen-RobotManip-scratch VLM (supervised) 4.7 4.7 71.6 22.6 47.1 StarVLA VLM (supervised) 7.8 7.8 58.1 10.6 34.4 Fast-WAM video generator 6.0 12.4 77.8 1.9 39.9 Faster-WAM video generator 5.1 11.4 68.6 2.2 35.4 La-JEPA S (ours) scratch 0.11 0.75 85.5 33.9 59.7 La-JEPA B (ours) scratch 0.37 1.01 86.2 35.4 60.8 La-JEPA L (ours) scratch 1.17 1.82 86.0 32.1 59.0",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "a371ae28db308849",
+      "section": "Temporal encoding.",
+      "location": "Temporal encoding.",
+      "text": "Unlike LDA-1B’s DINO, which only encodes images, V-JEPA 2.1 can process videos, which raises the question of how the observations and future targets should be encoded. We tested three configurations. Static encodings treat every frame as an image: the observation is the current frame, and eight future targets, spaced four frames apart up to 32 frames ahead, are encoded separately. Tube encoding instead processes two-frame clips aligned with the encoder’s tubelets, ending at the current frame for the observation and at each target frame for the futures; the observation clip thus gives the policy a motion cue without access to future observations. Tube-motion keeps the tube observation but jointly encodes the 16 future frames, spaced two frames apart, so each of the eight future feature grids attends over the whole predicted horizon (Figure 2 , right). Relative to static encoding on RoboTwin (Figure 3 C), tube encoding raises clean success by 1.1 points and randomized success by 3.6, and tube-motion preserves the randomized gain ( + 3.7 +3.7 ) while raising the clean gain to 3.4; the final recipe therefore uses tube-motion.",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e756371465846a6f",
+      "section": "Token reduction.",
+      "location": "Token reduction.",
+      "text": "Before entering the World DiT, the encoded feature grids are reduced spatially, either by averaging neighboring features (mean pooling) or by concatenating them into one token (patch grouping). We initially used mean pooling for its simplicity, since it can be applied once to the precomputed features. On RoboTwin, patch grouping improved randomized success, so the final RoboTwin recipe uses it; LIBERO did not benefit from it (89.35% against 94.05% with mean pooling), so we kept mean pooling there (Appendix A.1 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "620601eea5b13660",
+      "section": "Camera dropout.",
+      "location": "Camera dropout.",
+      "text": "To reduce reliance on any single view, we drop eligible cameras during training, always retaining at least one view and removing the dropped cameras’ future targets from the loss (Figure 3 D). This is the condition dropout used to train classifier-free guidance ( Ho & Salimans, 2022 ) , although we sample without guidance. Dropping only the wrist cameras raises randomized RoboTwin success by 7.1 points, while clean success remains essentially unchanged. LIBERO benefits from this too: by allowing either camera to be dropped, we raise LIBERO-Plus success by 10.2 points, with large gains under camera-viewpoint and sensor-noise perturbations (Table 8 ), while in-distribution success slightly improves.",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c718735b8eb9ed77",
+      "section": "Proprioception dropout.",
+      "location": "Proprioception dropout.",
+      "text": "Dropping the proprioceptive conditioning with probability 0.1 during training, with the configuration otherwise unchanged, raises RoboTwin success by 3.8 points in clean and 4.2 in randomized scenes (Figure 3 E). The final recipe therefore uses both camera and proprioception dropout.",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ed55b061470f2502",
+      "section": "Data augmentation and encoder adaptation.",
+      "location": "Data augmentation and encoder adaptation.",
+      "text": "Finally, we combine image augmentation of the observations with LoRA ( Hu et al., 2021 ) adaptation of the observation encoder; future targets are still computed from unmodified frames by the original encoder for training efficiency purposes (Appendix B ). Relative to a plain LIBERO policy (Figure 3 F), LoRA alone adds 1.4 points on LIBERO-Plus, augmentation alone 5.8, and both together 7.2, while in-distribution success remains unchanged. The combined recipe also improves RoboTwin, raising clean success by 5.7 points and randomized success by 16.0 (Appendix A.2 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS2.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bc27442a586440c9",
+      "section": "4.3 Final Recipe",
+      "location": "4.3 Final Recipe",
+      "text": "These studies define the final recipe: joint action and future prediction in V-JEPA 2.1 tube-motion features, camera and proprioception dropout, and image augmentation with encoder LoRA. We train it at three sizes, S, B, and L (Table 9 ), which correspond to 0.10, 0.34, and 1.14 B trainable parameters respectively. Appendix B documents the remaining benchmark-specific settings.",
+      "url": "https://arxiv.org/html/2611.08156v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d6f711dd98a22007",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "We evaluate the final recipe against WAM and VLA policies that, like La-JEPA, use no embodied pretraining on robot data beyond the target demonstrations (Figure 1 , Tables 1 and 2 ), and against the closest latent world-action models (Table 3 ); we then compare computational cost and, on four physical tasks, real-robot success (Table 5 ). Model sizes distinguish the parameters updated on target demonstrations ( trainable ) from the full inventory including frozen encoders ( deployed ; Appendix C.2 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "883a38eeb7bf93e4",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Table 3: Latent world-action models. Embodied PT: pretraining on robot data beyond the target demonstrations. ‡ Reported by Yan et al. (2026b) . La-JEPA LIBERO and LIBERO-Plus values are means over three training seeds (Appendix B ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "cf09406d5aed2f81",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Params (B) LIBERO RoboTwin 2.0 (20 tasks) Method Transformer init. Embodied PT Train. Depl. IID Plus C2C C2R LDA-1B ‡ — yes — — 90.6 45.5 — — LeapBot-WA video generator yes 2.7 10.4 97.3 71.7 — — JEPA-WAM VLM (supervised) no 0.55 1.35 96.7 77.1 79.9 36.9 La-JEPA S (ours) scratch no 0.10 0.74 97.9 80.0 95.8 49.9 La-JEPA B (ours) scratch no 0.34 0.98 98.0 82.5 95.9 49.9 La-JEPA L (ours) scratch no 1.14 1.78 98.1 84.1 95.5 46.0",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.T3.4",
+      "kind": "table"
+    },
+    {
+      "id": "cd6087cc5c2563ba",
+      "section": "5.1 Benchmark Performance and Generalization",
+      "location": "5.1 Benchmark Performance and Generalization",
+      "text": "Figure 4: RoboTwin clean versus randomized success of clean-trained policies. Blue: La-JEPA B; brown: no embodied pretraining; gray: embodied pretraining; RoboManip: Qwen-RobotManip. Points above the dashed line through La-JEPA have a higher mean of the two regimes. ∗ * : JEPA-WAM estimate (Appendix B ); LDA-1B as reported by Yan et al. (2026b) .",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.F4.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "34c7c653b4e2be6e",
+      "section": "5.1 Benchmark Performance and Generalization",
+      "location": "5.1 Benchmark Performance and Generalization",
+      "text": "Both benchmarks test generalization beyond the training distribution. On RoboTwin, policies are trained on clean demonstrations only and evaluated in both clean scenes and randomized scenes, which add clutter, distractor objects, and new textures. On LIBERO, policies are trained on the four standard suites and evaluated both on them and on LIBERO-Plus, which perturbs them along seven axes such as camera viewpoint, lighting, and sensor noise. On RoboTwin, all three La-JEPA sizes outperform every baseline in both regimes, with the largest margin in randomized scenes (Table 2 ). On LIBERO-Plus, success increases with size. With the released instructions, L exceeds every baseline except NowWAM ( Wang et al., 2026 ) , which deploys four times more parameters; with corrected instructions (Section 5.2 ), all three sizes exceed or match every re-evaluated baseline, and L leads NowWAM by 1.8 points. On LIBERO, where most methods are close to saturation, all three sizes come within 0.6 points of the best baseline.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dbe06cbee9c94646",
+      "section": "5.1 Benchmark Performance and Generalization",
+      "location": "5.1 Benchmark Performance and Generalization",
+      "text": "RoboTwin success, in contrast, does not monotonically increase with size. We did not vary the relative size of the Action DiT, which matches the World DiT at every size, and we hypothesize that a larger action expert more easily overfits the action distribution, which is far simpler than the distribution of future features, even when regularized by the world loss. Faster-WAM, whose single-layer action expert generalizes well on LIBERO-Plus ( Ma et al., 2026 ) , is consistent with this hypothesis.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d009aaa84039f752",
+      "section": "5.1 Benchmark Performance and Generalization",
+      "location": "5.1 Benchmark Performance and Generalization",
+      "text": "Figure 4 adds embodied-pretrained policies for reference. La-JEPA B’s mean over the two regimes exceeds that of all but four of them, OLA-Sem, GigaBrain-0.7 ( GigaBrain Team et al., 2026 ) , Qwen-RobotManip, and 4D-WAM ( Yang et al., 2026 ) , which all reach higher randomized but lower clean success, as expected when robot pretraining data already covers part of the randomized variation.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "162a05f6a636f7b9",
+      "section": "5.2 Instruction Leakage in LIBERO-Plus",
+      "location": "5.2 Instruction Leakage in LIBERO-Plus",
+      "text": "Table 4: Instruction received for two LIBERO-Plus variants. Bold: deviations from the training instruction.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ff3dc32ad5d6ea67",
+      "section": "5.2 Instruction Leakage in LIBERO-Plus",
+      "location": "5.2 Instruction Leakage in LIBERO-Plus",
+      "text": "Source Camera viewpoint (LIBERO-Object) Lighting (LIBERO-Spatial) Training, corrected (ours) pick up the alphabet soup and place it in the basket pick up the black bowl between the plate and the ramekin and place it on the plate Released …in the basket view 0 0 100 2 4 initstate 0 …place it on the plate light 1 Flex- π \\pi Pick the alphabet soup … Pick the akita black bowl …",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.T4.2",
+      "kind": "table"
+    },
+    {
+      "id": "ece5e0e5dd53b0f0",
+      "section": "5.2 Instruction Leakage in LIBERO-Plus",
+      "location": "5.2 Instruction Leakage in LIBERO-Plus",
+      "text": "The released LIBERO-Plus evaluator corrupts the instructions of 8,493 of its 10,030 variants by appending the perturbation’s parameters (Table 4 ); Flex- π \\pi ( Yan et al., 2026a ) noted this issue but substitutes BDDL annotations that paraphrase the training instructions for most variants, so that the language remains perturbed. We therefore also evaluate all open policies with corrected in-distribution instructions (Appendix B ). The corruption affects video-generator-based WAMs most strongly, obscuring their true robustness to several perturbations: with corrected instructions, Fast-WAM gains 19.3 points, LeapBot-WA 8.1, and Cosmos Policy 4.1, whereas image-generator-based WAMs and VLM-based policies change by at most 1.4 points and La-JEPA gains 3.9 to 6.3. With corrected instructions, every La-JEPA size exceeds every re-evaluated policy without embodied pretraining (Table 1 ), and L leads NowWAM by 1.8 points with four times fewer deployed parameters; it also exceeds the embodied-pretrained π 0.5 \\pi_{0.5} and π \\pi -JEPA-WAM (Table 14 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dcb8361048a19868",
+      "section": "5.3 Comparison with Latent World-Action Models",
+      "location": "5.3 Comparison with Latent World-Action Models",
+      "text": "La-JEPA also outperforms the two closest JEPA-based world-action models on LIBERO-Plus and RoboTwin 2.0, although both retain pretrained predictors (Table 3 ). LeapBot-WA, which also pretrains on robot data and deploys 10.4B parameters, falls below all three La-JEPA sizes on LIBERO-Plus with both the released and the corrected instructions (Table 14 in Appendix B ). JEPA-WAM, built on a pretrained Qwen2.5 model ( Qwen et al., 2024 ) , is exceeded on LIBERO and LIBERO-Plus by all three La-JEPA sizes, S and B deploying fewer parameters. On RoboTwin, JEPA-WAM trains and evaluates on 20 of the 50 tasks, and on these tasks every La-JEPA size, trained on all 50, leads it by more than 15 points in clean and 9 points in randomized scenes. This subset is easier than the full benchmark, since per-task DP3 and ACT policies score about 20 points higher on it in clean scenes (Appendix B ); because it was chosen by JEPA-WAM and applies equally to both methods, we do not consider the comparison biased in our favor. Even when JEPA-WAM’s scores are extrapolated to all 50 tasks using this difficulty gap, every La-JEPA size remains ahead in both regimes. LDA-1B, pretrained on over 30k hours of human and robot data with a 4B vision-language model ( Lyu et al., 2026 ) , remains far below on both benchmarks ( Yan et al., 2026b ) .",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "38176e6d94b4e6a8",
+      "section": "5.4 Computational Cost",
+      "location": "5.4 Computational Cost",
+      "text": "La-JEPA updates 0.10 to 1.14 B parameters during training, far fewer than the video-generator and vision-language-action baselines (2.0 to 7.8 B; Tables 1 and 2 ) while showing lower replan latency at matched or better performance. We time complete policy calls, with ten denoising steps on one consumer GPU (Table 15 , Appendix C ). With optimized (compiled) builds, S and B run two to five times faster than Fast-WAM and Faster-WAM, and S with original-kernel CUDA graphs, which reproduce uncompiled actions bit-for-bit, remains 2.6 × \\times faster than optimized Fast-WAM. Compiled builds do not significantly change closed-loop LIBERO success (Appendix C ), and the physical-robot policy runs compiled. Reducing inference to three denoising steps lowers latency further while keeping success within about one point (Appendix E.2 ), consistent with evidence that diffusion policies do not require many denoising steps ( Clémente et al., 2025 ) .",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c17ea132de648eae",
+      "section": "5.4 Computational Cost",
+      "location": "5.4 Computational Cost",
+      "text": "Figure 5: Real-robot tasks: cube placement, fruit picking, Push T, and dish manipulation.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c3f34a851e74ece2",
+      "section": "5.5 Real-Robot Experiments",
+      "location": "5.5 Real-Robot Experiments",
+      "text": "Table 5: Real-robot successes out of 20 and benchmark policy-call latency in ms, not control-loop timing (Appendix C ); LingBot-VA’s is rounded to 10 ms. Position: full dish success with correct utensil placement; Average: mean over the four tasks. LingBot-VA dish: 10 trials. Bold: best.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "05e83ebc1256657a",
+      "section": "5.5 Real-Robot Experiments",
+      "location": "5.5 Real-Robot Experiments",
+      "text": "Policy Latency (ms) Fruit Cube Push T Dish manipulation Average Plates Utensil 1 Utensil 2 Position With embodied pretraining π 0.5 \\pi_{0.5} 71.89 20 20 11 20 19 19 18 17.25 LingBot-VA ≈ 4760 \\approx 4760 18 20 2 6/10 3/10 2/10 1/10 — Without embodied pretraining Fast-WAM 88.09 19 19 14 20 19 15 12 16.00 Faster-WAM 50.96 18 20 13 20 18 16 14 16.25 La-JEPA 25.16 19 20 15 20 18 17 16 17.50",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "c9ae2c244e377f2b",
+      "section": "5.5 Real-Robot Experiments",
+      "location": "5.5 Real-Robot Experiments",
+      "text": "We train a La-JEPA B policy from scratch, with encoder LoRA but without image augmentation, on demonstrations of four Franka tabletop tasks (Figure 5 ; Appendix D ) and compare it with Fast-WAM, Faster-WAM, π 0.5 \\pi_{0.5} , and LingBot-VA ( Li et al., 2026 ) in Table 5 . We start with a simple cube placement as control, then test on fruit picking which requires lifting a lid, setting it down, and choosing the correct fruit; Push T tests contact-heavy interactions; and our dish task requires placing two plates from a rack onto the table, then a spoon on the gray plate and a fork on the pink plate in one uninterrupted rollout, with interchangeable utensil positions that require distinguishing the utensils.",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "69a04d16e58a178c",
+      "section": "5.5 Real-Robot Experiments",
+      "location": "5.5 Real-Robot Experiments",
+      "text": "La-JEPA achieves the highest average success among policies without embodied pretraining and is comparable to the embodied-pretrained π 0.5 \\pi_{0.5} , although its policy transformer is trained only on the target demonstrations. It is the most successful policy on Push T, whereas π 0.5 \\pi_{0.5} leads on the long-horizon dish task. On successful trials, La-JEPA also completes every task faster than the other policies without embodied pretraining (Appendix D ), and faster than π 0.5 \\pi_{0.5} on fruit picking and Push T, though slower on the dish task. LingBot-VA rarely succeeds on Push T and dish manipulation and is several times slower than every other policy. LingBot-VA’s low success may reflect a need for more real-robot finetuning than the shared budget allowed (Appendix D ).",
+      "url": "https://arxiv.org/html/2611.08156v1#S5.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "17c8aee0be53daa2",
+      "section": "Scope of recipe optimization.",
+      "location": "Scope of recipe optimization.",
+      "text": "We aim to show the potential of compact world-action policies rather than to optimize them exhaustively: beyond the targeted design studies, we did not systematically search learning rates, weight decay, dropout rates, LoRA configurations, or the relative capacity of the World and Action DiTs. This lack of scale-specific tuning, together with limited target data, may contribute to the non-monotonic RoboTwin scaling; our experiments do not isolate these effects. We also recognize that many high-performing baselines have external supervision objectives and robot-specific architectures that we do not: while this work does outline the performance of a policy with a simple setup, we cannot be certain that our improvements would stack with other work’s policy upgrades.",
+      "url": "https://arxiv.org/html/2611.08156v1#S6.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bdce68bfe11b0672",
+      "section": "Large-scale pretraining.",
+      "location": "Large-scale pretraining.",
+      "text": "Our policies learn from target demonstrations alone, so how La-JEPA scales with embodied pretraining remains open. Adapting the policy and its visual representation across embodiments and environments would also test whether data, rather than capacity, limits the larger models. We consider this the principal future direction of research that should come out of this paper. La-JEPA remains below the strongest embodied-pretrained methods on randomized RoboTwin scenes, and its real-robot average, although comparable to that of π 0.5 \\pi_{0.5} , comes from four tasks on one robot setup and does not establish parity across broader manipulation demands. The richer supervision, synthetic data, and additional objectives used by some stronger baselines are natural extensions of La-JEPA that we have not tested.",
+      "url": "https://arxiv.org/html/2611.08156v1#S6.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d936292078aa0a0b",
+      "section": "7 Conclusion",
+      "location": "7 Conclusion",
+      "text": "We asked whether world-action policies must inherit the architecture of a generative backbone, and whether a compact transformer trained from scratch can compete with those that do. Trained in a pretrained JEPA feature space, La-JEPA reaches the strongest RoboTwin 2.0 clean and randomized results among policies without embodied pretraining, and the strongest LIBERO-Plus results once the benchmark’s corrupted instructions are corrected, while running up to 5 × \\times faster than Fast-WAM. On four physical tasks, La-JEPA’s average success is comparable to that of the embodied-pretrained π 0.5 \\pi_{0.5} . Through our study, we empirically validate the benefits of the V-JEPA latent space for control tasks, provide some guidance on the benefits of different robustness design improvements and find that heavy generative models are not a requirement for high-performing learned policies.",
+      "url": "https://arxiv.org/html/2611.08156v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6ad691d3092036ee",
+      "section": "AI Use Statement",
+      "location": "AI Use Statement",
+      "text": "In this work, we used generative AI tools to implement methods, including the optimization of the training and dataloading pipeline which was particularly heavy, evaluation, and data-preprocessing code; to reformat datasets into precomputed feature stores (always through verifiable scripts); and to help design the infrastructure that enabled the interpretation of our large amount of results. We did not use generative AI tools to generate synthetic data, develop theoretical models, formulate or prove mathematical claims, or translate text; these uses are not applicable to this work. Additionally, we used generative AI tools to edit parts of the paper, to write the code that generates figures and tables from recorded results, to search for and summarize related literature, and to format references. We have reviewed all AI-assisted work: code was tested and validated against recorded outputs, reported numbers were traced to their evaluation records, figures and tables are generated by code from the underlying data directly, never by the AI tool itself, and references were checked against their arXiv entries. We take responsibility for the final content of this work, including text, claims, or artifacts produced with the aid of generative AI.",
+      "url": "https://arxiv.org/html/2611.08156v1#Sx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "84376a942ce1f4fd",
+      "section": "Ethics Statement",
+      "location": "Ethics Statement",
+      "text": "This work uses public simulation benchmarks and robot demonstrations collected by the authors through teleoperation; it involves no human-subject studies and releases no new dataset. We do not foresee harms specific to this work beyond those of robot learning in general.",
+      "url": "https://arxiv.org/html/2611.08156v1#Sx2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ce75927f7e6eca11",
+      "section": "Reproducibility Statement",
+      "location": "Reproducibility Statement",
+      "text": "Code for feature precomputation, training, and LIBERO, LIBERO-Plus, and RoboTwin 2.0 evaluation, with the configurations of the final S, B, and L policies, is available at https://github.com/mt-clemente/lajepa . Section 3 specifies the architecture and training objective. Appendix A details the design studies, Appendix B the training configurations, evaluation protocols, and baseline sources, Appendix C the latency and parameter accounting, Appendix D the real-robot setup, and Appendix E supplementary results, including per-task evaluations.",
+      "url": "https://arxiv.org/html/2611.08156v1#Sx3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fecf117523c2dd99",
+      "section": "Appendix A Design Studies",
+      "location": "Appendix A Design Studies",
+      "text": "This appendix documents the design studies of Section 4 . It first lists the values behind Figure 3 and the setup shared by all studies, then gives the protocol of each comparison in the order of the main text.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fa4b91cb88ea94fb",
+      "section": "Summary of gains.",
+      "location": "Summary of gains.",
+      "text": "Table 6 lists the gains shown in Figure 3 , together with each block’s baseline and evaluation budget. Values are percentage-point differences in success between La-JEPA’s choice and its baseline; IID and OOD denote LIBERO and LIBERO-Plus, or clean and randomized RoboTwin scenes. Each block has its own reference recipe and checkpoints, so comparisons hold only within a block.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b622fb4ac611e445",
+      "section": "Summary of gains.",
+      "location": "Summary of gains.",
+      "text": "Table 6: Gain in success (points) of each design choice over its baseline; comparisons hold within a block.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a765d66c07b9ef0b",
+      "section": "Summary of gains.",
+      "location": "Summary of gains.",
+      "text": "Choice Baseline Benchmark IID OOD Evaluation A Future prediction Action + future prediction Action only LIBERO + + 0.9 + + 2.1 IID: seed 42; OOD: 3 seeds Action + future prediction Action only RoboTwin + + 7.0 + + 3.7 5,000 5{,}000 /cond., 120–150k B V-JEPA features V-JEPA 2.1 features Wan2.2 VAE latents LIBERO + + 2.0 + + 6.0 2,000 2{,}000 / 10,030 10{,}030 , 150k V-JEPA 2.1 features Wan2.2 VAE latents RoboTwin + + 15.9 + + 16.0 5,000 5{,}000 /cond., 150k C V-JEPA setup Tube Static RoboTwin + + 1.1 + + 3.6 1,000 1{,}000 /cond., 120–150k Tube-motion Static RoboTwin + + 3.4 + + 3.7 1,000 1{,}000 /cond., 120–150k D Camera dropout Camera dropout Wrist-only camera dropout LIBERO + + 0.4 + + 10.2 n = 2,000 n{=}2{,}000 / 10,030 10{,}030 , 90k Camera dropout No camera dropout RoboTwin − - 0.6 + + 7.1 1,000 1{,}000 /cond., 150k E Proprioception dropout Proprioception dropout No proprioception dropout RoboTwin + + 3.8 + + 4.2 1,000 1{,}000 /cond., best step F Augmentation and encoder LoRA Encoder LoRA Plain LIBERO + + 0.5 + + 1.4 n = 2,000 n{=}2{,}000 / 10,030 10{,}030 Image augmentation Plain LIBERO + + 0.9 + + 5.8 n = 2,000 n{=}2{,}000 / 10,030 10{,}030 Augmentation + LoRA Plain LIBERO + + 0.1 + + 7.2 n = 2,000 n{=}2{,}000 / 10,030 10{,}030 Augmentation + LoRA Plain RoboTwin + + 5.7 + + 16.0 5,000 5{,}000 /cond., 150k",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.T6.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "9adccdd32ffd6aba",
+      "section": "Shared setup.",
+      "location": "Shared setup.",
+      "text": "All design studies use the original data and evaluation pipelines (Appendix B ), so each comparison is made within that pipeline. All design-study transformers are trained from scratch and evaluated with EMA weights, including the corresponding EMA encoder weights for policies with encoder LoRA. Studies use the small (S) policy unless stated otherwise, and each result comes from a single training run, except for the three-seed LIBERO-Plus comparison of predictive supervision. Several studies train on a subset of the training demonstrations, nominally 95%, which on LIBERO retains 1,663 of the 1,743 episodes; we call it the 95% split and state the training data of each comparison below. LIBERO evaluations cover 2,000 episodes with a 700-step budget in every suite unless stated otherwise, and LIBERO-Plus evaluations all 10,030 episodes with the upstream suite-specific step limits; both redraw action noise at every replan. RoboTwin evaluation budgets are listed per block in Table 6 ; the 1,000-episode budgets are ablation evaluations, smaller than the 5,000-episode headline protocol (Appendix B ).",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a57f37a52d6ff889",
+      "section": "A.1 Prediction Target and Feature Space",
+      "location": "A.1 Prediction Target and Feature Space",
+      "text": "These studies determine whether the policy should predict future features, in which representation, and how motion and spatial resolution enter the tokens (Section 4.1 ).",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "be96400baa4dfe83",
+      "section": "Predictive supervision on LIBERO.",
+      "location": "Predictive supervision on LIBERO.",
+      "text": "Joint action and future-feature prediction improves LIBERO-Plus success over action-only training for each of three training seeds, raising mean success from 74.35% to 76.47%, a gain of 2.12 points (Table 7 ). Figure 3 A shows this mean gain; its in-distribution bar uses the seed-42 pair at 150k updates, evaluated on 2,000 LIBERO episodes. Both objectives train on all 1,743 LIBERO episodes of the original pipeline for 150,000 updates with image augmentation and encoder LoRA, whereas the headline policies use the revised pipeline (Appendix B ), so these controls are not directly comparable to Table 1 . The action-only control omits future-feature supervision and computation while preserving the action pathway. For each objective and training seed, we select the checkpoint with the highest LIBERO success from the 30k, 60k, 90k, 120k, and 150k grid and evaluate it on all 10,030 LIBERO-Plus episodes with EMA weights, action-noise scale 1 redrawn at every replan, ten denoising steps, and ten-action execution chunks. Selection picks the same step for both objectives within each seed. Paired tests use identical task and evaluation-seed episodes for the two objectives.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c1f4a637fa4bc06",
+      "section": "Predictive supervision on LIBERO.",
+      "location": "Predictive supervision on LIBERO.",
+      "text": "Table 7: Predictive supervision across training seeds on LIBERO-Plus (success in %; per-seed exact McNemar tests).",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b748f0f75aad2e75",
+      "section": "Predictive supervision on LIBERO.",
+      "location": "Predictive supervision on LIBERO.",
+      "text": "Seed Selected step Joint Action only Gain (pp) Paired p p 42 150k 76.13 74.47 + + 1.67 2.3 × 10 − 4 2.3\\times 10^{-4} 1 90k 76.13 74.77 + + 1.37 0.002 0.002 2 120k 77.15 73.82 + + 3.33 2.2 × 10 − 12 2.2\\times 10^{-12} Mean — 76.47 74.35 + + 2.12 —",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.T7.2",
+      "kind": "table"
+    },
+    {
+      "id": "6e2b5978319c1918",
+      "section": "Predictive supervision on RoboTwin.",
+      "location": "Predictive supervision on RoboTwin.",
+      "text": "On 5,000 episodes per regime, each policy on its own set of evaluation episodes, joint training achieves 80.16% clean and 39.02% randomized success, against 73.14% and 35.34% for action-only training. Both policies use the final augmentation recipe (Table 10 ), all 2,500 clean demonstrations, 150,000 training updates, and a global batch of 400, split into four data-parallel ranks of 100 for joint training and eight of 50 for action-only training; the action-only policy neither loads nor computes future targets. Selection on the 1,000-episode clean grid picks 150k for joint training and 120k for action-only training, with ties broken toward the later step.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f65db9f01c4a54e7",
+      "section": "Feature space.",
+      "location": "Feature space.",
+      "text": "Block B compares frozen, static V-JEPA 2.1 features with Wan2.2 VAE latents at 150k updates, with action and future-feature prediction on the 95% split. Within each benchmark, feature dimensions, normalization, and input and output projections remain representation-specific, so the comparison concerns the two representation systems rather than their pretraining objectives in isolation. On RoboTwin, both policies use 384-dimensional, 12-layer transformers with patch grouping for observations and future targets and are evaluated on 5,000-episode clean and randomized manifests with 24-action execution chunks. On LIBERO, both use the 768-dimensional, 12-layer B transformer with 2 × 2\\times spatial mean pooling and 10-action execution chunks; LIBERO evaluation instead uses a 600-step budget per suite and 30 settling steps, and LIBERO-Plus evaluation uses action-noise scale 1. On LIBERO-Plus, V-JEPA succeeds in 5,773 episodes and Wan2.2 in 5,173. All evaluations use EMA weights, a single observation context, and 10 denoising steps.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8c84b20937df31c4",
+      "section": "Additional feature-space comparisons.",
+      "location": "Additional feature-space comparisons.",
+      "text": "Two further RoboTwin comparisons pool the future targets, each evaluated on 5,000 episodes per regime (clean only for the first). With full-data, static-feature training and patch-grouped observations, V-JEPA and Wan2.2 achieve 61.50% and 61.44% clean success at 150k. In the second, with 768-dimensional transformers, Wan2.2 leads on clean success (63.90% versus 61.12%), whereas V-JEPA leads on randomized success (15.00% versus 1.28%). V-JEPA’s advantage therefore holds in randomized scenes but not consistently in clean ones.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c43c82d6874eb90d",
+      "section": "Temporal encoding.",
+      "location": "Temporal encoding.",
+      "text": "Block C compares three frozen-encoder policies with patch grouping, trained on the 95% split, that differ only in the encoding: static, tube, or tube-motion. Each regime uses 1,000 episodes on the same scenes, and randomized success is read at the checkpoint selected on clean episodes: 150k for static and tube-motion, and 120k for tube.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d5bb7204ee9d41a",
+      "section": "Token reduction.",
+      "location": "Token reduction.",
+      "text": "On RoboTwin, grouping neighboring features into one token by concatenation (patch grouping) instead of averaging them (mean pooling) changes clean success by + 0.3 +0.3 points and raises randomized success by 4.1 points. Both policies apply the reduction to two-frame observations and to motion-based future targets and are compared at 150k updates; each clean and randomized evaluation uses 1,000 episodes, 32 samples per pixel, rendering depth 8, OIDN denoising, and action noise fixed within each episode. The pooling policy uses the full training set and the patch-grouping policy the 95% split, and their target normalization and projections also differ, so the comparison does not isolate the reduction operator. By contrast, on LIBERO, in a one-variable comparison between stored-feature S policies with tube-motion encoding at 150k updates, evaluated identically on 2,000 episodes, mean pooling reaches 94.05% against 89.35% for patch grouping. The final recipe uses patch grouping on RoboTwin, reducing the head camera 2 × 2\\times and the wrist cameras 4 × 4\\times , and 2 × 2\\times mean pooling on LIBERO (Appendix B ). Appendix E.3 reports a related sweep that pools only the future targets.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS1.SSS0.Px6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "908c467bc9fab866",
+      "section": "A.2 Robustness and Encoder Adaptation",
+      "location": "A.2 Robustness and Encoder Adaptation",
+      "text": "These studies target robustness to changes in the observations through camera and proprioception dropout, image augmentation, and encoder adaptation (Section 4.2 ). All LIBERO variants in blocks D and F train on the 95% split and are selected on LIBERO success: stored-feature policies with a frozen encoder at 90k updates, and online-encoder variants at 120k.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e5512273c4688ff8",
+      "section": "Camera dropout on LIBERO.",
+      "location": "Camera dropout on LIBERO.",
+      "text": "The LIBERO row of block D compares either-camera with wrist-only dropout in stored-feature policies. Allowing either camera to be dropped changes both camera eligibility and the expected number of missing streams, from 0.10 to 0.19 per example; at least one stream is always retained. Table 8 reports the effect of this change, and of the adaptation variants below, on the camera-viewpoint and sensor-noise categories of LIBERO-Plus.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "addf6f408a5f8913",
+      "section": "Camera dropout on LIBERO.",
+      "location": "Camera dropout on LIBERO.",
+      "text": "Table 8: LIBERO-Plus success under camera-viewpoint and sensor-noise perturbations (%).",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a97438efe3347a64",
+      "section": "Camera dropout on LIBERO.",
+      "location": "Camera dropout on LIBERO.",
+      "text": "Training variant Camera viewpoints Sensor noise Frozen encoder, stored features Wrist-camera dropout only 11.4 42.0 Either-camera dropout 43.8 67.1 Online encoder, either-camera dropout Image augmentation only 74.6 81.4 Encoder LoRA only 43.9 73.3 Image augmentation + encoder LoRA 72.5 83.6",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.T8.2",
+      "kind": "table"
+    },
+    {
+      "id": "266be266010d9acb",
+      "section": "Camera and proprioception dropout on RoboTwin.",
+      "location": "Camera and proprioception dropout on RoboTwin.",
+      "text": "The RoboTwin row of block D compares two frozen-encoder, static-feature policies at 150k updates that differ only in wrist-camera dropout with probability 0.1. The proprioception-dropout row of block E compares two policies of the same family that differ only in proprioception dropout with probability 0.1, read at each policy’s best checkpoint with an evaluation implementation different from that of the camera-dropout row. Both comparisons use 1,000 episodes per regime.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "56f1a57a917bc2a0",
+      "section": "Augmentation and encoder adaptation.",
+      "location": "Augmentation and encoder adaptation.",
+      "text": "On LIBERO, block F compares encoder LoRA, image augmentation, and both combined against the plain, either-camera-dropout policy of block D; the variants run the encoder online and are selected at 120k updates, whereas the plain reference uses stored features and is selected at 90k. On RoboTwin, the frozen-encoder policy without augmentation is compared with the augmentation-and-LoRA policy trained with the final augmentation pipeline, both at 150k updates and evaluated on 5,000 episodes per regime; the plain policy uses 2,400 of the 2,500 demonstrations and the augmentation-and-LoRA policy all 2,500, and the evaluation implementations also differ. Because the policies also differ in training duration on LIBERO and in training data on RoboTwin, block F measures recipe-level gains rather than isolated effects.",
+      "url": "https://arxiv.org/html/2611.08156v1#A1.SS2.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d239faa59757a33f",
+      "section": "Appendix B Training and Evaluation Protocols",
+      "location": "Appendix B Training and Evaluation Protocols",
+      "text": "This appendix specifies the headline training recipe, the data and checkpoint selection behind the reported La-JEPA results, the benchmark protocols, and the sources of baseline results.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1fa0e7804b23a42d",
+      "section": "Architecture and optimization.",
+      "location": "Architecture and optimization.",
+      "text": "Table 9 summarizes the architecture, optimization, conditioning, and inference settings of the headline recipe at the three policy sizes.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c0019d87764efb47",
+      "section": "Architecture and optimization.",
+      "location": "Architecture and optimization.",
+      "text": "Table 9: Architecture, training, and inference settings.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "40fa24909c625d4b",
+      "section": "Architecture and optimization.",
+      "location": "Architecture and optimization.",
+      "text": "Policy size S B L Width / layers / heads 384 / 12 / 6 768 / 12 / 12 1024 / 24 / 16 LoRA blocks (LIBERO) Last 8 Last 8 All 24 LoRA blocks (RoboTwin) Last 8 Last 8 Last 8 Transformer / losses Equal World/Action DiT widths and depths; MLP expansion 4; action and future loss weights 1 each Optimizer AdamW; policy LR 5 × 10 − 4 5\\times 10^{-4} ; betas ( 0.9 , 0.95 ) (0.9,0.95) ; matrix weight decay 0.01; gradient clipping 1 Precision / EMA BF16 mixed precision; EMA decay 0.9999 Schedule 150,000 updates; 5% warmup, cosine decay, final 10% constant tail; LR floor 1% of peak Global batch LIBERO: 128; RoboTwin: 400 LoRA Rank 16; α = 32 \\alpha=32 ; dropout 0.05; LR 10 − 4 10^{-4} with cosine decay to 5% of peak and 1% in the final tail; weight decay 0 Adapter locations Fused Q/K/V, attention output, both MLP projections Conditioning dropout Text and proprioception: 0.1 each; camera: 0.1, either view on LIBERO, wrists only on RoboTwin; retain at least one view Action/state normalization Per-channel 1st/99th percentiles mapped to [ − 1 , 1 ] [-1,1] ; clamped to ± 5 \\pm 5 on RoboTwin Feature normalization Training-set statistics; separate motion-target statistics; LIBERO pooled futures use per-camera scalar variance correction from 64 training windows Inference defaults τ ctx = 0 \\tau_{\\mathrm{ctx}}=0 ; predict 32 actions; execute 10 per replan on LIBERO, 24 on RoboTwin",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T9.2",
+      "kind": "table"
+    },
+    {
+      "id": "ab94adb329a26ed1",
+      "section": "Observation augmentation.",
+      "location": "Observation augmentation.",
+      "text": "Table 10 lists the final augmentation recipe. After the gate that leaves a window unmodified, transformation gates are independent, and parameters are shared across frames. Only observations are augmented; future targets are computed from unmodified frames by the frozen encoder.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "75ddc5f90d58384f",
+      "section": "Observation augmentation.",
+      "location": "Observation augmentation.",
+      "text": "Table 10: Observation augmentation. Probabilities are conditional on not bypassing augmentation; fog is one of three corruption types.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "22357a64dc48e5ce",
+      "section": "Observation augmentation.",
+      "location": "Observation augmentation.",
+      "text": "Operation Probability Parameters and scope Unmodified window 0.3 Bypass all observation augmentation Photometric 0.6 All cameras share brightness/contrast/saturation strength 0.3, hue 0.03 turns, gamma [ 0.8 , 1.25 ] [0.8,1.25] Corruption 0.5 Primary camera; uniform choice of Gaussian blur ( σ ∈ [ 0.5 , 6 ] \\sigma\\in[0.5,6] pixels), motion blur (length [ 5 , 20 ] [5,20] pixels), or fog Fog Within corruption Opacity [ 0.2 , 0.6 ] [0.2,0.6] ; contrast multiplier [ 0.5 , 0.9 ] [0.5,0.9] ; grid size 4–8; gray fraction 0.5–1.0 Rotation 0.5 Primary camera; yaw/pitch [ − 4 , 4 ] ∘ [-4,4]^{\\circ} , roll [ − 3 , 3 ] ∘ [-3,3]^{\\circ} ; homography K ​ R ​ K − 1 KRK^{-1} , replicated borders; vertical FOV 45 ∘ 45^{\\circ} (LIBERO), 37 ∘ 37^{\\circ} (RoboTwin)",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T10.2",
+      "kind": "table"
+    },
+    {
+      "id": "fefe7cdf79841452",
+      "section": "Precomputed features and token reduction.",
+      "location": "Precomputed features and token reduction.",
+      "text": "Before training, we encode every demonstration once with the frozen V-JEPA 2.1 encoder and store the resulting features. Stored-feature policies, used in most design studies, read both observations and future targets from these stores and never run the encoder during training. Encoder LoRA and image augmentation require encoding the observations at every training step, so the final policies encode their observation clips online but still read their future targets from the stores. Encoding the targets online as well would dominate the encoder cost of each step, since each camera’s targets span 16 frames, eight times as many encoder tokens as its two-frame observation clip. Targets from the adapting encoder also do not improve success (Appendix E.1 ), so the targets remain those of the frozen encoder.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b88d1d6b806086d0",
+      "section": "Precomputed features and token reduction.",
+      "location": "Precomputed features and token reduction.",
+      "text": "The features are then reduced spatially before entering the World DiT. Mean pooling, the simplest reduction, averages each 2 × 2 2\\times 2 neighborhood of a feature grid into one token. Because it can be applied once when the features are precomputed, it shrinks the stored features fourfold. Most of our development therefore used pre-pooled stores, which are much smaller and far easier to load during training than full-resolution V-JEPA features. Patch grouping instead concatenates neighboring features into one wider token, reducing the number of tokens without discarding any feature values, but the stored features keep their full size. Mean pooling suffices on LIBERO, whereas on RoboTwin the detail it averages away matters: patch grouping raises randomized success by 4.1 points (Appendix A.1 ), so the final RoboTwin recipe uses patch grouping.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "414c118b4e9ecdff",
+      "section": "Training data and checkpoint selection.",
+      "location": "Training data and checkpoint selection.",
+      "text": "On LIBERO, all three sizes train on all 1,777 demonstrations retained by the revised pipeline (Appendix B ) for 150,000 updates, and we report the final checkpoints’ performances averaged over three training seeds; L additionally uses full-depth LoRA. The final RoboTwin S, B, and L policies train on the 2,438 clean demonstrations retained by the revised pipeline (Appendix B ) with three training seeds each. For each seed, the checkpoint is selected among 90k, 120k, and 150k updates on a 1,000-episode clean grid disjoint from the evaluation episodes, which picks 150k for every seed except one L seed (120k); the selected policies are evaluated on 5,000 episodes per condition with action noise redrawn at every replan, and we report the mean over seeds.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3aed9125e437f898",
+      "section": "Benchmark protocols.",
+      "location": "Benchmark protocols.",
+      "text": "LIBERO scores are success rates over the four standard suites. LIBERO-Plus scores are success rates over all 10,030 evaluation episodes of the seven perturbation categories, including background textures, weighting every episode rather than every category equally. Literature aggregates are recomputed from reported per-category rates when needed. La-JEPA’s headline LIBERO and LIBERO-Plus evaluations use MuJoCo 3.3.2 and the upstream suite-specific step limits (220, 280, 300, and 520 steps, after 10 settling steps). The design studies, evaluation-setting sweeps, and compiled-build validation keep a flat budget in every suite, 700 steps except for the LIBERO pair of block B (600 steps after 30 settling steps; Appendix A.1 ), so each comparison is made within one protocol. RoboTwin policies are trained on clean demonstrations and evaluated in clean and randomized scenes, and the mean of the two regimes is the leaderboard aggregate. La-JEPA’s RoboTwin policies are conditioned on each episode’s own RoboTwin instruction in both training and evaluation. JEPA-WAM reports 20 RoboTwin tasks, so Table 3 restricts our evaluations to the same tasks, using 2,000 episodes per condition and training seed. JEPA-WAM trains only on these 20 tasks, whereas our policies train on all 50. The subset is easier than the full benchmark: per-task DP3 and ACT policies reach 73.9% and 51.8% clean success on it ( Lin et al., 2026 ) , against 55.2% and 29.7% over all 50 tasks ( Chen et al., 2025 ) . Projected to all 50 tasks, JEPA-WAM’s success is estimated at 65.5% clean and 25.0% randomized (see the full-suite estimate below), below every La-JEPA size in Table 2 . Methods pretrained on robot trajectories beyond the target demonstrations are outside the main comparison and are explicitly identified in the latent world-action model comparison, the leaderboard figure, and the physical-robot comparison.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "07e302db3274bd86",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "Baseline scores come from the following sources.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e97b364d2a64d6c",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "Re-evaluations of released checkpoints: All LIBERO-Plus scores of StarVLA ( StarVLA Community, 2026 ) , JEPA-WAM, Fast-WAM, Cosmos Policy, ImageWAM, NowWAM, LeapBot-WA, π 0.5 \\pi_{0.5} , and π \\pi -JEPA-WAM, with both the released and the corrected instructions (Section 5.2 and Appendix B ), and the LIBERO scores of StarVLA and NowWAM. For StarVLA, whose variant the Qwen-RobotManip report does not specify, we evaluate the released LIBERO checkpoint with a Qwen3-VL-4B backbone and a flow-matching action head; for LeapBot-WA, we evaluate its LIBERO-trained checkpoint, matching the zero-shot LIBERO-Plus transfer reported in its paper.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "366ecde113a1f44c",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "Training: Faster-WAM reports RoboTwin results only for training on clean and randomized demonstrations, so we train it on the clean demonstrations ourselves, adapting the open-source Fast-WAM code as described in the Faster-WAM paper.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c74bca67c29d5580",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "Qwen-RobotManip report ( Yuan et al., 2026a ) : All Qwen-RobotManip-scratch scores and the RoboTwin scores of StarVLA, as well as the embodied-pretrained Qwen-RobotManip model in Figure 4 , taken from its clean-to-randomized comparison.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c2ebfd0ed7f7551",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "RoboTwin 2.0 leaderboard and report ( Chen et al., 2025 ) : Fast-WAM’s clean-trained RoboTwin scores and the embodied-pretrained policies added in Figure 4 come from the official leaderboard 1 1 1 https://robotwin-platform.github.io/leaderboard : 4D-WAM ( Yang et al., 2026 ) , GigaBrain-0.7 ( GigaBrain Team et al., 2026 ) , and OLA-Sem and OLA-Geo, which are leaderboard entries without an accompanying paper. The ACT and DP3 RoboTwin scores in Figure 6 come from the benchmark report.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "36a86f3a4c014af8",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "Method papers: All other LIBERO and LIBERO-Plus scores, and JEPA-WAM’s 20-task RoboTwin scores, come from each method’s paper; in Figure 6 , SmolVLA’s LIBERO scores are those of its variants without robot pretraining ( Shukor et al., 2025 ) , and LDA-1B’s scores in Table 3 are those reported by Yan et al. (2026b) . Where a paper prints a category-averaged LIBERO-Plus score (Faster-WAM and MINT), we recompute the episode-weighted score from its per-category rates, so our values can differ from the printed averages.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I1.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ddb2c30342434107",
+      "section": "Baseline sources.",
+      "location": "Baseline sources.",
+      "text": "LeapBot-WA’s clean-plus-randomized training regime is excluded from the RoboTwin comparison of Table 3 . In Figure 4 , the La-JEPA point is B, and the dashed contour fixes the arithmetic mean of clean and randomized success.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px6.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "36510787b44f742c",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "The headline policies use the data and evaluation pipelines below, with three training seeds per size. The design studies, representation diagnostics, evaluation-setting sweeps, adapted-target comparison, and compiled-build validation use the original version of these pipelines, with the same architecture, objective, and augmentation strengths; Tables 11 and 12 compare the two.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5f0a83b021455400",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Simulator version: Demonstrations are rendered and all policies are evaluated with MuJoCo 3.3.2, the version used by the compared baselines; under newer releases such as 3.9.0, the bowl in the task “pick up the black bowl on the ramekin” is unseated at reset.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2b0b3a7caffdf233",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Demonstration filtering: Each demonstration’s recorded actions are replayed from its recorded initial state, and only demonstrations that end in task success are kept: 1,777 of the 2,000.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec4b4ad83d6ebfec",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Proprioception alignment: Each frame is paired with the proprioceptive state at its own time step, as at evaluation.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4b3346d46e419159",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Normalization: States and actions use per-channel 1st/99th-percentile scaling to [ − 1 , 1 ] [-1,1] , as in OpenVLA-OFT ( Kim et al., 2025 ) and π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) .",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "86de22a40dd12469",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "End-of-episode windows: Training windows extend to the end of each demonstration, and missing future targets are masked from the loss.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e2bc02bfaa9d5cb6",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Training schedule: All sizes train on all retained demonstrations for 150,000 updates, and we report the final checkpoint averaged over the three seeds.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec0a189d4ca8ffcc",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Evaluation protocol: Each episode takes 10 settling steps before the policy acts and is scored at the upstream per-suite step limits (220, 280, 300, and 520 steps).",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I2.i7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "034845e56b0a6a6f",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Table 11 compares these policies with the original-pipeline ones, which were evaluated under MuJoCo 3.9.0.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px7.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "e5910d7c7b62ac4f",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Table 11: Revised versus original LIBERO policies (success in %). Revised: final 150k checkpoint, mean over three training seeds ± \\pm sample standard deviation across seeds; LIBERO-Plus categories are three-seed means. Original: one training run at 120k updates. Both use the upstream suite-specific step limits; the original LIBERO values are counted from recorded rollouts without settling steps, whereas the revised evaluations take 10 settling steps before the policy acts.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5736fd62414a651c",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "LIBERO-Plus categories (revised) LIBERO-Plus LIBERO Size Camera Robot Language Light Backgr. Noise Layout Revised Orig. Revised Orig. S 80.4 58.3 89.1 95.5 66.0 89.6 80.3 80.0 ± \\pm 0.4 75.2 97.9 ± \\pm 0.1 93.4 B 85.0 58.0 91.0 96.7 71.4 93.2 82.1 82.5 ± \\pm 0.4 78.9 98.0 ± \\pm 0.2 96.4 L 86.4 61.4 92.1 97.4 74.9 94.6 82.1 84.1 ± \\pm 0.4 82.3 98.1 ± \\pm 0.2 97.0",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T11.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "1f16fee33b13df0f",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Normalization: States and actions use the same per-channel percentile scaling as on LIBERO, clamped to ± 5 \\pm 5 , with gripper commands mapped from [ 0 , 1 ] [0,1] to [ − 1 , 1 ] [-1,1] .",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I3.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bcc85427073c1576",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Joint-angle wrapping: In 62 of the 2,500 clean demonstrations, spread over 21 of the 50 tasks, the planned joint path crosses ± π \\pm\\pi , where the wrap-around makes the joint trajectory discontinuous. We exclude these demonstrations and train on the remaining 2,438 (538,662 frames, at least 41 per task).",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I3.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8dd4f7bc0a0ad26c",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "End-of-episode windows: Training windows extend to the end of each episode; padded steps and padded future-target rows are masked from the loss, as on LIBERO.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I3.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "04b27b38290da319",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Instructions: Each episode is conditioned on its own official RoboTwin instruction.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I3.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a155d246fa45b9df",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Task isolation: Each task is evaluated in its own simulator process. In dump_bin_bigbin and put_bottles_dustbin , the upstream scene setup shifts the clutter region at every reset, so that it drifts across episodes; we keep this upstream behavior for comparability with leaderboard results, and the isolation prevents it from affecting other tasks, all of which pass a per-reset scene check.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.I3.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a7fc9fc40d12ebbf",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Table 12 compares these policies with the original-pipeline ones: clean success rises by 5 to 8 points at every size, randomized success falls by 5 to 9 points, and the mean of the two regimes changes by at most one point.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px7.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "5ff4dae251109016",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Table 12: Revised versus original RoboTwin 2.0 policies (clean-trained; success in %, 5,000 episodes per condition). Revised: mean over three training seeds ± \\pm sample standard deviation across seeds. Original: one training run.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f811600ad92406a0",
+      "section": "Data and evaluation pipelines:",
+      "location": "Data and evaluation pipelines:",
+      "text": "Clean Randomized Mean Size Revised Orig. Revised Orig. Revised Orig. S 85.5 ± \\pm 0.5 80.2 33.9 ± \\pm 2.2 39.0 59.7 ± \\pm 1.3 59.6 B 86.2 ± \\pm 0.5 78.8 35.4 ± \\pm 0.6 44.7 60.8 ± \\pm 0.5 61.8 L 86.0 ± \\pm 0.4 78.4 32.1 ± \\pm 2.8 39.1 59.0 ± \\pm 1.6 58.7",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T12.2",
+      "kind": "table"
+    },
+    {
+      "id": "7144376f190f2354",
+      "section": "LIBERO-Plus instruction texts.",
+      "location": "LIBERO-Plus instruction texts.",
+      "text": "Table 13 compares the instruction a policy receives under four sources. The LIBERO training demonstrations store each task’s instruction in their metadata, identical to the instruction that standard LIBERO evaluation derives from the task’s file name. The released LIBERO-Plus evaluator derives the instruction from the variant’s file name instead, so every non-language variant receives the training instruction followed by the perturbation’s parameters. Flex- π \\pi ( Yan et al., 2026a ) replaces it with the :language annotation of the variant’s BDDL file, falling back to the base task’s file for camera, robot-initial-state, and sensor-noise variants. These annotations are written independently of the training instructions: across the 8,493 non-language variants, only 2,351 match the training instruction exactly and 3,148 up to capitalization, so most variants still receive a paraphrase that the policy never saw during training. Our corrected text gives every non-language variant its base task’s training instruction verbatim. For the 1,537 language variants, whose paraphrases are the intended perturbation, the released and corrected texts are identical, and Flex- π \\pi ’s annotations contain the same words but differ in capitalization for 1,209 of them. All re-evaluations share one protocol; NowWAM, Fast-WAM, and ImageWAM, whose released evaluations use longer step limits, are scored at the upstream per-suite limits like every other policy. Table 14 reports both evaluations. Because the corruption affects policies to different degrees, released-instruction scores partly rank policies by their sensitivity to corrupted text rather than by their robustness to the intended perturbation: correcting the instructions reverses the order of NowWAM and La-JEPA B and L, and of Cosmos Policy and La-JEPA S. With corrected instructions, S is on par with NowWAM, and L’s 1.8-point lead exceeds both its seed-to-seed standard deviation (0.3 points) and the binomial standard error of a single 10,030-episode evaluation (about 0.35 points).",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b95761e6d90f209d",
+      "section": "LIBERO-Plus instruction texts.",
+      "location": "LIBERO-Plus instruction texts.",
+      "text": "Table 13: Instruction sources for LIBERO-Plus. Example: the first LIBERO-Spatial task under the first lighting perturbation. Match: non-language variants whose instruction equals the training instruction, out of 8,493.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "fa9af0188eb82342",
+      "section": "LIBERO-Plus instruction texts.",
+      "location": "LIBERO-Plus instruction texts.",
+      "text": "Source Example instruction Match LIBERO training data pick up the black bowl between the plate and the ramekin and place it on the plate — Released LIBERO-Plus pick up the black bowl between the plate and the ramekin and place it on the plate light 1 0 Flex- π \\pi (BDDL annotation) Pick the akita black bowl between the plate and the ramekin and place it on the plate 2,351 Ours (corrected) pick up the black bowl between the plate and the ramekin and place it on the plate 8,493",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T13.2",
+      "kind": "table"
+    },
+    {
+      "id": "1ef93a790b4bd5c1",
+      "section": "LIBERO-Plus instruction texts.",
+      "location": "LIBERO-Plus instruction texts.",
+      "text": "Table 14: LIBERO-Plus success (%) with the released and the corrected instructions, all evaluated in our harness on all 10,030 variants (MuJoCo 3.3.2, seed 0, first initial state, 10 settling steps, upstream per-suite step limits). Δ \\Delta : corrected minus released. Best in bold, second best underlined. La-JEPA values are means over three training seeds. § One variant cannot be instantiated by LIBERO-Plus, so n = 10,029 n=10{,}029 . ¶ Run-to-run variation of about ± 0.5 \\pm 0.5 points. π \\pi -JEPA-WAM: π 0.5 \\pi_{0.5} trained with the auxiliary JEPA objective of JEPA-WAM ( Lin et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "31bcfe82e6a0e052",
+      "section": "LIBERO-Plus instruction texts.",
+      "location": "LIBERO-Plus instruction texts.",
+      "text": "Policy Embodied PT Released Corrected Δ \\Delta La-JEPA S (ours) no 80.0 86.3 + 6.3 +6.3 La-JEPA B (ours) no 82.5 87.3 + 4.9 +4.9 La-JEPA L (ours) no 84.1 88.0 + 3.9 +3.9 NowWAM no 86.2 86.2 + 0.0 +0.0 Cosmos Policy § no 80.8 84.9 + 4.1 +4.1 ImageWAM no 79.7 80.4 + 0.7 +0.7 JEPA-WAM § no 77.1 77.8 + 0.7 +0.7 StarVLA § no 76.7 77.6 + 0.9 +0.9 Fast-WAM no 51.5 70.8 + 19.3 +19.3 π 0.5 \\pi_{0.5} §¶ yes 84.3 85.7 + 1.4 +1.4 π \\pi -JEPA-WAM §¶ yes 84.5 85.2 + 0.6 +0.6 LeapBot-WA § yes 71.7 79.7 + 8.1 +8.1",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.T14.6",
+      "kind": "table"
+    },
+    {
+      "id": "6640a46bb5ce4951",
+      "section": "Action-noise scale for L.",
+      "location": "Action-noise scale for L.",
+      "text": "All headline results use the default action-noise scale of 1, which multiplies the initial action noise at each replan; for the original-pipeline L policy (Appendix B ), this gives 82.26% on LIBERO-Plus. Appendix E.2 reports a sweep over scales { 0 , 0.25 , 0.5 , 1 } \\{0,0.25,0.5,1\\} for that policy, in which scale 0.5 reaches 82.50%; no scale gives a statistically supported improvement, so we report the default. The scale does not change the trained model or its parameter count.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px9.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3b880b8c02e0731a",
+      "section": "JEPA-WAM full-suite estimate.",
+      "location": "JEPA-WAM full-suite estimate.",
+      "text": "For the asterisk-marked points in Figures 1 and 4 , we fit separate linear regressions from 20-task to 50-task RoboTwin success using seven policies with both scores: Diffusion Policy ( Chi et al., 2023 ) , ACT ( Zhao et al., 2023 ) , RDT ( Liu et al., 2024 ) , π 0 \\pi_{0} ( Black et al., 2024 ) , and DP3 ( Ze et al., 2024 ) from the official leaderboard’s clean-trained per-task results, and La-JEPA S and B. With success expressed in percent, the fits are s ^ clean = − 33.09 + 1.234 ​ s 20 \\hat{s}_{\\mathrm{clean}}=-33.09+1.234s_{20} and s ^ rand = − 1.14 + 0.710 ​ s 20 \\hat{s}_{\\mathrm{rand}}=-1.14+0.710s_{20} , with leave-one-out mean absolute errors of 2.1 and 1.0 points, respectively. Applied to JEPA-WAM’s reported 79.9% clean and 36.9% randomized success ( Lin et al., 2026 ) , they give estimates of 65.5% and 25.0% (mean 45.3%). Figure 1 shows the mean estimate at 1.35 B deployed parameters; these cross-policy estimates are excluded from the result tables.",
+      "url": "https://arxiv.org/html/2611.08156v1#A2.SS0.SSS0.Px10.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "389d12582f0729d4",
+      "section": "Appendix C Inference Cost and Model Size",
+      "location": "Appendix C Inference Cost and Model Size",
+      "text": "This appendix defines how we time policy calls and count parameters, the two cost measures of Section 5.4 .",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "83d24c305feb6de8",
+      "section": "C.1 Latency",
+      "location": "C.1 Latency",
+      "text": "Table 15: Policy-call latency (ms): batch size one, median of 100 calls after 20 warm-ups on one consumer GPU. OOM: out of memory; dashes: not measured. The timed L uses last-eight-block rather than full-depth LoRA, which does not change latency.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.T15",
+      "kind": "figcaption"
+    },
+    {
+      "id": "98ab0a431d0590e6",
+      "section": "C.1 Latency",
+      "location": "C.1 Latency",
+      "text": "Policy Steps Optimized Original-kernel CUDA graphs Eager La-JEPA S 10 17.78 34.20 99.96 La-JEPA B 10 25.16 42.35 98.21 La-JEPA L 10 59.72 88.87 167.93 Fast-WAM 10 88.09 OOM 193.44 Faster-WAM 10 50.96 OOM 62.70 π 0.5 \\pi_{0.5} 10 71.89 — — La-JEPA S 3 11.04 19.59 — La-JEPA B 3 13.40 22.54 — La-JEPA L 3 26.30 39.37 —",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.T15.2",
+      "kind": "table"
+    },
+    {
+      "id": "8578ff83e100586b",
+      "section": "Protocol.",
+      "location": "Protocol.",
+      "text": "Tables 15 and 5 time complete benchmark policy calls, not executed actions or control-loop cycles. Each timed call includes fresh instruction tokenization and encoding, input preparation, transfer, and host-side action output; loading, compilation, simulation, and transport are excluded. Text and vision encoders run on parallel streams where supported. Eager execution is uncompiled; original-kernel CUDA graphs reduce launch overhead without changing kernels; optimized builds also compile the computation. The head-to-head WAM rows use ten denoising steps and 32 predicted actions, whereas the three-step rows and π 0.5 \\pi_{0.5} (official JAX JIT, ten steps, native ten-action horizon) are separate operating points. Each method keeps its native inputs: La-JEPA uses two 256 × 256 256\\times 256 cameras with two adjacent frames and FLAN-T5-large, timed in FP32 (our success evaluations use FP16), whereas in our setup Fast-WAM and Faster-WAM use two 224 × 224 224\\times 224 single-frame cameras and BF16 UMT5-XXL ( Chung et al., 2023 ) . Action noise is pre-drawn and copied inside the timed call for La-JEPA, and drawn on the CPU inside the call for Fast-WAM. LingBot-VA is timed on the same device under the same protocol with its native implementation and appears, rounded to 10 ms, only in Table 5 .",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b5c6311039eefd94",
+      "section": "Execution variants.",
+      "location": "Execution variants.",
+      "text": "For La-JEPA, original-kernel CUDA graphs reproduce eager actions bit-for-bit across 36 replays per model on 12 inputs that vary observations, instructions, and noise. Compilation is not bit-exact: the maximum ten-step action differences are 0.010, 0.021, and 0.009 for S, B, and L. Our simulation success rates use uncompiled execution, which the CUDA graphs reproduce exactly, whereas the physical-robot La-JEPA policy runs compiled. For Fast-WAM and Faster-WAM, original-kernel graphs exceed the available GPU memory in our implementation.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9010f6b1a2647e36",
+      "section": "Closed-loop validation.",
+      "location": "Closed-loop validation.",
+      "text": "Using the original-pipeline checkpoints (Appendix B ), we evaluate the exact timed builds on 2,000 LIBERO episodes with a 700-step budget in every suite (Appendix B ), with action noise of scale 1 redrawn at every replan, and compare each with uncompiled execution of the same checkpoint using paired McNemar tests. Compiled ten-step builds reach 95.20%, 97.05%, and 96.25% for S, B, and L, against 94.30%, 97.35%, and 96.50% uncompiled ( p = 0.15 p=0.15 , 0.59 0.59 , and 0.69 0.69 ). In separate evaluation runs, ten-step CUDA-graph builds reach 94.70%, 97.00%, and 96.35% ( p = 0.55 p=0.55 , 0.50 0.50 , and 0.84 0.84 ), and the three-step B graph build 96.90% against 97.30% ( p = 0.45 p=0.45 ). None of the seven paired comparisons differs significantly. The timed L build applies LoRA to the final eight encoder blocks and is selected at 150k updates.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f34af82a5fd8d714",
+      "section": "Serial encoding.",
+      "location": "Serial encoding.",
+      "text": "With serial rather than parallel text and vision encoding, optimized ten-step calls take 19, 26, and 61 ms for S, B, and L, against 92 ms for Fast-WAM and 54 ms for Faster-WAM, leaving the speedups essentially unchanged.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "86a9d57111a7abd4",
+      "section": "Definitions.",
+      "location": "Definitions.",
+      "text": "Table 16 lists the components behind the size columns. Trainable counts the weights updated on target demonstrations, including LoRA adapters. Deployed counts the policy and encoder parameter inventory, including frozen visual and language encoders; it is a size measure, not a measurement of memory use or operations per action. Deployed counts merge LoRA adapters into the encoder weights, adding no parameters, and count shared encoders once across cameras. Baseline counts use measured checkpoints or published inventories; where encoder-only counts are unavailable, we count full tokenizer inventories, including unused decoder weights, which conservatively overestimates executed parameters. Transformer initialization refers to the trained world-action predictor or VLA backbone: video or image generation, vision-language pretraining, or random initialization.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec1daf5f1c663ee7",
+      "section": "RoboTwin configurations.",
+      "location": "RoboTwin configurations.",
+      "text": "Table 16 refers to LIBERO configurations. RoboTwin’s token projections change La-JEPA’s sizes to 0.11/0.75 B (trainable/deployed) for S, 0.37/1.01 B for B, and 1.17/1.82 B for L (Table 2 ). Figure 6 complements Figure 1 by plotting success against trainable rather than deployed parameters.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8508451851f3b176",
+      "section": "RoboTwin configurations.",
+      "location": "RoboTwin configurations.",
+      "text": "Table 16: Parameter inventory (billions); La-JEPA rows for LIBERO. m: measured, r: reported, e: estimated.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.T16",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1c80a0925e42ce59",
+      "section": "RoboTwin configurations.",
+      "location": "RoboTwin configurations.",
+      "text": "Method Trained components Frozen components at inference Trainable Deployed Qwen-RobotManip-scratch Qwen3.5-4B, action head — 4.7 e 4.7 e StarVLA Qwen3-VL-4B (4.44), cross-attention DiT action head (3.36) — 7.79 m 7.79 m Fast-WAM Wan2.2 video DiT (5.00), action DiT (1.02) UMT5-XXL encoder (5.68), Wan2.2 VAE (0.71) 6.02 m 12.4 m Faster-WAM Wan2.2 video DiT (5.00), action head (0.05) UMT5-XXL encoder (5.68), Wan2.2 VAE (0.71) 5.05 r 11.4 e Cosmos Policy Cosmos-Predict2-2B DiT (1.96) T5-11B encoder (4.87), Wan2.1 VAE (0.13) 1.96 m 6.95 m ImageWAM FLUX.2 4B image DiT (3.86), action DiT (0.64) Qwen3-4B encoder (4.02), VAE (0.08) 4.52 m 8.62 m NowWAM FLUX.2-klein 4B-initialized DiT (3.04) Qwen3-4B encoder (4.02), autoencoder (0.08) 3.04 m 7.1 m JEPA-WAM action DiT (0.53), Qwen2.5-0.5B LoRA (0.018), transition head (0.004, training only) Qwen2.5-0.5B (0.49), V-JEPA 2.1 L (0.30), projector (0.002) 0.55 m 1.35 m LeapBot-WA mixture-of-transformers policy (2.75) V-JEPA 2.1 encoder (1.85), adapter (0.11), UMT5-XXL encoder (5.68) 2.75 m 10.4 m π 0.5 \\pi_{0.5} PaliGemma (2.92), action expert (0.43) — 3.35 m 3.35 m La-JEPA S world and action transformers (0.094), encoder LoRA (0.002) V-JEPA 2.1 L (0.305), FLAN-T5-large encoder (0.341) 0.096 m 0.74 m La-JEPA B world and action transformers (0.335), encoder LoRA (0.002) V-JEPA 2.1 L (0.305), FLAN-T5-large encoder (0.341) 0.337 m 0.98 m La-JEPA L world and action transformers (1.131), full-depth encoder LoRA (0.006) V-JEPA 2.1 L (0.305), FLAN-T5-large encoder (0.341) 1.14 m 1.78 m",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.T16.2",
+      "kind": "table"
+    },
+    {
+      "id": "1614491a39111e10",
+      "section": "RoboTwin configurations.",
+      "location": "RoboTwin configurations.",
+      "text": "Figure 6: Companion to Figure 1 : in-distribution (top) and out-of-distribution (bottom) success against trainable parameters on a logarithmic axis, for LIBERO (left) and clean-trained RoboTwin 2.0 (right). Trainable counts every weight updated on the target demonstrations, adapters included. La-JEPA points are blue and connected in size order; purple denotes VLM-initialized and brown generator-initialized action transformers, while other scratch policies use muted blue. SmolVLA ( Shukor et al., 2025 ) is shown at its three sizes joined by a dotted line. Unlike Figure 1 , LIBERO-Plus uses the released instructions, for which scores of all baselines are available.",
+      "url": "https://arxiv.org/html/2611.08156v1#A3.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e6706ea2c2510a29",
+      "section": "Appendix D Real-Robot Setup",
+      "location": "Appendix D Real-Robot Setup",
+      "text": "This appendix describes the physical platform, the four tasks, demonstration collection, and the training and evaluation protocol behind Table 5 , and reports completion times.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9316c53b1ba96d67",
+      "section": "Robot, cameras, and control.",
+      "location": "Robot, cameras, and control.",
+      "text": "A tabletop Franka Panda with a parallel gripper uses a wrist-mounted RealSense D405 camera and a fixed external RealSense D435 camera. A GPU workstation runs Linux with a real-time kernel. Policies receive both camera views, proprioception, and a task instruction, and execute end-effector deltas and gripper commands through Polymetis 2 2 2 https://facebookresearch.github.io/fairo/polymetis/ and the Franka Control Interface.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fd02051d2b02cd99",
+      "section": "Tasks and objects.",
+      "location": "Tasks and objects.",
+      "text": "Cube placement uses a red wooden cube and a bowl. Fruit picking requires removing a bamboo steamer’s lid, setting it down, and then picking the correct fruit, a plum, from inside the steamer. Push T requires pushing a wooden T onto a T shape marked on the table. Dish manipulation requires placing both plates, then the spoon on the gray plate and the fork on the pink plate, in one uninterrupted rollout; plate locations are fixed, but the utensils’ starting positions are interchangeable. Every training demonstration and evaluation rollout contains the complete uninterrupted sequence of its task. Figure 5 shows the initial scene of each task from the external camera.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "554140fbb09efedb",
+      "section": "Demonstration collection.",
+      "location": "Demonstration collection.",
+      "text": "SpaceMouse teleoperation provides six-degree-of-freedom end-effector control through the same interface. We record camera observations, robot state, end-effector pose, and gripper state at 10 Hz, collecting 100 demonstrations per task (400 in total). Initial cube positions vary within 10 ​ cm × 10 ​ cm 10\\,\\mathrm{cm}\\times 10\\,\\mathrm{cm} , and plum positions vary within the steamer; Push T and dish manipulation use smaller placement variations, including utensil rearrangements.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1afde2bb025bd961",
+      "section": "Training and evaluation.",
+      "location": "Training and evaluation.",
+      "text": "Policies train jointly on the four language-conditioned tasks using their respective recipes. Fast-WAM and Faster-WAM train for 30 epochs; La-JEPA trains its B policy transformer from scratch with encoder LoRA but without image augmentation. Table 5 reports counts over 20 rollouts per task, with explicit ten-rollout denominators for LingBot-VA’s dish result. Utensil 1 and Utensil 2 denote successful placement of the first and second utensils on plates, irrespective of utensil identity or order. Position additionally requires the correct spoon–gray and fork–pink assignments and success at all preceding stages; the two plate stages share one table column because their counts are identical. Average weights the four tasks equally, using Position for dish, in mean successes out of 20; LingBot-VA’s average is omitted because its dish result uses 10 trials rather than 20.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "20a54218809a7180",
+      "section": "Completion time.",
+      "location": "Completion time.",
+      "text": "Table 17 reports the mean and standard deviation of completion time over successful trials. La-JEPA is the fastest policy without embodied pretraining on every task and the fastest overall on fruit picking and Push T, while π 0.5 \\pi_{0.5} is fastest on cube placement and dish manipulation. Our main hypothesis for LingBot-VA’s low Push T and dish success is that it requires substantially more real-robot finetuning than the other policies; independently of success, its completion times, three to eleven times longer than those of the other policies, make it impractical for closed-loop control on this platform. Its dish entry comes from its single successful trial.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.SS0.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c1727b7ee30f9f66",
+      "section": "Completion time.",
+      "location": "Completion time.",
+      "text": "Table 17: Real-robot completion time over successful trials (s; standard deviation in small type). Bold: fastest; underlined: second. † Single successful trial.",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.T17",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ca41b3987ebc9e4e",
+      "section": "Completion time.",
+      "location": "Completion time.",
+      "text": "With embodied pretraining Without embodied pretraining Task π 0.5 \\pi_{0.5} LingBot-VA Fast-WAM Faster-WAM La-JEPA Fruit 24.4 ± \\pm 2.7 175.3 ± \\pm 41.0 36.7 ± \\pm 9.0 35.1 ± \\pm 9.5 21.4 ± \\pm 0.8 Cube 10.8 ± \\pm 0.5 117.8 ± \\pm 50.9 21.9 ± \\pm 7.6 18.2 ± \\pm 4.6 11.5 ± \\pm 3.2 Push T 22.8 ± \\pm 14.7 112.5 ± \\pm 9.1 24.6 ± \\pm 6.6 23.8 ± \\pm 12.1 21.1 ± \\pm 4.1 Dish 39.0 ± \\pm 3.4 269.0 † 85.0 ± \\pm 15.3 72.0 ± \\pm 8.8 58.1 ± \\pm 8.7",
+      "url": "https://arxiv.org/html/2611.08156v1#A4.T17.4",
+      "kind": "table"
+    },
+    {
+      "id": "3253bab0e3957960",
+      "section": "Appendix E Supplementary Results",
+      "location": "Appendix E Supplementary Results",
+      "text": "Table 18: Per-task RoboTwin 2.0 success of La-JEPA S, B, and L (%), mean over three training seeds with 100 episodes per task, condition, and seed.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T18",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bd7981dd819f7863",
+      "section": "Appendix E Supplementary Results",
+      "location": "Appendix E Supplementary Results",
+      "text": "S B L Task Clean Rand. Clean Rand. Clean Rand. Adjust bottle 100.0 21.0 100.0 18.7 99.7 15.7 Beat block hammer 91.3 17.7 94.7 20.7 94.0 21.0 Blocks ranking rgb 95.7 35.7 95.0 43.7 97.0 43.3 Blocks ranking size 67.3 29.3 69.3 34.0 66.7 29.7 Click alarmclock 99.7 47.7 100.0 68.0 99.7 64.3 Click bell 100.0 63.7 100.0 64.3 100.0 64.0 Dump bin bigbin 93.0 79.7 94.7 81.7 94.3 79.0 Grab roller 100.0 45.7 100.0 46.3 99.7 44.3 Handover block 88.3 5.0 93.0 7.0 86.3 5.7 Handover mic 99.7 8.3 99.3 4.0 98.3 6.7 Hanging mug 47.7 3.7 49.3 7.3 54.0 5.0 Lift pot 99.7 0.0 99.7 0.3 97.3 0.7 Move can pot 84.7 4.3 83.3 4.7 81.3 4.0 Move pillbottle pad 90.0 10.3 94.3 10.3 91.0 10.3 Move playingcard away 96.0 8.0 96.3 21.0 96.7 23.0 Move stapler pad 50.0 4.7 48.3 5.0 32.3 2.3 Open laptop 95.0 6.3 95.7 6.7 96.0 5.7 Open microwave 91.0 14.0 87.7 13.0 89.3 16.7 Pick diverse bottles 80.3 30.7 84.7 39.7 82.3 37.7 Pick dual bottles 92.7 35.0 92.0 44.7 91.7 43.3 Place a2b left 68.3 32.3 74.3 27.7 81.3 24.0 Place a2b right 67.3 26.0 66.7 19.7 71.3 19.3 Place bread basket 88.0 56.3 90.0 58.0 93.3 53.7 Place bread skillet 91.7 30.3 93.3 29.3 91.0 31.0 Place burger fries 97.7 82.7 98.7 74.0 93.3 55.0 Place can basket 74.7 16.3 73.0 17.3 81.0 20.7 Place cans plasticbox 99.3 60.0 99.3 63.7 99.3 53.3 Place container plate 100.0 71.7 98.7 78.0 98.7 72.7 Place dual shoes 69.3 39.3 71.0 32.3 78.0 27.3 Place empty cup 100.0 56.7 100.0 50.7 100.0 55.3 Place fan 68.0 10.3 71.7 5.7 76.0 6.3 Place mouse pad 65.0 7.7 71.0 7.0 71.0 5.0 Place object basket 85.0 32.0 83.7 32.7 83.7 28.3 Place object scale 76.3 15.0 82.3 23.0 81.7 18.0 Place object stand 96.0 49.7 96.3 60.7 97.0 51.3 Place phone stand 85.7 26.0 83.3 30.0 77.7 21.0 Place shoe 94.3 57.3 92.0 54.3 95.3 39.3 Press stapler 95.7 68.3 92.3 58.7 90.7 44.3 Put bottles dustbin 82.0 72.7 81.0 78.0 69.7 60.3 Put object cabinet 37.7 37.0 39.7 26.7 41.3 22.3 Rotate qrcode 89.0 4.7 88.7 6.0 88.0 4.0 Scan object 84.0 32.3 86.3 32.7 86.7 32.3 Shake bottle 100.0 70.0 100.0 69.0 100.0 66.3 Shake bottle horizontally 100.0 68.7 100.0 70.7 100.0 68.7 Stack blocks three 97.0 10.7 97.0 19.7 99.0 19.3 Stack blocks two 99.7 35.3 100.0 55.0 100.0 41.7 Stack bowls three 84.0 58.0 83.3 57.7 85.0 58.3 Stack bowls two 97.3 73.7 97.0 75.3 95.3 70.0 Stamp seal 60.0 5.7 60.3 9.0 64.3 5.0 Turn switch 57.7 16.0 61.7 8.3 62.0 7.0 Mean over 50 tasks 85.5 33.9 86.2 35.4 86.0 32.1",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T18.2",
+      "kind": "table"
+    },
+    {
+      "id": "8b7fc9d1de8edb3b",
+      "section": "Appendix E Supplementary Results",
+      "location": "Appendix E Supplementary Results",
+      "text": "This appendix collects results that inform but do not define the final recipe: adapted future targets, evaluation-time settings, future-only pooling, representation diagnostics, and per-task RoboTwin success.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec2e898702878396",
+      "section": "E.1 Adapting Future Targets",
+      "location": "E.1 Adapting Future Targets",
+      "text": "On LIBERO with L, we replace the frozen future targets with targets from an EMA of the adapting encoder, keeping the clips, observation processing, and normalization statistics of the frozen-target policy and passing no gradients through the target path. The adapted-target policy, selected at 90k updates, achieves 81.65% on LIBERO-Plus, against 82.26% for the frozen-target policy at 120k, both trained with the original pipeline (Appendix B ) and at action-noise scale 1. Adapted targets do not improve success (paired McNemar p = 0.096 p=0.096 ), so the final recipe retains frozen targets.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a19bd0d56859c4c1",
+      "section": "E.2 Evaluation Settings",
+      "location": "E.2 Evaluation Settings",
+      "text": "At the 120k checkpoints of the original-pipeline policies (Appendix B ), we vary the execution chunk length, the number of denoising steps, and the action-noise scale for L and B, and test three-step inference for S (Table 19 ); the reference executes ten actions per replan with ten denoising steps and noise scale 1, and LIBERO runs use a 700-step budget in every suite (Appendix B ). Executing only five actions reduces LIBERO-Plus success by 3.29 points for L and 3.45 for B, whereas the number of denoising steps matters less: with three steps, B and L stay within one point of their ten-step references on both benchmarks, and S obtains 94.50% against 94.30% on LIBERO ( p = 0.81 p=0.81 , paired McNemar). Three-step calls take 23 ms for B and 39 ms for L with original-kernel CUDA graphs (Table 15 ), an operating point separate from the ten-step latency comparison. No tested noise scale gives a statistically supported aggregate improvement in the paired comparisons; the original L policy reaches 82.26% at the default scale 1 (Appendix B ), and the best single scale, 0.5, reaches 82.50%.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "45c8beed9a5c6c8c",
+      "section": "E.2 Evaluation Settings",
+      "location": "E.2 Evaluation Settings",
+      "text": "Table 19: Evaluation-setting sweeps at fixed checkpoints (success in %). LIBERO values use the 700-step budget in every suite (Appendix B ); B’s LIBERO reference is a re-evaluation of its default setting.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T19",
+      "kind": "figcaption"
+    },
+    {
+      "id": "40c826fab8f79e22",
+      "section": "E.2 Evaluation Settings",
+      "location": "E.2 Evaluation Settings",
+      "text": "Model Evaluation setting Value Success (%) S Reference Default 94.30 S Denoising steps 3 94.50 L Reference Default 97.40 B Reference Default 97.60 L Execution chunk 5 97.00 L Execution chunk 8 96.30 B Execution chunk 5 96.40 B Execution chunk 8 97.30 L Denoising steps 3 96.45 L Denoising steps 5 97.05 L Denoising steps 20 96.95 L Denoising steps 50 96.60 B Denoising steps 3 97.30 B Denoising steps 5 97.25 B Denoising steps 20 96.80 B Denoising steps 50 96.80 L Noise scale σ \\sigma 0.25 96.65",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T19.2.2",
+      "kind": "table"
+    },
+    {
+      "id": "d251a02526e13d6e",
+      "section": "E.2 Evaluation Settings",
+      "location": "E.2 Evaluation Settings",
+      "text": "Model Evaluation setting Value Success (%) L Reference Default 82.26 B Reference Default 78.89 L Execution chunk 5 78.97 L Execution chunk 6 80.19 L Execution chunk 8 81.68 L Execution chunk 16 81.53 L Execution chunk 24 78.46 L Execution chunk 32 74.92 B Execution chunk 5 75.44 B Execution chunk 8 78.46 L Denoising steps 3 82.41 L Denoising steps 5 82.12 L Denoising steps 20 81.88 L Denoising steps 50 81.66 B Denoising steps 3 79.22 L Noise scale σ \\sigma 0 82.44 L Noise scale σ \\sigma 0.25 82.24 L Noise scale σ \\sigma 0.5 82.50 B Noise scale σ \\sigma 0.25 79.38",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T19.3.2",
+      "kind": "table"
+    },
+    {
+      "id": "bfc4b772616e818c",
+      "section": "E.3 Future-Only Pooling",
+      "location": "E.3 Future-Only Pooling",
+      "text": "Complementing the token-reduction comparison (Appendix A.1 ), we keep patch-grouped observations and mean-pool only the future targets (Table 20 ). In-distribution success stays near 61–62%, whereas out-of-distribution success is non-monotonic in pooling granularity. Because the settings also differ in positional geometry, target normalization, camera weighting, and checkpoint step, these scores describe the tested recipes rather than an isolated effect of target resolution. The policies are small, frozen-encoder, static-feature policies trained on the 95% split. Observations keep patch grouping with spatial factors [ 2 , 4 , 4 ] [2,4,4] for the head, left-wrist, and right-wrist cameras, and the future targets are pooled by [ 2 , 4 , 4 ] [2,4,4] , [ 4 , 8 , 8 ] [4,8,8] , or global averaging, giving [ 80 , 20 , 20 ] [80,20,20] , [ 20 , 6 , 6 ] [20,6,6] , or [ 1 , 1 , 1 ] [1,1,1] spatial tokens per temporal position. The first setting has the patch-grouped reference’s token count but averages rather than concatenates features. The rows report 150k, 60k, and 90k checkpoints, each evaluated in both regimes on 5,000 episodes, under an evaluation implementation that differs from the other studies.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "763bea86568ecc61",
+      "section": "E.3 Future-Only Pooling",
+      "location": "E.3 Future-Only Pooling",
+      "text": "Table 20: Future-only pooling on RoboTwin (success in %).",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T20",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7eb0d2a3f43a0fa6",
+      "section": "E.3 Future-Only Pooling",
+      "location": "E.3 Future-Only Pooling",
+      "text": "Future pooling IID OOD 2 × 2\\times head, 4 × 4\\times wrists 61.24 15.68 4 × 4\\times head, 8 × 8\\times wrists 61.96 18.56 Global spatial pooling 61.14 15.04",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T20.2",
+      "kind": "table"
+    },
+    {
+      "id": "40a7a8b62a808032",
+      "section": "E.4 Representation Diagnostics",
+      "location": "E.4 Representation Diagnostics",
+      "text": "Table 21 analyzes frozen-encoder RoboTwin policies trained with and without future prediction at 150k updates, separate from the policies in Figure 3 A. Centered RankMe ( Garrido et al., 2022 ) uses 2,000 sampled, mean-pooled final-layer value features, and a cosine 5-nearest-neighbor action readout reports R 2 R^{2} over normalized action chunks. Features span 100 episodes held out from policy training, with an episode-disjoint 70/30 split for fitting and testing the readout and with language and proprioceptive conditioning retained. Future prediction raises effective rank together with clean success under the 1,000-episode protocol, but lowers action-readout R 2 R^{2} , so nearest-neighbor action decodability does not explain the difference in control performance.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a2e82cc12e10fe2e",
+      "section": "E.4 Representation Diagnostics",
+      "location": "E.4 Representation Diagnostics",
+      "text": "Table 21: Representation diagnostics with and without future prediction on RoboTwin.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T21",
+      "kind": "figcaption"
+    },
+    {
+      "id": "87cfcc114536c5e1",
+      "section": "E.4 Representation Diagnostics",
+      "location": "E.4 Representation Diagnostics",
+      "text": "Training objective Clean success (%) Effective rank Action readout R 2 R^{2} Action + future prediction 66.5 137.70 0.4315 Action only 62.8 48.41 0.7937",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.T21.2",
+      "kind": "table"
+    },
+    {
+      "id": "6879fa68a425377f",
+      "section": "E.5 Per-Task RoboTwin Results",
+      "location": "E.5 Per-Task RoboTwin Results",
+      "text": "Table 18 lists the per-task RoboTwin 2.0 success of La-JEPA S, B, and L, the policies reported in Table 2 , trained on clean demonstrations and evaluated on 100 episodes per task in clean and randomized scenes. Success varies widely across tasks, and randomized scenes lower success on almost every task.",
+      "url": "https://arxiv.org/html/2611.08156v1#A5.SS5.p1.1",
+      "kind": "p"
+    }
+  ]
+}

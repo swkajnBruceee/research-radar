@@ -1,0 +1,751 @@
+{
+  "id": "87b5884784b3e2ff850a72e72ebdd5b06c0ac80ea618d78477121ba8d3c919a3",
+  "url": "https://arxiv.org/html/2611.08372v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "ff3c06f7c1237443",
+      "section": "MoMaSplat : Dynamic Novel-View Demonstration Augmentation for Mobile Manipulation",
+      "location": "MoMaSplat : Dynamic Novel-View Demonstration Augmentation for Mobile Manipulation",
+      "text": "Visuomotor policies trained through imitation learning are highly sensitive to changes in camera viewpoint. This is particularly problematic for mobile manipulation (MoMa), where robots rarely execute manipulation from the exact same base pose used during demonstration collection due to navigation uncertainty, localization drift, and environmental constraints. Recent approaches use novel-view synthesis (NVS) to augment demonstrations with unseen viewpoints, but they assume static scenes and therefore fail to re-render the manipulated object during the post-contact interaction phase, leaving the most critical parts of the demonstration unaugmented. We present MoMaSplat , a novel-view demonstration augmentation framework for mobile manipulation that synthesizes full manipulation trajectories from unseen robot base poses, including dynamic object interactions. Our key insight is that standard MoMa data collection naturally provides the multi-view observations needed to reconstruct both the static scene and the manipulated object in 3D. MoMaSplat combines 3D Gaussian Splatting, feed-forward 3D foundation models, and kinematics-based action retargeting to separately reconstruct the scene and manipulated object, render them from novel viewpoints, and generate geometrically consistent synthetic demonstrations paired with transformed actions. We evaluate MoMaSplat on five real-world mobile manipulation tasks involving both rigid and articulated objects across three scenes, and validate the fidelity of its synthesized demonstrations against ground truth in simulation. MoMaSplat substantially improves robustness to unseen base poses, more than doubling the average success rate of the strongest baseline and maintaining non-trivial success at large base displacements where all baselines fail, while reducing the need for large-scale real-world data collection. More information at: https://robin-lab.cs.utexas.edu/momasplat/",
+      "url": "https://arxiv.org/html/2611.08372v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c1cd0aa0b100a904",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "Imitation learning has emerged as a powerful paradigm for training visuomotor policies that perform complex manipulation tasks directly from image observations [ 1 , 2 ] . However, these policies are notoriously sensitive to changes in camera viewpoint [ 3 , 4 , 5 ] . Even small deviations in camera pose can significantly degrade performance, since the policy learns a narrow visual distribution tied to the demonstrations used during training.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "52ee2d053822b3a3",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "This sensitivity is particularly problematic for mobile manipulation (MoMa). Unlike tabletop manipulation setups, where demonstrations are often collected from a fixed robot camera pose, mobile manipulators rarely execute tasks from the exact same location at deployment time. Navigation uncertainty, localization drift, obstacle avoidance, and imperfect planning routinely place the robot at different base poses relative to the workspace. As a result, the robot observes the manipulation scene from viewpoints that may differ substantially from those seen during demonstration collection. Robust deployment therefore requires visuomotor policies that generalize across a distribution of robot base poses rather than a single viewpoint.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1228f9af1666c216",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "A straightforward solution would be to collect demonstrations from many different robot locations. However, large-scale real-world teleoperation is expensive and difficult to scale [ 6 , 2 , 7 ] . Recent work has therefore explored synthesizing additional demonstrations through novel-view synthesis (NVS), generating virtual observations from unseen viewpoints using real-world captures [ 8 , 9 , 10 ] . While promising, existing approaches assume a static scene and therefore fail during the most important part of manipulation: object interaction. Since the manipulated object moves throughout the demonstration, prior NVS methods cannot consistently re-render the object from novel viewpoints during the post-contact interaction phase, restricting augmentation primarily to pre-contact motions or introducing geometrically inconsistent generations.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "e7a0b9ff296b6b03",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "Fig. 1 : MoMaSplat . Starting from mobile-manipulation data collected at the original base pose (white and red robot), MoMaSplat synthesizes demonstrations from sampled novel base poses ( yellow -outlined gray robot). The top-right sequence shows the source manipulation demonstration, while the bottom-right shows the corresponding synthesized trajectory, including the dynamic object as it is moved by the robot. Augmenting the source manipulation dataset with these demonstrations enables execution from unseen deployment-time base poses ( blue -outlined gray robot).",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6d620650972383b8",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "In this work, we present MoMaSplat , a demonstration augmentation framework for mobile manipulation that synthesizes complete manipulation trajectories from unseen robot base poses, including dynamic object interactions (Fig. 1 ). Our key insight is that standard mobile-manipulation data collection naturally provides the multi-view observations needed to reconstruct both the static scene and the manipulated object in 3D. During navigation, the robot observes the scene from diverse viewpoints that enable scene reconstruction, while the manipulation demonstrations themselves provide object-centric observations that enable reconstructing the manipulated object and its motion.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "cac69a7254df5080",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "Building on this observation, MoMaSplat separately reconstructs the static scene and manipulated objects using 3D Gaussian Splatting [ 11 ] and feed-forward 3D foundation models [ 12 ] . Given a novel robot base pose, MoMaSplat re-renders the scene, manipulated object, and robot from the new viewpoint and retargets the original actions through kinematics-based transformations to generate geometrically consistent synthetic demonstrations.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "b29c70a77e950d6d",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "We evaluate MoMaSplat on five real-world mobile manipulation tasks involving both rigid and articulated objects across three scenes, and validate the fidelity of its synthesized demonstrations against ground truth in simulation. Our experiments show that MoMaSplat substantially improves robustness to unseen deployment-time base poses, outperforming prior augmentation approaches across 12 12 unseen base poses ( 3 3 rollouts per pose) per task as the robot moves farther away from the source demonstration locations.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "e32933bf4ec62dc4",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "Our contributions are threefold:",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "d4d80d1cfd68cb14",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "A novel-view demonstration augmentation framework for mobile manipulation that synthesizes complete trajectories, including dynamic object interactions.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dfd12b6304e934f0",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "A geometry-consistent generation pipeline that separately reconstructs scenes and manipulated objects and retargets actions to unseen base poses.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aab36837d47d1c69",
+      "section": "I INTRODUCTION",
+      "location": "I INTRODUCTION",
+      "text": "Substantial improvements in robustness to deployment-time viewpoint variation across multiple real-world mobile manipulation tasks.",
+      "url": "https://arxiv.org/html/2611.08372v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "635d5b6c7344799e",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Our method proposes a solution to train imitation learning visuomotor policies for mobile manipulators via data augmentation. Here, we review the most relevant related work in those areas.",
+      "url": "https://arxiv.org/html/2611.08372v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0ff565eeba88f705",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Demonstration Synthesis in Simulation. A prominent line of work synthesizes new demonstrations by replaying source actions in randomized simulated scenes. The X-Gen family [ 7 , 13 , 14 , 15 , 16 ] procedurally generates data by transforming and sequencing object-centric trajectory segments, with extensions such as MoMaGen [ 15 ] addressing mobile-manipulation constraints like base reachability and visibility. However, because the generated plans are purely kinematic, they typically rely on open-loop on-robot rollouts to verify feasibility and capture visual observations, at a cost that rivals manual data collection [ 17 , 8 ] . A parallel line of work uses simulators to generate data from multiple viewpoints [ 18 , 19 , 20 ] , but requires modeling the full environment and task dynamics in simulation, suffering from the visual and physical sim-to-real gap. Our work avoids on-robot rollouts and full-scene simulation by reconstructing the real scene and manipulated object via novel-view synthesis, using simulation only to render the known robot embodiment.",
+      "url": "https://arxiv.org/html/2611.08372v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b47cc5d086c58ed3",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Demonstration Augmentation from Real-World Captures. Beyond 2D image augmentation [ 21 , 22 , 23 ] , recent methods synthesize observations from real-world captures. Neural simulators [ 24 , 25 , 26 ] use generative video models but can suffer from hallucinations and geometric inconsistencies. Alternatively, novel-view synthesis (NVS) enables viewpoint augmentation [ 9 , 10 , 17 , 27 , 28 , 29 , 30 , 31 ] . VISTA [ 27 ] uses ZeroNVS [ 32 ] , while Yang et al. [ 9 ] employ 3D Gaussian Splatting [ 11 ] ; however, both focus on third-person tabletop settings requiring multi-camera pre-scans. Closer to our setting, One-Thousand Trajectories [ 8 ] supports moving eye-in-hand cameras, while EgoDemoGen [ 33 ] generates paired egocentric observations and actions using a generative model. However, these methods do not explicitly reconstruct dynamic objects and restrict augmentation to pre-contact motion. In contrast, MoMaSplat jointly models the static scene and manipulated objects, enabling kinematically consistent augmentation across both pre-contact and post-contact interaction phases for mobile robots with egocentric cameras.",
+      "url": "https://arxiv.org/html/2611.08372v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "33d55ef68dc54893",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Mobile Manipulation. Mobile manipulation remains a key challenge in robot learning [ 34 , 35 , 36 , 37 , 38 ] , particularly in selecting robot base poses. Traditional methods use geometric heuristics such as Inverse Reachability Maps [ 39 , 40 , 41 ] , while learning-based navigation [ 42 , 43 , 44 , 45 ] often overlooks downstream policy sensitivity to viewpoint changes. Mobi- π \\pi [ 3 ] selects base poses matching the training distribution but requires pre-scanning and test-time optimization. In contrast, we train policies robust to diverse base poses, reducing the need for precise base placement at deployment.",
+      "url": "https://arxiv.org/html/2611.08372v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "b9c3b8b83b3f1fcb",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "We aim to augment a mobile-manipulation dataset with synthetic demonstrations from unseen robot base poses. From source demonstrations at a few robot locations, MoMaSplat synthesizes observations and actions for nearby deployment-time poses never physically demonstrated.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "afa85c698db7d843",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "To achieve this, MoMaSplat decomposes the environment into three components: i) a static scene model, ii) a dynamic object model for the manipulated object, and iii) the robot embodiment itself. The scene and object models are reconstructed independently and aligned into a shared metric frame. A key observation is that the navigation trajectories naturally provide the bridge between both reconstructions: during navigation, the manipulated objects remain static, allowing the object-centric and scene-centric trajectories to be consistently registered.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bec78b27630e2e26",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "For augmentation, given a sampled robot base pose, MoMaSplat renders the scene, manipulated object, and robot from the corresponding viewpoint and retargets the demonstrated actions through kinematic transformations. The resulting observations and transformed actions form synthetic demonstrations that augment the dataset for policy training. Fig. 2 provides an overview of the full process.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4593c711a9e07185",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "Fig. 2 : Overview of MoMaSplat . 3D Reconstruction: We build 3D models of the environment from the navigation and manipulation data. We estimate camera poses via structure-from-motion and fit a 3D Gaussian Splatting model of the static scene, 𝒢 scene \\mathcal{G}_{\\text{scene}} . For the dynamic objects, we segment each manipulated object and estimate its per-frame pose trajectory with a feed-forward 3D foundation model; since the scene and object poses lie in separate reference frames, we align them with a Sim(3) transformation and fit a separate object model 𝒢 obj \\mathcal{G}_{\\text{obj}} . Synthesizing Demonstrations from Unseen Base Poses: Given a robot base pose, T ~ \\tilde{T} , sampled around the original demonstration poses (left), we render the scene and object from the new viewpoint, transform the source end-effector trajectory into the new base frame to render the robot from a simulator, and composite the three streams into a photorealistic novel observation. Paired with the transformed actions a ~ 1 : L j \\tilde{a}_{1:L_{j}} , this forms a synthetic demonstration; repeating across sampled poses yields the generated dataset. Imitation Learning: the policy is trained on the union of source and generated demonstrations.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bfc4a3383d82e9f8",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "Problem Formulation. We consider an imitation learning setting on a mobile manipulator operating in a scene. The robot alternates between two modes of operation: navigation, which changes the robot base pose, and manipulation, which executes arm actions from a fixed base location. We represent the robot base pose as a transform T w b ∈ S ​ E ​ ( 2 ) {}^{b}_{w}T\\in SE(2) with respect to a stationary world frame w w , parameterized by a planar position ( x b , y b ) (x_{b},y_{b}) and heading θ b \\theta_{b} . The robot observes the scene through an egocentric RGB camera mounted on the robot body (e.g., head or torso). The camera pose relative to the robot base is determined by the robot configuration through forward kinematics, such that both changes in base pose and articulation of the robot body induce changes in viewpoint.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e69ad8167b1f44f",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "During data collection, the robot navigates to a predefined set of N N target base poses:",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "9cb1643b1c21ab7a",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "𝒯 = { T 1 w b , … , T N w b } , \\mathcal{T}=\\{{}^{b}_{w}T_{1},\\dots,{}^{b}_{w}T_{N}\\},",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "58c89aff54378448",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "from which manipulation demonstrations are collected. The robot executes N nav N_{\\text{nav}} navigation trajectories from different starting locations toward the target base poses, either teleoperated or autonomously, and performs M M manipulation demonstrations from each fixed base pose without further base motion.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p5.2",
+      "kind": "p"
+    },
+    {
+      "id": "5c9e66b84c038144",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "This process produces two complementary datasets. First, we collect a navigation dataset 𝒟 nav = { d nav 1 , … , d nav N nav } \\mathcal{D}_{\\text{nav}}=\\{d^{1}_{\\text{nav}},\\dots,d^{N_{\\text{nav}}}_{\\text{nav}}\\} , where N nav N_{\\text{nav}} denotes the number of navigation trajectories and each trajectory d nav k = ( ( I 1 , q 1 ) , … , ( I L k , q L k ) ) d^{k}_{\\text{nav}}=\\big((I_{1},q_{1}),\\dots,(I_{L_{k}},q_{L_{k}})\\big) contains RGB observations and robot states recorded while navigating toward one of the target base poses. These trajectories provide diverse multi-view observations of the environment and manipulated objects before interaction. Second, we collect a source manipulation dataset 𝒟 src = { d src 1 , … , d src N src } \\mathcal{D}_{\\text{src}}=\\{d^{1}_{\\text{src}},\\dots,d^{N_{\\text{src}}}_{\\text{src}}\\} of N src = N × M N_{\\text{src}}=N\\times M demonstrations, where each trajectory d src j = ( ( I 1 , q 1 , a 1 ) , … , ( I L j , q L j , a L j ) ) d^{j}_{\\text{src}}=\\big((I_{1},q_{1},a_{1}),\\dots,(I_{L_{j}},q_{L_{j}},a_{L_{j}})\\big) contains manipulation observations and actions recorded during task execution from one of the N N base locations. We represent actions as 7-D commands a t = ( p t , o t , g t ) a_{t}=(p_{t},o_{t},g_{t}) , consisting of desired end-effector translation and rotation deltas p t ∈ ℝ 3 p_{t}\\in\\mathbb{R}^{3} and o t ∈ S ​ O ​ ( 3 ) o_{t}\\in SO(3) applied in the robot base frame, together with the gripper command g t ∈ ℝ g_{t}\\in\\mathbb{R} .",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "f13485d72d437f92",
+      "section": "III MoMaSplat",
+      "location": "III MoMaSplat",
+      "text": "Our goal is to augment the source manipulation dataset 𝒟 src \\mathcal{D}_{\\text{src}} with a synthetic dataset 𝒟 gen \\mathcal{D}_{\\text{gen}} of demonstrations generated at unseen base poses to obtain a base-pose robust policy trained on 𝒟 = 𝒟 src ∪ 𝒟 gen \\mathcal{D}=\\mathcal{D}_{\\text{src}}\\cup\\mathcal{D}_{\\text{gen}} . To achieve this, MoMaSplat first reconstructs the scene and manipulated objects in 3D and aligns them into a shared metric frame (Sec. III-A ). It then synthesizes demonstrations from sampled base poses by rendering the scene, object, and robot from the corresponding viewpoint and retargeting the actions and proprioception to remain geometrically consistent (Sec. III-B ). The synthesized demonstrations are combined with the source dataset for policy training (Sec. III-C ).",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "4d470ea28c5c7b2c",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "To synthesize demonstrations from unseen robot base poses, MoMaSplat requires a 3D representation that can be rendered from arbitrary viewpoints. A central challenge is that manipulation involves dynamic objects whose pose changes throughout the demonstration. Unlike prior novel-view synthesis approaches that model the environment as a single static scene, MoMaSplat reconstructs the static scene and manipulated objects separately, leveraging observations naturally produced during mobile-manipulation data collection. Navigation trajectories cover the environment while the objects are static, and manipulation trajectories capture the objects in motion.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "466e6544a03d7616",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "3D Scene Model Reconstruction. As the robot moves through the workspace, its camera naturally captures diverse viewpoints, providing the multi-view coverage needed for 3D reconstruction without external cameras or scanning. We therefore use 𝒟 nav \\mathcal{D}_{\\text{nav}} to build a photorealistic 3D scene model: we recover per-image camera poses with structure-from-motion via COLMAP [ 46 ] , which also produces a sparse point cloud that initializes a 3D Gaussian Splatting (3DGS) [ 11 ] reconstruction.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d258e4ea406b221",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "We optimize the Gaussians by minimizing a photometric loss between rendered and observed images. Since the scene is not perfectly static across navigation trajectories, transient content may appear between demonstrations; we adopt the uncertainty-aware formulation of WildGaussians [ 47 ] , which down-weights inconsistent regions during optimization to yield a robust model 𝒢 scene \\mathcal{G}_{\\text{scene}} . We additionally mask out pixels belonging to the manipulated object and the robot during scene reconstruction, preventing the object from being baked into 𝒢 scene \\mathcal{G}_{\\text{scene}} and avoiding a static “ghost” when the independently reconstructed dynamic object is later composited into the scene.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5409eca67b844353",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "Structure-from-motion reconstructs the scene only up to an unknown global scale, while our framework transforms metric actions and therefore requires a metric reconstruction. We recover the scale using the robot’s onboard depth sensor: for the frames in 𝒟 nav \\mathcal{D}_{\\text{nav}} , we compare the measured depth maps to depth maps rendered from 𝒢 scene \\mathcal{G}_{\\text{scene}} and take the median per-pixel ratio of measured to rendered depth as the scale factor.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "32cbd9679cd2dd4a",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "3D Object Model Reconstruction. Since the object of interest moves independently from the scene, we build a separate 3DGS model for it. Conceptually, the steps mirror those for the scene: we estimate the object’s pose in each frame and use these poses to optimize a 3D Gaussian reconstruction. However, the challenges here are different. Correspondence-based methods [ 46 ] are poorly suited to small, weakly-textured objects, while instance-level pose trackers [ 48 ] require an existing 3D model of the object, which is not available to us. Instead, we find that our setting is amenable to recent feed-forward 3D foundation models, like VGGT [ 49 , 12 ] , which estimate camera poses directly from an unposed RGB sequence.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "a5f241d51a1d280a",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "Specifically, for each trajectory d nav k ∈ 𝒟 nav d^{k}_{\\text{nav}}\\in\\mathcal{D}_{\\text{nav}} and source demonstration d src j ∈ 𝒟 src d^{j}_{\\text{src}}\\in\\mathcal{D}_{\\text{src}} , we extract the RGB frames { I t k } t = 1 L k \\{I_{t}^{k}\\}_{t=1}^{L_{k}} and { I t j } t = 1 L j \\{I_{t}^{j}\\}_{t=1}^{L_{j}} , respectively, and obtain per-frame segmentation masks ℳ t k \\mathcal{M}_{t}^{k} and ℳ t j \\mathcal{M}_{t}^{j} for the object using an open-world segmentation pipeline [ 50 , 51 ] , which masks out the background and the robot.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "c05b256db7803115",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "Then, we apply FastVGGT [ 49 ] to the object-masked frames { I t k ⊙ ℳ t k } \\{I_{t}^{k}\\odot\\mathcal{M}_{t}^{k}\\} and { I t j ⊙ ℳ t j } \\{I_{t}^{j}\\odot\\mathcal{M}_{t}^{j}\\} , respectively. With everything else masked out, the model predicts a camera pose at each frame that is expressed relative to the object itself. These object-relative camera poses T ^ o , t ∈ S ​ E ​ ( 3 ) \\hat{T}_{o,t}\\in SE(3) act as the initial pose estimates in the model’s internal coordinate frame v v .",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "dfe65756f273ad20",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "Frame Alignment. The estimates T ^ o , t \\hat{T}_{o,t} lie in v v , with arbitrary scale, orientation, and origin relative to the metric world frame w w established by the Scene Reconstruction. To align the two frames, we use a set of frames from the navigation demonstrations 𝒟 nav \\mathcal{D}_{\\text{nav}} as a bridge. During navigation the object remains static, so the only motion comes from the robot itself, i.e., the pose trajectory recovered by the object model is purely due to camera motion. This is not true for the manipulation frames: the object moves, so the recovered trajectory conflates camera and object motion. On the selected navigation frames, the same cameras are posed twice, by the feed-forward model in v v and by structure-from-motion in w w . The two trajectories must describe the same motion up to an unknown Sim(3) transformation. We recover this transformation 𝐒 : v → w \\mathbf{S}:v\\to w in closed form via the Umeyama algorithm [ 52 ] . Applying 𝐒 \\mathbf{S} to the estimated poses yields the aligned pose trajectory in the world frame, T o , t = 𝐒 ⋅ T ^ o , t T_{o,t}=\\mathbf{S}\\cdot\\hat{T}_{o,t} .",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d2bc7f0423dc9d3",
+      "section": "III-A 3D Reconstruction",
+      "location": "III-A 3D Reconstruction",
+      "text": "Object 3DGS Optimization. Finally, we jointly optimize these aligned poses T o , t T_{o,t} alongside the Gaussian parameters of 𝒢 obj \\mathcal{G}_{\\text{obj}} , backpropagating the photometric loss through both. This yields a pose-disentangled representation 𝒢 obj \\mathcal{G}_{\\text{obj}} that can be rendered at arbitrary 6-DoF poses for compositing into novel-pose observations. For articulated objects, we model the moving rigid link separately from the static remainder of the object. For example, a laptop lid or the basket of an air fryer is represented by 𝒢 obj \\mathcal{G}_{\\text{obj}} , while the keyboard base or the air fryer’s surrounding body remains part of the static scene. The component represented by 𝒢 obj \\mathcal{G}_{\\text{obj}} therefore undergoes a rigid 6-DoF motion over the demonstrated trajectory, and we do not estimate articulation parameters or extrapolate beyond the demonstrated motion.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS1.p9.1",
+      "kind": "p"
+    },
+    {
+      "id": "6fe4495afb391322",
+      "section": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "location": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "text": "Given the scene and object models, our framework synthesizes new demonstrations at unseen base poses in three stages. For each original robot base pose, T i w b {}^{\\mathit{b}}_{\\mathit{w}}{T}_{i} , we first sample a set of target base poses that cover possible deployment-time locations while remaining kinematically feasible (e.g., reachable for the arm). We then synthesize each source demonstration from each sampled pose by composing three separately rendered streams: the static scene (from the 3D scene model), the manipulated objects (from the 3D object model), and the robot body as seen from the new base location. Finally, we retarget the source action to be defined with respect to the virtual sampled base location to obtain a new pair of virtual image and action label.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "de30f8de65e4f941",
+      "section": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "location": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "text": "Sampling Base Poses. To generate synthetic demonstrations, we sample a set of target base poses 𝒯 i sampled = { T ~ 1 , … , T ~ K } \\mathcal{T}^{\\text{sampled}}_{i}=\\{\\tilde{T}_{1},\\ldots,\\tilde{T}_{K}\\} (here, we omit the superindex b b and subindex w w from T ~ w b {}^{\\mathit{b}}_{\\mathit{w}}\\tilde{T} for simplicity) that the policy should learn to handle around each of the original base locations, T i {T}_{i} . We sample the planar position ( x ~ j , y ~ j ) (\\tilde{x}_{j},\\tilde{y}_{j}) uniformly within a region surrounding the original base pose, chosen to cover the range of deployment-time poses the robot may reach. For each sampled position, we set the base heading θ ~ j \\tilde{\\theta}_{j} so that the object of interest is centered in the egocentric camera’s field of view, then perturb it with uniform noise to expose the policy to a range of object-in-frame configurations. We then apply the transformation Δ j i ​ T = ( T ~ j ) − 1 ⋅ T i \\Delta^{i}_{j}T=(\\tilde{T}_{j})^{-1}\\cdot{T}_{i} that transforms the original base frame, T i {T}_{i} , to the sampled base frame, T ~ j \\tilde{T}_{j} (where we lift Δ j i ​ T \\Delta^{i}_{j}T from S ​ E ​ ( 2 ) SE(2) into S ​ E ​ ( 3 ) SE(3) with zero vertical translation and zero roll/pitch when transforming 3D poses and vectors). We retain a sampled base pose, T ~ j \\tilde{T}_{j} , only if the source arm trajectory, where the end-effector remains at the same pose with respect to the manipulated object, admits a valid inverse-kinematics solution at several probe timesteps spanning the demonstration; infeasible poses are rejected and resampled. To obtain the end-effector pose in the sampled base frame, we apply Δ j i ​ T \\Delta_{j}^{i}T to the source end-effector pose T i b e ​ e {}^{ee}_{b}T_{i} , obtained from q q through forward kinematics. The resulting pose, T ~ j b e ​ e = Δ j i ​ T ⋅ T i b e ​ e {}^{ee}_{b}\\tilde{T}_{j}=\\Delta_{j}^{i}T\\cdot{}^{ee}_{b}T_{i} , preserves the end-effector pose in the world frame.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "57edbe51146adf6b",
+      "section": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "location": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "text": "Novel View Synthesis. We virtually place the egocentric camera at its mounted offset relative to T ~ j \\tilde{T}_{j} using forward kinematics and the robot’s recorded configuration, q q , and matching the physical camera’s intrinsics. We then render three elements from the new view: i) the scene, ii) the manipulated object, and iii) the robot. From the scene model, 𝒢 scene \\mathcal{G}_{\\text{scene}} , we obtain a virtual RGB image I ~ scene \\tilde{I}_{\\text{scene}} , the depth map D ~ scene \\tilde{D}_{\\text{scene}} and the accumulated opacity α ~ scene \\tilde{\\alpha}_{\\text{scene}} . For the manipulated object, we transform 𝒢 obj \\mathcal{G}_{\\text{obj}} to its source-demonstration pose T o , t T_{o,t} and rasterize it from the same camera, yielding per-timestep renders I ~ obj \\tilde{I}_{\\text{obj}} , depth maps D ~ obj \\tilde{D}_{\\text{obj}} and opacity image α ~ obj \\tilde{\\alpha}_{\\text{obj}} . For the robot, we use inverse kinematics on the end-effector pose for the sampled base location, T ~ j b e ​ e {}^{ee}_{b}\\tilde{T}_{j} , to recover a joint configuration, q ~ t j \\tilde{q}^{j}_{t} , that would place the end-effector at the same location with respect to the object. Then, we apply the joint configuration to the robot and render it using OmniGibson [ 53 ] to obtain a robot-only RGB image I ~ robot \\tilde{I}_{\\text{robot}} , depth map D ~ robot \\tilde{D}_{\\text{robot}} and opacity mask α ~ robot \\tilde{\\alpha}_{\\text{robot}} .",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5db12c3140562d92",
+      "section": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "location": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "text": "To get a single RGB observation from the three virtual images, we need to combine them together, while respecting the depths and the opacities at each pixel. To achieve this, we use per-pixel alpha compositing. Specifically, at each pixel, we sort the three layers by depth, letting ( c i , α i ) (c_{i},\\alpha_{i}) denote the color and opacity of the i i -th layer, with i = 1 i=1 being the nearest. Then, we combine them in a front-to-back manner: c = ∑ i = 1 3 c i ​ α i ​ ∏ j = 1 i − 1 ( 1 − α j ) c=\\sum_{i=1}^{3}c_{i}\\alpha_{i}\\prod_{j=1}^{i-1}(1-\\alpha_{j}) , so that nearer surfaces occlude farther ones. This generates virtual RGB images as would be seen from a physical camera at sampled location T ~ j \\tilde{T}_{j} .",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0825e3863c184250",
+      "section": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "location": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "text": "Robot Action and Proprioception Retargeting. A change in base pose moves the coordinate frame in which both the robot’s end-effector proprioception and actions are expressed, so both must be retargeted to the sampled base frame T ~ j w b {}^{\\mathit{b}}_{\\mathit{w}}\\tilde{T}_{j} . Because the policy conditions on end-effector proprioception in the robot base frame (consisting of the end-effector pose T i b e ​ e {}^{ee}_{b}T_{i} and gripper state), we transform the end-effector pose into the sampled base frame via T ~ j b e ​ e = Δ j i ​ T ⋅ T i b e ​ e {}^{ee}_{b}\\tilde{T}_{j}=\\Delta^{i}_{j}T\\cdot{}^{ee}_{b}T_{i} (as above) while keeping the gripper state unchanged. Robot actions a t = ( p t , o t , g t ) a_{t}=(p_{t},o_{t},g_{t}) consist of desired end-effector translation deltas p t ∈ ℝ 3 p_{t}\\in\\mathbb{R}^{3} , rotation deltas o t ∈ S ​ O ​ ( 3 ) o_{t}\\in SO(3) , and gripper commands g t ∈ ℝ g_{t}\\in\\mathbb{R} , where both translation and rotation deltas are defined and applied in the robot base frame (i.e., R t + 1 b e ​ e = R ⁡ ( o t ) ​ R t b e ​ e {}^{ee}_{b}R_{t+1}=R(o_{t})\\,{}^{ee}_{b}R_{t} ). To retarget the desired end-effector translation delta, we apply the rotation component of Δ j i ​ T \\Delta^{i}_{j}T so that p ~ t = R Δ j i ​ T ⋅ p t \\tilde{p}_{t}=R_{\\Delta^{i}_{j}T}\\cdot p_{t} expresses the same world-frame displacement in the sampled base frame. Because rotation deltas are applied in the base frame, conjugating R ⁡ ( o t ) R(o_{t}) by R Δ j i ​ T R_{\\Delta^{i}_{j}T} rotates its axis of rotation by R Δ j i ​ T R_{\\Delta^{i}_{j}T} while preserving the rotation angle; in axis-angle format o t = ( u ^ t , ϕ t ) o_{t}=(\\hat{u}_{t},\\phi_{t}) , the retargeted rotation delta is therefore o ~ t = ( R Δ j i ​ T ⋅ u ^ t , ϕ t ) \\tilde{o}_{t}=(R_{\\Delta^{i}_{j}T}\\cdot\\hat{u}_{t},\\phi_{t}) . The gripper command remains unchanged ( g ~ t = g t \\tilde{g}_{t}=g_{t} ), yielding the retargeted action a ~ t = ( p ~ t , o ~ t , g t ) \\tilde{a}_{t}=(\\tilde{p}_{t},\\tilde{o}_{t},g_{t}) . Pairing the virtual RGB images with the retargeted proprioception and actions a ~ t j \\tilde{a}^{j}_{t} across the trajectory provides a synthetic demonstration at T ~ j w b {}^{\\mathit{b}}_{\\mathit{w}}\\tilde{T}_{j} .",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "75fc17fff4217950",
+      "section": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "location": "III-B Synthesizing Demonstrations from Unseen Base Poses",
+      "text": "Constructing the Augmented Dataset. For each of the N src = N × M N_{\\text{src}}=N\\times M source manipulation demonstrations in 𝒟 src \\mathcal{D}_{\\text{src}} , we generate K K synthetic demonstrations from K K sampled novel base poses, producing a synthetic dataset 𝒟 gen \\mathcal{D}_{\\text{gen}} of K ⋅ N src K\\cdot N_{\\text{src}} demonstrations that we combine with 𝒟 src \\mathcal{D}_{\\text{src}} to form 𝒟 = 𝒟 src ∪ 𝒟 gen \\mathcal{D}=\\mathcal{D}_{\\text{src}}\\cup\\mathcal{D}_{\\text{gen}} for policy training (Sec. III-C ).",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "9616345292405c8b",
+      "section": "III-C Imitation Learning",
+      "location": "III-C Imitation Learning",
+      "text": "We train a visuomotor policy on the union of source demonstrations 𝒟 src \\mathcal{D}_{\\text{src}} and synthetic demonstrations 𝒟 gen \\mathcal{D}_{\\text{gen}} using Diffusion Policy [ 1 ] , which models the conditional action distribution as a denoising diffusion process and is trained by minimizing the standard noise prediction loss:",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3d9aa8f740a7b9ce",
+      "section": "III-C Imitation Learning",
+      "location": "III-C Imitation Learning",
+      "text": "ℒ = 𝔼 k , ϵ , ( o , a ) ∼ 𝒟 ​ [ ‖ ϵ − ϵ θ ​ ( o , a k , k ) ‖ 2 ] , \\mathcal{L}=\\mathbb{E}_{k,\\epsilon,(o,a)\\sim\\mathcal{D}}\\left[\\|\\epsilon-\\epsilon_{\\theta}(o,a^{k},k)\\|^{2}\\right], (1)",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "d8955a3ea4346684",
+      "section": "III-C Imitation Learning",
+      "location": "III-C Imitation Learning",
+      "text": "where a k a^{k} is the ground-truth action sequence noised at denoising step k k with Gaussian noise ϵ \\epsilon . The policy conditions on the RGB observation and end-effector proprioception, and outputs an action sequence of end-effector pose deltas. To balance the two datasets during training, we co-train with a sampling ratio of 0.25 0.25 for 𝒟 src \\mathcal{D}_{\\text{src}} and 0.75 0.75 for 𝒟 gen \\mathcal{D}_{\\text{gen}} , anchoring the policy to the source data while leveraging the broader pose coverage of the synthetic data.",
+      "url": "https://arxiv.org/html/2611.08372v1#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "8ac9dfc338b2282e",
+      "section": "IV Experimental Evaluation",
+      "location": "IV Experimental Evaluation",
+      "text": "We evaluate MoMaSplat on five real-world mobile manipulation tasks across three scenes, comparing against four baselines: no augmentation and three augmentation methods. Our experiments focus on a) whether MoMaSplat improves policy success at unseen base poses, b) how performance varies with the distance between the deployment-time base pose and the closest demonstration pose, and c) how policy success changes with the number of source demonstrations available for augmentation. Additionally, we evaluate the quality of the generated data itself. This requires ground truth observations at poses where no demonstration was collected, which is impractical in the real world. A human teleoperator produces a different motion on every attempt, so even a re-collected trajectory cannot serve as ground-truth for the generated demonstration. Therefore, we develop one task in simulation , where camera and object poses are known and source trajectories can be replayed from arbitrary base poses.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6b842c0da0cffd90",
+      "section": "IV Experimental Evaluation",
+      "location": "IV Experimental Evaluation",
+      "text": "((a)) Scenes: desk, kitchen, and living room environments used in our experiments; the simulated scene is shown at right.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.F3.sf1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c7bf29125318e902",
+      "section": "IV Experimental Evaluation",
+      "location": "IV Experimental Evaluation",
+      "text": "((b)) Tasks: placing a bottle, opening a drawer, closing a laptop, picking up a remote, and opening an air fryer in the real world; placing a bottle in simulation.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.F3.sf2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "22105b173a4837c7",
+      "section": "IV Experimental Evaluation",
+      "location": "IV Experimental Evaluation",
+      "text": "Fig. 3 : Tasks and scenes used in our experiments. We evaluate MoMaSplat on five real-world manipulation tasks across three scenes (top: scenes; bottom: per-task close-ups), covering manipulation of both rigid and articulated objects. The simulated scene and its task, Sim Pick-Place Bottle (right of the dashed lines), are used to measure the fidelity of MoMaSplat ’s generated demonstrations against ground truth.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "fe8867d0abc39ecd",
+      "section": "IV Experimental Evaluation",
+      "location": "IV Experimental Evaluation",
+      "text": "Fig. 4 : Policy success across base poses. For each task, we evaluate 12 unseen base locations distributed across categorical distance bins that vary per task, with 3 trials per pose, and report success rate by distance to the nearest demonstration pose. The shaded gray region denotes the original base poses; locations 5–50 cm away are unseen deployment poses. MoMaSplat maintains substantially higher success as the base pose shifts away from the source demonstrations (where Source Only is labeled “Original data only”).",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "666922a72cd28109",
+      "section": "IV Experimental Evaluation",
+      "location": "IV Experimental Evaluation",
+      "text": "Fig. 5 : Spatial distribution of policy evaluation poses. Top-down view of each task showing the table and target-object locations, the original demonstration base poses, and the test base poses used for policy evaluation. Original demonstration poses are marked with circles, while evaluation poses are marked with squares; arrows indicate the robot heading at each pose. Evaluation poses are colored by MoMaSplat policy success rate, providing spatial context for the distance-based results in Fig. 4 .",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7e0fed187809e26c",
+      "section": "IV-A Experimental Setup",
+      "location": "IV-A Experimental Setup",
+      "text": "Tasks. The robot performs (i) Pick-Place Bottle and (ii) Open Drawer in the desk scene; (iii) Pick-Place Remote and (iv) Close Laptop in the living room ; and (v) Open Air-fryer in the kitchen (Fig. 3 ). We additionally build (vi) Sim Pick-Place Bottle in OmniGibson [ 53 ] , a simulated scene modeled after the desk environment that follows the same task structure as (i) without replicating its exact geometry. The tasks span rigid pick-place and single-DoF articulated manipulation. We collect 75 75 manipulation demonstrations for Close Laptop and 90 90 for each other task across three base poses, forming 𝒟 src \\mathcal{D}_{\\text{src}} . We additionally collect nine navigation trajectories 𝒟 nav \\mathcal{D}_{\\text{nav}} from different starting poses to the target base poses.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "932098cef9815762",
+      "section": "IV-A Experimental Setup",
+      "location": "IV-A Experimental Setup",
+      "text": "Evaluation Protocol. For each task, we deploy the trained policy at 12 12 unseen base poses across the scene, with heading centered on the object, and perform 3 3 rollouts per pose.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5ec95b58e108168a",
+      "section": "IV-A Experimental Setup",
+      "location": "IV-A Experimental Setup",
+      "text": "Baselines. We compare against four baselines. Source Only (labeled “Original data only” in Fig. 4 ) trains Diffusion Policy [ 1 ] without augmentation. Action Augmentation [ 54 ] adds noise to proprioceptive states and actions while preserving observations. VISTA [ 27 ] generates novel-view images without transforming actions. One-Thousand Trajectories [ 8 ] reconstructs the static scene using 3DGS; we additionally provide our action transformation to account for changes in the robot base frame. All methods train on the same source demonstrations. For Pick-Place Bottle , we restrict synthetic generation for One-Thousand Trajectories to demonstrations whose initial object pose matches the reconstructed scene, since its static reconstruction cannot represent variation in this pose.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4511c3998ed5261a",
+      "section": "IV-A Experimental Setup",
+      "location": "IV-A Experimental Setup",
+      "text": "Data Augmentation Setup. Each method generates 10 synthetic demonstrations per source demonstration, yielding 750–900 synthetic demonstrations per task except One-Thousand Trajectories on Pick-Place Bottle , which generates 400. For MoMaSplat and One-Thousand Trajectories , we sample base poses within a 1.2 × 1.2 1.2\\times 1.2 m region around each source pose (Sec. III-B ). Frame alignment uses 50 frames from one navigation demonstration.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "b2f7b2d5a93723b9",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "Performance at Unseen Base Poses. Our main experimental results for policy success using MoMaSplat are summarized in Fig. 4 , where success rates are binned by their minimum distance to the nearest demonstration pose. We additionally evaluate the 3 original demonstration base poses with 15 rollouts per pose. At the original base poses, all methods perform comparably. The picture changes sharply at unseen poses. When we average the results over all five tasks, MoMaSplat succeeds on 37% of unseen evaluations, more than twice the rate of the strongest baseline ( One-Thousand Trajectories at 17%) and four to six times that of the remaining baselines ( Source Only 6%, VISTA 8%, Action Augmentation 6%). Critically, Source Only and Action Augmentation collapse to near-zero success beyond 10 cm on most tasks, confirming that perturbing actions without changing the observation gives little robustness to base-pose shifts. VISTA performs poorly throughout; since it is designed for static-base settings, it does not transform actions to match the synthesized viewpoints. Moreover, its lack of temporal consistency produces jittery camera trajectories that further degrade the augmented data. One-Thousand Trajectories degrades more gracefully but still falls off at large distances, since it augments only the free-space approach motion. MoMaSplat achieves the highest overall unseen-pose success rate on every task, outperforming or matching all baselines across every unseen distance bin while sustaining substantial performance at the largest evaluated distances. For example, MoMaSplat achieves 33% on Pick-Place Bottle at 30 cm and 50% on Close Laptop at 40 cm, where every baseline has dropped to zero success rates. Finally, to better contextualize the geometry of our tasks and scenes, Fig. 5 shows the spatial layout of these evaluation locations across each workspace.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fda9a5e044e17377",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "Effect of Number of Source Demonstrations. To evaluate how the number of source demonstrations affects MoMaSplat , we use the Pick-Place Bottle task and train policies using 10, 50, and 90 source demonstrations. For each source demonstration, we generate 10 synthetic demonstrations. Across four test locations at a distance of 10 10 – 20 20 cm from the demonstration poses, we observe that success degrades gracefully with fewer source demonstrations. Specifically, we achieve success rates of 33 % 33\\% , 42 % 42\\% , and 50 % 50\\% for 10, 50, and 90 source demonstrations, respectively. For reference, training on the full set of 90 source demonstrations without augmentation yields only an 8 % 8\\% success rate at the same test poses. These results show that MoMaSplat substantially improves base-pose robustness even with a limited number of source demonstrations.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "af015daf5d3a28b5",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "Generation Quality. We first evaluate generation quality in simulation, where the ground-truth counterpart of a generated demonstration is obtained by executing its transformed actions in the simulator and rendering the on-board camera at every timestep. We use the Sim Pick-Place Bottle task and evaluate 75 75 generated demonstrations, taking every tenth frame for a total of 2,486 2{,}486 frames. Unlike the policy evaluations above, which measure distance between base poses, here we measure how far each generated view is from the views that were used to build the reconstruction. For the 75 75 demonstrations, we find this distance to be between 0.4 0.4 and 27.3 27.3 cm. Since the static reconstruction does not change over a demonstration, we score the scene separately by rendering the scene splat and the empty simulated scene from the same camera pose once per demonstration, rather than considering every frame. We report PSNR, SSIM, and LPIPS over the full image, the scene, and over the robot and object regions using the simulator’s segmentation masks. Table I reports the detailed results. The reconstructed scene achieves the highest fidelity at 26.40 26.40 dB, followed by the manipulated object at 18.18 18.18 dB and the robot at 17.43 17.43 dB. For reference, the original 3DGS work [ 11 ] reports roughly 23 23 dB PSNR on Tanks & Temples [ 55 ] . This places our scene reconstruction in the range of standard novel-view synthesis, while the lower object PSNR reflects the harder setting of reconstructing a moving object with limited viewpoint coverage. The robot error is mainly caused by lighting and shadow differences introduced during compositing. We also evaluate object-pose accuracy to measure how well our estimated object trajectory matches the true object motion of the observations. On 30 30 source demonstrations, including poses directly registered by VGGT and interpolated poses, the predicted object pose has a mean translation error of 1.46 ± 0.71 1.46\\pm 0.71 cm and rotation error of 4.01 ∘ ± 4.66 ∘ 4.01^{\\circ}\\pm 4.66^{\\circ} relative to the simulator ground truth.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "3ffb7211e2db8956",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "On real data, we evaluate scene reconstruction by masking out the robot and the manipulated object, and we obtain 24.00 24.00 dB PSNR on 110 110 held-out frames. For the manipulated object, we use its bounding-box crop and we mask out the background. At poses directly registered by VGGT, we obtain 23.63 23.63 dB, while at interpolated poses we obtain 22.59 22.59 dB. We do not report full-image view-synthesis metrics on real data because the simulated robot differs in appearance from the real robot and this appearance mismatch dominates the pixel-wise error that the view synthesis metrics evaluate.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "208d911f384d4260",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "Overall, the simulation results show that MoMaSplat produces observations that closely match the ground truth, while the real-world results show high-fidelity scene reconstruction and consistent object reconstruction across both directly estimated and interpolated poses.",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a6def1277b21449",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "Region PSNR (dB) ↑ \\uparrow SSIM ↑ \\uparrow LPIPS ↓ \\downarrow Full image 21.27 ± 1.12 21.27\\pm 1.12 0.902 ± 0.019 0.902\\pm 0.019 0.253 ± 0.030 0.253\\pm 0.030 Scene 26.40 ± 2.18 26.40\\pm 2.18 0.936 ± 0.021 0.936\\pm 0.021 0.248 ± 0.037 0.248\\pm 0.037 Object 18.18 ± 2.15 18.18\\pm 2.15 0.688 ± 0.081 0.688\\pm 0.081 0.341 ± 0.106 0.341\\pm 0.106 Robot 17.43 ± 1.30 17.43\\pm 1.30 0.812 ± 0.057 0.812\\pm 0.057 0.287 ± 0.048 0.287\\pm 0.048",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.T1.3",
+      "kind": "table"
+    },
+    {
+      "id": "aee1159e63f58e98",
+      "section": "IV-B Results",
+      "location": "IV-B Results",
+      "text": "TABLE I : Generated-observation fidelity against simulator ground truth. Mean ± \\pm std over 75 75 generated demonstrations spanning viewpoints with distances of 0.4 0.4 – 27.3 27.3 cm from the reconstruction views. Full image , object , and robot use every tenth frame ( 2486 2486 total frames), with object and robot restricted to their masks; scene PSNR evaluation uses one frame per demonstration ( 75 75 in total).",
+      "url": "https://arxiv.org/html/2611.08372v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2545a512472af312",
+      "section": "V Conclusion and Limitations",
+      "location": "V Conclusion and Limitations",
+      "text": "Conclusion. We propose MoMaSplat , a framework for novel-view augmentation of mobile manipulation demonstrations that reconstructs the static scene and manipulated object in 3D, then re-renders full demonstrations, including the post-contact interaction phase, from unseen base poses. Unlike prior NVS augmentation methods that model only the static scene, MoMaSplat produces geometrically consistent observations across the entire trajectory. Across five real-world tasks in three scenes, this improves policy robustness, outperforming prior augmentation methods and maintaining performance beyond the distances where baselines fail. We will publicly release our code to support further research.",
+      "url": "https://arxiv.org/html/2611.08372v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c2348455a46adfd7",
+      "section": "V Conclusion and Limitations",
+      "location": "V Conclusion and Limitations",
+      "text": "Limitations. MoMaSplat assumes mostly static scenes and rigid, visible objects, making deformable objects, heavy occlusions, and texture-poor surfaces challenging. Furthermore, because 𝒢 scene \\mathcal{G}_{\\text{scene}} is reconstructed from pre-interaction navigation views with object masks excluded, regions occluded by the object in its initial state (such as the surface beneath a lifted bottle or the interior of an opened drawer or air-fryer basket) are never observed during scene reconstruction and remain unmodeled when disoccluded. It also depends on consistent open-world segmentation and produces non-physical demonstrations by replaying source object trajectories without modeling contact forces or dynamics. Finally, view quality depends on navigation-data coverage. Addressing dynamic backgrounds, deformable objects, physical contact, and cluttered scenes remains future work.",
+      "url": "https://arxiv.org/html/2611.08372v1#S5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8681da88124455db",
+      "section": "Acknowledgment",
+      "location": "Acknowledgment",
+      "text": "This work was conducted in the Robot Interactive Intelligence (RobIn) Lab at The University of Texas at Austin and was supported in part by the National Science Foundation (CAREER FAIN 2543745), the NVIDIA Academic Grant Program, Amazon, and DARPA TIAMAT program (HR0011-24-9-0428). G. Pavlakos acknowledges support by NSF-2504906 and 2544200, and the NVIDIA Academic Grant Program. S. Kumar is supported in part by the Amazon AI PhD Fellowship program. The opinions, findings, and conclusions expressed in this material are those of the authors and do not necessarily reflect the views of the sponsors.",
+      "url": "https://arxiv.org/html/2611.08372v1#Sx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0b4363df9e092f4f",
+      "section": "-A Baseline Details",
+      "location": "-A Baseline Details",
+      "text": "In this section, we provide more details about the baselines we are using in our evaluation.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2fef7fab2dee50ab",
+      "section": "-A Baseline Details",
+      "location": "-A Baseline Details",
+      "text": "Source Only. This baseline trains the same Diffusion Policy [ 1 ] as we do, but using only the source demonstrations 𝒟 src \\mathcal{D}_{\\text{src}} , without any augmentation. This allows us to quantify how well a policy trained only on the original base poses generalizes to unseen poses.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "552f200f1277ff9a",
+      "section": "-A Baseline Details",
+      "location": "-A Baseline Details",
+      "text": "Action Augmentation. Following [ 54 ] , we augment each demonstration by perturbing the proprioceptive state and the action labels with zero-mean Gaussian noise while leaving the image observations unchanged. This exposes the policy to small action variations, but because the images remain the same, this augmentation provides no information about how the scene looks from a different base pose. We use this data to train the same Diffusion Policy and use the same training schedule as we do with all other baselines.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2a8729b4676ade00",
+      "section": "-A Baseline Details",
+      "location": "-A Baseline Details",
+      "text": "VISTA. VISTA [ 27 ] augments a demonstration by re-rendering its observations from perturbed camera viewpoints with ZeroNVS [ 32 ] , a zero-shot single-image novel-view-synthesis diffusion model, while leaving the actions unchanged. We run the publicly released ZeroNVS model and checkpoint. 1 1 1 https://github.com/s-tian/ZeroNVS For each source demonstration, we sample a small set of viewpoint perturbations: a planar camera offset ( d ​ x , d ​ y ) (dx,dy) drawn uniformly within ± 10 \\pm 10 cm on each axis (the first sample is the unperturbed view), together with a single per-demonstration yaw that re-aims the camera at the object centroid, clipped to ± 0.5 \\pm 0.5 rad; beyond this perturbation range, we observe large artifacts in image generation and worse imitation learning results. We then process each frame independently: conditioning on the original egocentric RGB image (center-cropped and resized to 256 × 256 256\\times 256 ) and the relative perturbation, ZeroNVS synthesizes the frame from the novel viewpoint. We sample with DDIM ( 50 50 steps, η = 0 \\eta=0 ), a classifier-free guidance scale of 7.5 7.5 , and a 70 ∘ 70^{\\circ} field of view matching our camera. Because ZeroNVS is a single-image model applied frame by frame, the synthesized views are not temporally consistent across a trajectory. The generated frames are paired with the original, unmodified actions and are used to train the same Diffusion Policy as all other methods.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "7c9c26a72faa0b7a",
+      "section": "-A Baseline Details",
+      "location": "-A Baseline Details",
+      "text": "One-Thousand Trajectories. One-Thousand Trajectories [ 8 ] reconstructs the static scene as a 3D Gaussian Splatting model and re-renders observations from novel viewpoints. In our implementation, we reconstruct the static scene using the same pipeline and navigation data 𝒟 nav \\mathcal{D}_{\\text{nav}} as 𝒢 scene \\mathcal{G}_{\\text{scene}} in MoMaSplat, but without masking out the manipulated object, so that the static scene model contains the manipulated object at its initial pose.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "920d0d72cdada3e2",
+      "section": "-A Baseline Details",
+      "location": "-A Baseline Details",
+      "text": "We use its novel-view augmentation component without the additional trajectory augmentation proposed in [ 8 ] . To account for changes in the robot base frame, we apply the same delta-based action retargeting used by MoMaSplat (Sec. III-B ). This baseline relies on a static scene reconstruction rather than explicitly reconstructing the dynamic manipulated object. For Pick-Place Bottle , we restrict synthetic generation to the 40 demonstrations whose initial object pose matches the reconstructed scene, producing 400 synthetic demonstrations. All 90 source demonstrations remain in the policy-training set. For the other tasks, the initial object pose is fixed, so all source demonstrations are used for synthetic generation.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "1fe1362a09abb296",
+      "section": "-B -1 3D Scene Model Reconstruction",
+      "location": "-B -1 3D Scene Model Reconstruction",
+      "text": "Structure from motion and Gaussian Splatting. We reconstruct the static scene from the navigation frames 𝒟 nav \\mathcal{D}_{\\text{nav}} . We run structure-from-motion using COLMAP [ 46 ] with a sequential matcher over the navigation frames, together with a small set of context frames sampled just before each manipulation. This step returns per-image camera poses and a sparse point cloud. The sparse points are used to initialize a 3D Gaussian Splatting reconstruction that we train with WildGaussians [ 47 ] 2 2 2 https://github.com/jkulhanek/wild-gaussians . We use the nerfbaselines framework and train for 30,000 30{,}000 iterations. WildGaussians augments 3DGS with per-image appearance and exposure embeddings and a DINOv2-based uncertainty head that down-weights transient or inconsistent regions, such as the robot or moving objects, during optimization. We use a DSSIM weight of 0.2 0.2 in the photometric loss and hold out every eighth frame for evaluation.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dc4250e05d708d4b",
+      "section": "-B -1 3D Scene Model Reconstruction",
+      "location": "-B -1 3D Scene Model Reconstruction",
+      "text": "Metric scaling. Structure-from-motion recovers the scene only up to an unknown global scale. However, our action retargeting is metric, so we rescale the reconstruction using the robot’s onboard depth sensor measurements. For each navigation frame we render a depth map from the scene model and compare it to the measured depth from the head-mounted RGB-D camera (stored in millimeters and converted to meters). We consider only pixels with valid measured depth (in ( 0 , 9 ] (0,9] m, at least 1000 1000 per frame) and for each frame, we take the median of the per-pixel ratios of measured to rendered depth. Eventually, the scale factor is set as the median of these per-frame median values, making it robust to outliers. This factor allows us to convert rendered depth and Gaussian coordinates into meters.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1f3dde0e4f01d6e8",
+      "section": "-B -1 3D Scene Model Reconstruction",
+      "location": "-B -1 3D Scene Model Reconstruction",
+      "text": "Scene pose interpolation. For the navigation frames that have not been registered by COLMAP, we estimate their scene camera poses using the same strategy as we do with objects (see Sec. -B-2 ). This includes SLERP-based interpolation, smoothness filtering, and cyclic-outlier rejection, applied per demonstration.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "f7d8c8792b8f151d",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "Segmentation. To obtain the per-frame object masks ℳ t j \\mathcal{M}_{t}^{j} , we use Grounded-SAM [ 50 ] , prompting an open-world detector, GroundingDINO [ 56 ] , with a per-object text label to localize the manipulated object, and propagating the detected box through the clip using SAM 2 [ 51 ] 3 3 3 Grounded-SAM 2: https://github.com/IDEA-Research/Grounded-SAM-2 . We use a forward and a reverse pass from a per-object seed frame. When multiple objects are tracked, pixels claimed by more than one object are removed from all of them (exclusive masks). Object reconstruction uses the per-object masks to exclude the background and robot. For scene reconstruction, we additionally obtain a robot mask by rendering the robot in the simulator at the recorded configuration and camera pose. We exclude the union of the object masks and this robot mask when training 𝒢 scene \\mathcal{G}_{\\text{scene}} .",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "16211d21e2267667",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "Frame Selection Strategy. A source manipulation demonstration d src j ∈ 𝒟 src d^{j}_{\\text{src}}\\in\\mathcal{D}_{\\text{src}} contains several hundred RGB frames recorded at video rate, far more than the feed-forward model can process. Simultaneously, near-duplicate frames add little to the pose estimate while inflating compute. We therefore subsample each demonstration to a compact, motion-diverse set of roughly 10 10 – 20 20 frames before passing it to the model, using the per-frame object masks ℳ t j \\mathcal{M}_{t}^{j} .",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "38695ec9dc6848d1",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "We first discard frames whose object mask is small or poorly segmented, removing views where the object is distant or occluded. From the remaining frames we drop near-duplicate, stationary views: scanning in temporal order, we keep a frame only when its mask bounding-box IoU with the previously kept frame falls below 0.8 0.8 (the same threshold for all tasks), or when more than 20 20 frames have elapsed since the last kept frame. The first and last frame of every demonstration are always retained to anchor the reconstruction to the endpoints of the clip. Additionally, 50 50 frames from one navigation demonstration are included for frame alignment, and the combined set is capped at the feed-forward model’s 400 400 -frame input budget.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0fd5ea50a1cef9df",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "Bundle Adjustment. For our feed-forward model, we use VGGT [ 12 ] 4 4 4 https://github.com/facebookresearch/vggt , as implemented by the training-free FastVGGT [ 49 ] acceleration 5 5 5 https://github.com/mystorm16/FastVGGT . For each selected frame, it predicts an object-relative camera pose T ^ o , t \\hat{T}_{o,t} together with a per-frame intrinsics matrix and a dense depth map. These predictions are accurate but not multi-view consistent, so we refine them with a bundle-adjustment step. We first unproject the predicted depth into a set of 3D points and predict dense 2D feature tracks across the selected frames. Initializing a reconstruction with the predicted poses, intrinsics, and points, we filter tracks by reprojection error, using an adaptive threshold that grows until a sufficient fraction of frames retain enough inliers, and by track visibility, requiring every 3D point to be observed in at least two frames. We then run bundle adjustment, jointly optimizing the camera poses and 3D points (and, when intrinsics are not supplied, the focal length and principal point) to minimize reprojection error. The refined, multi-view-consistent poses replace T ^ o , t \\hat{T}_{o,t} as the input to the Sim ⁡ ( 3 ) \\mathrm{Sim}(3) alignment.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "07047fb92292e9c9",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "Frame Alignment. The poses estimated above lie in the object model’s internal frame v v with arbitrary scale, orientation, and origin, whereas the scene lives in the world frame w w . We align them using the navigation frames, where the object is static so its recovered trajectory is explained purely by the camera motion. Effectively, the same cameras are posed twice: by the object model in v v and by structure-from-motion in w w . Matching the navigation cameras by frame, we fit the similarity transform S : v → w S:v\\rightarrow w from their camera centers with the Umeyama algorithm [ 52 ] , solving for scale, rotation, and translation in closed form. To be robust to mis-registered frames, we wrap Umeyama in RANSAC: we repeatedly fit S S from minimal 5 5 -camera subsets, reject hypotheses whose scale leaves a plausible range, score each by the number of camera centers whose residual is below 0.2 0.2 m, keep the highest-consensus hypothesis, and refit on its inliers followed by a Huber-robust nonlinear refinement restricted to those inliers. We report the alignment quality as the camera-center residual (mean and median) and the RMS of the aligned sparse-point residuals. Applying S S maps the object poses into the world frame, T o , t = S ⋅ T ^ o , t T_{o,t}=S\\cdot\\hat{T}_{o,t} .",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e23191da5394bf8",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "Object Gaussian Optimization. Given the registered frames and their aligned poses T o , t T_{o,t} , we fit a 3D Gaussian Splatting model [ 11 ] 𝒢 obj \\mathcal{G}_{\\text{obj}} of the object with the gsplat [ 57 ] trainer 6 6 6 https://github.com/nerfstudio-project/gsplat for 60,000 60{,}000 steps, supervising only the segmented object through its RGBA images, where the alpha channel is the object mask composited over a white background. We minimize an L 1 L_{1} plus SSIM photometric loss (SSIM weight 0.2 0.2 ) together with an L 1 L_{1} term on the rendered opacity against the mask. The per-frame poses are optimized jointly with the Gaussian parameters at a small learning rate of 10 − 5 10^{-5} , so the photometric loss is backpropagated through both appearance and pose, yielding the pose-disentangled model 𝒢 obj \\mathcal{G}_{\\text{obj}} that can be rendered at arbitrary 6-DoF poses.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "8be1bba1ce2cb334",
+      "section": "-B -2 3D Object Model Reconstruction",
+      "location": "-B -2 3D Object Model Reconstruction",
+      "text": "Pose Interpolation. Because of frame selection, the feed-forward model only returns camera poses at the selected keyframes. In contrast to that, synthesizing a demonstration requires an object pose T o , t T_{o,t} at every timestep of the source trajectory. We therefore densify the keyframe poses by interpolation: rotations are interpolated with spherical linear interpolation (SLERP) and translations are interpolated linearly, between consecutive keyframes. To suppress residual estimation noise we add three refinements before interpolating. (i) A smoothness filter drops keyframes whose translation and rotation relative to the previous keyframe both fall below small thresholds, removing jitter from near-stationary stretches. (ii) A cyclic-outlier filter removes backtracking A → B → A A\\!\\rightarrow\\!B\\!\\rightarrow\\!A keyframes, where an excursion to B B is large enough to be meaningful yet the trajectory returns close to A A , a signature of transient pose-estimation errors. (iii) An ease-in parameterization places interpolated samples so that pose changes are concentrated toward the end of each keyframe interval, better matching the observed motion profile than uniform piecewise-linear filling. The densified trajectory { T o , t } \\{T_{o,t}\\} is what we rasterize 𝒢 obj \\mathcal{G}_{\\text{obj}} along when compositing novel-view observations.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS2.SSS2.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "204dee0f6bed691c",
+      "section": "-C Base Pose Sampling Strategy",
+      "location": "-C Base Pose Sampling Strategy",
+      "text": "Here, we expand on the procedure used to draw the sampled base poses 𝒯 i sampled = { T ~ 1 , … , T ~ K } \\mathcal{T}_{i}^{\\text{sampled}}=\\{\\tilde{T}_{1},\\dots,\\tilde{T}_{K}\\} around each original base pose T i T_{i} (Sec. III-B ). Sampling operates per source demonstration about an anchor pose recovered for that demonstration, i.e., the original base position and heading expressed in the world frame, as it is established by the scene reconstruction.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f37d55962e4eb9e5",
+      "section": "-C Base Pose Sampling Strategy",
+      "location": "-C Base Pose Sampling Strategy",
+      "text": "Planar position. We draw the planar offset ( x ~ j , y ~ j ) (\\tilde{x}_{j},\\tilde{y}_{j}) from a distribution centered at the anchor. By default this is uniform over a square region around the original base pose (the region size used in our experiments is reported in Sec. IV-A ); we also support an isotropic Gaussian with magnitude bounds for annulus-shaped coverage.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bd18ea9fa7c5c5a8",
+      "section": "-C Base Pose Sampling Strategy",
+      "location": "-C Base Pose Sampling Strategy",
+      "text": "Heading. For each sampled position we set the base heading θ ~ j \\tilde{\\theta}_{j} so that the egocentric camera points at the object’s 3D centroid (accounting for the camera’s fixed offset from the base), then perturb it with uniform noise (default ± 20 ∘ \\pm 20^{\\circ} ) so the policy sees the object at a range of positions in the camera view. The robot head is fixed, so the object is kept in view through the base pose alone; we discard samples that would place the object near the image edge or out of view before running the costlier IK check.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "db8e46adcf00bca0",
+      "section": "-C Base Pose Sampling Strategy",
+      "location": "-C Base Pose Sampling Strategy",
+      "text": "IK feasibility. Following Sec. III-B , a sampled base pose is retained only if the source arm trajectory, with the end effector held at the same pose relative to the manipulated object, admits a valid inverse-kinematics solution. We verify reachability at several probe timesteps spanning the demonstration and accept the sample only if all of them are reachable, querying the curobo inverse-kinematics solver for the TIAGo robot inside the OmniGibson simulator [ 53 ] 7 7 7 OmniGibson: https://github.com/StanfordVL/OmniGibson ; cuRobo: https://github.com/NVlabs/curobo . Infeasible candidates are rejected and resampled, up to a fixed draw budget per demonstration, and the first K K accepted samples are kept.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "40ed0d245cd9df9c",
+      "section": "-C Base Pose Sampling Strategy",
+      "location": "-C Base Pose Sampling Strategy",
+      "text": "Stage Parameter Value Scene SfM matcher sequential (COLMAP) Scene 3DGS method / iterations WildGaussians / 30,000 30{,}000 Scene 3DGS DSSIM weight 0.2 0.2 Metric scale valid-depth range ( 0 , 9 ] (0,9] m, ≥ 1000 \\geq 1000 px/frame Segmentation detector / tracker GroundingDINO / SAM2 Frame selection IoU thresh. / max gap 0.8 0.8 / 20 20 frames Frame selection VGGT input budget 400 400 frames per object Object BA visibility per 3D point ≥ 2 \\geq 2 views Sim ⁡ ( 3 ) \\mathrm{Sim}(3) RANSAC subset / trials / inlier 5 5 / 8000 8000 / 0.2 0.2 m Object 3DGS steps / SSIM weight 60,000 60{,}000 / 0.2 0.2 Object 3DGS pose-opt learning rate 10 − 5 10^{-5} Base sampling region / yaw noise 120 × 120 120\\times 120 cm / ± 20 ∘ \\pm 20^{\\circ} Generation synthetic per source demonstration 10 10 Policy obs / action horizon 2 2 / 8 8 Policy DDIM train timesteps 50 50 Policy optimizer / learning rate AdamW / 3 × 10 − 4 3\\times 10^{-4} Policy batch size / training steps 32 32 / 100,000 100{,}000 Policy source : generated ratio 0.25 : 0.75 0.25:0.75",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.T2.3",
+      "kind": "table"
+    },
+    {
+      "id": "5602f963fc42ff31",
+      "section": "-C Base Pose Sampling Strategy",
+      "location": "-C Base Pose Sampling Strategy",
+      "text": "TABLE II : Key hyperparameters across the M o M a S plat pipeline.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "866435eb7a6576ed",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "We provide implementation details for the policy trained with Diffusion Policy [ 1 ] on the union of source and generated demonstrations (Sec. III-C ).",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "23cbdf74df6b346b",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "Architecture. The policy is a conditional 1D U-Net denoiser. The egocentric head-camera RGB image is encoded by a ResNet-18 trained from scratch followed by a spatial-softmax pooling layer ( 32 32 keypoints), and the resulting visual features are concatenated with the low-dimensional proprioception to form the conditioning vector.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0f0dbb3850466021",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "Observations and actions. At each step the policy conditions on the egocentric head-camera RGB image (resized to 224 × 224 224\\times 224 ) and the end-effector proprioception, stacked over the most recent n obs = 2 n_{\\text{obs}}=2 steps. It predicts a chunk of n act = 8 n_{\\text{act}}=8 future actions, each a 7 7 -dimensional command consisting of an end-effector translation delta, a rotation delta, and a gripper command expressed in the robot base frame, normalized to zero mean and unit variance. During training we apply random crop and translation together with color-jitter augmentation to the RGB input.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "1afaa5ffdb0380b7",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "Diffusion process. We use a DDIM noise scheduler with 50 50 training timesteps, a cosine-based β \\beta schedule, and ϵ \\epsilon (noise) prediction, optimizing the mean-squared denoising loss of Eq. (1). At inference, actions are produced by running the reverse process for the same number of denoising steps.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "bfa0d4c5535c51ab",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "Optimization. We optimize with AdamW (learning rate 3 × 10 − 4 3\\times 10^{-4} , weight decay 10 − 4 10^{-4} ) under a cosine schedule with 1000 1000 warm-up steps and a batch size of 32 32 for 100,000 100{,}000 gradient steps.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "eff00c9ceed60543",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "Source and synthetic co-training. We train on the union of the source demonstrations 𝒟 src \\mathcal{D}_{\\text{src}} and the generated demonstrations 𝒟 gen \\mathcal{D}_{\\text{gen}} using a weighted sampler that draws each training sequence from 𝒟 src \\mathcal{D}_{\\text{src}} with probability 0.25 0.25 and from 𝒟 gen \\mathcal{D}_{\\text{gen}} with probability 0.75 0.75 . This anchors the policy to the source data while exploiting the broader base-pose coverage of the synthetic data.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "e57f6262532fe378",
+      "section": "-D Imitation Learning",
+      "location": "-D Imitation Learning",
+      "text": "Hardware and data. We use a TIAGo mobile manipulator with a head-mounted RGB-D camera ( 70 ∘ 70^{\\circ} field of view). We collect 75 source demonstrations for Close Laptop and 90 for each other task across three base poses, and generate 10 10 synthetic demonstrations per source demonstration within a 120 × 120 120\\times 120 cm region around each source base pose. We evaluate each policy at 12 12 unseen base poses with 3 3 rollouts per pose. Table II summarizes the main hyperparameters across the pipeline.",
+      "url": "https://arxiv.org/html/2611.08372v1#A0.SS4.p7.1",
+      "kind": "p"
+    }
+  ]
+}

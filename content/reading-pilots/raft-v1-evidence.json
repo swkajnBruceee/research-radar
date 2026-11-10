@@ -1,0 +1,736 @@
+{
+  "id": "401105ec546c7a870f50ddce8b7bfb49586da605690324c502c49b2e3e136175",
+  "url": "https://arxiv.org/html/2611.04368v1",
+  "format": "html",
+  "fetched": "2026-11-05T04:01:00+00:00",
+  "passages": [
+    {
+      "id": "ab10303a86f41d3b",
+      "section": "正文",
+      "location": "正文",
+      "text": "1]Princeton University 2]Microsoft Research",
+      "url": "https://arxiv.org/html/2611.04368v1#p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "23594deaa1b62be0",
+      "section": "正文",
+      "location": "正文",
+      "text": "https://princeton-prism.github.io/RAFT/princeton-prism.github.io/RAFT \\code https://github.com/princeton-prism/RAFTgithub.com/princeton-prism/RAFT",
+      "url": "https://arxiv.org/html/2611.04368v1#p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "4db493a9aaf55f5c",
+      "section": "RAFT: Reasoning-Aligned Fine-Tuning Improves Robustness of VLA Post-Training",
+      "location": "RAFT: Reasoning-Aligned Fine-Tuning Improves Robustness of VLA Post-Training",
+      "text": "Adapting a generalist vision-language-action (VLA) policy to a target task with limited demonstrations can improve nominal task success while reducing robustness to variations in appearance, objects, and instructions. We introduce reasoning-aligned fine-tuning (RAFT), a two-stage post-training procedure: RAFT first trains low-rank adapters on task-relevant reasoning annotations, then freezes them while fine-tuning the policy on action demonstrations. On a physical DROID robot, RAFT achieves 75.0 % 75.0\\% out-of-distribution success, compared with 27.9 % 27.9\\% for plain fine-tuning; on a multi-stage bimanual YAM task, it reaches 70.0 % 70.0\\% mean success, compared with 36.0 % 36.0\\% for the strongest baseline. RAFT also improves success under visual, object, and instruction shifts in simulated pick-and-place and open-drawer tasks. Compared with plain fine-tuning, RAFT policies place more attention on annotated task regions and yield higher linear-probe accuracy for object identity in later layers. A broader reasoning-data mixture further improves downstream success across demonstration budgets.",
+      "url": "https://arxiv.org/html/2611.04368v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5b88768ae9ca5593",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Generalist vision-language-action (VLA) policies, built on pretrained vision-language models and large robot datasets [ 1 , 7 , 22 , 24 , 3 , 2 ] , typically still require adaptation to reach the success rates needed to deploy the policy on a real-world target task [ 4 , 23 ] . Because collecting task-specific demonstrations is expensive, this post-training often relies on a small dataset collected in a narrow set of environments. Fine-tuning can improve nominal success while reducing robustness to visual and semantic variations absent from those demonstrations [ 12 , 43 , 35 , 37 , 21 , 38 ] . Existing approaches address this problem through parameter merging, as in RETAIN [ 39 ] , or regularization during adaptation [ 20 , 17 ] . We study a complementary approach, aligning a pretrained policy with task-relevant reasoning supervision before adapting it to the target actions.",
+      "url": "https://arxiv.org/html/2611.04368v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a84068958a679ad4",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Figure 1 : Reasoning-aligned fine-tuning for robust VLA adaptation. (a) Plain FT, fine-tuned only on actions, succeeds in the training layout but fails under small scene changes. (b) RAFT first learns task-relevant reasoning through LoRA adapters, then freezes them while fine-tuning the policy on action demonstrations. (c) With the same demonstrations, RAFT succeeds under these shifts. On physical robots, RAFT raises success over Plain FT from 34.7 % 34.7\\% to 70.0 % 70.0\\% on YAM and from 27.9 % 27.9\\% to 75.0 % 75.0\\% on out-of-distribution DROID trials.",
+      "url": "https://arxiv.org/html/2611.04368v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f4354d417c517253",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Reasoning supervision can teach policies to identify task-relevant objects, spatial relations, and motion structure [ 41 , 10 , 42 , 26 ] . We study how reasoning capabilities in pretrained VLMs can support low-data adaptation of generalist VLAs to a target skill. We introduce reasoning-aligned fine-tuning ( RAFT ), a two-stage adaptation procedure. Stage I learns low-rank adapters in the language and vision modules from task-relevant reasoning annotations while keeping pretrained parameters fixed. Stage II freezes these adapters and fine-tunes the language model, action expert, and projection layers on action demonstrations. Action gradients therefore do not directly update the reasoning-adapter weights. We find that how reasoning supervision is incorporated matters: jointly co-training reasoning and actions underperforms plain fine-tuning ( 63.2 % 63.2\\% vs. 79.6 % 79.6\\% mean success on simulated pick and place), and updating the reasoning adapter during action learning falls below Plain FT ( 74.0 % 74.0\\% vs. 79.6 % 79.6\\% ) (Secs. 8.3 and 8.2 ). Staging the two, with the adapter frozen, yields these robustness gains. RAFT policies also place more attention on annotated task regions and yield higher linear-probe accuracy for object identity and episode-time position than plainly fine-tuned policies (Sec. 4.3 ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0e54fee51ecb85cd",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We evaluate RAFT on two simulated tasks and two physical platforms: the single-arm DROID setup [ 22 ] and the bimanual YAM setup [ 10 ] . Evaluations test visual, object, instruction, and geometric variations of the adapted tasks. RAFT achieves the highest mean success on simulated pick and place and improves open-drawer success, with the largest gains on the physical robots: success on 75 % 75\\% of out-of-distribution DROID trials versus 28 % 28\\% for plain fine-tuning, and 70 % 70\\% mean success on the multi-stage YAM task versus 36 % 36\\% for the strongest baseline. Our contributions are threefold: (1) We propose RAFT a post training recipt that separates task relevant reasoning supervision from action fine tuning (2) We show improved downstream performace and robustness in simulation and on two physical robot platforms; and (3) We analyze why RAFT helps generalist policy adapt to a target by analyzing the features learned by RAFT.",
+      "url": "https://arxiv.org/html/2611.04368v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ba8546f54bce5fb7",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Generalist robot policies have made substantial progress in learning transferable skills and supporting deployment through post-training [ 5 , 24 , 34 , 15 , 27 , 40 , 30 ] . Within this setting, work on VLA fine-tuning studies reliable task execution [ 23 , 43 ] , while FAST improves action tokenization for autoregressive VLAs [ 31 ] . ControlVLA uses object-centric conditioning for few-shot adaptation [ 28 ] . These advances make specialization more effective, but nominal task success can still mask failures under distribution shift [ 12 , 44 , 11 ] . This motivates studying robustness to variations absent from the target demonstrations.",
+      "url": "https://arxiv.org/html/2611.04368v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7bc4f0b92b85002b",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Robust post-training methods seek to adapt generalist policies while retaining useful pretrained capabilities. Weight-space approaches interpolate or merge pretrained and adapted parameters [ 36 , 18 , 9 ] , while regularization and steerability-preserving adaptation constrain changes during fine-tuning [ 20 , 14 , 33 , 17 ] . RETAIN [ 39 ] interpolates pretrained and fine-tuned policy weights to improve generalization to variations of a new skill and retain broader capabilities. DeLock [ 17 ] regularizes visual-encoder weight drift during post-training and uses contrastive prompt guidance at inference. RAFT instead introduces task-relevant reasoning alignment before action fine-tuning, with complementary parameter freezing across the two stages.",
+      "url": "https://arxiv.org/html/2611.04368v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "75789f9299351a71",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Reasoning and grounding supervision provide a foundation for this approach. Embodied Chain-of-Thought interleaves sub-goal, spatial, and motion reasoning with action prediction [ 41 ] . Related work incorporates spatial representations, affordances, keypoints, and manipulable parts [ 10 , 42 , 26 ] , or object- and language-grounded supervision [ 3 ] . Steerable Policies use commands at multiple abstraction levels to control [ 6 ] , while VLS uses VLM-generated rewards to steer frozen policies at inference [ 29 ] . Reasoning supervision is used to prepare that policy for specialization, and the learned adapters are held fixed during subsequent action learning. To the best of our knowledge, reasoning supervision has not been studied for low-data post-training of a pretrained generalist VLA. We evaluate this adaptation schedule through downstream robustness, additional training controls, and analyses of task-relevant representations.",
+      "url": "https://arxiv.org/html/2611.04368v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "611ea7c8af37d3d7",
+      "section": "3 Method",
+      "location": "3 Method",
+      "text": "Figure 2 : Overview of RAFT . Stage I updates only the reasoning adapters, using reasoning annotations. Stage II freezes the adapters and updates the language model, action expert, and projection layers on action demonstrations, so action gradients do not reach the reasoning adapters.",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a939bc18dbcad3d4",
+      "section": "3.1 Overview and Problem Setup",
+      "location": "3.1 Overview and Problem Setup",
+      "text": "We consider task adaptation from a pretrained generalist policy using a small demonstration dataset 𝒟 η = { ( s t , a t , T ) } \\mathcal{D}_{\\eta}=\\{(s_{t},a_{t},T)\\} collected in a narrow set of environments. Here s t s_{t} contains the policy observations, a t a_{t} is the demonstrated action, and T T is the task instruction. We denote the Stage-II trainable non-adapter parameters (the language model, action expert, and projection layers) by θ \\theta , initialized from θ pre \\theta_{\\mathrm{pre}} , and the LoRA parameters by ϕ \\phi [ 16 ] . In RAFT , the pretrained SigLIP weights remain frozen throughout adaptation, while LoRA modules in both the vision encoder and language model are trained in Stage I. Stage II freezes these learned adapters and updates θ \\theta . Thus, vision adaptation in RAFT occurs through Stage-I LoRA rather than updates to the pretrained SigLIP weights. The resulting action policy is π θ , ϕ ​ ( a t ∣ s t , T ) \\pi_{\\theta,\\phi}(a_{t}\\mid s_{t},T) . Figure 2 summarizes the two stages; Sec. 6 gives the adapter placement and optimization settings.",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "402bd3844cb0850e",
+      "section": "3.1 Overview and Problem Setup",
+      "location": "3.1 Overview and Problem Setup",
+      "text": "Figure 3 : Example Stage-I reasoning annotation. In this YAM example, the left arm holds the lid open while the right arm reaches for the toy. The target combines language, object boxes, keypoints, motion traces, and per-arm state information. Blue and green mark the box and toy, yellow marks keypoints, and red marks the active arm’s trace.",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e24e079d0e0f9fe1",
+      "section": "3.2 Stage I: Reasoning Alignment",
+      "location": "3.2 Stage I: Reasoning Alignment",
+      "text": "Stage I trains the adapter to predict task-relevant reasoning annotations. A VLM annotator (Gemini 3.1 Pro) produces task-relevant reasoning targets from observations and instructions on 𝒟 η \\mathcal{D}_{\\eta} , yielding 𝒟 reason = { ( s , r , T ) } \\mathcal{D}_{\\mathrm{reason}}=\\{(s,r,T)\\} . These annotations describe the objects and interactions relevant to the task. The annotation choices include bounding boxes, keypoints, traces, spatial descriptions, and visual question answering. Section 8.1 compares their effects. Each annotation is represented as a target token sequence r = ( r 1 , … , r | r | ) r=(r_{1},\\ldots,r_{|r|}) . We train the LoRA adapter using standard autoregressive cross-entropy:",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6df8988159159cd7",
+      "section": "3.2 Stage I: Reasoning Alignment",
+      "location": "3.2 Stage I: Reasoning Alignment",
+      "text": "ℒ reason ( ϕ ) = − 𝔼 ( s , r , T ) ∼ 𝒟 reason ∑ j = 1 | r | log p θ pre , ϕ ( r j ∣ s , T , r < j ) . \\mathcal{L}_{\\mathrm{reason}}(\\phi)=-\\mathbb{E}_{(s,r,T)\\sim\\mathcal{D}_{\\mathrm{reason}}}\\sum_{j=1}^{|r|}\\log p_{\\theta_{\\mathrm{pre}},\\phi}(r_{j}\\mid s,T,r_{<j}). (1)",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "745d6b87aa13c5df",
+      "section": "3.2 Stage I: Reasoning Alignment",
+      "location": "3.2 Stage I: Reasoning Alignment",
+      "text": "Only ϕ \\phi is updated in this stage; all remaining parameters are frozen. This supervision encourages task-relevant grounding before action adaptation.",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "b7cddbe44023cd85",
+      "section": "3.3 Stage II: Action Adaptation",
+      "location": "3.3 Stage II: Action Adaptation",
+      "text": "Stage II turns the reasoning-aligned initialization into an action policy for the target task. We retain the learned adapter ϕ ⋆ \\phi^{\\star} and freeze its parameters. The Stage-II parameter set θ \\theta is then updated by supervised fine-tuning (SFT) on the task demonstrations [ 24 , 23 ] :",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b16c6220d7e898ce",
+      "section": "3.3 Stage II: Action Adaptation",
+      "location": "3.3 Stage II: Action Adaptation",
+      "text": "θ ⋆ = arg ⁡ min θ ⁡ 𝔼 ( s , a , T ) ∼ 𝒟 η ​ [ ℓ SFT ​ ( π θ , ϕ ⋆ , s , a , T ) ] ⏟ ℒ BC ​ ( θ , 𝒟 η , ϕ ⋆ ) . \\theta^{\\star}=\\arg\\min_{\\theta}\\,\\underbrace{\\mathbb{E}_{(s,a,T)\\sim\\mathcal{D}_{\\eta}}[\\ell_{\\mathrm{SFT}}(\\pi_{\\theta,\\phi^{\\star}};s,a,T)]}_{\\mathcal{L}_{\\mathrm{BC}}(\\theta;\\mathcal{D}_{\\eta},\\phi^{\\star})}. (2)",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "f5b0aa0e8094647c",
+      "section": "3.3 Stage II: Action Adaptation",
+      "location": "3.3 Stage II: Action Adaptation",
+      "text": "Here ℓ SFT \\ell_{\\mathrm{SFT}} is the underlying policy’s action-supervision objective. Stage II updates the language model, action expert, and projection layers while the adapter and SigLIP vision tower remain frozen. At deployment, the resulting policy is π θ ⋆ , ϕ ⋆ \\pi_{\\theta^{\\star},\\phi^{\\star}} . The adapter ablation in the appendix (Sec. 8.2 ) evaluates the benefit of freezing the reasoning adapter during action learning. Attention and linear-probe analyses (Sec. 4.3 ) provide empirical evidence of retained task grounding in the resulting policy.",
+      "url": "https://arxiv.org/html/2611.04368v1#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "a18ee1a87ff079e1",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "The goal of our experiments is to evaluate RAFT ’s ability to retain task-relevant information and improve downstream robustness. Concretely, we aim to answer: (1) does RAFT generalize better than baselines under distribution shift, in simulation and on physical robots? (2) do RAFT ’s representations retain more task-relevant information than a plainly fine-tuned policy, and does this track downstream success? (3) how does downstream performance scale with the amount of reasoning data used in Stage I? and (4) How freezing Stage-I adapted compares with common approaches like co-training simulatenously?",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ae854a1efd883516",
+      "section": "4.1 Experimental setup",
+      "location": "4.1 Experimental setup",
+      "text": "Figure 4 : Evaluation scenes. Representative in-distribution (ID) and out-of-distribution (OOD) observations, left to right: simulated pick and place, simulated open drawer, physical DROID pick and place, and the physical YAM two-stage task. The OOD panels show texture changes in simulation and background changes on the physical robots. The full set of evaluated shifts is shown in Fig. 20 .",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7d9786fe12c942fa",
+      "section": "Baselines",
+      "location": "Baselines",
+      "text": "We compare RAFT with standard supervised fine-tuning ( Plain FT ), RETAIN [ 39 ] , which merges pretrained and fine-tuned weights, and DeLock [ 17 ] , which regularizes visual-encoder weight drift during fine-tuning and applies contrastive prompt guidance at inference. We additionally report Base , the pretrained generalist policy evaluated without post-training. All fine-tuned policies are evaluated after 5,000 action-training steps. Sec. 6.3 gives the baseline settings; Sec. 4.5 ablates the training design, with full adapter and co-training results in the appendix (Secs. 8.2 and 8.3 ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8f79ccea6d5da580",
+      "section": "Baselines",
+      "location": "Baselines",
+      "text": "Figure 5 : Simulation results under distribution shift. Success rates for pick and place (left) and open drawer (right), with 106 trials per split. RAFT uses full reasoning for pick and place and bounding-box supervision for open drawer (Sec. 8.1 ). RAFT has the highest mean success on both tasks: 83 % 83\\% versus 80 % 80\\% for Plain FT on pick and place, and 39 % 39\\% versus 29 % 29\\% on open drawer.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "76869b796ecaaaa0",
+      "section": "4.2 RAFT generalizes under distribution shift",
+      "location": "4.2 RAFT generalizes under distribution shift",
+      "text": "We evaluate RAFT on pick-and-place and open-drawer tasks in simulation and on two real-world platforms: the single-arm DROID setup [ 22 ] and the dexterous, dual-arm YAM setup [ 10 ] , under the visual, object, and instruction or geometric shifts described below.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4588b7807c9570f6",
+      "section": "Simulation",
+      "location": "Simulation",
+      "text": "We evaluate MolmoBot [ 8 ] in the MolmoSpaces simulator [ 25 ] on pick-and-place and open-drawer tasks. For each task, we use 106 successful demonstrations from one layout provided in the MolmoSpaces benchmark for post-training. We measure robustness using perturbations absent from the demonstrations. OOD-light changes the number, position, and intensity of light sources; OOD-texture replaces table and scene textures; OOD-object substitutes a semantically similar manipulation object unseen during post-training and is evaluated only for pick and place; and OOD-prompt paraphrases the instruction without changing its meaning. ID uses the demonstration layout. Each evaluation split contains n = 106 n=106 trials with matched seeds across methods.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c5185ce935a12050",
+      "section": "RAFT has the highest simulated success, with the largest margin on novel objects",
+      "location": "RAFT has the highest simulated success, with the largest margin on novel objects",
+      "text": "On pick and place, RAFT achieves 83 % 83\\% mean success across the five evaluation splits, compared with 80 % 80\\% for Plain FT, 79 % 79\\% for RETAIN, and 74 % 74\\% for DeLock (Fig. 5 ). The largest margin is under object shift: 43 % 43\\% for RAFT versus 36 % 36\\% for Plain FT and 37 % 37\\% for RETAIN. On the open drawer task, RAFT reaches 44 % 44\\% success in ID and 28 % 28\\% under texture shift, versus 29 % 29\\% and 15 % 15\\% for Plain FT, and it also leads under lighting and instruction shifts.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a1b88d3184fa0787",
+      "section": "Real-world: DROID",
+      "location": "Real-world: DROID",
+      "text": "We post-train MolmoBot [ 8 ] on 50 pick-and-place demonstrations and evaluate on a physical DROID robot under four axes: the demonstration setup (ID; blue, yellow, and brown toys), novel object colors (OOD-Object, e.g., a white toy in place of the brown one), added distractors (OOD-Distractor), and a changed tabletop surface (OOD-Background). On out-of-distribution DROID trials, RAFT succeeds in 75.0 % 75.0\\% of trials versus 27.9 % 27.9\\% for Plain FT (Fig. 6 ): 83 % 83\\% versus 33 % 33\\% with novel object colors, 75 % 75\\% versus 25 % 25\\% with distractors, and 65 % 65\\% versus 25 % 25\\% on the changed tabletop. In the demonstration setup, the two are close ( 63 % 63\\% versus 60 % 60\\% ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS2.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "615770bc6459a3e9",
+      "section": "Real-world: DROID",
+      "location": "Real-world: DROID",
+      "text": "Figure 6 : Real-robot results under distribution shift. Left: DROID pick and place. Right: YAM box opening and place inside box. RAFT has the highest success on both platforms: 75 % 75\\% versus 28 % 28\\% for Plain FT on out-of-distribution DROID trials, and 70 % 70\\% versus 35 % 35\\% on YAM.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "242f51b85cd1814d",
+      "section": "Real-world: YAM",
+      "location": "Real-world: YAM",
+      "text": "For the dual-arm YAM platform, we post-train π 0.5 \\pi_{0.5} [ 3 ] on 100 demonstrations of a long-horizon task: open a hinged box, pick up an object, and place it inside. Because placement depends on the box being open, the task separates completing the first interaction from completing the whole sequence. We evaluate in the demonstration setup and under four shifts: clutter, box pose, object color, and background. On the bimanual YAM task, RAFT completes the full sequence in 70.0 % 70.0\\% of trials pooled over the five axes, versus 36 % 36\\% for DeLock, 35 % 35\\% for Plain FT, and 29 % 29\\% for RETAIN (Fig. 6 ), and it has the highest success on every axis ( 73 % 73\\% in-distribution and 60 % 60\\% – 80 % 80\\% under the four shifts). Plain FT usually opens the box but then fails to place the object.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS2.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "117582c992c19b2f",
+      "section": "Real-world: YAM",
+      "location": "Real-world: YAM",
+      "text": "Figure 7 : Successful physical-robot rollouts. Ordered frames show DROID picking up the brown toy and placing it in the bowl (top) and YAM opening the box and placing the toy inside (bottom). Numbers indicate temporal order; circles and arrows mark the manipulated object and motion.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "71268eefbd7ace11",
+      "section": "Real-world: YAM",
+      "location": "Real-world: YAM",
+      "text": "Figure 8 : Attention maps along one trajectory. Columns show successive observations; rows compare Base, Stage I, RAFT , and Plain FT. Overlays identify annotated task regions, and color scales are shared within each column. RAFT places more attention on the annotated regions than Plain FT; Fig. 10 quantifies this across layers.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7b4ba4f8907f189c",
+      "section": "Real-world: YAM",
+      "location": "Real-world: YAM",
+      "text": "Figure 9 : Layer-wise linear probes. Balanced accuracy for object identity (left; chance 1 / 7 1/7 ) and episode-time quartile (right; chance 1 / 4 1/4 ). Policies use the same 414 frames; episodes are held out from probe fitting, not policy training. Shading marks layers 14–17. In these layers, RAFT reaches 0.51–0.53 object-identity accuracy versus 0.45 for Plain FT, and 0.62–0.65 quartile accuracy versus 0.55.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a82042b47f8788ac",
+      "section": "4.3 Representation Analysis",
+      "location": "4.3 Representation Analysis",
+      "text": "We examine representation dimensionality, linearly decodable task information, and visual attention to assess what RAFT preserves during post-training. The measurement protocol is in Sec. 10 .",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e1ccaf373a1db8a3",
+      "section": "Late-layer dimensionality correlates with downstream success",
+      "location": "Late-layer dimensionality correlates with downstream success",
+      "text": "We measure the effective dimensionality of the backbone’s hidden states with the participation ratio (PR) [ 13 , 32 , 19 ] :",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d8c8b9a89c47a58c",
+      "section": "Late-layer dimensionality correlates with downstream success",
+      "location": "Late-layer dimensionality correlates with downstream success",
+      "text": "PR = ( ∑ i λ i ) 2 ∑ i λ i 2 , \\mathrm{PR}\\;=\\;\\frac{\\left(\\sum_{i}\\lambda_{i}\\right)^{2}}{\\sum_{i}\\lambda_{i}^{2}}, (3)",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.E3",
+      "kind": "table"
+    },
+    {
+      "id": "f93622eb6aab5813",
+      "section": "Late-layer dimensionality correlates with downstream success",
+      "location": "Late-layer dimensionality correlates with downstream success",
+      "text": "where λ i \\lambda_{i} are the eigenvalues of the covariance of mean-pooled hidden states across frames. Across six Stage-I reasoning variants, late-layer PR correlates with success on each task-matched evaluation axis; at layer 15, absolute PR has mean Spearman ρ = 0.76 \\rho=0.76 (Fig. 19 ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS3.SSS0.Px1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "5a9eb07c39aa1a49",
+      "section": "Object identity and task progress are more linearly decodable from RAFT ’s late layers",
+      "location": "Object identity and task progress are more linearly decodable from RAFT ’s late layers",
+      "text": "We fit linear probes on the same late layers to predict object identity (seven classes, chance 1 / 7 1/7 ) and episode-time quartile (four bins, chance 1 / 4 1/4 ). In layers 14–17, probes on RAFT reach 0.51–0.53 balanced accuracy for object identity, against 0.45 for Plain FT and 0.40 for the base policy, and 0.62–0.65 for episode quartile, against 0.55 and 0.51 (Fig. 9 ). Object-identity decoding also rises sharply between layers 13 and 15 for RAFT , but barely changes for Plain FT or the base policy. The layers where PR tracks success are the same layers where this information becomes decodable.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0c2086892bf6de1d",
+      "section": "RAFT has higher attention enrichment on annotated task regions",
+      "location": "RAFT has higher attention enrichment on annotated task regions",
+      "text": "We measure how much of the policy’s visual attention falls on annotated task regions, such as the manipulated object, the target, and the gripper, relative to their share of the image (enrichment; values above one mean attention is concentrated there). At layer 11, RAFT gives these regions 3.2–3.4 times their uniform share of attention, against 1.9–2.1 for Plain FT, while attention to the background stays near uniform (Figs. 8 and 10 ); the separation narrows in later layers. The concentration persists through Stage-II action training and stays above that of plain fine-tuning. The size of these effects depends on the reasoning modality used in Stage I; Sec. 8.1 reports the full modality ablation.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS3.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8314c2564192f9a5",
+      "section": "RAFT has higher attention enrichment on annotated task regions",
+      "location": "RAFT has higher attention enrichment on annotated task regions",
+      "text": "Figure 10 : Layer-wise attention enrichment. Enrichment for object boxes, keypoints, traces, and background; values above one indicate attention exceeding a region’s image-area share. Curves compare Base, Plain FT, Stage I, and RAFT ; shading marks layers 14–17. At layer 11, RAFT gives task regions 3.2–3.4 times their area share, versus 1.9–2.1 for Plain FT, while background attention stays near uniform.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "35f2542f53996f68",
+      "section": "RAFT has higher attention enrichment on annotated task regions",
+      "location": "RAFT has higher attention enrichment on annotated task regions",
+      "text": "Figure 11 : Effect of reasoning data and demonstration budget. Left: held-out reasoning loss across corpus sizes and constructions. Middle: in-distribution pick-and-place success after 5,000 Stage-II steps from in-domain and broader-mixture Stage-I initializations. Right: RAFT versus Plain FT across demonstration budgets, with 106 evaluation episodes per budget. The broader mixture lowers held-out loss (0.29 versus 0.62) and improves this success by 0.9–3.8 points at every budget.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e084306181107c5e",
+      "section": "More reasoning data lowers held-out loss",
+      "location": "More reasoning data lowers held-out loss",
+      "text": "On a common 560-record held-out split, cross-entropy on full-reasoning targets falls as the number of reasoning records grows, in both frame- and episode-subsampled series (Fig. 11 , left). Corpus composition also matters: 628 frame-subsampled records reach a loss of 0.77, while 680 episode-subsampled records reach only 1.48. The broader mixture, which adds roughly 60,000 records to the 5,000-record in-domain corpus, gives the lowest loss (0.29, versus 0.62 in-domain) and still reaches 0.39 with target-simulator records removed.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4aba4446c701386c",
+      "section": "Broader reasoning data also helps downstream",
+      "location": "Broader reasoning data also helps downstream",
+      "text": "Initializing Stage II from the broader-mixture adapter instead of the in-domain one improves in-distribution success by 0.9–3.8 points at each of the three demonstration budgets (Fig. 11 , middle). Against Plain FT at matched budgets (right panel), the two methods tie with 25 demonstrations ( 46.2 % 46.2\\% success each), and RAFT leads modestly at intermediate budgets. With all demonstrations, RAFT reaches 95.3 % 95.3\\% ID success against 90.6 % 90.6\\% for Plain FT (Fig. 5 ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e51dfdb523a93f6c",
+      "section": "4.5 Effect of unfrozen adapter",
+      "location": "4.5 Effect of unfrozen adapter",
+      "text": "We ablate two design choices of RAFT on simulated pick and place: how reasoning and action supervision are combined, and whether the reasoning adapter is updated during action learning (Fig. 12 ). Co-train trains on reasoning and action examples jointly, sampling them equally and weighting their losses 1:1. Adapter trainable runs both stages but keeps the Stage-I adapter trainable in Stage II, and Stage I only applies the adapter without action fine-tuning.",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e0754157ec66a422",
+      "section": "4.5 Effect of unfrozen adapter",
+      "location": "4.5 Effect of unfrozen adapter",
+      "text": "Figure 12 : Training-scheme ablation on simulated pick and place. Mean success over trials. Staged training with a frozen adapter achieves the highest success ( 83.2 % 83.2\\% ), above Plain FT ( 79.6 % 79.6\\% ), a trainable adapter ( 74.0 % 74.0\\% ), and co-training ( 63.2 % 63.2\\% ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.F12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9458327b34e87e91",
+      "section": "4.5 Effect of unfrozen adapter",
+      "location": "4.5 Effect of unfrozen adapter",
+      "text": "Across five matched splits with 106 episodes each, co-training reaches 63.21 % 63.21\\% mean success, below both Plain FT ( 79.62 % 79.62\\% ) and RAFT ( 83.21 % 83.21\\% ). Updating the adapter in Stage II lowers success to 73.96 % 73.96\\% , and Stage I alone reaches 48.30 % 48.30\\% . Plain FT with a frozen vision encoder also stays at 79.62 % 79.62\\% , so freezing the pretrained vision weights alone does not account for the gain. Split-level results are in Tables 3 and 4 .",
+      "url": "https://arxiv.org/html/2611.04368v1#S4.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "dbc1fecd569bd6bb",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "We presented RAFT , which first trains a low-rank adapter on task-relevant reasoning annotations, freezes it, and only then fine-tunes the pretrained VLA on actions. Across two simulated tasks and two real robots, this staging improved success under distribution shift relative to plain fine-tuning, RETAIN, and DeLock. We also show how training reasoning adapter on different modalities can lead to varied performance gains and selection of optimal reasoning modality for a specific task remains an open question. Since, RAFT approaches post-training from a different perspective to current approaches, it makes RAFT compatible with these approaches and future work could explore utlizing a combination of RAFT and existing methods to do more robust post-training.",
+      "url": "https://arxiv.org/html/2611.04368v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d20aba92d64f0d36",
+      "section": "Acknowledgments",
+      "location": "Acknowledgments",
+      "text": "This research was partially supported by the Toyota Research Institute and Microsoft Research, with compute support from Google TPU Research Cloud, NVIDIA Academic Grant Program, and Gemini Academic Program. The authors also thank Samuel M. Bateman and Lihan Zha for helpful discussions.",
+      "url": "https://arxiv.org/html/2611.04368v1#Sx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7563e80a4753adb8",
+      "section": "6 Training and implementation details",
+      "location": "6 Training and implementation details",
+      "text": "Table 1 reports the training configuration RAFT uses in simulation and on DROID (SigLIP vision encoder and an 18-layer Gemma-2B decoder). The YAM experiments instead adapt π 0.5 \\pi_{0.5} using a similar setup. In RAFT , the pretrained SigLIP weights remain frozen in both stages. Stage I optimizes reasoning LoRA modules in the language model and vision encoder.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "79df3852e02ad2ce",
+      "section": "6 Training and implementation details",
+      "location": "6 Training and implementation details",
+      "text": "Table 1: Training configuration for the two stages of RAFT .",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bf798dbc199b9625",
+      "section": "6 Training and implementation details",
+      "location": "6 Training and implementation details",
+      "text": "Stage I: reasoning alignment Stage II: action fine-tuning Trainable components LoRA adapters only Language model, action expert, and projection layers; SigLIP vision tower and Stage-I LoRA frozen LoRA placement All 18 language-model layers: q/k/v/o attention projections and gate/up/down MLP projections (126 modules); all 27 vision layers: q/k/v projections (81 modules) The Stage-I LoRA remains attached and frozen; no adapter parameters are optimized in Stage II LoRA configuration Rank r = 64 r=64 , scaling α = 128 \\alpha=128 ( α / r = 2.0 \\alpha/r=2.0 ), dropout 0.05 0.05 — Trainable parameters 90.4 90.4 M ( 78.4 78.4 M language-model and 11.9 11.9 M vision-adapter parameters) 3.09 3.09 B of 3.50 3.50 B parameters Optimizer AdamW, β = ( 0.9 , 0.999 ) \\beta=(0.9,0.999) , weight decay 10 − 6 10^{-6} , gradient clipping 1.0 1.0 AdamW, β = ( 0.9 , 0.95 ) \\beta=(0.9,0.95) , gradient clipping 1.0 1.0 Learning rate Peak 2 × 10 − 4 2\\times 10^{-4} ; 100 warmup steps; cosine schedule (2,010-step horizon), 1,000 steps Peak 5 × 10 − 5 5\\times 10^{-5} ; 1,000 warmup steps; thereafter effectively constant at 5 × 10 − 5 5\\times 10^{-5} Effective batch size 12 12 samples/GPU × \\times accumulation 4 = 48 4=48 16 16 samples/GPU × \\times 4 GPUs × \\times accumulation 8 = 512 8=512 Optimization steps 1,000 5,000 Numerics bfloat16 with gradient checkpointing bfloat16 with gradient checkpointing Hardware 1 × \\times NVIDIA L40 (46 GB) 4 × \\times NVIDIA L40 (46 GB), one node with distributed data parallel training",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.T1.7",
+      "kind": "table"
+    },
+    {
+      "id": "8c04320d06002855",
+      "section": "6.1 Annotation format",
+      "location": "6.1 Annotation format",
+      "text": "For each observation and task instruction, Gemini 3.1 Pro is asked to return a JSON object in the following format. Coordinates are normalized to the [ 0 , 1000 ] [0,1000] image frame; boxes are [ x 1 , y 1 , x 2 , y 2 ] [x_{1},y_{1},x_{2},y_{2}] and points are ( x , y ) (x,y) . The format below is for pick-and-place; the open drawer task uses the same structure with handle_point , pre_grasp_point , grasp_point , pull_start_point , and pull_end_point as keypoints.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e9e1af63d9f06348",
+      "section": "Bimanual (YAM).",
+      "location": "Bimanual (YAM).",
+      "text": "For the bimanual box-loading task, one arm holds the lid open while the other loads the object, so the keypoints are split by arm rather than by motion stage, and the response adds a per-arm block:",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "891b0d345e602bfe",
+      "section": "6.2 Stage-I supervision targets by modality",
+      "location": "6.2 Stage-I supervision targets by modality",
+      "text": "Table 2 illustrates the target formats for a mug-into-bowl pick-and-place example. Every row uses the same pick-and-place observation and instruction; only the response format changes. VQA and spatial supervision contain language only, while geometric variants use the corresponding coordinates and, where applicable, object or keypoint labels.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "55391d0cc982182c",
+      "section": "6.2 Stage-I supervision targets by modality",
+      "location": "6.2 Stage-I supervision targets by modality",
+      "text": "Table 2: Modality-specific Stage-I targets for a mug-into-bowl pick-and-place example. Coordinates use the normalized [ 0 , 1000 ] [0,1000] image frame.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "8c9ed3fd6c41d979",
+      "section": "6.2 Stage-I supervision targets by modality",
+      "location": "6.2 Stage-I supervision targets by modality",
+      "text": "Variant Target response VQA The robot should grasp the glossy beige ceramic mug on the left side of the counter and place it into the white bowl on its right. Spatial The beige mug is left of the white bowl. The gripper begins above and to the right of the mug, moves to the mug, lifts it, then moves rightward to the bowl. Bounding box glossy beige ceramic mug: [310, 600, 380, 740]; white bowl: [410, 570, 520, 720] Keypoints grasp_point: [340, 670]; target_point: [460, 650]; lift_point: [340, 500]; pre_grasp_point: [340, 550]; pre_place_point: [460, 500] Trajectory trace [[600, 400], [470, 470], [340, 550], [340, 670], [400, 580], [460, 650]] Full reasoning The VQA plan together with the two object boxes, five semantic keypoints, and six-point trajectory trace shown above.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.T2.8",
+      "kind": "table"
+    },
+    {
+      "id": "b4c6746a9cd61649",
+      "section": "6.3 Baseline implementation details",
+      "location": "6.3 Baseline implementation details",
+      "text": "Plain FT. Plain fine-tuning optimizes the SigLIP vision encoder, language model, action expert, and projection layers without Stage-I reasoning alignment.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "47564b8d259a6f91",
+      "section": "6.3 Baseline implementation details",
+      "location": "6.3 Baseline implementation details",
+      "text": "RETAIN and DeLock. We follow the methods as defined in their original papers [ 39 , 17 ] . For our evaluations, RETAIN uses the merge coefficient α = 0.9 \\alpha=0.9 reported by its authors. Both baselines use trainable SigLIP weights during fine-tuning. DeLock regularizes the drift of those weights from their pretrained values with coefficient 10 − 2 10^{-2} . We tune its contrastive-prompt coefficient over the values described below.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7aa3550a733e79a2",
+      "section": "6.3 Baseline implementation details",
+      "location": "6.3 Baseline implementation details",
+      "text": "Contrastive prompt. We sweep the contrastive-prompt coefficient over { 0.5 , 2 , 3 } \\{0.5,2,3\\} and report the setting with the highest average success across evaluation axes.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "151431e02d09b411",
+      "section": "6.4 Evaluation protocol",
+      "location": "6.4 Evaluation protocol",
+      "text": "Simulation task definitions, reset procedure, matched initial states, and success criteria follow the MolmoSpaces evaluation protocol [ 25 ] . Within each evaluation axis, methods are compared on matched episode IDs. Physical-robot resets preserve the task configuration and start state. DROID used 30 ID trials and 24, 24, and 20 trials for the object, distractor, and background shifts; YAM used 30 trials per OOD axis.",
+      "url": "https://arxiv.org/html/2611.04368v1#S6.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "78e1c11f4383d193",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figures 13 – 15 compare policies on matched DROID evaluation cases in which RAFT completes the task and the comparison policies fail before completion. Each method is shown at four ordered points in its rollout. Episode names and initial object configurations are matched across methods.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4533e62cfc081567",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figure 13 : DROID rollout comparison under an OOD background. Rows show RAFT , Plain FT, RETAIN, and DeLock at four ordered points in matched real-robot episodes. RAFT completes the manipulation, while the comparison policies fail before task completion.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.F13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "78e7e33c14cc4b1f",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figure 14 : DROID rollout comparison under OOD clutter. Rows show RAFT , Plain FT, RETAIN, and DeLock at four ordered points in matched real-robot episodes. RAFT completes the manipulation, while the comparison policies fail before task completion.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.F14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1dbd1fab59a50ed2",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figure 15 : DROID rollout comparison with an OOD object. Rows show RAFT , Plain FT, RETAIN, and DeLock at four ordered points in matched real-robot episodes. RAFT completes the manipulation, while the comparison policies fail before task completion.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.F15",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6f4da2ff056b19b4",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figures 16 – 18 show matched YAM evaluations under three OOD shifts. Rows correspond to RAFT , Plain FT, RETAIN, and DeLock; columns follow each rollout in temporal order.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e2fa944a75ab3624",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figure 16 : YAM rollout comparison under OOD clutter. Rows show RAFT , Plain FT, RETAIN, and DeLock on matched task instances; columns show ordered rollout frames. RAFT completes the two-stage task, while the comparison policies do not.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.F16",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a5ef8107fe5e915a",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figure 17 : YAM rollout comparison under an OOD color shift. Rows show RAFT , Plain FT, RETAIN, and DeLock on matched task instances; columns show ordered rollout frames. RAFT completes the two-stage task, while the comparison policies do not.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.F17",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7d883afb41fdd7e9",
+      "section": "7 Qualitative real-robot comparisons",
+      "location": "7 Qualitative real-robot comparisons",
+      "text": "Figure 18 : YAM rollout comparison under an OOD initial pose. Rows show RAFT , Plain FT, RETAIN, and DeLock on matched task instances; columns show ordered rollout frames. RAFT completes the two-stage task, while the comparison policies do not.",
+      "url": "https://arxiv.org/html/2611.04368v1#S7.F18",
+      "kind": "figcaption"
+    },
+    {
+      "id": "480276e9b4c4145a",
+      "section": "8 Additional ablations and controls",
+      "location": "8 Additional ablations and controls",
+      "text": "Section 8.1 varies the format of the Stage-I supervision target; Section 8.2 ablates how the Stage-I reasoning adapter is treated during Stage II; Section 8.3 compares staged training with co-training and with frozen-vision fine-tuning; and Section 8.4 tests whether RAFT composes with RETAIN weight merging.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "35b310ba1931f337",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "We vary the Stage-I supervision target across six formats: full reasoning, visual question answering (VQA), spatial descriptions, bounding boxes, keypoints, and trajectory traces; Table 2 gives an example of each. Each variant changes only the format of the Stage-I target, while Stage-II action training and the evaluation protocol are held fixed. The main-text results use full reasoning for pick and place and bounding-box supervision for the open drawer task, with the modality fixed across evaluation perturbations within each task; the remaining modalities are reported here. Figure 19 summarizes success on both tasks together with a layer-wise participation-ratio analysis.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3f54c4b6c82daf36",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Figure 19 : Effect of reasoning modality on success and representation dimensionality. Left: ID and OOD-visual success on the open drawer task for six reasoning modalities. Center: ID and OOD-object success on pick and place for five modalities. Red crosses denote no-reasoning controls, and dashed lines mark Plain FT. Each policy is evaluated on 106 trials per axis. Right: Layer-wise mean Spearman correlation between participation ratio and success, pooled over three task-matched evaluation axes and six reasoning variants, for four participation-ratio measures. Filled markers denote significance after FDR correction; shading marks layers 14–17.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.F19",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f454f270f593cd38",
+      "section": "Results.",
+      "location": "Results.",
+      "text": "On the open drawer task, trajectory-trace supervision achieves the highest ID success ( 49.06 % 49.06\\% vs. 29.25 % 29.25\\% for Plain FT). Under the visual shift, spatial descriptions, bounding boxes, and trajectory traces reach 29.25 % 29.25\\% , 28.30 % 28.30\\% , and 23.58 % 23.58\\% , respectively. On pick and place , full reasoning achieves the highest ID success ( 95.28 % 95.28\\% ), whereas trajectory traces achieve the highest OOD-object success ( 45.28 % 45.28\\% ), followed by VQA and full reasoning ( 43.40 % 43.40\\% each). Bounding-box and keypoint supervision each reach 34.91 % 34.91\\% , comparable to Plain FT ( 35.85 % 35.85\\% ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c3fb231ddd673c68",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "We evaluate the same Stage-I reasoning LoRA under three settings: (i) attached to the base policy without Stage-II action fine-tuning, (ii) updated during Stage II, and (iii) frozen during Stage II, as in RAFT . Table 3 reports pick-and-place success over 106 episodes per split.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7ae5289f795c233d",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Table 3 : Stage-II reasoning-adapter ablation on pick and place. Success rate (%) when the Stage-I reasoning LoRA is applied without Stage II, updated during Stage II, or frozen during Stage II ( RAFT ). Each split contains 106 episodes.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "741cb2d5f30f3a42",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Adapter setting ID OOD-light OOD-texture OOD-object OOD-prompt Mean LoRA on base (no Stage II) 72.64 60.38 9.43 33.02 66.04 48.30 LoRA trainable in Stage II 90.57 86.79 65.09 34.91 92.45 73.96 LoRA frozen in Stage II ( RAFT ) 95.28 93.40 92.45 43.40 91.51 83.21",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.T3.7",
+      "kind": "table"
+    },
+    {
+      "id": "4604d47d78d09bde",
+      "section": "Results.",
+      "location": "Results.",
+      "text": "Attaching the LoRA to the base policy without Stage II yields 48.30 % 48.30\\% mean success. Updating the LoRA during Stage II raises mean success to 73.96 % 73.96\\% , and freezing it raises it further to 83.21 % 83.21\\% . The gap between the trainable and frozen settings is largest under the texture shift ( 65.09 % 65.09\\% vs. 92.45 % 92.45\\% ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4dd11098c2bdf409",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "We compare staged training with co-training, in which reasoning and action supervision are applied within a single training run. Reasoning and action examples are sampled in a 50/50 ratio, and their losses are weighted equally. The primary Plain FT and co-training baselines fine-tune the SigLIP vision encoder. We also evaluate Plain FT with a frozen vision encoder, matching RAFT , which adapts vision only through the Stage-I LoRA and keeps that LoRA frozen in Stage II. Table 4 reports pick-and-place success on the same 106 evaluation episodes per split.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b7f3600f0adfa726",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Table 4 : Co-training and frozen-vision controls on simulated pick and place. Success rate (%) on five matched evaluation splits ( n = 106 n=106 per cell).",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e5c1e4ab3b1db09e",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Method ID OOD-light OOD-texture OOD-object OOD-prompt Mean Plain FT 90.57 87.74 92.45 35.85 91.51 79.62 Plain FT (frozen vision) 91.51 86.79 87.74 40.57 91.51 79.62 Co-train 79.25 70.75 72.64 17.92 75.47 63.21 RAFT 95.28 93.40 92.45 43.40 91.51 83.21",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.T4.6",
+      "kind": "table"
+    },
+    {
+      "id": "774c12679077d1d5",
+      "section": "Results.",
+      "location": "Results.",
+      "text": "Co-training reaches 63.21 % 63.21\\% mean success, compared with 79.62 % 79.62\\% for Plain FT and 83.21 % 83.21\\% for RAFT ; its largest deficit is under the object shift ( 17.92 % 17.92\\% vs. 43.40 % 43.40\\% for RAFT ). Freezing the vision encoder in Plain FT changes its split-level results but leaves its mean success unchanged at 79.62 % 79.62\\% . Its OOD-object success is 40.57 % 40.57\\% , compared with 35.85 % 35.85\\% for the primary Plain FT and 43.40 % 43.40\\% for RAFT .",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a2ad0a3a4eb3c7b0",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "We test whether RAFT can serve as the adapted checkpoint in RETAIN weight merging. Both merged policies interpolate with the same pretrained base at α = 0.9 \\alpha=0.9 : one uses Plain FT as the adapted endpoint, and the other uses RAFT with bounding-box supervision. We also evaluate the standalone RAFT policy. Table 5 reports results on the Franka open drawer task; every cell contains 106 trials.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "63b0ac90d36bbc83",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Table 5 : RETAIN applied to Plain FT and RAFT on the Franka open drawer task. Success rate (%) for each axis. RETAIN applied to RAFT outperforms RETAIN applied to Plain FT.",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "22a0470f2e71c483",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Policy ID OOD-light OOD-texture Overall RETAIN on Plain FT ( α = 0.9 \\alpha=0.9 ) 38.68 34.91 17.92 30.50 RETAIN on RAFT (bbox, α = 0.9 \\alpha=0.9 ) 41.51 37.74 29.25 36.16 RAFT (bbox) alone 44.34 41.51 28.30 38.05",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.T5.7",
+      "kind": "table"
+    },
+    {
+      "id": "5d196da1664cf491",
+      "section": "Results.",
+      "location": "Results.",
+      "text": "Using RAFT instead of Plain FT as the adapted endpoint increases pooled success from 30.50 % 30.50\\% to 36.16 % 36.16\\% . Standalone RAFT reaches 38.05 % 38.05\\% , the highest overall, with the highest ID and lighting success ( 44.34 % 44.34\\% and 41.51 % 41.51\\% ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S8.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "90736d4afbb8899d",
+      "section": "9 Evaluation environments",
+      "location": "9 Evaluation environments",
+      "text": "Figure 20 illustrates the in-distribution (ID) and out-of-distribution (OOD) conditions used in our simulated and physical-robot experiments; the evaluation protocol is described in Appendix 6.4 . Simulation task construction, resets, initial-state matching, and success criteria follow MolmoSpaces [ 25 ] . Within each perturbation, all methods are evaluated on identical episodes. On the physical robots, resets preserve the task configuration and initial state.",
+      "url": "https://arxiv.org/html/2611.04368v1#S9.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "78fbaee67c654458",
+      "section": "9 Evaluation environments",
+      "location": "9 Evaluation environments",
+      "text": "Figure 20 : Evaluation setup across the four robot tasks. Each row begins with an in-distribution observation, followed by its OOD variants. Pick and place varies lighting, target object, instruction, and scene texture; the open drawer task varies lighting, instruction, and scene texture; DROID varies background, clutter, and object appearance; and YAM varies box pose, object color, clutter, and background. Instruction shifts reuse the ID image because only the task prompt changes.",
+      "url": "https://arxiv.org/html/2611.04368v1#S9.F20",
+      "kind": "figcaption"
+    },
+    {
+      "id": "dc33cb68e2bca442",
+      "section": "Model and captured frames.",
+      "location": "Model and captured frames.",
+      "text": "The participation-ratio (PR) analysis in Figure 19 uses the first 400 records of the held-out iTHOR FloorPlan13 validation split, spanning five episodes. The linear-probe results in Figure 9 use a capture of 414 frames: nine evenly spaced frames from each of 46 policy-training episodes.",
+      "url": "https://arxiv.org/html/2611.04368v1#S10.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c46fdb81da6a6284",
+      "section": "Participation ratio and correlations.",
+      "location": "Participation ratio and correlations.",
+      "text": "For each frame and decoder layer ℓ \\ell , we mean-pool hidden_states[ ℓ \\ell ] over non-padding positions to obtain a 400 × 2048 400\\times 2048 matrix X ℓ X_{\\ell} . After centering the columns, we compute the covariance eigenvalues λ i \\lambda_{i} from the squared singular values and define PR ℓ = ( ∑ i λ i ) 2 / ∑ i λ i 2 \\mathrm{PR}_{\\ell}=(\\sum_{i}\\lambda_{i})^{2}/\\sum_{i}\\lambda_{i}^{2} . PR thus measures the effective dimensionality of across-frame variance. Each evaluation axis pairs one downstream benchmark with one PR probe domain. Figure 19 pools the three task-matched axes. For each layer and axis, we compute the Spearman correlation across the same six Stage-I arms and assess significance with a two-sided exact permutation test over all 6 ! = 720 6!=720 assignments, applying Benjamini–Hochberg FDR correction across the 19 layers.",
+      "url": "https://arxiv.org/html/2611.04368v1#S10.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bc2909dc9a6d9674",
+      "section": "Linear probes.",
+      "location": "Linear probes.",
+      "text": "Episode-time labels are defined as min ⁡ ( 3 , ⌊ 4 ​ frame ​ _ ​ idx / total ​ _ ​ frames ⌋ ) \\min(3,\\lfloor 4\\,\\mathrm{frame\\_idx}/\\mathrm{total\\_frames}\\rfloor) , giving a chance balanced accuracy of 1 / 4 1/4 . The labels reach , grasp , transport , and place denote the four positional (timestep) quartiles of each episode. Within each leave-one-episode-out fold, we fit StandardScaler , PCA(64) , and LogisticRegression(C=0.5) . Layer-band uncertainty and differences from Plain FT are estimated with a paired bootstrap over episodes ( B = 1000 B=1000 ).",
+      "url": "https://arxiv.org/html/2611.04368v1#S10.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "be03f9086948e567",
+      "section": "Visual attention and region masks.",
+      "location": "Visual attention and region masks.",
+      "text": "At each layer, we extract the attention from text queries to image keys, A [ : , 256 : , : 256 ] A[:,256:,:256] , average it uniformly over heads and text queries, and L 1 L_{1} -normalize it over the 256 image patches; no individual head or last-token readout is selected. Band-level maps average the normalized per-layer maps. Because this normalization removes the total attention mass on the image, we report that quantity separately as img_mass . For visualization, patch values are upsampled by nearest-neighbor tiling, and all arms share a color scale capped at the 99th percentile of interior-patch attention; the border ring is excluded from this scale because it exhibits attention-sink/register behavior. Bounding boxes are mapped to patches using floor/ceiling boundaries and may include up to one extra patch on each edge; each keypoint or trace point is mapped to the patch that contains it, and the background is the complement of all annotated patches. A frame enters a given region analysis only if it contains at least two bounding-box patches, one keypoint, or one trace point, as applicable. For a patch mask M M and normalized attention p j p_{j} , we define enrichment as ( 256 / | M | ) ​ ∑ j ∈ M p j (256/|M|)\\sum_{j\\in M}p_{j} , so that a value of 1 corresponds to uniform attention. Bounding-box, keypoint, and trace masks may overlap and therefore do not partition the image; only the background mask is defined by complementation.",
+      "url": "https://arxiv.org/html/2611.04368v1#S10.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b51cb9f5924dc1c6",
+      "section": "11 Extended late-layer probe analysis",
+      "location": "11 Extended late-layer probe analysis",
+      "text": "Figure 21 expands the main-text probe comparison to all nine model arms. VQA and trace show the largest late-layer recovery in object-identity decoding and the strongest novel-object results; spatial, bounding-box, and keypoint variants show no comparable recovery and are the weakest on that shift.",
+      "url": "https://arxiv.org/html/2611.04368v1#S11.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2ade4155bfe8c098",
+      "section": "11 Extended late-layer probe analysis",
+      "location": "11 Extended late-layer probe analysis",
+      "text": "Figure 21 : Late-layer probes for all nine model arms. Leave-one-episode-out balanced accuracy for object identity and episode-time quartile across backbone layers. The shaded band marks layers 14–17. This expands the four-arm comparison in the main text to the full set of reasoning-modality variants.",
+      "url": "https://arxiv.org/html/2611.04368v1#S11.F21",
+      "kind": "figcaption"
+    }
+  ]
+}

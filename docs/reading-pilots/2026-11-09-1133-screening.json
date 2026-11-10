@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.08039",
+    "source_signature": "b43aea53cd2df3c0c61b33998b47b64b435bf57f385daa93ff942cd78feb407d",
+    "level": 1,
+    "reason": "全身harness与五基础任务轨迹微调有任务外和实机展示，但接口与训练贡献需分离，先作人形控制增量。",
+    "quote": "HITCH: Teaching"
+  },
+  {
+    "item_id": "arxiv:2611.07896",
+    "source_signature": "81089588f0c533ac4c97875e500a7cf56515afe7b5d74fc6d6760bd0a217a03e",
+    "level": 1,
+    "reason": "候选区域分级双向确认与单次前向判定减少语言推理，跨数据集比较相关；摘要缺具体延迟和候选预算，暂不高判。",
+    "quote": "AffordJEV: Affordance"
+  },
+  {
+    "item_id": "arxiv:2611.07850",
+    "source_signature": "c280332bbe25ce520e87fe7536e9ee235952c9a77e38a696652fbdd13870a64c",
+    "level": 1,
+    "reason": "语义视觉双反馈对比有同初始化更新次数的受控预测收益，但未证明闭环策略增益或额外评估成本优势。",
+    "quote": "Learning Robotic"
+  },
+  {
+    "item_id": "arxiv:2611.07825",
+    "source_signature": "b4a54ff9be0b054cb13bfa2574d742b5abe172a1e9d93c08ac3c1171edd79ee1",
+    "level": 0,
+    "reason": "SFT后对候选输出做偏好排序属于常见组合，摘要未给具体增益、数据成本或受控消融，路线影响依据不足。",
+    "quote": "Generate-then-Rank:"
+  },
+  {
+    "item_id": "arxiv:2611.07779",
+    "source_signature": "6da36dcd14b40ae351a6377ec89009ddca96771b7effb8df835084ba827e5c20",
+    "level": 1,
+    "reason": "六对象分布式触觉识别有窗口传感器数与边端延迟能量实测，适合低耗感知；范围限闭集识别而非操作策略。",
+    "quote": "Flexible Piezoelectric"
+  },
+  {
+    "item_id": "arxiv:2611.07730",
+    "source_signature": "4d0337bbecab05f7adf36eec3325d4956704dce30bec7e10362b6a09547f4146",
+    "level": 1,
+    "reason": "将社交与语义世界模型仅用于训练偏好蒸馏，部署单前向有资源潜力；摘要缺定量开销及隔离消融，先核实效。",
+    "quote": "Seeing Beyond"
+  },
+  {
+    "item_id": "arxiv:2611.07726",
+    "source_signature": "17c127f658d24ae9492712a586b2786fd605aa4bda903f6151ef658d2dee61ab",
+    "level": 1,
+    "reason": "异步推送与移动堆叠拓宽双臂交接方案，密集场景有固定handoff对照；范围主要为桌面重排几何规划。",
+    "quote": "Dual-Arm Tabletop"
+  },
+  {
+    "item_id": "arxiv:2611.07679",
+    "source_signature": "6b61f0bca2da65f9747fa8514bed6b80aed77e90e68f48d2eb4ec3d55aed8dbd",
+    "level": 2,
+    "reason": "四VLM偏好与物理平滑反向、通道消融及跨模拟器不迁移反例，可能改变VLM奖励的使用与证据解释，需优先核。",
+    "quote": "PhySA: Decoupling"
+  },
+  {
+    "item_id": "arxiv:2611.04522",
+    "source_signature": "d6cf21f788d86306adfc5aa0c0556d9a5b81828605fd52e8151572cc416d5bd7",
+    "level": 1,
+    "reason": "显式隐式动作意图共享表示支持人视频迁移，摘要缺量化对照和配对机器人数据前提，先核技术增量。",
+    "quote": "Action Intent"
+  },
+  {
+    "item_id": "arxiv:2611.04839",
+    "source_signature": "a336319f2b5f9ce295c8e0cf244ca9a72d11f014526e059cdc05c3e706f04e1b",
+    "level": 1,
+    "reason": "潜端点预测加时序先验改善模拟与实机全身任务，有清楚基线；候选选择与模型复杂度的独立收益仍需核。",
+    "quote": "Coordinating"
+  },
+  {
+    "item_id": "arxiv:2611.04870",
+    "source_signature": "7d61235c70db5f4518052cfd946f1d2180afbe2091caddd7f36b6c302011f8f5",
+    "level": 2,
+    "reason": "三万小时22平台世界模拟器并开放权重训练代码，跨五模型基准与新平台微调比较可能改变可复用视频先验门槛。",
+    "quote": "PrimeSim: A Generalist"
+  },
+  {
+    "item_id": "arxiv:2611.04873",
+    "source_signature": "fc4d1be05b7c27e390d49e6f41eef447dd7e8050111ecc305e81b4bd1b98b1e5",
+    "level": 1,
+    "reason": "奖励审计在同轨迹数更新预算及匹配替换率下有受控小幅增益，值得跟进，但真实结果为离线视频选择非部署。",
+    "quote": "Trusting Imagined"
+  },
+  {
+    "item_id": "arxiv:2611.04972",
+    "source_signature": "b9f000a5c4f1d2d1b999b967c08038b928b1ffa9418a1bda08702ce1765f8e9f",
+    "level": 1,
+    "reason": "以SDF物理层和dEBF约束封装VLA有实机多本体价值，保证依赖假设且摘要未给量化对照，先核安全边界。",
+    "quote": "Caging Vision-Language"
+  },
+  {
+    "item_id": "arxiv:2611.05023",
+    "source_signature": "f0835737365f9dccfbebb369bb4c8f1df1ed44c08806471602c69f391be9688d",
+    "level": 2,
+    "reason": "长程稀疏与短程稠密双流改变WAM建模和推理分配，有消融及2.93倍加速比较，可能影响架构预算选择。",
+    "quote": "HiLo-WAM: Decoupling"
+  },
+  {
+    "item_id": "arxiv:2611.05058",
+    "source_signature": "6273af947b52b935187e48a871e97a02662427acfe406d9dbf7681e280283ffc",
+    "level": 1,
+    "reason": "显式几何引用与文本残差减少重复多模态查询，有部署接口增量；校准RGB-D前提及实际成本收益未量化。",
+    "quote": "Do Agentic Policies"
+  },
+  {
+    "item_id": "arxiv:2611.05072",
+    "source_signature": "14f7d2daac0144f0d8cd845604bf3cda9eed6dbf39019c9ca7e81d9d4282a478",
+    "level": 1,
+    "reason": "候选直接查共享未来表征避免rollout，名义复杂度下降有潜力；摘要缺完整查询延迟与等质量定量比较。",
+    "quote": "Trajectory Evaluation"
+  },
+  {
+    "item_id": "arxiv:2611.07560",
+    "source_signature": "a4baf15275142074a6aa15d96edabbd9f6ad4f8b58534fcc4e39d03a649a47e0",
+    "level": 1,
+    "reason": "共享腰部柔性参数联合标定有两机器人负载和留出位姿对照，工程价值明确但影响限该类双链结构。",
+    "quote": "Whole-Body Elasto-Geometrical"
+  },
+  {
+    "item_id": "arxiv:2611.00951",
+    "source_signature": "44815561edb036adb33316d50abb7b1162a1a65eb74c28d911c7ea54933e72a9",
+    "level": 2,
+    "reason": "替换同管线世界模型并分解action-affine误差、切点与在线修复，跨G1/Ant/Humanoid反例可改变可微模型结构选择。",
+    "quote": "Why Koopman Structure"
+  },
+  {
+    "item_id": "arxiv:2611.03501",
+    "source_signature": "d271b9cb797af13a33055ef4556a7e46a081f537d96137c46ac46b0a3f24920e",
+    "level": 1,
+    "reason": "控制质量组合揭示BC的接触惯性数据负担，配置调整可操作；摘要未给效应量及真实验证，先跟进数据设计。",
+    "quote": "When Robots Outweigh"
+  },
+  {
+    "item_id": "arxiv:2611.07515",
+    "source_signature": "456f17e25ed0e59e49aa6efe7c175509fe24242f2ff62b1db2433bada6166998",
+    "level": 1,
+    "reason": "抓取可达表征与分阶段专家协调最后一米，有双模拟器比较；摘要缺量化及真实执行，暂限方法增量。",
+    "quote": "LMGN: A Unified"
+  },
+  {
+    "item_id": "arxiv:2611.04527",
+    "source_signature": "56fd4ba390ced2dbe18b3460b5267709e68512b1ac602d4b36bfa47d50d7cc4f",
+    "level": 2,
+    "reason": "将未来视频先验蒸馏到当前视觉编码器、14B骨干达11Hz并跨数据任务比较，可能改变WAM部署推理成本路线。",
+    "quote": "Future Representation"
+  },
+  {
+    "item_id": "arxiv:2611.07235",
+    "source_signature": "b035e79b5be2703849aad266e78484124b1339f1f5a72b4a8a2543457959ef1b",
+    "level": 1,
+    "reason": "力视觉自适应优于纯力控制有12条件MAE对照，适合挤压液体操作；限两瓶及EMG参考，不代表通用策略收益。",
+    "quote": "Adaptive Hybrid"
+  },
+  {
+    "item_id": "arxiv:2611.07517",
+    "source_signature": "6b64a1ba8b032453b447d3de28cbc9ecb94cf6a9bd7c791c474ef4e0bf75a69e",
+    "level": 1,
+    "reason": "产品能力检索与确定性空间可行性结合有配对准确率和token对照，但基准范围与实际机器人执行证据需核。",
+    "quote": "Embodied RAG++:"
+  },
+  {
+    "item_id": "arxiv:2610.39327",
+    "source_signature": "40a01e537454d07ca1431a4b3800c278359f9f71bf2b11c9a596cd34d56498d1",
+    "level": 1,
+    "reason": "单GPU开放K1追踪器和延迟后训练可复用，有首版失败对照；本体移植范围窄且摘要未给匹配算力性能基线。",
+    "quote": "SONIC-K1: Porting"
+  }
+]

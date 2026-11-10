@@ -1,0 +1,719 @@
+{
+  "id": "a63354d4bb389823fbb7b29e2a81e5b3df31fa3d24af5944f476cc06dc14fb11",
+  "url": "https://arxiv.org/html/2611.08390v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "9ce427141fde7e0e",
+      "section": "Scale : Real-Time Latent Communication for Cyber-Physical Agents",
+      "location": "Scale : Real-Time Latent Communication for Cyber-Physical Agents",
+      "text": "Latent communication enables agents to collaborate efficiently by directly exchanging intermediate model representations rather than raw sensor data or text messages. Existing approaches, however, are primarily designed for LLM agents and do not consider the bandwidth constraints and heterogeneous task deadlines faced by cyber-physical agents. In this work, we propose Scale , a real-time latent communication method tailored for cyber-physical agents. Motivated by the spatio-temporal continuity of the physical world, Scale matches tokens across consecutive latent messages using similarity scores to identify reusable information and avoid redundant transmission. It then profiles the semantic gain and communication cost of transmitting different amounts of latent information. Based on these profiles, Scale employs a real-time scheduler that jointly determines which pending messages to transmit and how many latent tokens to send, subject to available bandwidth and task deadlines. We evaluate Scale across three cyber-physical benchmarks and a physical spider robot case study under diverse network conditions and heterogeneous task deadlines. Our results show that Scale significantly improves both task performance and on-time delivery in bandwidth-constrained networks. Our code is available at: https://anonymous.4open.science/r/SCALE-4E80/ .",
+      "url": "https://arxiv.org/html/2611.08390v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ca54a95a3446f6df",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Communication is fundamental to cyber-physical agents. Individual agents often possess only partial observations or complementary capabilities, and therefore must exchange information with one another to accomplish diverse cyber-physical tasks ( Patel et al., 2021 ; Hu et al., 2022 ) . However, transmitting raw sensor observations incurs substantial communication overhead, while natural-language communication introduces additional computational overhead from generating text at the sender and interpreting it at the receiver. These limitations make conventional communication inefficient for real-time multi-agent systems.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "94da0af7dc75533b",
+      "section": "Existing Literature and the Gap.",
+      "location": "Existing Literature and the Gap.",
+      "text": "Latent communication has emerged as a potential “AI language”, allowing agents to directly exchange hidden states or intermediate representations to improve efficiency ( Du et al., 2026 ; Zou et al., 2026 ; Shi et al., 2026 ; Ye et al., 2025 ) . However, existing methods are primarily designed for LLM-based agents and focus on reducing model-side computation, with limited consideration of communication bandwidth and task deadlines. Meanwhile, communication-efficient collaborative-perception methods consider bandwidth and delay ( Liu et al., 2020 ; Hu et al., 2022 ; Yang et al., 2023 ; Hu et al., 2024 ) , but primarily focus on task-specific perception rather than multiple concurrent CPS tasks sharing a bandwidth-constrained link. Thus, latent communication for CPS agents under practical network constraints and heterogeneous task deadlines remains largely underexplored.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7a973e540bbb3e15",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "We propose Scale , a real-time latent communication method tailored for cyber-physical agents. Scale exploits the spatiotemporal continuity of the physical world to reuse latent information already available at the receiver, reducing redundant transmission. It employs a real-time scheduler that jointly determines which messages to transmit and how many latent tokens to send based on semantic gain, available bandwidth, and task deadlines, thereby improving both task utility and message on-time delivery. In addition, Scale is lightweight and operates on latent tokens produced by existing modality encoders without modifying the underlying models, supporting different sensory modalities and downstream CPS tasks.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4a7fb7b1889b47e8",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "Designing Scale addresses three technical challenges. First, spatiotemporal variation makes it difficult to determine what information has actually changed. Physical observations often evolve continuously, but object, agent, or viewpoint motion can make fixed-position latent comparisons overestimate motion for semantic change. Scale therefore performs semantic change evaluation by matching current latent tokens against the receiver’s acknowledged latent state and measuring change relative to their best correspondences. Second, the amount of latent information to transmit must adapt to each message. The semantic gain from transmitting additional latent tokens varies across messages, making a fixed transmission size inefficient. Scale therefore performs utility–cost profiling for each message, ranking latent tokens by semantic change and characterizing the cumulative semantic gain and communication cost at different transmission sizes to guide real-time scheduling. Third, limited and time-varying bandwidth must be allocated across messages with heterogeneous deadlines. Allocating more latent tokens to one message increases its semantic gain but may delay other messages beyond their deadlines. Scale therefore employs a real-time scheduler that greedily allocates latent tokens based on marginal semantic gain per communication cost, while maintaining deadline feasibility for all selected messages under earliest-deadline-first (EDF) ordering.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.SS0.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "89e2037a9999e0e2",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "We implement and evaluate Scale on CooperScene Wu et al. (2026) , OPV2V Xu et al. (2022c) , and LIBERO Liu et al. (2023a) , covering autonomous driving and robotic manipulation benchmarks. We further conduct a physical spider robot case study. Our evaluation considers constrained bandwidth, time-varying link capacity, and background traffic, with heterogeneous task deadlines. We compare Scale against full latent transmission, uniform compression, and four state-of-the-art methods Xu et al. (2025) ; Xu et al. (2022b) ; Hu et al. (2022) ; Mukhopadhyay et al. (2026) . Our results show that Scale achieves the highest task performance in almost all settings while significantly improving on-time delivery rates (see Fig. 1 for an example).",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.SS0.SSS0.Px2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "f32f9fc3fae0de47",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "We make the following contributions:",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.SS0.SSS0.Px2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "8354713aa78d744a",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "We identify and formulate the problem of real-time latent communication for CPS agents, where latent messages from multiple downstream tasks with heterogeneous deadlines share a bandwidth-constrained communication link, a setting not adequately addressed by existing methods.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "80748f47800dac76",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "We propose Scale , a real-time latent communication method that combines spatiotemporal latent reuse, utility–cost profiling, and deadline-aware scheduling to improve both task utility and message on-time delivery under bandwidth constraints.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f409ef1756ced07c",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "We implement and evaluate Scale across three CPS benchmarks and a physical spider robot case study under diverse network conditions, demonstrating its effectiveness in both benchmark evaluations and a physical robotic system.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fdc8b42cba49e74f",
+      "section": "Our Work.",
+      "location": "Our Work.",
+      "text": "Figure 1: Comparison between Scale and other latent communication baselines on the OPV2V benchmark at 15 Mbps. Scale achieves the best mIoU scores and message on-time rates.",
+      "url": "https://arxiv.org/html/2611.08390v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e8f1a557c836fbfa",
+      "section": "LLM-based latent communication.",
+      "location": "LLM-based latent communication.",
+      "text": "Recent LLM-based latent communication methods enable multi-agent systems to exchange latent representations, such as hidden states or KV caches, to reduce model inference and computation overhead ( Du et al., 2026 ; Zou et al., 2026 ; Ye et al., 2025 ; Shi et al., 2026 ; Fu et al., 2026 ; Chen et al., 2026 ) . These approaches primarily focus on efficient latent interaction and reducing model-side computation, with limited consideration of the underlying communication network. Scale instead studies latent communication over resource-constrained networks, a practical setting for cyber-physical agents.",
+      "url": "https://arxiv.org/html/2611.08390v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9dfb24a97434dd9b",
+      "section": "Communication-efficient cyber-physical systems.",
+      "location": "Communication-efficient cyber-physical systems.",
+      "text": "Communication-efficient collaborative perception has been extensively studied in cyber-physical systems, where agents exchange intermediate features to improve shared perception ( Wang et al., 2020 ; Li et al., 2021 ) . Existing methods explore when, where, and how agents should communicate through communication triggering ( Liu et al., 2020 ) , spatial feature selection ( Hu et al., 2022 ) , and feature sparsification ( Yang et al., 2023 ; Hu et al., 2024 ) . Other work improves robustness to communication delay and asynchrony ( Lei et al., 2022 ; Wei et al., 2023 ) or exploits temporal redundancy to reduce repeated transmission ( Mukhopadhyay et al., 2026 ) . Recent methods further improve the perception–communication tradeoff through adaptive feature selection ( Xu et al., 2025 ; Hu et al., 2026 ; Liu et al., 2026 ) . In the semantic communication literature, existing task-oriented methods tailor transmitted representations according to downstream task utility ( Xie et al., 2021 ; Gündüz et al., 2022 ) , jointly allocate communication resources under bandwidth constraints ( Zhang et al., 2023 ; Liu et al., 2023b ; Cai et al., 2025 ) , and account for communication latency ( Sagduyu and Erpek, 2026 ) . However, these methods are primarily designed for individual perception or communication tasks, rather than the broader CPS setting where multiple downstream tasks with heterogeneous deadlines coexist and share a bandwidth-constrained communication link.",
+      "url": "https://arxiv.org/html/2611.08390v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f996d4bd7562faa0",
+      "section": "System Model.",
+      "location": "System Model.",
+      "text": "Following common settings in prior works ( Liu et al., 2020 ; Hu et al., 2022 ; Yang et al., 2023 ) , we consider cyber-physical agents that locally encode their observations and exchange latent representations over a communication link. For an observation x i x_{i} , a local encoder produces a latent representation:",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b55c4299410c4c3e",
+      "section": "System Model.",
+      "location": "System Model.",
+      "text": "H i = E ⁡ ( x i ) = { h i , 1 , … , h i , N i } , H_{i}=E(x_{i})=\\{h_{i,1},\\ldots,h_{i,N_{i}}\\}, (1)",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "c492bd7826a9561f",
+      "section": "System Model.",
+      "location": "System Model.",
+      "text": "where each h i , j ∈ ℝ d h_{i,j}\\in\\mathbb{R}^{d} is a fixed-dimensional latent token, and N i N_{i} is the token length. Encoders may be modality-specific, e.g., for image, audio, or text inputs. Within each agent, multiple downstream tasks may coexist and generate latent messages that share the same communication link.",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.SS0.SSS0.Px1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "560a5305688b09dc",
+      "section": "Network and Timing Model.",
+      "location": "Network and Timing Model.",
+      "text": "We denote the available rate of the communication link by R ⁡ ( t ) R(t) , which may vary over time. Within each agent, multiple latent messages from different tasks compete for the same communication resources. We denote the set of messages pending transmission at time t t by 𝒬 ⁡ ( t ) \\mathcal{Q}(t) and the deadline of message i i by d i d_{i} . Let C i C_{i} denote the transmission completion time of message i i . Following a common firm-deadline model in real-time systems, we assume that a message contributes to its downstream task only if the selected latent information arrives before its deadline, i.e., C i ≤ d i C_{i}\\leq d_{i} .",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bcdbdd6ce41ad2e3",
+      "section": "Scheduling Objective.",
+      "location": "Scheduling Objective.",
+      "text": "At time t t , the scheduler considers all messages in the pending set 𝒬 ⁡ ( t ) \\mathcal{Q}(t) . For each message i ∈ 𝒬 ⁡ ( t ) i\\in\\mathcal{Q}(t) , let K i ≤ N i K_{i}\\leq N_{i} denote the number of latent tokens selected for transmission, where K i = 0 K_{i}=0 indicates that the message is not selected. We denote the semantic gain and communication cost of transmitting K i K_{i} tokens by U i ​ ( K i ) U_{i}(K_{i}) and B i ​ ( K i ) B_{i}(K_{i}) , respectively. Our goal is to determine which pending messages to transmit and how many tokens to transmit for each message, so as to maximize the total semantic gain delivered before their respective deadlines:",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "44c9d8803a4fd108",
+      "section": "Scheduling Objective.",
+      "location": "Scheduling Objective.",
+      "text": "max { K i } ∑ i ∈ 𝒬 ⁡ ( t ) U i ( K i ) [ C i ≤ d i ] , \\max_{\\{K_{i}\\}}\\sum_{i\\in\\mathcal{Q}(t)}U_{i}(K_{i})\\mathbf{1}\\!\\left[C_{i}\\leq d_{i}\\right], (2)",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "efda1bd63b80962e",
+      "section": "Scheduling Objective.",
+      "location": "Scheduling Objective.",
+      "text": "subject to available bandwidth constraints.",
+      "url": "https://arxiv.org/html/2611.08390v1#S3.SS0.SSS0.Px3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "ecf2546527dd9651",
+      "section": "4.1 Overview",
+      "location": "4.1 Overview",
+      "text": "Scale consists of three stages: semantic change evaluation , utility–cost profiling , and real-time scheduling . In the first two stages, it identifies latent information that is new relative to the receiver’s acknowledged state, and characterizes the semantic benefit and communication cost of different transmission lengths. The scheduler then combines these profiles with available bandwidth and task deadlines to determine which message to transmit and how many latent tokens to send. We demonstrate the system flow of Scale in Fig. 2",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "31ddb5879c1b43fb",
+      "section": "4.1 Overview",
+      "location": "4.1 Overview",
+      "text": "Figure 2: Scale system design. Semantic change evaluation and utility–cost profiling guide the real-time scheduler in jointly selecting messages and transmission sizes under bandwidth and deadline constraints.",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2a22889a000c5940",
+      "section": "4.2 Semantic Change Evaluation",
+      "location": "4.2 Semantic Change Evaluation",
+      "text": "Physical observations often evolve continuously, creating substantial redundancy between consecutive observations. In this stage, we aim to measure such semantic redundancy and identify the nonredundant information to transmit. A key challenge is that directly comparing two latent messages token by token can be unreliable because their corresponding observations may be misaligned due to object or viewpoint motion. Scale therefore first establishes token-level correspondences between the current latent message and the receiver’s acknowledged latent state before quantifying their semantic changes.",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c561fe36442877e",
+      "section": "4.2 Semantic Change Evaluation",
+      "location": "4.2 Semantic Change Evaluation",
+      "text": "Therefore, for each current token h i , j h_{i,j} , we first find the most similar token in the receiver’s acknowledged latent state:",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "fb223e63b89480ff",
+      "section": "4.2 Semantic Change Evaluation",
+      "location": "4.2 Semantic Change Evaluation",
+      "text": "μ i ​ ( j ) = arg ⁡ max k ⁡ cos ⁡ ( h i , j , h ~ i , k recv ) . \\mu_{i}(j)=\\arg\\max_{k}\\cos\\!\\left(h_{i,j},\\tilde{h}^{\\mathrm{recv}}_{i,k}\\right). (3)",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.E3",
+      "kind": "table"
+    },
+    {
+      "id": "06c7e8f45f743c46",
+      "section": "4.2 Semantic Change Evaluation",
+      "location": "4.2 Semantic Change Evaluation",
+      "text": "Let c i , j c_{i,j} denote the corresponding maximum cosine similarity. We then quantify the semantic change of token h i , j h_{i,j} as:",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "eebd1b5f3e9792ef",
+      "section": "4.2 Semantic Change Evaluation",
+      "location": "4.2 Semantic Change Evaluation",
+      "text": "s i , j = 1 − c i , j . s_{i,j}=1-c_{i,j}. (4)",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.E4",
+      "kind": "table"
+    },
+    {
+      "id": "380675332ecd25ec",
+      "section": "4.2 Semantic Change Evaluation",
+      "location": "4.2 Semantic Change Evaluation",
+      "text": "Consequently, highly similar tokens receive small change scores, while tokens with low similarity receive larger scores. We further use a similarity threshold τ \\tau to determine whether the matched receiver-side token can be reused: a match is reusable only when c i , j ≥ τ c_{i,j}\\geq\\tau . Matching is performed against the receiver’s acknowledged state to ensure that only information confirmed to be available at the receiver is reused.",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "e4c7ee86d74f0fa5",
+      "section": "4.3 Utility–Cost Profiling",
+      "location": "4.3 Utility–Cost Profiling",
+      "text": "The semantic change scores obtained above capture the amount of new information carried by individual latent tokens. In this stage, we further characterize the trade-off between semantic gain and communication cost at different transmission sizes K K , where K ≤ N i K\\leq N_{i} denotes the number of latent tokens transmitted for message i i .",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b4ac535329d49e3e",
+      "section": "4.3 Utility–Cost Profiling",
+      "location": "4.3 Utility–Cost Profiling",
+      "text": "Specifically, we prioritize tokens with larger semantic change scores by sorting them in descending order according to s i , j s_{i,j} . We define the cumulative semantic gain and communication cost as:",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "62849d1b1b3c61eb",
+      "section": "4.3 Utility–Cost Profiling",
+      "location": "4.3 Utility–Cost Profiling",
+      "text": "U i ​ ( K ) \\displaystyle U_{i}(K) = ∑ k = 1 K s i , ( k ) , \\displaystyle=\\sum_{k=1}^{K}s_{i,(k)}, (5) B i ​ ( K ) \\displaystyle B_{i}(K) = K ​ b tok + B i meta ​ ( K ) , \\displaystyle=Kb_{\\mathrm{tok}}+B_{i}^{\\mathrm{meta}}(K),",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.E5",
+      "kind": "table"
+    },
+    {
+      "id": "57d83957695cfa81",
+      "section": "4.3 Utility–Cost Profiling",
+      "location": "4.3 Utility–Cost Profiling",
+      "text": "where s i , ( k ) s_{i,(k)} denotes the k k -th largest semantic change score, b tok b_{\\mathrm{tok}} is the serialized size of one latent token, and B i meta ​ ( K ) B_{i}^{\\mathrm{meta}}(K) accounts for the metadata required to interpret the transmission, including token indices, correspondence mappings, and the reference-state version. The resulting pairs ( U i ​ ( K ) , B i ​ ( K ) ) (U_{i}(K),B_{i}(K)) characterize the available transmission choices for message i i . As a result, a larger K K generally preserves more new semantic information but incurs greater communication cost.",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "647f52db6acc4cb9",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "In the final stage, the scheduler takes as input the utility–cost profiles { ( U i ​ ( K ) , B i ​ ( K ) ) } \\{(U_{i}(K),B_{i}(K))\\} and task deadlines of all messages in 𝒬 ⁡ ( t ) \\mathcal{Q}(t) , together with the current link rate R ⁡ ( t ) R(t) . Based on this information, it determines the transmission size K i K_{i} for each message and their transmission order.",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e08c8c2967e2eb86",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "Scale first determines the transmission size K i K_{i} for each pending message. Following the scheduling objective in Section 3 , we employ a greedy algorithm to maximize semantic gain under the deadline constraints. Specifically, we initialize K i = 0 K_{i}=0 for each pending message and iteratively allocate tokens one at a time. Suppose message i i has already been allocated K i K_{i} tokens. The marginal semantic gain per communication cost of adding its next token k = K i + 1 k=K_{i}+1 is:",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f1b9278211139a09",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "ρ i , k = U i ​ ( k ) − U i ​ ( k − 1 ) B i ​ ( k ) − B i ​ ( k − 1 ) . \\rho_{i,k}=\\frac{U_{i}(k)-U_{i}(k-1)}{B_{i}(k)-B_{i}(k-1)}. (6)",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.E6",
+      "kind": "table"
+    },
+    {
+      "id": "953ac0726566c610",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "At each step, the scheduler considers the next token of every pending message and prioritizes the one with the largest ρ i , k \\rho_{i,k} , subject to the message deadlines. To check deadline feasibility, let π 1 , … , π m \\pi_{1},\\ldots,\\pi_{m} denote the currently selected messages ordered by earliest deadline first (EDF). The completion time of message π q \\pi_{q} is estimated as:",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS4.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "2e93f72a030302bf",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "C π q = t + ∑ ℓ = 1 q 8 ​ B π ℓ ​ ( K π ℓ ) R ⁡ ( t ) . C_{\\pi_{q}}=t+\\sum_{\\ell=1}^{q}\\frac{8B_{\\pi_{\\ell}}(K_{\\pi_{\\ell}})}{R(t)}. (7)",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.E7",
+      "kind": "table"
+    },
+    {
+      "id": "28329a7ba9497bf9",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "An allocation is feasible only if C π q ≤ d π q C_{\\pi_{q}}\\leq d_{\\pi_{q}} for all q = 1 , … , m q=1,\\ldots,m . Among all feasible token increments, the scheduler selects the one with the largest ρ i , k \\rho_{i,k} , updates K i ← K i + 1 K_{i}\\leftarrow K_{i}+1 , and repeats this process until no additional token can be allocated without violating a deadline.",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS4.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "8bbfb8e86d2341a8",
+      "section": "4.4 Real-Time Scheduling",
+      "location": "4.4 Real-Time Scheduling",
+      "text": "The resulting K i K_{i} values determine the transmission size of each message, where K i = 0 K_{i}=0 indicates that the message is not selected. Messages with K i > 0 K_{i}>0 are transmitted in EDF order. In this way, Scale prioritizes semantic gain relative to communication cost while using task deadlines as feasibility constraints on both message selection and transmission size. After transmission, the receiver updates its latent state with the received tokens and reuses matched tokens from its previous state according to the correspondences established in the semantic change evaluation stage. The receiver then acknowledges the updated state, allowing the sender to maintain an accurate view of the receiver’s state for subsequent communication. The detailed scheduling algorithm can be found in Appendix 1 .",
+      "url": "https://arxiv.org/html/2611.08390v1#S4.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ff81711bc7b9223a",
+      "section": "CPS Benchmarks.",
+      "location": "CPS Benchmarks.",
+      "text": "We evaluate Scale on three cyber-physical benchmarks: CooperScene Wu et al. (2026) , OPV2V Xu et al. (2022c) , and LIBERO Liu et al. (2023a) . CooperScene is a real-world cooperative autonomous-driving benchmark with LiDAR and camera observations from vehicles and roadside infrastructure. OPV2V is a simulated cooperative-perception benchmark with LiDAR and camera observations from multiple vehicles. LIBERO provides language-conditioned robotic manipulation tasks with visual observations and robot states. These benchmarks cover different CPS use cases, and their detailed descriptions are provided in Appendix B .",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9860920df13d500d",
+      "section": "Tasks and Models.",
+      "location": "Tasks and Models.",
+      "text": "On CooperScene, we evaluate concurrent 3D object detection and 5-sec trajectory prediction tasks, with deadlines of 100 ms and 200 ms. We use CoBEVT Xu et al. (2022a) for detection and a frozen, pretrained Motion Transformer (MTR) Shi et al. (2022) for prediction. On OPV2V, we evaluate concurrent 3D object detection and BEV semantic segmentation using the LiDAR-based detection and camera-based segmentation variants of CoBEVT, each with its own pretrained weights. Their deadlines are 100 ms and 200 ms, respectively. On LIBERO, we evaluate object manipulation using SmolVLA Shukor et al. (2025) , with the deadline determined by the time remaining before the robot exhausts its buffered actions, plus reserving 100 ms for inference and 10 ms for returning actions. Across all benchmarks, a sensing agent sends latent features to another agent or remote server for inference.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dabced4f8e997011",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "For each benchmark, we evaluate four fixed-bandwidth settings and one time-varying setting. The fixed rates correspond to different fractions (e.g., 20%, 50%) of the average bandwidth required for full latent transmission in each benchmark. In the time-varying setting, the link alternates between low and high rates every 2 seconds. In all settings, we account for both queueing and transmission time when computing communication delay. More detailed network settings, including the bandwidth values for each benchmark, are provided in Table 5 in the Appendix.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "23c214e2eb4cdda6",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "(a) Detection Method 15 Mbps 20 Mbps 25 Mbps 30 Mbps Varying AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow Full-send 22.77 0.00 22.77 0.00 22.77 0.00 22.77 0.00 40.26 49.97 Uniform 22.50 68.42 23.38 68.64 23.72 68.63 24.91 68.50 39.25 81.59 CoSDH 27.99 32.04 31.34 48.02 40.67 68.14 43.33 75.43 49.87 89.05 V2X-ViT 25.24 0.00 25.24 0.00 25.33 1.21 25.91 8.70 42.22 55.01 Scale 45.62 64.95 51.53 80.36 54.87 88.13 56.28 92.84 56.09 94.52",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T1.2",
+      "kind": "table"
+    },
+    {
+      "id": "5b9924bce58eb044",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "(b) Prediction Method 15 Mbps 20 Mbps 25 Mbps 30 Mbps Varying Succ. ↑ \\uparrow OT ↑ \\uparrow Succ. ↑ \\uparrow OT ↑ \\uparrow Succ. ↑ \\uparrow OT ↑ \\uparrow Succ. ↑ \\uparrow OT ↑ \\uparrow Succ. ↑ \\uparrow OT ↑ \\uparrow Full-send 43.72 0.26 44.73 6.54 49.57 35.32 48.50 25.05 54.88 64.89 Uniform 59.49 93.81 59.52 94.44 59.87 95.64 59.84 95.90 60.48 98.47 CoSDH 46.48 16.69 51.28 44.26 52.86 50.99 57.37 80.92 59.24 91.47 V2X-ViT 48.54 29.23 46.65 18.53 49.75 36.37 52.41 50.95 57.07 77.64 Scale 60.82 99.82 60.85 100.00 60.85 100.00 60.85 100.00 60.81 99.71",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T1.3",
+      "kind": "table"
+    },
+    {
+      "id": "d0f989d0c1e34ab5",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "Table 1: CooperScene results on 3,936 detection jobs and 18,693 prediction targets. AP denotes average precision, OT denotes the on-time rate (%), and Succ. denotes prediction success (%).",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3dce9dfe9affee6b",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "(a) Detection Method 8 Mbps 15 Mbps 31 Mbps 61 Mbps Varying AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow AP ↑ \\uparrow OT ↑ \\uparrow Full-send 76.37 0.00 76.37 0.00 76.37 0.00 76.37 0.00 76.37 0.00 Uniform 78.29 46.49 79.87 44.21 77.80 41.20 81.90 39.93 79.65 42.30 CooperTrim 84.25 0.73 84.39 4.92 85.81 28.71 89.47 69.55 86.14 31.81 Where2comm 82.25 0.82 82.63 10.30 88.09 54.42 91.88 86.51 86.20 36.37 Scale 83.41 37.74 86.42 50.23 90.30 75.39 92.52 91.70 86.44 56.43",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "c2530a9a712edf0a",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "(b) Segmentation Method 8 Mbps 15 Mbps 31 Mbps 61 Mbps Varying mIoU ↑ \\uparrow OT ↑ \\uparrow mIoU ↑ \\uparrow OT ↑ \\uparrow mIoU ↑ \\uparrow OT ↑ \\uparrow mIoU ↑ \\uparrow OT ↑ \\uparrow mIoU ↑ \\uparrow OT ↑ \\uparrow Full-send 27.02 0.00 27.14 0.73 28.80 10.36 31.77 27.82 28.74 11.09 Uniform 27.10 77.82 26.95 81.09 28.93 79.27 32.69 78.00 28.67 76.18 CooperTrim 33.08 12.36 35.52 32.36 40.87 67.64 43.31 92.73 37.75 48.55 Where2comm 37.14 0.18 37.17 7.82 37.76 52.00 38.32 93.64 37.56 42.55 Scale 46.48 94.91 47.14 97.09 47.71 99.64 47.78 100.00 45.17 90.18",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T2.3",
+      "kind": "table"
+    },
+    {
+      "id": "3e6731ab609837b9",
+      "section": "Network Settings.",
+      "location": "Network Settings.",
+      "text": "Table 2: OPV2V results on 528 detection jobs and 265 segmentation jobs. AP denotes average precision, mIoU denotes mean IoU score, and OT denotes on-time rate (%).",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0516027e0a3849ac",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "We compare Scale with Full-send , which transmits the complete latent message, and Uniform compression , which uniformly selects a fraction of latent features for transmission based on the available bandwidth. On CooperScene, we additionally compare with CoSDH ( Xu et al., 2025 ) and V2X-ViT ( Xu et al., 2022b ) . On OPV2V, we additionally compare with CooperTrim ( Mukhopadhyay et al., 2026 ) and Where2comm ( Hu et al., 2022 ) . All baseline methods use earliest-deadline-first (EDF) transmission ordering.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "617f68bab14d4a4d",
+      "section": "Metrics.",
+      "location": "Metrics.",
+      "text": "We evaluate Scale in terms of task utility and message on-time rate. Task utility measures downstream task performance, while on-time rate is the percentage of messages received before their deadlines.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS1.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "933808398c07ceb6",
+      "section": "CooperScene.",
+      "location": "CooperScene.",
+      "text": "We use task-specific performance metrics to evaluate the two tasks on CooperScene. For the 3D object detection task, we report average precision (AP) and the message on-time rate, where AP is computed using an intersection-over-union (IoU) threshold of 0.5 to match predicted boxes to ground-truth boxes. For the trajectory prediction task, we report task success and the message on-time rate, where task success is the percentage of prediction targets for which at least one of six predicted trajectories is within 2 m of the ground-truth position.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "36d44569974a4cac",
+      "section": "CooperScene.",
+      "location": "CooperScene.",
+      "text": "Table 1 presents the results. The results show that Scale achieves the highest detection AP and prediction task success across all settings. In particular, for 3D object detection at 20 Mbps, Scale achieves 51.53 AP, exceeding the strongest baseline, CoSDH, by 20.19 points. It also delivers 80.36% of detection messages on time, compared with 48.02% for CoSDH. For trajectory prediction under fixed bandwidth, Scale maintains task success between 60.82% and 60.85%, while delivering at least 99.82% of prediction messages on time. Under varying bandwidth, Scale achieves 56.09 detection AP and 60.81% prediction task success, with detection and prediction on-time rates of 94.52% and 99.71%, respectively.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS2.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2b730c2c529985f2",
+      "section": "OPV2V.",
+      "location": "OPV2V.",
+      "text": "Similarly, we use task-specific performance metrics to evaluate the two tasks on OPV2V. For the 3D object detection task, we report AP and the message on-time rate. We evaluate BEV semantic segmentation using mean intersection-over-union (mIoU) and also report its message on-time rate, where mIoU averages the IoU between predicted and ground-truth regions across semantic classes.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6e636e6913d62852",
+      "section": "OPV2V.",
+      "location": "OPV2V.",
+      "text": "Table 2 presents the results. The results show that Scale achieves the highest segmentation mIoU and segmentation on-time rate across all settings, and the highest detection AP except at 8 Mbps. In this setting, Scale achieves 83.41 AP, slightly below CooperTrim’s 84.25 AP, while delivering 37.74% of detection messages on time, compared with 0.73% for CooperTrim. For BEV semantic segmentation, the largest mIoU improvement over the strongest baseline occurs at 15 Mbps, where Scale achieves 47.14 mIoU, exceeding Where2comm by 9.97 points. It also delivers 97.09% of segmentation messages on time, compared with 7.82% for Where2comm.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS2.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3940120573d64d6f",
+      "section": "OPV2V.",
+      "location": "OPV2V.",
+      "text": "Bandwidth Method Task success ↑ \\uparrow On-time ↑ \\uparrow 3.4 Mbps Full-send 0.00% 0.00% Uniform 0.00% 74.47% Scale 44.44% 77.76% 5.0 Mbps Full-send 24.44% 25.24% Uniform 0.00% 74.47% Scale 86.67% 84.57% 6.7 Mbps Full-send 60.00% 25.98% Uniform 0.00% 74.47% Scale 95.56% 88.81% 10.1 Mbps Full-send 88.89% 51.52% Uniform 42.22% 74.85% Scale 97.78% 94.21% Varying Full-send 88.89% 65.87% Uniform 0.00% 77.45% Scale 100.00% 89.28%",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T3.2",
+      "kind": "table"
+    },
+    {
+      "id": "a92fb90bfc600532",
+      "section": "OPV2V.",
+      "location": "OPV2V.",
+      "text": "Table 3: LIBERO results over 45 episodes per method and bandwidth setting. We report the task success rate (%) and on-time rate (%).",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e5cbe3353770596b",
+      "section": "OPV2V.",
+      "location": "OPV2V.",
+      "text": "Figure 3: Message-lateness CDFs for CooperScene at 20 Mbps: (a) object detection and (b) trajectory prediction. The vertical dashed line marks each task’s deadline; the cumulative percentage at zero gives the on-time rate.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9884849934354701",
+      "section": "LIBERO.",
+      "location": "LIBERO.",
+      "text": "Our LIBERO evaluation focuses on a single language-conditioned robotic manipulation task. We report task success, defined as the percentage of episodes completed within 280 steps, and the communication on-time rate.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS2.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c8c201bc1a8da8bf",
+      "section": "LIBERO.",
+      "location": "LIBERO.",
+      "text": "Table 3 presents the results. The results show that Scale achieves the highest task success and on-time rate across all settings. At the lowest tested bandwidth of 3.4 Mbps, Scale completes 44.44% of episodes, while both baselines fail all episodes. In particular, Uniform compression achieves a similar on-time rate (74.47% versus 77.76% for Scale ), showing that timely delivery alone does not ensure task success. The largest task success improvement over the strongest baseline occurs at 5.0 Mbps, where Scale achieves 86.67% task success, compared with 24.44% for Full-send and 0.00% for Uniform compression. Its communication on-time rate also reaches 84.57%, exceeding both baselines.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS2.SSS0.Px3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "879791153e2f2b37",
+      "section": "5.3 Real-Time Performance",
+      "location": "5.3 Real-Time Performance",
+      "text": "We measure message lateness as L i = C i − d i L_{i}=C_{i}-d_{i} , where C i C_{i} and d i d_{i} are the completion time and deadline of message i i , respectively. On-time messages have L i ≤ 0 L_{i}\\leq 0 , while delayed messages have L i > 0 L_{i}>0 . To better illustrate real-time performance, Fig. 3 shows the lateness distributions for CooperScene at 20 Mbps for both object detection and trajectory prediction tasks. In the figure, the cumulative percentage at zero gives the on-time rate, which is computed over all generated messages, including undelivered ones.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "360f379e86284dbd",
+      "section": "5.3 Real-Time Performance",
+      "location": "5.3 Real-Time Performance",
+      "text": "The results show that Scale delivers 80.36% of detection messages and 100.00% of prediction messages on time, compared with 68.64% and 94.44% for Uniform compression. Uniform compression achieves the highest on-time rates among the baselines at this bandwidth, but its task utility is significantly lower than that of Scale . We also observe a steep rise in the detection CDF just before the deadline for the object detection task, indicating that many messages complete shortly before their deadlines. This behavior is consistent with Scale ’s greedy allocation of available bandwidth to maximize semantic gain under deadline constraints. The complete distributions for all three benchmarks and bandwidth settings appear in Appendix C (Figures 8 , 9 , and 10 ). Across these results, Scale improves on-time delivery in every tested setting and achieves the highest on-time rate among all methods in most settings.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8441e4fe244bc36",
+      "section": "5.4 Case Study",
+      "location": "5.4 Case Study",
+      "text": "We conduct a hardware-in-the-loop case study using a Raspberry Pi-based spider robot, as shown in Fig. 4 . The robot is equipped with a camera and an ultrasonic sensor and performs two tasks: object detection and distance measurement on a fixed robot patrolling route. The patrolling route is a 55.4-second walk through a miniature city containing objects such as small road signs, pedestrian figures, and buildings. Among the two tasks, object detection is time-sensitive, with a communication deadline of 1,000 ms, while ultrasonic distance measurements generate background traffic over the shared link. We compare Scale against two baselines: Raw RGB, which transmits uncompressed images, and Full-send, which transmits complete intermediate latent features. We evaluate the system in three bandwidth settings, including 1, 2, and 8 Mbps.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "494f666f373b2389",
+      "section": "5.4 Case Study",
+      "location": "5.4 Case Study",
+      "text": "Figure 4: Spider robot patrolling in the mini-city with pedestrians, stop signs, and model cars. The spider patrols along an L-shaped route.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e962e25a8227e830",
+      "section": "5.4 Case Study",
+      "location": "5.4 Case Study",
+      "text": "Bandwidth (Mbps) Method Metric 1 2 8 RGB Success ↑ \\uparrow 0.00% 0.00% 100.00% On-time ↑ \\uparrow 0.00% 0.00% 100.00% Latent Success ↑ \\uparrow 0.00% 0.00% 100.00% On-time ↑ \\uparrow 0.00% 0.00% 100.00% SCALE Success ↑ \\uparrow 77.62% 91.67% 100.00% On-time ↑ \\uparrow 100.00% 96.43% 100.00%",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T4.2",
+      "kind": "table"
+    },
+    {
+      "id": "da1601612b0bc29b",
+      "section": "5.4 Case Study",
+      "location": "5.4 Case Study",
+      "text": "Table 4: Spider robot mini-city case study results under different bandwidth constraints.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6da15541492938ce",
+      "section": "5.4 Case Study",
+      "location": "5.4 Case Study",
+      "text": "We report task success and message on-time rates. Table 4 presents the results. We observe that Scale substantially outperforms both baselines under constrained bandwidth. Specifically, at 1 and 2 Mbps, both baselines achieve zero detection success, whereas Scale achieves success rates of 77.62% and 91.67%, respectively, with on-time rates of 100% and 96.43%. At 8 Mbps, all methods achieve 100% detection success and on-time delivery. These results demonstrate the effectiveness of Scale in preserving timely detection performance on a physical robotic platform under limited bandwidth.",
+      "url": "https://arxiv.org/html/2611.08390v1#S5.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "67aafe318a19fa44",
+      "section": "6 Conclusion",
+      "location": "6 Conclusion",
+      "text": "In this work, we present Scale , a real-time latent communication method for cyber-physical agents. By exploiting spatiotemporal continuity, Scale avoids retransmitting latent information already available at the receiver. To support timely communication, we design a real-time scheduler that jointly selects messages and transmission sizes based on semantic gain, available bandwidth, and task deadlines. We evaluate Scale on three benchmarks and conduct a physical robot case study. The results demonstrate improved task performance and high message on-time rates under constrained and varying network conditions. These findings highlight Scale as an effective and efficient method for meeting the communication and timing requirements of CPS agents.",
+      "url": "https://arxiv.org/html/2611.08390v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c240bc08a78c8a3d",
+      "section": "Limitations",
+      "location": "Limitations",
+      "text": "While Scale significantly improves bandwidth efficiency and supports real-time scheduling for CPS agents, it has two limitations. First, the communication savings of Scale depend on spatiotemporal redundancy in latent representations. However, observations in the physical world can change abruptly, which may reduce the amount of reusable information and increase the communication required to maintain task performance. Second, the scheduling algorithm assesses deadline feasibility using the current link rate. However, this design cannot handle unexpected bandwidth decreases that occur on timescales shorter than the minimum scheduling interval, which may affect message timeliness before the scheduler can adapt.",
+      "url": "https://arxiv.org/html/2611.08390v1#Sx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "05f680419e575280",
+      "section": "Appendix A Scheduling Algorithm",
+      "location": "Appendix A Scheduling Algorithm",
+      "text": "Algorithm 1 Greedy Deadline-Feasible Semantic Allocation",
+      "url": "https://arxiv.org/html/2611.08390v1#alg1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d40ed3ffcfa1f062",
+      "section": "Appendix A Scheduling Algorithm",
+      "location": "Appendix A Scheduling Algorithm",
+      "text": "We provide the detailed scheduling procedure used by Scale in Algorithm 1 . We define U i ​ ( 0 ) = B i ​ ( 0 ) = 0 U_{i}(0)=B_{i}(0)=0 for all messages i i . Our design separates semantic prioritization from deadline feasibility. At each iteration, it considers one additional token for every pending message and admits only increments for which all currently selected messages remain deadline-feasible under EDF ordering. Among these feasible increments, it selects the one with the largest marginal semantic gain per communication cost. The procedure terminates when no additional token can be admitted without causing a deadline violation.",
+      "url": "https://arxiv.org/html/2611.08390v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6172e443f080bd61",
+      "section": "Appendix B Detailed Settings",
+      "location": "Appendix B Detailed Settings",
+      "text": "(a) Tasks and timing Benchmark Task Test workload Rate (Hz) Deadline (ms) CooperScene 3D detection 3,936 jobs 10 100 Trajectory prediction (5 s) 18,693 targets 5 200 OPV2V 3D detection 528 jobs 10 100 BEV segmentation 265 jobs 5 200 LIBERO Object manipulation 45 episodes 20 Variable",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "8cbf09d5750aaf56",
+      "section": "Appendix B Detailed Settings",
+      "location": "Appendix B Detailed Settings",
+      "text": "(b) Bandwidth settings (Mbps) Benchmark Full-send Fixed rates Fractions (%) Varying rates CooperScene 118.5 15, 20, 25, 30 12.5, 16.7, 20.8, 25 30 ↔ 200 30\\leftrightarrow 200 OPV2V 153.0 8, 15, 31, 61 5, 10, 20, 40 8 ↔ 61 8\\leftrightarrow 61 LIBERO 13.46 3.4, 5.0, 6.7, 10.1 25, 37.5, 50, 75 3.4 ↔ 20 3.4\\leftrightarrow 20",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.T5.3",
+      "kind": "table"
+    },
+    {
+      "id": "9a3fe3d64df2381a",
+      "section": "Appendix B Detailed Settings",
+      "location": "Appendix B Detailed Settings",
+      "text": "Full-send reference rates are estimated from validation or calibration data.",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.T5.4",
+      "kind": "p"
+    },
+    {
+      "id": "94f1f13824581328",
+      "section": "Appendix B Detailed Settings",
+      "location": "Appendix B Detailed Settings",
+      "text": "Table 5: Detailed experiment settings.",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d243c5d96ccfc282",
+      "section": "Appendix B Detailed Settings",
+      "location": "Appendix B Detailed Settings",
+      "text": "Bandwidth Change evaluation Utility–cost profiling State update + scheduling Total 15 Mbps 0.351 0.130 0.333 0.813 20 Mbps 0.355 0.130 0.374 0.859 25 Mbps 0.353 0.130 0.390 0.873 30 Mbps 0.354 0.130 0.401 0.884 Varying 0.352 0.129 0.392 0.873",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.T6.2",
+      "kind": "table"
+    },
+    {
+      "id": "71875c2b34782af1",
+      "section": "Appendix B Detailed Settings",
+      "location": "Appendix B Detailed Settings",
+      "text": "Table 6: Mean runtime per message of Scale on CooperScene (ms).",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "baf38718b0728f79",
+      "section": "CooperScene.",
+      "location": "CooperScene.",
+      "text": "CooperScene Wu et al. (2026) is a real-world cooperative autonomy benchmark collected using three connected vehicles and one roadside unit. It provides synchronized LiDAR, camera, and GNSS/IMU observations, together with C-V2X communication measurements. The dataset contains approximately 59,000 LiDAR frames, 53,000 image frames, and 344,000 annotated 3D bounding boxes. Its scenes cover intersections, freeway ramps, local streets, and parking lots, supporting cooperative 3D object detection and motion prediction.",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dc7ee19bd08ce4e3",
+      "section": "OPV2V.",
+      "location": "OPV2V.",
+      "text": "OPV2V Xu et al. (2022c) is a simulated cooperative perception benchmark generated using OpenCDA and CARLA. It contains 73 scenes across eight CARLA towns and a digital replica of Culver City, with 11,464 frames and 232,913 annotated 3D vehicle bounding boxes. Each frame includes observations from two to seven connected vehicles, each equipped with a 64-channel LiDAR, four RGB cameras providing a combined 360-degree view, and GPS/IMU sensors. The dataset supports cooperative 3D object detection, BEV semantic segmentation, tracking, and prediction.",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "47ccd4e02862efeb",
+      "section": "LIBERO.",
+      "location": "LIBERO.",
+      "text": "LIBERO Liu et al. (2023a) is a benchmark for knowledge transfer in language-conditioned robotic manipulation. It contains 130 tasks organized into four suites: LIBERO-Spatial, LIBERO-Object, and LIBERO-Goal, each containing 10 tasks, and LIBERO-100, containing 100 tasks. The suites vary spatial relationships, object identities, and manipulation goals to evaluate different forms of knowledge transfer. The benchmark provides language instructions, RGB observations from workspace and wrist cameras, and robot proprioceptive states.",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b24c03483686f740",
+      "section": "Detailed experimental settings.",
+      "location": "Detailed experimental settings.",
+      "text": "Table 5 presents the detailed experimental settings for our evaluations on these benchmarks, including the evaluated tasks, test set sizes, task rates, deadlines, and bandwidth configurations.",
+      "url": "https://arxiv.org/html/2611.08390v1#A2.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7fbcf7c96d51862e",
+      "section": "Scene examples and CDFs.",
+      "location": "Scene examples and CDFs.",
+      "text": "Figures 6 and 7 compare the detection results of Full-send and Scale against ground-truth annotations on CooperScene and OPV2V, respectively. Figure 5 illustrates a successful LIBERO manipulation episode with Scale . Figures 8 , 9 , and 10 present the message lateness CDFs for CooperScene, OPV2V, and LIBERO, respectively, under fixed and varying bandwidth settings.",
+      "url": "https://arxiv.org/html/2611.08390v1#A3.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f58745e606083ead",
+      "section": "Runtime overhead.",
+      "location": "Runtime overhead.",
+      "text": "Table 6 reports the computational overhead of Scale on CooperScene across five bandwidth settings. We measure runtime on an Intel Core i9-13900K using four CPU cores and four OpenBLAS threads. We report the overhead of the three design stages: semantic change evaluation, utility–cost profiling, and real-time scheduling, with the last stage also accounting for message preparation and state updates. Averaged over all generated detection and prediction messages, the total overhead remains below 1 ms per message across all settings, ranging from 0.813 to 0.884 ms. These results highlight the low computational overhead of Scale .",
+      "url": "https://arxiv.org/html/2611.08390v1#A3.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2bbbca8152945df2",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "We used AI assistants to support the implementation and debugging of the experimental code described in Section 5. We also used AI assistants for grammar checking and revising the manuscript. The authors reviewed the AI-assisted code and text and tested the code. The authors take full responsibility for the experimental results and the final manuscript.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ad84a5e39a0209ed",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "Figure 5: LIBERO task execution with SCALE at 10.1 Mbps: the robot picks up the soup can and places it in the basket. The sequence shows the start, midpoint, and successful completion of one test episode.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1f0c6a367d3d5212",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "Figure 6: Vehicle detection on CooperScene at 25 Mbps. (a) Receiver camera. (b–c) Full-send and SCALE detections for the same frame, using the same CoBEVT model. Green boxes are detections; dashed blue boxes are ground truth. Both BEV panels use the same view.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4d62b75054bc9e51",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "Figure 7: Vehicle detection on OPV2V at 31 Mbps. (a) Receiver camera. (b–c) Full-send and SCALE detections for the same frame, using the same CoBEVT model. Green boxes are detections; dashed blue boxes are ground truth. Both BEV panels use the same view.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1300203ff9a6a8ef",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "Figure 8: CooperScene message-lateness CDFs at the five selected bandwidth settings: detection (left) and prediction (right). Varying switches between 30 and 200 Mbps every 2 seconds. Zero marks each message’s deadline; the CDF at zero is its method’s on-time rate.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b1cc11e2d975211b",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "Figure 9: OPV2V message-lateness CDFs at the five selected bandwidth settings: detection (left) and segmentation (right). Varying switches between 8 and 61 Mbps every 2 seconds. Zero marks each message’s deadline; the CDF at zero is its method’s on-time rate.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "112ba2d61e7d38f4",
+      "section": "Appendix D AI Usage Statement",
+      "location": "Appendix D AI Usage Statement",
+      "text": "Figure 10: LIBERO camera-update lateness CDFs at the five selected bandwidth settings, using all 45 episodes per method and setting. Varying switches between 3.4 and 20 Mbps every 2 seconds. Zero marks each message’s deadline; the CDF at zero is its method’s on-time rate.",
+      "url": "https://arxiv.org/html/2611.08390v1#A4.F10",
+      "kind": "figcaption"
+    }
+  ]
+}

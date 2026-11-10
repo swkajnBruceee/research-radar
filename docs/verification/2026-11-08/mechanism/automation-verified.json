@@ -1,0 +1,9 @@
+{
+  "id": "automation",
+  "kind": "heartbeat",
+  "status": "ACTIVE",
+  "rrule": "RRULE:FREQ=HOURLY;INTERVAL=3",
+  "target_thread_id": "01a1afd5-2c99-7f83-b3df-d703de48aefe",
+  "full_batch_required": true,
+  "obsolete_latest_first": false
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.08100",
+    "source_signature": "d59f111d23190df4288ede60b228a6d9fe2bb5dfbf3802c1c1dd5623f859386b",
+    "level": 0,
+    "reason": "主要整合现有ROS2导航组件；三次任务尚不足以确认通用可靠性，相关度和方法增量低于训练路线候选。",
+    "quote": "repeated instrumented trials remain necessary"
+  },
+  {
+    "item_id": "arxiv:2611.08013",
+    "source_signature": "a53be5a402f5c18d8a91dd6faaeb8a996244365ee90efa9de9c7e6027965a27f",
+    "level": 0,
+    "reason": "开源机械臂与遥操作、经典运动学实现为主，摘要未给出相对前沿学习方法的受控增量。",
+    "quote": "Denavit-Hartenberg method"
+  },
+  {
+    "item_id": "arxiv:2611.08009",
+    "source_signature": "9629f1dd0ac0ae4296eb734889ccd19b5f14daccb4525f64909b2938c7f06739",
+    "level": 1,
+    "reason": "统一被动交互控制并有同类架构实机对照，适合跟进接触切换；尚未显示广泛训练或资源路线改变。",
+    "quote": "compare the H-PMP against earlier FIC architectures"
+  },
+  {
+    "item_id": "arxiv:2611.07630",
+    "source_signature": "6a8686d1888e4cf214cdbddf3b626c31edcb2075b224dc6dacbcbed9885585b4",
+    "level": 1,
+    "reason": "以PWM身份编码和双速率事件更新降低标记跟踪开销，适用事件视觉定位；场景依赖强于通用策略路线。",
+    "quote": "distinct PWM duty cycles"
+  },
+  {
+    "item_id": "arxiv:2611.08259",
+    "source_signature": "2fa909a75cc4210740284a26e299120786450426e22c6ace3c8ed6a5c402544e",
+    "level": 0,
+    "reason": "已知故障电机的分配器选择与仿真敏感性分析较专门，模型误差使边界漂移，不优先于通用方法。",
+    "quote": "sensitivity to plant-model mismatch"
+  },
+  {
+    "item_id": "arxiv:2611.08142",
+    "source_signature": "199e150b1301059aba405ebe0fa0fc34edf9c5276af0559982e0b00548ca3ddb",
+    "level": 0,
+    "reason": "面向教学简化部署和基础控制迁移，与用户已有研究基础及前沿方法目标匹配较弱。",
+    "quote": "educational experience"
+  },
+  {
+    "item_id": "arxiv:2611.08119",
+    "source_signature": "062d7ac406535a51f582658192a187dab61cb32c1e55b8e7dda4440186134099",
+    "level": 1,
+    "reason": "边界压缩支持精确有向可达性和批查询复用，适合高查询负载规划；适用范围限定静态图。",
+    "quote": "exact cell-to-cell queries on directed grid graphs"
+  },
+  {
+    "item_id": "arxiv:2611.07808",
+    "source_signature": "04d7fdcf0579c2f47c5b8d316d9ee75eb14b5728195ae4d90506eed4c5a5e63b",
+    "level": 0,
+    "reason": "配送网络与成本联动分析有工程价值，当前偏具体运营设计，与具身策略训练方法相关较弱。",
+    "quote": "reductions in vehicle mass and energy consumption"
+  },
+  {
+    "item_id": "arxiv:2611.05372",
+    "source_signature": "fd0334a92d8c025b89f58e7d778875ed1619a8bd85da53aedec86153c5b85776",
+    "level": 1,
+    "reason": "利用累积参考偏差和双尺度误差改善IK保持精度，提供实机经典控制对照，值得跟进动作执行层。",
+    "quote": "retain the offset that the position controller needs at rest"
+  },
+  {
+    "item_id": "arxiv:2611.03520",
+    "source_signature": "fd1edfdefd68b3ab7f77e8ed6d6622163992ad4d2af2d8830812ad0b2c887a89",
+    "level": 1,
+    "reason": "低成本三轴触觉与空间、剪切消融可支持接触策略选型，需核查跨传感器校准和任务泛化。",
+    "quote": "removing either spatial contact information or shear feedback"
+  },
+  {
+    "item_id": "arxiv:2611.03584",
+    "source_signature": "cc8612ec222a37cfe09c2c714d09add8646794b756a05b9f30ee80db8ce70eff",
+    "level": 1,
+    "reason": "将信念空间约束和经典搜索接入工具代理，适合部分可观测移动操作；摘要比较细节不足以判为路线突破。",
+    "quote": "partially observable environments"
+  },
+  {
+    "item_id": "arxiv:2611.03622",
+    "source_signature": "a465c7e0dc04e28f145d24eb61c6efe06b17cd2d7866f61f3d03e4ba3f8bdc33",
+    "level": 1,
+    "reason": "零训练的描述与评分解耦可能缓解奖励确认偏差，需精读确认对照、公平提示预算和下游RL收益。",
+    "quote": "decouples progress estimation"
+  },
+  {
+    "item_id": "arxiv:2611.03647",
+    "source_signature": "64f1e091a78131c9da88a51dbf7d7007a35ec59326a51d071b5688ff74829b96",
+    "level": 1,
+    "reason": "几何重定向、误差感知遮罩与在策略纠正处理人机数据差异，适合全身操作数据；须区分各模块贡献。",
+    "quote": "Retargeting-Error-Aware Masking"
+  },
+  {
+    "item_id": "arxiv:2611.03648",
+    "source_signature": "6a3e52a3a0f1b9ac73fe069fd2d92131f80e87f7fdb9ae074f5d63f9469082cf",
+    "level": 1,
+    "reason": "硬件、采集、全身控制与学习协同设计可复用，但摘要未交代足以比较的受控规模或成本增量。",
+    "quote": "co-designed full-stack system"
+  },
+  {
+    "item_id": "arxiv:2611.03779",
+    "source_signature": "7d196cd045bd658650d2d2f92e19b847321fce9c8179adb567e9fdd2d0688d90",
+    "level": 1,
+    "reason": "软指与机器人匹配的数据采集提供跨物体迁移对照，值得跟进数据工具；仍是特定夹爪和任务范围。",
+    "quote": "mid-training on our multi-task data"
+  },
+  {
+    "item_id": "arxiv:2611.03815",
+    "source_signature": "55f657651545155a170daf269c75f523befca8f9d3268838fbcc9cffb8cd0aa5",
+    "level": 2,
+    "reason": "无机器人训练数据的长时程跨本体操作与大规模手持数据开放，可能改变采集和迁移路线，应优先核查数据与基线公平性。",
+    "quote": "no robot data collected at any stage"
+  },
+  {
+    "item_id": "arxiv:2611.05163",
+    "source_signature": "9250e9af68704c14474dbbbdb77ab05e25f63c38bcc54e582af61a9877507c1c",
+    "level": 2,
+    "reason": "人视频生成机器人视频再推断动作，可能替代部分遥操作采集；跨本体与成本对照值得优先精读，合成质量仍须核查。",
+    "quote": "approximately a third of the collection cost"
+  },
+  {
+    "item_id": "arxiv:2611.08156",
+    "source_signature": "f85205a3f7d39b3dcc6d1a7c3dd3259214159cd5e8b07dfb182d461984cf6776",
+    "level": 2,
+    "reason": "从生成骨干转向控制专用紧凑JEPA策略并重审评测指令，直接影响架构、预训练与推理预算选择，优先核查受控消融。",
+    "quote": "trained from scratch in the feature space"
+  },
+  {
+    "item_id": "arxiv:2611.08318",
+    "source_signature": "c72fa376c8977d5a24dfdcc598dead6260e228ef8913de87e00fb90c0a164601",
+    "level": 1,
+    "reason": "成功判据暴露导致得分提升但迁移退化，是自改进评测的重要反例；优先跟进方法有效性边界。",
+    "quote": "this advantage disappears when the criteria are changed slightly"
+  },
+  {
+    "item_id": "arxiv:2611.07516",
+    "source_signature": "fcd65fbc23061f556af8775beaa8a0df2cd9e2ebea5b0935335ff24eb661be37",
+    "level": 1,
+    "reason": "训练外物理参数与独立验收指标揭示控制验证漏洞，适合迁移验证设计，特技车辆场景限制直接复用。",
+    "quote": "validation must be independent of training"
+  },
+  {
+    "item_id": "arxiv:2611.08295",
+    "source_signature": "140cf5d0516abc8d3fd3cd7393808b821b2ecbc69701a0a6de64c871227ec189",
+    "level": 0,
+    "reason": "康复处方模型以健康参与者概念验证为主，与当前具身通用方法目标较远，临床效果仍待研究。",
+    "quote": "16 healthy participants"
+  },
+  {
+    "item_id": "arxiv:2611.08056",
+    "source_signature": "8018b72df33ba5438424c723b91b681ee902a4ac17da0c2f00f05a3e08b2e5ea",
+    "level": 1,
+    "reason": "分阶段改变示范约束并用几何支持适配机器人接触，适合复杂地形全身控制；需核查消融与场景迁移边界。",
+    "quote": "reduced motion-prior weight enables contact adaptation"
+  },
+  {
+    "item_id": "arxiv:2611.07537",
+    "source_signature": "37cb89d0b35634201d1562a4bf1128a60b3f890efafd4230bc7642796d04def4",
+    "level": 0,
+    "reason": "安全证书教程和基准对照适合按需背景阅读，非当前新训练或推理技术的优先精读对象。",
+    "quote": "This tutorial provides a holistic treatment"
+  },
+  {
+    "item_id": "arxiv:2611.07687",
+    "source_signature": "15047c7864b58a649519917aba87de87ea2d1acc0a972c7e68902aac60f8f067",
+    "level": 1,
+    "reason": "主动投放视觉特征处理VIO漂移有可操作增量，但实机控制使用OptiTrack，需要先分离控制与定位证据。",
+    "quote": "use OptiTrack for flight control"
+  }
+]

@@ -1,0 +1,911 @@
+{
+  "id": "50d661f38c283c4734d38fde7506f791984e6e45a965a9619902beb9f0b2a208",
+  "url": "https://arxiv.org/html/2611.07513v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "a3225d9116e0fb6b",
+      "section": "Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model",
+      "location": "Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model",
+      "text": "Most vision-language-action (VLA) policies decouple manipulation from cognition by bolting an external action mechanism onto a vision-language model (VLM)—either quantizing actions into discrete tokens whose errors bear no stable correspondence to physical displacements, or delegating continuous trajectory generation to a separate action expert whose gradients compete with or are blocked from updating the VLM backbone. We argue that manipulation and cognition should instead be embodied in the same model, shifting from a decoupled VLA to an Embodied Vision-Language Model ( eVLM ). We introduce Concertina, an eVLM that places continuous trajectory representation, blockwise generation, and physical-coordinate supervision directly on the computation and parameter path of a shared diffusion VLM backbone. Each control timestep is encoded as one continuous latent action token in the backbone hidden space, and the shared Transformer reconstructs temporally ordered action blocks via the same corrupt-and-reconstruct operator used for multimodal pretraining. Active action projections account for only 0.21 % 0.21\\% of parameters in the 4.46B model with zero separate action-generator layers, compared with 16.5 % 16.5\\% – 35.1 % 35.1\\% dedicated action-expert capacity in representative continuous VLAs. Using our proposed Action Interface Audit , we confirm that cross-time trajectory coupling emerges in the middle and late layers of the shared backbone rather than at the action interfaces. On standard benchmarks, Concertina achieves 98.15 % 98.15\\% average success on regular LIBERO, 85.9 % 85.9\\% on the 10,030-task LIBERO-Plus benchmark, and 4.142 4.142 average completed chain length on CALVIN ABC–D.",
+      "url": "https://arxiv.org/html/2611.07513v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a568dc70ec05c2c9",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "The premise of vision-language-action (VLA) policies is to transfer the visual perception, semantic grounding, and generalization of pretrained vision-language models (VLMs) to physical manipulation. Beneath specific design choices lies a foundational question: how can we enable a pretrained VLM to natively output precise continuous actions while preserving its visual-language generalization, its model architecture, and its native training paradigm? Existing VLAs largely compromise on at least one of these requirements by treating action as an external attachment to a VLM—dividing manipulation and cognition across separate representations, modules, or training objectives, where the VLM handles scene and instruction understanding while another mechanism handles action representation, trajectory generation, or coordinate supervision. Our thesis is that manipulation and cognition should not be decoupled across a bolted-on VLA pipeline; they should be embodied in a single Embodied Vision-Language Model ( eVLM ). Concretely, in an eVLM, actions are represented directly in the backbone’s continuous hidden space, generated across time by the same parameters and native generative operator that process vision and language, and supervised in physical coordinates end-to-end without degrading the shared VLM.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "49d541dc0aca5027",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Three principles motivate this shift from decoupled VLAs to a unified eVLM. First, cognition should participate in manipulation at every layer. Grasping, placement, and obstacle avoidance rely on the same spatial and physical cues as scene understanding; when trajectory generation happens outside the VLM, cognition is reduced to a one-time conditioning handoff and cannot interact with evolving action states across depth. Second, manipulation should shape cognition in return. Robot trajectories are the primary source of physical and spatial grounding for a VLM; only when continuous action gradients directly update the vision-language parameters can manipulation experience consolidate into the backbone’s spatial cognition rather than remaining confined to an external head. Third, preserving the backbone’s architecture, training paradigm, and representation stability enables end-to-end scaling. When cognitive and motor modules rely on incompatible paradigms or objectives, their gradients compete and degrade pretrained representations, often forcing practitioners to insulate or freeze the backbone ( Driess et al., 2025 ; Liang et al., 2025 ) and permanently fixing the separation between perception and control.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2893b9f1c4cedbc0",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "From this perspective, conventional VLAs fail to form a unified eVLM in two primary ways (Table 1 ). The first is representational decoupling . Methods such as RT-2 ( Brohan et al., 2023 ) and OpenVLA ( Kim et al., 2024 ) quantize each action dimension into discrete bins and reuse the language vocabulary under cross-entropy loss, while FAST ( Pertsch et al., 2025 ) compresses action chunks via a discrete cosine transform and byte-pair encoding. Although these methods preserve the VLM architecture and training paradigm, control is moved from physical space into symbol space: token-level cross-entropy penalizes adjacent-bin and far-bin errors equally, and compressed tokens entangle multiple timesteps and dimensions so that a single token error can corrupt an entire trajectory. The second is computational and parameter decoupling . Continuous policies such as π 0 \\pi_{0} ( Black et al., 2024 ) , π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) , SmolVLA ( Shukor et al., 2025 ) , GR00T N1 ( Bjorck et al., 2025 ) , and X-VLA ( Zheng et al., 2025 ) preserve physical coordinates via flow matching or diffusion, but alter the model architecture and training paradigm by delegating trajectory generation to a dedicated action expert or 24-layer action Transformer outside the VLM. Because action supervision primarily updates the external expert and its competing gradients can degrade pretrained VLM features, Knowledge Insulation ( Driess et al., 2025 ) blocks expert gradients from entering the backbone—resolving training instability by hard-wiring architectural decoupling. Recent hybrids partially restore coupling along individual axes—sharing a backbone over discrete diffusion tokens ( Liang et al., 2025 ; Yang et al., 2026a ; Wang et al., 2026 ; Lee et al., 2026 ) , combining discrete and continuous branches ( Liu et al., 2025 ) , training a separate trajectory codec ( Yang et al., 2026b ) , or switching from discrete pretraining to downstream flow matching ( Ye et al., 2025 ) —yet none realizes a true eVLM that natively generates continuous physical trajectories while preserving its model architecture, its native pretraining paradigm, and its visual-language generalization.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2d3c905b9060449c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Representational Coupling Computational & Parameter Coupling Generation & Complexity Paradigm / Method Cont. action values Coordinate supervision Backbone generates traj. No external action gen. No pretrained tokenizer/codec Single action repr. & loss Parallel / joint generation Causal temporal order Iterative refinement Sequence length 𝒪 ⁡ ( H ) \\mathcal{O}(H) RT-2 ( Brohan et al., 2023 ) / OpenVLA ( Kim et al., 2024 ) × \\times × \\times ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark × \\times × \\times FAST / π 0 \\pi_{0} -FAST ( Pertsch et al., 2025 ) × \\times × \\times ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark × \\times × \\times π 0 \\pi_{0} ( Black et al., 2024 ) / π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) ✓ \\checkmark ✓ \\checkmark × \\times × \\times ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark ✓ \\checkmark SmolVLA ( Shukor et al., 2025 ) / GR00T N1 ( Bjorck et al., 2025 ) ✓ \\checkmark ✓ \\checkmark × \\times × \\times ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark ✓ \\checkmark X-VLA ( Zheng et al., 2025 ) ✓ \\checkmark ✓ \\checkmark × \\times × \\times ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark ✓ \\checkmark HybridVLA ( Liu et al., 2025 ) ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark × \\times ✓ \\checkmark ✓ \\checkmark Dream-VLA ( Ye et al., 2025 ) ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark × \\times ✓ \\checkmark ✓ \\checkmark Discrete Diffusion VLA ( Liang et al., 2025 ) / MMaDA-VLA ( Yang et al., 2026a ) × \\times × \\times ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark × \\times BlockVLA ( Wang et al., 2026 ) / TBD-VLA ( Lee et al., 2026 ) × \\times × \\times ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark × \\times CAT ( Yang et al., 2026b ) ✓ \\checkmark × \\times × \\times × \\times ✓ \\checkmark ✓ \\checkmark × \\times ✓ \\checkmark ✓ \\checkmark Concertina (eVLM, ours) ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.T1.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "0f841d7f7146287c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Table 1: Architectural comparison between representative VLA paradigms and our eVLM ( ✓ \\checkmark : satisfied; × \\times : not satisfied; : partially satisfied). Columns 1–2 reflect representational coupling (whether actions enter and are supervised in physical coordinates); columns 3–4 reflect computational and parameter coupling (whether the VLM backbone directly generates trajectories without a separate action Transformer, DiT, flow expert, or post-codec generator); the remaining columns summarize training and decoding structure. Coordinate supervision marks for dual discrete-continuous objectives (HybridVLA), latent-codec policy losses (CAT), or discrete-pretrain/continuous-finetune stage switches (Dream-VLA).",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "996d7a7154667ccc",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We instantiate this eVLM paradigm in Concertina through an end-to-end continuous latent action representation inside a diffusion VLM. Prior latent-action works (LAPA, IGOR, UniVLA, Moto, villa-X, CAT ( Ye et al., 2024 ; Chen et al., 2024a ; Bu et al., 2025 ; Chen et al., 2024b ; Chen et al., 2025 ; Yang et al., 2026b ) ) show that mapping diverse robot controls into a shared latent space decouples embodiment-specific kinematics from sequence modeling, but they rely on separately pretrained VQ codebooks or trajectory codecs. We place this latent space directly inside the hidden space of a diffusion VLM (BARD-VL ( Chen et al., 2026 ) ): at each control timestep, a lightweight position-wise action encoder maps the complete D D -dimensional action vector into a single continuous latent action token in ℝ d \\mathbb{R}^{d} , so a horizon- H H trajectory occupies H H tokens rather than H ​ D HD scalar symbols. Vision, language, and latent action tokens are jointly contextualized across every layer of the shared Transformer, and a lightweight position-wise action decoder maps output hidden states back to physical coordinates under direct coordinate reconstruction loss.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "d566473640993481",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Figure 1: Concertina (eVLM) reconstructs continuous action blocks inside a shared diffusion vision-language model. Multimodal inputs and continuous latent action tokens are jointly processed across all layers of the shared Transformer F θ F_{\\theta} , combining position-wise continuous coordinate projections ( E ϕ , D ψ E_{\\phi},D_{\\psi} ), packed blockwise teacher forcing during training, and risk-guided blockwise reconstruction at inference. Amber tiles denote complete action vectors; dashed “M” tiles denote masked vectors.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e274ec6125a0ed3e",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Building on this principle, Concertina partitions the H H -step horizon into temporally ordered action blocks that are causal across blocks and bidirectional within each block, allowing contiguous action segments to be generated and refined jointly. During training, the multimodal conditioning prefix, corrupted action tokens, and teacher-forced clean action tokens are packed into a single sequence, supervising all block-conditional distributions in one forward pass and providing a compute-efficient, scalable end-to-end training path. Because the VLM backbone is already pretrained with masked block reconstruction ( Chen et al., 2026 ) , Concertina reuses the exact same corrupt-and-reconstruct generative operator for continuous control without introducing a second training paradigm or external diffusion network.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "931b2dcdf5313b61",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "To rigorously test whether a policy acts as a decoupled VLA or a true eVLM—and to localize where action representation and trajectory computation reside—we introduce the Action Interface Audit , a checkpoint-level methodology comprising three metrics aligned with the three decoupling axes: (i) Error-Geometry Consistency ( EGC = p 95 / p 05 \\mathrm{EGC}=p_{95}/p_{05} ), measuring whether unit training errors map stably to physical action errors; (ii) Trajectory Coupling Attribution (TCA) via the non-local response ratio ( NLR \\mathrm{NLR} ), using deterministic finite differences to localize where cross-time dependencies emerge; and (iii) Action-Specific Capacity Ratio ( ASCR \\mathrm{ASCR} ), quantifying parameters dedicated solely to action generation. The audit reveals that uniform discrete bins induce a 25.14 × 25.14\\times physical-error span per single-token error and FAST-style compressed tokens suffer 77.9 % 77.9\\% – 82.2 % 82.2\\% structural decoding failures under single-token edits; π 0 \\pi_{0} and π 0.5 \\pi_{0.5} derive all cross-time coupling from external action experts ( ASCR = 16.51 % \\mathrm{ASCR}=16.51\\% and 19.17 % 19.17\\% , rising to 22.19 % 22.19\\% in SmolVLA and 35.10 % 35.10\\% in X-VLA); whereas Concertina’s active action interfaces occupy only 0.21 % 0.21\\% of the 4.46B model, exhibit zero cross-time response on their own ( NLR = 0 \\mathrm{NLR}=0 ), and delegate all temporal trajectory coupling to the middle and late layers of the shared VLM backbone ( NLR = 4.06 % \\mathrm{NLR}=4.06\\% in pretraining, 4.10 % 4.10\\% on CALVIN, and 1.22 % 1.22\\% on LIBERO). Furthermore, a matched counterfactual intervention shows that attaching a second coordinate objective to the shared hidden space induces opposing gradients (cosine − 0.891 -0.891 ) and collapses CALVIN chain length from 2.970 2.970 to 0.237 0.237 , confirming that enabling native action generation in an eVLM without degrading the shared VLM requires co-designing the action representation and its supervision objective as a unified whole. On standard closed-loop benchmarks, Concertina reaches 98.15 % 98.15\\% average success on regular LIBERO, 85.9 % 85.9\\% on the 10,030-task LIBERO-Plus benchmark, and 4.142 4.142 average completed chain length on CALVIN ABC–D (Table 2 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "681143ca69aa9f69",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Our contributions are threefold:",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec8f95da5e2ccf9a",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Embodied Vision-Language Model (eVLM) Paradigm. We formulate the eVLM paradigm, embodying manipulation and cognition within a single VLM across representation, supervision, and generation so that a pretrained VLM natively generates continuous action trajectories while preserving its model architecture, native training paradigm, and visual-language generalization.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "13f2a4b817f71ce8",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Continuous Blockwise eVLM Architecture (Concertina). We introduce Concertina, representing a horizon- H H trajectory as H H continuous latent action tokens with blockwise causal-bidirectional visibility and packed teacher forcing, requiring only 0.21 % 0.21\\% active interface parameters and no external action expert, tokenizer, or codec.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "398739b0d50277d5",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Action Interface Audit and Empirical Validation. We introduce EGC, TCA ( NLR \\mathrm{NLR} ), and ASCR to audit representative discrete VLAs, action-expert VLAs, and our eVLM, provide counterfactual evidence on shared-space objective design, and demonstrate state-of-the-art closed-loop performance on LIBERO and LIBERO-Plus alongside strong zero-shot transfer on CALVIN ABC–D.",
+      "url": "https://arxiv.org/html/2611.07513v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "92b6640e42b1c22a",
+      "section": "Latent action representations.",
+      "location": "Latent action representations.",
+      "text": "Several recent works learn compact latent action variables from video or robot demonstrations before policy learning. LAPA and IGOR extract discrete latent actions from action-free videos and image-goal pairs before grounding them into physical controls in a subsequent stage ( Ye et al., 2024 ; Chen et al., 2024a ) , while UniVLA ( Bu et al., 2025 ) , Moto ( Chen et al., 2024b ) , villa-X ( Chen et al., 2025 ) , and CAT ( Yang et al., 2026b ) introduce task-centric codebooks, motion tokens, proprioceptive latent dynamics, or frozen trajectory codecs. Because these methods freeze the tokenizer or codec prior to policy optimization, the latent space is never shaped directly by closed-loop physical control gradients. By contrast, Concertina embeds continuous actions directly into the hidden space of the diffusion VLM through lightweight position-wise projections co-trained end-to-end with the backbone under physical-coordinate reconstruction loss.",
+      "url": "https://arxiv.org/html/2611.07513v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5c66568ddb8d3ce7",
+      "section": "External action experts versus shared-backbone generation.",
+      "location": "External action experts versus shared-backbone generation.",
+      "text": "Building on diffusion and flow-matching policies ( Chi et al., 2023 ) , continuous VLA architectures such as π 0 \\pi_{0} ( Black et al., 2024 ) , π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) , SmolVLA ( Shukor et al., 2025 ) , GR00T N1 ( Bjorck et al., 2025 ) , and X-VLA ( Zheng et al., 2025 ) preserve continuous control coordinates by pairing a VLM with a dedicated flow-matching action expert or a 24-layer external action Transformer, while OpenVLA-OFT attaches a continuous regression head ( Kim et al., 2025 ) . Delegating trajectory generation to an external module separates motor computation from visual-language reasoning and introduces cross-module gradient tension; Knowledge Insulation ( Driess et al., 2025 ) addresses the resulting backbone degradation by blocking expert gradients from updating the VLM, permanently fixing the division between perception and control. Concertina eliminates the external action generator altogether, executing trajectory reconstruction inside the shared VLM Transformer so that manipulation and cognition co-adapt along a single parameter path.",
+      "url": "https://arxiv.org/html/2611.07513v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6039743cb7b7533e",
+      "section": "Discrete and compressed action tokenizers.",
+      "location": "Discrete and compressed action tokenizers.",
+      "text": "A third paradigm represents robot controls as discrete symbols over the language vocabulary. RT-2 and OpenVLA quantize each action coordinate into uniform bins ( Brohan et al., 2023 ; Kim et al., 2024 ) ; FAST compresses action chunks via a discrete cosine transform and byte-pair encoding ( Pertsch et al., 2025 ) ; OAT learns ordered discrete action tokens ( Liu et al., 2026 ) ; and Discrete Diffusion VLA, MMaDA-VLA, and LLaDA-VLA apply masked discrete diffusion over quantized action tokens ( Liang et al., 2025 ; Yang et al., 2026a ; Wen et al., 2025 ) . Operating in symbol space decouples the training loss from physical error geometry: cross-entropy penalizes near-miss and large-displacement bin errors equally, while frequency-compressed tokens entangle multiple timesteps so that a single token error can invalidate an entire action chunk. Concertina retains token-level sequence length 𝒪 ⁡ ( H ) \\mathcal{O}(H) while supervising every token directly in normalized physical coordinates.",
+      "url": "https://arxiv.org/html/2611.07513v1#S2.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b3787d80a61c445e",
+      "section": "Discrete and compressed action tokenizers.",
+      "location": "Discrete and compressed action tokenizers.",
+      "text": "Figure 2: From decoupled VLAs to an Embodied Vision-Language Model (eVLM). Comparison of four architectural routes to robot manipulation: (A) OpenVLA quantizes coordinates into discrete vocabulary tokens (language-objective VLA); (B) π 0 \\pi_{0} delegates continuous trajectory generation to a separate flow-matching action expert (separate-objective VLA); (C) Dream-VLA retains a shared diffusion VLM backbone but switches to a flow-matching objective for continuous control (switched-objective VLA); (D) Concertina instantiates an eVLM that preserves both the shared diffusion VLM backbone and its native masked block reconstruction operator over continuous latent action tokens.",
+      "url": "https://arxiv.org/html/2611.07513v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ef0430a3157924a0",
+      "section": "Blockwise diffusion VLMs.",
+      "location": "Blockwise diffusion VLMs.",
+      "text": "Blockwise diffusion models combine causal ordering across blocks with parallel bidirectional denoising within each block. BARD-VL bridges autoregressive and diffusion vision-language modeling via progressive block merging and stage-wise distillation over packed clean and corrupted sequences ( Chen et al., 2026 ) . Recent VLA adaptations apply block diffusion to discretized action bins ( Wang et al., 2026 ; Lee et al., 2026 ) , combine autoregressive and continuous diffusion branches ( Liu et al., 2025 ) , or switch from discrete masked pretraining to downstream flow matching ( Ye et al., 2025 ) . Concertina instead generalizes masked block reconstruction directly to continuous latent action vectors, turning the diffusion VLM itself into an eVLM that preserves both its shared backbone and its native pretraining operator (Figure 2 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S2.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8c5b1be82450bcc",
+      "section": "3 Method",
+      "location": "3 Method",
+      "text": "Concertina instantiates an Embodied Vision-Language Model (eVLM) that embodies manipulation and cognition within a single diffusion vision-language model, enabling the pretrained backbone to natively generate continuous action trajectories without altering its model architecture or training paradigm. Its atomic generation unit is one complete continuous action vector at one control timestep, represented as a continuous latent action token: a lightweight position-wise encoder maps it into the VLM hidden space, and a position-wise decoder maps the contextualized hidden state back to physical control coordinates. All cross-time and cross-modal dependencies are modeled by the shared Transformer F θ F_{\\theta} without an external action expert or discrete action tokenizer. This design establishes two direct coupling pathways between cognition and control: in the forward pass , action tokens attend to visual and linguistic representations at every Transformer layer rather than receiving a one-time conditioning summary; in the backward pass , physical-coordinate reconstruction gradients update the shared vision-language parameters end-to-end, consolidating manipulation experience into the backbone’s spatial representations.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8cd8e42da3c1866a",
+      "section": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "location": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "text": "Given visual observations ℐ \\mathcal{I} , a language instruction l l , and proprioceptive state s s , the policy predicts a horizon- H H continuous action trajectory A = ( a 1 , … , a H ) ∈ ℝ H × D A=(a_{1},\\ldots,a_{H})\\in\\mathbb{R}^{H\\times D} , where a i ∈ ℝ D a_{i}\\in\\mathbb{R}^{D} . The VLM encodes visual, language, and state inputs into a multimodal conditioning prefix C = ( c 1 , … , c P ) C=(c_{1},\\ldots,c_{P}) . Concertina initializes F θ F_{\\theta} from BARD-VL ( Chen et al., 2026 ) , reusing its masked blockwise corrupt-and-reconstruct operator across continuous latent action tokens so that cognitive pretraining and motor learning share the same generative procedure.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bffd505412f8194d",
+      "section": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "location": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "text": "A position-wise action encoder E ϕ E_{\\phi} and action decoder D ψ D_{\\psi} bridge physical control coordinates and the d d -dimensional backbone hidden space:",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c190862e82b71d78",
+      "section": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "location": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "text": "z i = E ϕ ​ ( a i ) ∈ ℝ d , a ^ i = D ψ ​ ( h i ) ∈ ℝ D . z_{i}=E_{\\phi}(a_{i})\\in\\mathbb{R}^{d},\\qquad\\widehat{a}_{i}=D_{\\psi}(h_{i})\\in\\mathbb{R}^{D}. (1)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "f1e1f0f114377c7b",
+      "section": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "location": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "text": "Both E ϕ E_{\\phi} and D ψ D_{\\psi} are lightweight multilayer perceptrons applied independently at each timestep i i and trained jointly with F θ F_{\\theta} . Because they act strictly position-wise, they perform coordinate projection without temporal mixing; all trajectory-level dependencies across the H H latent action tokens Z = ( z 1 , … , z H ) Z=(z_{1},\\ldots,z_{H}) are computed inside F θ F_{\\theta} :",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "d29b11fd5b4d9433",
+      "section": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "location": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "text": "[ H C , H A ] = F θ ​ ( [ C , Z ] ) , A ^ = D ψ ​ ( H A ) . [H_{C},H_{A}]=F_{\\theta}([C,Z]),\\qquad\\widehat{A}=D_{\\psi}(H_{A}). (2)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "bb2664e82d6f4475",
+      "section": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "location": "3.1 Preliminaries and Continuous Latent Action Tokens",
+      "text": "Representing the full vector a i a_{i} as a single token preserves the physical coupling among translation, rotation, and gripper coordinates within each control step while keeping the action sequence length to H H tokens; local Jacobian analysis confirms that E ϕ E_{\\phi} maintains a non-collapsed, full-rank D D -dimensional chart inside ℝ d \\mathbb{R}^{d} throughout pretraining (effective rank 18.63 / 20 18.63/20 ; Section 4.5 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS1.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "7f22a7fc17ec71db",
+      "section": "Unified latent space across embodiments.",
+      "location": "Unified latent space across embodiments.",
+      "text": "For multi-embodiment training, heterogeneous control spaces are mapped into a shared maximum coordinate width D D . A binary dimension-validity mask q n , d ∈ { 0 , 1 } q_{n,d}\\in\\{0,1\\} indicates active coordinates for sample n n , and a timestep-validity mask v n , i ∈ { 0 , 1 } v_{n,i}\\in\\{0,1\\} indicates valid trajectory positions. Inactive coordinates are zeroed at the input and excluded from the loss denominator, allowing diverse robot embodiments to share a unified d d -dimensional latent space inside F θ F_{\\theta} while preserving exact physical supervision on each embodiment’s active degrees of freedom.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "73c0f90935d87fe8",
+      "section": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "location": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "text": "We partition the horizon H H into M = ⌈ H / K ⌉ M=\\lceil H/K\\rceil temporally ordered action blocks of size at most K K , with block index b ⁡ ( i ) = ⌊ ( i − 1 ) / K ⌋ b(i)=\\lfloor(i-1)/K\\rfloor and A = ( A ( 0 ) , … , A ( M − 1 ) ) A=(A^{(0)},\\ldots,A^{(M-1)}) . Generation is causal across blocks and bidirectional within each block: all tokens in block b b are reconstructed jointly conditioned on the multimodal prefix C C , completed earlier blocks A ( < b ) A^{(<b)} , and the corrupted state A ~ ( b ) \\widetilde{A}^{(b)} of the current block. Inter-block causality preserves the temporal directionality of execution, while intra-block bidirectionality allows contiguous control steps (e.g., approaching, closing the gripper, and lifting) to coordinate and update in parallel as a coherent motion segment.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "938c76468b291350",
+      "section": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "location": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "text": "During training, Concertina packs the multimodal prefix, a corrupted action copy, and a clean teacher-forced action copy into a single Transformer sequence:",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "96ac271e5649295a",
+      "section": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "location": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "text": "X train = [ C , Z ~ , Z ] , Z ~ = E ϕ ​ ( A ~ ) , Z = E ϕ ​ ( A ) . X_{\\mathrm{train}}=[C,\\widetilde{Z},Z],\\qquad\\widetilde{Z}=E_{\\phi}(\\widetilde{A}),\\quad Z=E_{\\phi}(A). (3)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "844639dd1e307e7b",
+      "section": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "location": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "text": "Both copies share aligned action position identifiers but follow distinct blockwise visibility rules. A corrupted query at timestep i i attends to the prefix, its own corrupted block, and strictly earlier clean blocks:",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "af9e56e5d9844437",
+      "section": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "location": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "text": "𝒱 noisy ​ ( i ) = C ∪ { z ~ j : b ⁡ ( j ) = b ⁡ ( i ) } ∪ { z j : b ⁡ ( j ) < b ⁡ ( i ) } , \\mathcal{V}_{\\mathrm{noisy}}(i)=C\\cup\\{\\widetilde{z}_{j}:b(j)=b(i)\\}\\cup\\{z_{j}:b(j)<b(i)\\}, (4)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "a78a01f802cd363c",
+      "section": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "location": "3.2 Blockwise Topology and Packed Teacher Forcing",
+      "text": "whereas a clean query attends to the prefix and clean blocks up to its own block, 𝒱 clean ​ ( i ) = C ∪ { z j : b ⁡ ( j ) ≤ b ⁡ ( i ) } \\mathcal{V}_{\\mathrm{clean}}(i)=C\\cup\\{z_{j}:b(j)\\leq b(i)\\} . Action predictions are read exclusively from the corrupted branch Z ~ \\widetilde{Z} , while the clean branch Z Z supplies teacher-forced context to later blocks without leaking current-block targets. Prefix tokens use causal attention within C C and do not attend to action branches, so action queries read multimodal features at every layer during the forward pass while action gradients update the shared prefix-processing parameters during backpropagation. This packed layout supervises all M M block-conditional distributions simultaneously in a single backbone forward pass over P + 2 ​ H P+2H positions, with sequence length scaling linearly in H H , providing a compute-efficient and scalable organization for end-to-end pretraining.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "9c4e546cdd18a05d",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "Each training sample draws a stratified corruption level for each block so that every forward pass spans the full corruption spectrum. Specifically, we partition [ 0 , 1 ] [0,1] into M M equal strata, sample u n , j ∼ 𝒰 ⁡ ( 0 , 1 ) u_{n,j}\\sim\\mathcal{U}(0,1) to form t ¯ n , j = ( j + u n , j ) / M \\bar{t}_{n,j}=(j+u_{n,j})/M for j = 0 , … , M − 1 j=0,\\ldots,M-1 , and assign them to blocks via a random permutation π n \\pi_{n} with lower clipping at ϵ \\epsilon :",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c205d6317a7f4e36",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "t n , π n ​ ( j ) = clip ⁡ ( t ¯ n , j , ϵ , 1 ) . t_{n,\\pi_{n}(j)}=\\operatorname{clip}(\\bar{t}_{n,j},\\epsilon,1). (5)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "0bcc8a07b7783e4b",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "Within block b b , each timestep is independently selected for masking according to m n , i ∼ Bernoulli ⁡ ( t n , b ⁡ ( i ) ) m_{n,i}\\sim\\operatorname{Bernoulli}(t_{n,b(i)}) . Selected positions replace a n , i a_{n,i} with an unknown-action sentinel vector (instantiated as the zero vector in ℝ D \\mathbb{R}^{D} ) before encoding through E ϕ E_{\\phi} , while unselected positions retain their clean action vectors to provide intra-block context. 1 1 1 Appendix A details both mask-only corruption and the three-state mixed corruption schedule inherited from BARD.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "f0c47cbad1c11abd",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "Supervision is defined directly in normalized physical action coordinates over masked and valid positions. With physical coordinate weights ω d \\omega_{d} ( 500 : 10 : 1 500:10:1 across translation, 6D rotation, and gripper coordinates) and coordinate loss ρ d \\rho_{d} —instantiated as Smooth- L 1 L_{1} regression on continuous pose coordinates and probability-valued binary cross-entropy on the gripper closure coordinate (Appendix A )—the per-token coordinate reconstruction error is",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "066a5c6cd37dd9e8",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "ℓ n , i = ∑ d = 1 D q n , d ​ ω d ​ ρ d ​ ( a ^ n , i , d , a n , i , d ) max ⁡ ( ∑ d = 1 D q n , d ​ ω d , δ ) , \\ell_{n,i}=\\frac{\\sum_{d=1}^{D}q_{n,d}\\omega_{d}\\,\\rho_{d}(\\widehat{a}_{n,i,d},\\,a_{n,i,d})}{\\max(\\sum_{d=1}^{D}q_{n,d}\\omega_{d},\\delta)}, (6)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "07ded76a3f0f0362",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "and the full blockwise action reconstruction objective is weighted by the inverse masking probability:",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "8d6dbe067d15b36c",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "ℒ act = 1 N ​ ∑ n = 1 N 1 max ⁡ ( ∑ i = 1 H v n , i , 1 ) ​ ∑ i = 1 H v n , i ​ m n , i ​ ℓ n , i max ⁡ ( t n , b ⁡ ( i ) , ϵ ) . \\mathcal{L}_{\\mathrm{act}}=\\frac{1}{N}\\sum_{n=1}^{N}\\frac{1}{\\max(\\sum_{i=1}^{H}v_{n,i},1)}\\sum_{i=1}^{H}v_{n,i}\\,m_{n,i}\\,\\frac{\\ell_{n,i}}{\\max(t_{n,b(i)},\\epsilon)}. (7)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E7",
+      "kind": "table"
+    },
+    {
+      "id": "9dcdc61c716534e7",
+      "section": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "location": "3.3 Block-Stratified Corruption and Coordinate Reconstruction",
+      "text": "Because 𝔼 ⁡ [ m n , i / t n , b ⁡ ( i ) ∣ t ] = 1 \\mathbb{E}[m_{n,i}/t_{n,b(i)}\\mid t]=1 , Equation 7 weights masked positions inversely by their selection rate across corruption levels and propagates gradients end-to-end through D ψ D_{\\psi} , F θ F_{\\theta} , and E ϕ E_{\\phi} .",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS3.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "2ff67603897595cf",
+      "section": "3.4 Blockwise Decoding and Closed-Loop Execution",
+      "location": "3.4 Blockwise Decoding and Closed-Loop Execution",
+      "text": "At inference, Concertina prefills the multimodal prefix C C into a key–value cache once and generates action blocks sequentially for b = 0 , … , M − 1 b=0,\\ldots,M-1 . Within block b b , action slots are initialized to the zero sentinel and updated over a preset proposal schedule using the shared backbone:",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "51260512991f3b95",
+      "section": "3.4 Blockwise Decoding and Closed-Loop Execution",
+      "location": "3.4 Blockwise Decoding and Closed-Loop Execution",
+      "text": "H b ( r ) = F θ ​ ( C , E ϕ ​ ( A final ( < b ) ) , E ϕ ​ ( A ( b , r ) ) ) b , A ^ ( b , r ) = D ψ ​ ( H b ( r ) ) . H_{b}^{(r)}=F_{\\theta}\\!\\left(C,\\,E_{\\phi}(A_{\\mathrm{final}}^{(<b)}),\\,E_{\\phi}(A^{(b,r)})\\right)_{b},\\qquad\\widehat{A}^{(b,r)}=D_{\\psi}(H_{b}^{(r)}). (8)",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.E8",
+      "kind": "table"
+    },
+    {
+      "id": "679e0918ea7c56f8",
+      "section": "3.4 Blockwise Decoding and Closed-Loop Execution",
+      "location": "3.4 Blockwise Decoding and Closed-Loop Execution",
+      "text": "To prioritize high-confidence actions during multi-step commitment, a lightweight token-risk head predicts the log reconstruction error log ⁡ ( ℓ n , i + 10 − 6 ) \\log(\\ell_{n,i}+10^{-6}) from detached hidden states; proposals are ranked by negative predicted log-risk, and optional refinement rounds remask and re-predict low-scoring slots using the same backbone (Figure 7 ). Intermediate proposal rounds read from a read-only view of the prefix cache, and once block b b finishes, its final action vectors A final ( b ) A_{\\mathrm{final}}^{(b)} are re-encoded and appended to the persistent KV cache for subsequent blocks. Every proposal and refinement step is executed by F θ F_{\\theta} without an external action expert. Appendix A details the risk head, cache lifecycle, and inference hyperparameters.",
+      "url": "https://arxiv.org/html/2611.07513v1#S3.SS4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "d4bed3ac75566a17",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "We evaluate Concertina across three questions: (i) how a single shared diffusion VLM performs on standard closed-loop manipulation benchmarks (Section 4.2 ); (ii) how blockwise partition topology, pretraining coordinate weighting, and shared-space objective design govern closed-loop control (Sections 4.3 – 4.4 ); and (iii) where trajectory representation, temporal coupling, and parameter capacity reside across VLA families under our Action Interface Audit (Section 4.5 ). Appendix B provides complete training recipes, inference configurations, and additional evaluations on decoding budgets, replanning frequency, and representation stress tests.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5b6646cba7accf8f",
+      "section": "4.1 Evaluation protocol and scope",
+      "location": "4.1 Evaluation protocol and scope",
+      "text": "Our main benchmark evaluation covers regular LIBERO, LIBERO-Plus, and CALVIN ABC–D ( Liu et al., 2023 ; Fei et al., 2025 ; Mees et al., 2021 ) . Regular LIBERO evaluates 50 episodes per task across four suites (LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-10; 2,000 episodes total); LIBERO-Plus evaluates all 10,030 perturbed tasks across the four suites; CALVIN ABC–D evaluates all 1,000 official five-task instruction chains in the unseen environment D after training on environments A, B, and C. We report success rate (%) on LIBERO and LIBERO-Plus, and average completed chain length (AvgLen) alongside task- k k chain success rates (SR@ k k ) on CALVIN.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3f3273f5e87e9bce",
+      "section": "4.1 Evaluation protocol and scope",
+      "location": "4.1 Evaluation protocol and scope",
+      "text": "Multi-embodiment pretraining (60,000 updates followed by a 30,000-update continuation on the 80.2M-frame mixture) and CALVIN finetuning (5,000 updates) use eight GPUs with global batch size 1,536 (192 per GPU), while regular-LIBERO finetuning uses eight GPUs with global batch size 448 (56 per GPU). Appendix B.1 documents the dataset mixture, training stages, and inference hyperparameters.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8b7c6240d8268df3",
+      "section": "4.2 Main benchmark results",
+      "location": "4.2 Main benchmark results",
+      "text": "Table 2 compares Concertina against representative discrete, action-expert, and diffusion-based VLA policies across regular LIBERO, LIBERO-Plus, and CALVIN ABC–D. On regular LIBERO, Concertina achieves 99.0 % 99.0\\% on Spatial, 100.0 % 100.0\\% on Object, 98.8 % 98.8\\% on Goal, and 94.8 % 94.8\\% on LIBERO-10, reaching an overall average of 98.15 % \\mathbf{98.15\\%} across 2,000 episodes—the highest average among all compared methods, outperforming continuous action-expert policies such as π 0 \\pi_{0} ( 94.2 % 94.2\\% ), π 0.5 \\pi_{0.5} ( 97.5 % 97.5\\% ), and X-VLA ( 98.1 % 98.1\\% ), as well as discrete and hybrid diffusion policies including Discrete Diffusion VLA ( 96.4 % 96.4\\% ) and Dream-VLA ( 97.2 % 97.2\\% ). On the 10,030-task LIBERO-Plus benchmark, Concertina attains the highest score on every suite— 87.7 % 87.7\\% on Spatial (2,106/2,402), 88.0 % 88.0\\% on Object (2,216/2,518), 83.0 % 83.0\\% on Goal (2,150/2,591), and 85.1 % 85.1\\% on LIBERO-10 (2,143/2,519)—yielding 85.9 % \\mathbf{85.9\\%} (8,615/10,030) overall and surpassing EFFVLA ( 79.8 % 79.8\\% ) by + 6.1 +6.1 percentage points and OpenVLA-OFT ( 69.6 % 69.6\\% ) by + 16.3 +16.3 points. On the zero-shot environment-transfer benchmark CALVIN ABC–D, Concertina reaches an average completed chain length of 4.142 4.142 across 1,000 chains, achieving 98.6 % 98.6\\% SR@1 and 93.8 % 93.8\\% SR@2 (second-best overall and higher than X-VLA’s 97.1 % 97.1\\% SR@1 and 92.6 % 92.6\\% SR@2) while outperforming the shared-backbone diffusion policy LLaDA-VLA ( 4.01 4.01 AvgLen, 95.6 % 95.6\\% SR@1) across all chain lengths.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aad760de963e67eb",
+      "section": "4.2 Main benchmark results",
+      "location": "4.2 Main benchmark results",
+      "text": "Regular LIBERO (%) LIBERO-Plus (%) CALVIN ABC–D Method / checkpoint Spatial Object Goal LIBERO-10 Avg. Spatial Object Goal LIBERO-10 Overall AvgLen SR@1 SR@2 SR@3 SR@4 SR@5 Discrete & Compressed-Token VLAs Octo ( Octo Model Team et al., 2024 ) 78.9 85.7 84.6 51.1 75.1 – – – – – – – – – – – OpenVLA ( Kim et al., 2024 ) 84.7 88.4 79.2 53.7 76.5 19.4 14.0 15.1 14.3 15.6 – – – – – – π 0 \\pi_{0} -Fast ( Pertsch et al., 2025 ) 96.4 96.8 88.6 60.2 85.5 74.4 72.7 57.5 43.4 61.6 – – – – – – NORA ( Hung et al., 2025 ) – – – – – 47.6 34.4 38.8 36.3 39.0 – – – – – – WorldVLA (512 2 ) ( Cen et al., 2025 ) 87.6 96.2 83.4 60.0 81.8 32.5 28.6 31.8 8.2 25.0 – – – – – – UniVLA ( Wang et al., 2025 ) 95.4 98.8 93.6 94.0 95.5 55.5 36.7 40.7 39.9 42.9 4.41 98.9 94.8 89.0 82.8 75.1 External Action-Expert & Continuous-Head VLAs π 0 \\pi_{0} ( Black et al., 2024 ) 96.8 98.8 95.8 85.2 94.2 60.7 61.4 44.9 48.4 53.6 – – – – – – π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) 97.2 99.0 97.8 96.0 97.5 – – – – – – – – – – – SmolVLA 2.25B ( Shukor et al., 2025 ) 93.0 94.0 91.0 77.0 88.75 – – – – – – – – – – – X-VLA ( Zheng et al., 2025 ) 98.2 98.6 97.8 97.6 98.1 – – – – – 4.43 97.1 92.6 88.5 84.4 78.8 OpenVLA-OFT ( Kim et al., 2025 ) 97.6 98.4 97.9 94.5 97.1 84.0 66.5 63.0 66.4 69.6 – – – – – – OpenVLA-OFT w ( Kim et al., 2025 ) – – – – – 62.5 56.0 53.3 52.2 55.8 – – – – – – OpenVLA-OFT m ( Kim et al., 2025 ) – – – – – 75.4 77.1 56.2 63.9 67.9 – – – – – – RIPT-VLA ( Tan et al., 2025 ) 98.6 98.6 99.0 93.8 97.5 85.8 64.3 58.0 67.5 68.4 – – – – – – IMLE-VLA ( Hosseinkhani et al., 2026 ) 98.0 99.8 98.2 96.0 98.0 – – – – – – – – – – – EFFVLA ( Sun et al., 2026 ) – – – – – 84.4 84.5 75.5 74.7 79.8 – – – – – – Shared-Backbone VLAs & Embodied VLM (eVLM) LLaDA-VLA ( Wen et al., 2025 ) – – – – – – – – – – 4.01 95.6 87.8 79.5 73.9 64.5 Discrete Diffusion VLA ( Liang et al., 2025 ) 97.2 99.4 96.8 92.2 96.4 – – – – – – – – – – – Dream-VLA ( Ye et al., 2025 ) 97.6 98.8 97.2 95.0 97.2 – – – – – – – – – – – Concertina (eVLM, ours) 99.0 100.0 98.8 94.8 98.15 87.7 88.0 83.0 85.1 85.9 4.142 98.6 93.8 83.2 73.7 64.9",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T2.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "3279c8a6abd10476",
+      "section": "4.2 Main benchmark results",
+      "location": "4.2 Main benchmark results",
+      "text": "Table 2: Main results across regular LIBERO, LIBERO-Plus, and CALVIN ABC–D, grouped by architectural paradigm. Regular-LIBERO Avg. is the arithmetic mean of its four suite scores. Bold and underline mark the best and second-best result per column. The π 0.5 \\pi_{0.5} and IMLE-VLA rows follow the comparison reported by Hosseinkhani et al. ( Hosseinkhani et al., 2026 ) . EFFVLA reports suite-level LIBERO-Plus averages, while Concertina and the remaining LIBERO-Plus rows report the official 10,030-task benchmark with Long labeled LIBERO-10. CALVIN reports average completed chain length and sequence success rates (SR@ 1 1 – 5 5 ) on ABC → \\rightarrow D.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9f2bce2eecc818fc",
+      "section": "4.3 Blockwise Horizon Partition, Pretraining Weighting, and Execution Horizon",
+      "location": "4.3 Blockwise Horizon Partition, Pretraining Weighting, and Execution Horizon",
+      "text": "Figure 3: Blockwise horizon partition, physical action coherence, and cumulative recipe progression. (a) Regular-LIBERO suite-level and overall success over 200 episodes (40 tasks × \\times 5 episodes, Wilson 95% CIs) at fixed 2,400-step finetuning budgets, showing consistent gains across all four suites ( 38.5 % → 73.0 % 38.5\\%\\rightarrow 73.0\\% overall). (b) Directional cosine similarity of physical action increments across temporal lags Δ ​ t = 1 ​ … ​ 30 \\Delta t=1\\dots 30 over 999,830 AgiBot frames (30 Hz, 95% task-bootstrap CI); enlarging the block size from K = 5 K=5 to K = 10 K=10 more than doubles intra-block coherent action mass ( 9.8 % → 21.3 % 9.8\\%\\rightarrow 21.3\\% , 2.17 × 2.17\\times ). (c) Official 1,000-sequence CALVIN ABC–D chain survival curves (SR@ 1 1 – 5 5 ) across block partitions ( K = 5 K=5 vs. K = 10 K=10 ) and pretraining corruption/weighting schedules ( 1.333 → 1.701 → 2.087 1.333\\rightarrow 1.701\\rightarrow 2.087 AvgLen). (d) Cumulative CALVIN ABC–D progression from uniform coordinate weights ( 0.41 0.41 ) to physical weighting, state masking, 60k multi-block pretraining, aligned single-block execution ( 4.135 4.135 ), and two-block continued pretraining ( 4.142 4.142 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4c36f718538781a3",
+      "section": "Block partition and physical action coherence.",
+      "location": "Block partition and physical action coherence.",
+      "text": "To examine how intra-block bidirectional context and inter-block causality affect policy learning, we first conduct a controlled ablation at a fixed horizon of H = 50 H=50 , varying the partition from ten blocks of five ( M = 10 , K = 5 M=10,K=5 ) to five blocks of ten ( M = 5 , K = 10 M=5,K=10 ) under identical pretraining and downstream finetuning budgets (2,400 finetuning updates on LIBERO and 2,600 on CALVIN), and evaluating on 200 regular-LIBERO episodes (40 tasks × \\times 5 episodes) and all 1,000 official CALVIN ABC–D sequences. Enlarging each block from K = 5 K=5 to K = 10 K=10 substantially improves closed-loop control across every suite and chain depth (Figure 3 a,c). On regular LIBERO, the five-blocks-of-ten ( M = 5 , K = 10 M=5,K=10 ) layout reaches 73.0 % 73.0\\% (146/200) compared with 38.5 % 38.5\\% (77/200) for ten blocks of five ( M = 10 , K = 5 M=10,K=5 )—raising Spatial from 50 % 50\\% to 82 % 82\\% , Object from 62 % 62\\% to 100 % 100\\% , Goal from 24 % 24\\% to 54 % 54\\% , and LIBERO-10 from 18 % 18\\% to 56 % 56\\% ( + 34.5 +34.5 percentage points overall, with 32 of 40 tasks improving, seven tying, and only one declining). On CALVIN ABC–D, average completed chain length rises 35 × 35\\times from 0.055 0.055 to 1.945 1.945 , SR@1 jumps from 5.1 % 5.1\\% to 78.2 % 78.2\\% , and SR@5 rises from 0 % 0\\% to 11.7 % 11.7\\% . Replacing uniform visible substitution with Gaussian corruption at M = 10 , K = 5 M=10,K=5 leaves LIBERO success unchanged at 38.5 % 38.5\\% (CALVIN AvgLen 0.147 0.147 ), while extending the horizon to H = 100 H=100 with twenty blocks of five ( M = 20 , K = 5 M=20,K=5 ) reduces valid unpadded trajectory starts ( 12.5 % 12.5\\% on LIBERO, 0.115 0.115 on CALVIN). Moreover, holding the M = 5 , K = 10 M=5,K=10 partition fixed on CALVIN (Figure 3 c), adding inverse- t t loss weighting (Equation 7 ) lifts three-state mixed corruption from 1.333 1.333 to 1.701 1.701 AvgLen ( + 13.6 ​ pp +13.6\\text{ pp} SR@1), and switching to mask-only inverse- t t reconstruction further raises performance to 2.087 \\mathbf{2.087} AvgLen ( 81.9 % 81.9\\% SR@1, 12.5 % 12.5\\% SR@5).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "568ea0112baebefe",
+      "section": "Block partition and physical action coherence.",
+      "location": "Block partition and physical action coherence.",
+      "text": "To understand why block width K = 10 K=10 is critical, we analyze the temporal autocorrelation of physical action increments (translation deltas, SO ⁡ ( 3 ) \\mathrm{SO}(3) geodesic rotation deltas, and gripper changes) across 999,830 frames from 680 pretraining episodes spanning all 34 AgiBot tasks at 30 Hz (Figure 3 b). Directional cosine similarity remains 0.775 \\mathbf{0.775} at lag Δ ​ t = 5 \\Delta t=5 (95% task-bootstrap CI [ 0.732 , 0.816 ] [0.732,0.816] ), 0.663 \\mathbf{0.663} at lag Δ ​ t = 10 \\Delta t=10 ( [ 0.623 , 0.703 ] [0.623,0.703] ), and first drops below 0.5 0.5 at lag Δ ​ t = 19 \\Delta t=19 (and below 1 / e 1/e at lag Δ ​ t = 27 \\Delta t=27 ). Because contiguous manipulation primitives (such as reaching, aligning, and grasping) remain strongly directional over 15 15 – 20 20 frames, a narrow K = 5 K=5 partition under random block phasing retains only 9.8 % 9.8\\% of positive lag- 1 ​ … ​ 30 1\\dots 30 coherence mass within the same bidirectional block, splitting ongoing motion phases across causal block boundaries. Doubling the block size to K = 10 K=10 captures 21.3 % 21.3\\% of coherent trajectory mass within each block ( 2.17 × 2.17\\times ), enabling contiguous control steps to be reconstructed jointly as a coherent motion unit.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS3.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "72b7a701250bd143",
+      "section": "Block partition and physical action coherence.",
+      "location": "Block partition and physical action coherence.",
+      "text": "Pretraining configuration Coord. weights ω d \\omega_{d} State mask Early-layer freeze Visual RRC AvgLen SR@1 SR@2 SR@3 SR@4 SR@5 Full pretraining recipe 500 : 10 : 1 500:10:1 ✓ \\checkmark Layers 0–1 ✓ \\checkmark 1.837 73.1 50.4 30.5 18.9 10.8 Full trainable backbone, w/o state mask 500 : 10 : 1 500:10:1 × \\times None (all 36L) ✓ \\checkmark 1.589 69.9 42.7 23.9 14.4 8.0 w/o proprioceptive state mask 500 : 10 : 1 500:10:1 × \\times Layers 0–1 ✓ \\checkmark 1.093 61.9 30.1 11.2 4.4 1.7 w/o state mask, w/o visual RRC 500 : 10 : 1 500:10:1 × \\times Layers 0–1 × \\times 1.027 56.4 26.7 12.3 4.9 2.4 Full trainable backbone, w/o state mask & RRC 500 : 10 : 1 500:10:1 × \\times None (all 36L) × \\times 0.607 40.6 15.2 3.6 1.0 0.3 Uniform coordinate weights, w/o state mask 1 : 1 : 1 1:1:1 × \\times Layers 0–1 ✓ \\checkmark 0.535 36.5 13.0 3.0 0.8 0.2 Uniform coordinate weights, w/ state mask 1 : 1 : 1 1:1:1 ✓ \\checkmark Layers 0–1 ✓ \\checkmark 0.406 31.0 7.5 1.5 0.6 0.0",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T3.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "fe095d17d38d0479",
+      "section": "Block partition and physical action coherence.",
+      "location": "Block partition and physical action coherence.",
+      "text": "Table 3: Controlled pretraining ablation evaluating physical coordinate weighting ( ω d \\omega_{d} ), proprioceptive state masking, early-layer freezing, and random-resized crop (RRC). Every configuration runs 4,800 pretraining updates on AgiBot followed by 2,600 CALVIN finetuning updates (global batch 1,536) and is evaluated on all 1,000 official CALVIN ABC–D chains.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0f3ef9fbd417a368",
+      "section": "Pretraining coordinate weighting and state masking.",
+      "location": "Pretraining coordinate weighting and state masking.",
+      "text": "Because translation deltas in physical meters have orders-of-magnitude smaller numerical variance than normalized rotation and gripper coordinates, unscaled regression under-weights translational accuracy inside the shared backbone. Table 3 evaluates a controlled 7-configuration pretraining study (4,800 AgiBot pretraining steps → \\rightarrow 2,600 CALVIN finetuning steps, 1,000 evaluation chains per configuration) isolating our physical coordinate weighting ω d = ( 500 , 10 , 1 ) \\omega_{d}=(500,10,1) in Equation 6 , proprioceptive state masking, and visual random-resized crop (RRC). Three matched findings stand out: (i) replacing uniform 1 : 1 : 1 1:1:1 coordinate weights with 500 : 10 : 1 500:10:1 raises CALVIN AvgLen by + 1.431 \\mathbf{+1.431} when state masking is active ( 1.837 1.837 vs. 0.406 0.406 , SR@1 73.1 % 73.1\\% vs. 31.0 % 31.0\\% ) and by + 0.558 \\mathbf{+0.558} without state masking ( 1.093 1.093 vs. 0.535 0.535 ); (ii) masking proprioceptive state during pretraining encourages the backbone to ground trajectories in visual-language context rather than relying solely on state extrapolation, lifting AvgLen by + 0.744 \\mathbf{+0.744} under 500 : 10 : 1 500:10:1 weighting ( 1.837 1.837 vs. 1.093 1.093 , + 11.2 ​ pp +11.2\\text{ pp} SR@1 and + 9.1 ​ pp +9.1\\text{ pp} SR@5); and (iii) enabling visual RRC enhances spatial generalization when all 36 backbone layers are trained end-to-end, improving AvgLen by + 0.982 \\mathbf{+0.982} ( 1.589 1.589 vs. 0.607 0.607 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "43d8b0b953f021ad",
+      "section": "Pretraining coordinate weighting and state masking.",
+      "location": "Pretraining coordinate weighting and state masking.",
+      "text": "Training & execution configuration Pretraining stage Downstream ( H , M , K ) (H,M,K) Exec. H exec H_{\\mathrm{exec}} AvgLen SR@1 SR@2 SR@3 SR@4 SR@5 Multi-block finetuning ( H = 50 H=50 ) 60k ( H = 50 , M = 5 , K = 10 H=50,M=5,K=10 ) ( 50 , 5 , 10 ) (50,5,10) 10 10 3.535 92.6 82.5 70.2 59.3 48.9 Two-block finetuning ( H = 20 H=20 ), 2-block exec. 60k ( H = 50 , M = 5 , K = 10 H=50,M=5,K=10 ) ( 20 , 2 , 10 ) (20,2,10) 20 20 3.768 95.3 85.8 74.8 64.9 56.0 Two-block finetuning ( H = 20 H=20 ), 1-block exec. 60k ( H = 50 , M = 5 , K = 10 H=50,M=5,K=10 ) ( 20 , 2 , 10 ) (20,2,10) 10 10 3.924 96.4 89.2 79.9 69.2 57.7 Aligned 1-block finetuning ( H = 10 H=10 ) 60k ( H = 50 , M = 5 , K = 10 H=50,M=5,K=10 ) ( 10 , 1 , 10 ) (10,1,10) 10 10 4.135 98.7 93.9 84.6 72.1 64.2 Single-block +40k cont. (trainable interfaces) 60k + 40k ( H = 10 , M = 1 , K = 10 H=10,M=1,K=10 ) ( 10 , 1 , 10 ) (10,1,10) 10 10 3.786 97.6 89.0 75.5 64.3 52.2 Single-block +40k cont. (frozen interfaces) 60k + 40k ( H = 10 , M = 1 , K = 10 H=10,M=1,K=10 ) ( 10 , 1 , 10 ) (10,1,10) 10 10 3.934 97.9 90.3 79.7 67.2 58.3 Multi-block +30k cont. (Concertina) 60k + 30k ( H = 20 , M = 2 , K = 10 H=20,M=2,K=10 ) ( 10 , 1 , 10 ) (10,1,10) 10 10 4.142 98.6 93.8 83.2 73.7 64.9",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T4.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "d87a5cd931aac096",
+      "section": "Pretraining coordinate weighting and state masking.",
+      "location": "Pretraining coordinate weighting and state masking.",
+      "text": "Table 4: Synergy between multi-block pretraining and receding-horizon closed-loop execution on CALVIN ABC–D (1,000 chains per row, 5,000 finetuning updates). Aligning the downstream finetuning horizon to the K = 10 K=10 receding-horizon execution block raises AvgLen from 3.535 3.535 to 4.135 4.135 , while retaining multi-block causal-bidirectional context during continued pretraining ( H = 20 , M = 2 , K = 10 H=20,M=2,K=10 ) outperforms single-block continued pretraining ( H = 10 , M = 1 , K = 10 H=10,M=1,K=10 ) by + 0.208 +0.208 AvgLen (95% paired bootstrap CI [ + 0.119 , + 0.298 ] [+0.119,+0.298] ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3b3fcb734545bcba",
+      "section": "Multi-block pretraining and receding-horizon closed-loop execution.",
+      "location": "Multi-block pretraining and receding-horizon closed-loop execution.",
+      "text": "Multi-block packed training ( M > 1 , K = 10 M>1,K=10 ) and receding-horizon closed-loop control play complementary roles across pretraining and deployment. During pretraining, supervising multiple consecutive blocks in a single packed forward pass requires the shared VLM backbone to model cross-block phase transitions and longer-horizon task progression. During closed-loop control, the robot executes one coherent K = 10 K=10 action block ( H exec = 10 H_{\\mathrm{exec}}=10 , corresponding to 0.33 ​ s 0.33\\text{\\,s} at 30 ​ Hz 30\\text{\\,Hz} ) before incorporating fresh visual observations. As shown in Table 4 , aligning the downstream finetuning horizon directly with this executed K = 10 K=10 block concentrates gradient updates on the active control segment, raising CALVIN AvgLen from 3.535 3.535 ( H = 50 H=50 ) to 3.768 3.768 ( H = 20 , H exec = 20 H=20,H_{\\mathrm{exec}}=20 ), 3.924 3.924 ( H = 20 , H exec = 10 H=20,H_{\\mathrm{exec}}=10 ), and 4.135 \\mathbf{4.135} at H = 10 , H exec = 10 H=10,H_{\\mathrm{exec}}=10 ( 98.7 % 98.7\\% SR@1, 64.2 % 64.2\\% SR@5). At the same time, multi-block context remains vital during pretraining: continuing pretraining for 30,000 updates with two-block H = 20 ​ ( M = 2 , K = 10 ) H=20\\ (M=2,K=10) reaches 4.142 \\mathbf{4.142} AvgLen ( 64.9 % 64.9\\% SR@5), outperforming a 40,000-update single-block H = 10 ​ ( M = 1 , K = 10 ) H=10\\ (M=1,K=10) continuation ( 3.786 3.786 and 3.934 3.934 ) by + 0.208 \\mathbf{+0.208} AvgLen (95% paired bootstrap CI [ + 0.119 , + 0.298 ] [+0.119,+0.298] , + 6.6 ​ pp +6.6\\text{ pp} SR@5). Multi-block pretraining thus endows the shared backbone with multi-phase dynamical representations that directly strengthen single-block closed-loop execution.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS3.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "430f9671e718498c",
+      "section": "4.4 Co-Design of Action Representation and Objective in the Shared Hidden Space",
+      "location": "4.4 Co-Design of Action Representation and Objective in the Shared Hidden Space",
+      "text": "Figure 4: Co-design of action representation and supervision objective in the shared hidden space. (a) Shared-hidden gradient cosine between the main relative-action objective and auxiliary absolute-action objective across eight fixed windows is − 0.891 -0.891 ( 99 % 99\\% of action slots < 0 <0 ), reducing combined-vs-main alignment to + 0.474 +0.474 (auxiliary/main norm ratio 0.88 × 0.88\\times ). (b) Layerwise parameter update divergence across all 26 active Transformer layers (L2–L27): while relative update norm Δ ​ W / W \\Delta W/W rises from 4.6 % 4.6\\% to 9.3 % 9.3\\% with identical overall magnitude ( 1.003 × 1.003\\times ), the parameter update direction cosine plunges from 0.604 0.604 at Layer 2 to 0.138 0.138 at Layer 22 (pooled cosine 0.225 0.225 ). (c) Resulting readout degradation ( 5.12 × 5.12\\times teacher action loss, 2.47 × 2.47\\times position error, 1.60 × 1.60\\times normalized MAE) and 92.0 % 92.0\\% closed-loop CALVIN collapse ( 2.970 → 0.237 2.970\\rightarrow 0.237 ). (d) Complete 2 × 2 × 2 2\\times 2\\times 2 factorial co-design across 8,000 CALVIN chains on 4.46B BARD-VL-B4, showing consistent gains from probability-valued gripper BCE ( + 0.427 +0.427 AvgLen) and trainable action interfaces ( + 0.311 +0.311 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "987e319ff47b5899",
+      "section": "Counterfactual dual-objective intervention.",
+      "location": "Counterfactual dual-objective intervention.",
+      "text": "Enabling a VLM to natively output continuous actions without degrading its pretrained representations requires care: when manipulation and cognition share a single hidden space, that space is not a passive feature buffer onto which incompatible coordinate readouts can be attached in parallel. We test this principle via a matched counterfactual intervention on the 8.35B shared-backbone checkpoint ( H = 25 H=25 ) that holds every model and optimization setting identical except for the supervision target: the single-objective baseline supervises relative actions alone, whereas the dual-objective variant attaches a frozen auxiliary decoder supervising absolute actions at loss weight 0.5 0.5 , with all 21/21 main action-interface tensors initialized bitwise identically from pretraining.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f7757f4bff79067a",
+      "section": "Counterfactual dual-objective intervention.",
+      "location": "Counterfactual dual-objective intervention.",
+      "text": "Attaching the second coordinate target induces severe gradient conflict directly on the shared backbone hidden states (Figure 4 a–c). Across eight fixed CALVIN windows, the pooled cosine similarity between the relative main gradient and absolute auxiliary gradient on the shared hidden state is − 0.891 -0.891 , with 99 % 99\\% of individual action-token gradients pointing in opposing directions. Even at weight 0.5 0.5 , the auxiliary gradient norm is 0.881 × 0.881\\times the main gradient norm, reducing the cosine alignment between the combined gradient and the main objective to 0.474 0.474 . Inspecting the resulting parameter updates across all 26 trainable Transformer layers (Figure 4 b) reveals that while both runs make updates of virtually identical magnitude (relative L 2 L_{2} update norm rising from 4.6 % 4.6\\% in shallow layers to 9.3 % 9.3\\% in layers 17–22; overall norm ratio 1.003 × 1.003\\times ), the parameter update direction cosine drops from 0.604 0.604 at Layer 2 down to 0.138 \\mathbf{0.138} at Layer 22 (pooled cosine 0.225 0.225 )—precisely the middle and late layers where trajectory coupling resides. Consequently, teacher-forced main loss increases 5.12 × 5.12\\times , one-pass position error increases 2.47 × 2.47\\times , normalized MAE increases 1.60 × 1.60\\times , and closed-loop CALVIN chain length drops by 92.0 % 92.0\\% from 2.970 2.970 to 0.237 0.237 across 1,000 sequences (Figure 4 c). In a unified model, the action coordinate representation and its supervision objective jointly define the optimization geometry of the shared VLM backbone and must be co-designed as a single coherent interface.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS4.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "34cd78fa0538bd29",
+      "section": "Factorial ablation of coordinate objective, interface co-adaptation, and end-to-end backbone training.",
+      "location": "Factorial ablation of coordinate objective, interface co-adaptation, and end-to-end backbone training.",
+      "text": "To quantify how coordinate loss design and parameter co-adaptation interact on the 4.46B BARD-VL-B4 architecture, we evaluate a complete 2 × 2 × 2 2\\times 2\\times 2 factorial design (5,000 updates per arm, 8,000 official CALVIN ABC–D evaluation chains in total; Figure 4 d and Table 5 ). Three consistent conclusions emerge across all matched pairs: (i) supervising the gripper closure coordinate with probability-valued binary cross-entropy (Appendix A ) rather than Smooth- L 1 L_{1} yields a mean gain of + 0.427 \\mathbf{+0.427} AvgLen ( 3.408 3.408 vs. 2.981 2.981 ) and + 11.2 ​ pp \\mathbf{+11.2\\text{ pp}} SR@5 ( 45.95 % 45.95\\% vs. 34.73 % 34.73\\% ), improving all four matched pairs ( + 0.715 +0.715 , + 0.141 +0.141 , + 0.270 +0.270 , + 0.581 +0.581 ) by calibrating grasp closure probabilities across multi-stage chains; (ii) co-adapting the position-wise action interfaces ( E ϕ , D ψ ) (E_{\\phi},D_{\\psi}) with the backbone adds + 0.311 \\mathbf{+0.311} mean AvgLen ( 3.350 3.350 vs. 3.039 3.039 ) over frozen interfaces; and (iii) when the action interfaces and gripper objective are properly co-designed, training all 36 shared Transformer layers end-to-end ( 3.525 3.525 AvgLen, 92.7 % 92.7\\% SR@1) and freezing only the first two stem layers ( 3.535 3.535 AvgLen, 92.6 % 92.6\\% SR@1) both preserve backbone stability and achieve strong multi-step performance without requiring Knowledge Insulation or gradient blocking.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3a0911bb28a0a97f",
+      "section": "Factorial ablation of coordinate objective, interface co-adaptation, and end-to-end backbone training.",
+      "location": "Factorial ablation of coordinate objective, interface co-adaptation, and end-to-end backbone training.",
+      "text": "Gripper coordinate objective Backbone training Action interfaces ( E ϕ , D ψ E_{\\phi},D_{\\psi} ) AvgLen SR@1 SR@2 SR@3 SR@4 SR@5 Probability-valued Gripper BCE Freeze layers 0–1 (34L trainable) Trainable 3.535 92.6 82.5 70.2 59.3 48.9 Probability-valued Gripper BCE Full trainable backbone (all 36L) Trainable 3.525 92.7 82.9 71.1 58.3 47.5 Probability-valued Gripper BCE Freeze layers 0–1 (34L trainable) Frozen 3.441 91.1 80.8 68.7 57.0 46.5 Smooth- L 1 L_{1} on all coordinates Freeze layers 0–1 (34L trainable) Trainable 3.394 91.2 81.6 67.4 55.1 44.1 Probability-valued Gripper BCE Full trainable backbone (all 36L) Frozen 3.129 87.0 74.5 60.5 50.0 40.9 Smooth- L 1 L_{1} on all coordinates Full trainable backbone (all 36L) Trainable 2.944 87.7 71.6 57.3 43.8 34.0 Smooth- L 1 L_{1} on all coordinates Full trainable backbone (all 36L) Frozen 2.859 85.9 71.1 54.7 42.8 31.4 Smooth- L 1 L_{1} on all coordinates Freeze layers 0–1 (34L trainable) Frozen 2.726 84.9 68.3 51.5 38.5 29.4 Factorial main effect: Gripper Closure BCE vs. Smooth- L 1 L_{1} (mean over 4 matched pairs) + + 0.427 + + 4.2 + + 6.5 + + 9.9 + + 11.1 + + 11.2 Factorial main effect: Trainable vs. Frozen interfaces (mean over 4 matched pairs) + + 0.311 + + 3.8 + + 6.0 + + 7.7 + + 7.1 + + 6.5 Factorial main effect: Freeze VLM layers 0–1 vs. Full trainable BB (mean over 4 matched pairs) + + 0.160 + + 1.6 + + 2.5 + + 2.6 + + 3.8 + + 4.1",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T5.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "195d0d53db3dfe02",
+      "section": "Factorial ablation of coordinate objective, interface co-adaptation, and end-to-end backbone training.",
+      "location": "Factorial ablation of coordinate objective, interface co-adaptation, and end-to-end backbone training.",
+      "text": "Table 5: Full 2 × 2 × 2 2\\times 2\\times 2 factorial ablation on 4.46B BARD-VL-B4 (initialized from the 60k pretraining checkpoint at H = 50 , M = 5 , K = 10 H=50,M=5,K=10 ; 5,000 CALVIN updates at batch size 1,536; evaluated on all 1,000 official CALVIN ABC–D chains per configuration, 8,000 chains total).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7cea02b28726fda2",
+      "section": "4.5 Action Interface Audit: Measuring Manipulation–Cognition Coupling",
+      "location": "4.5 Action Interface Audit: Measuring Manipulation–Cognition Coupling",
+      "text": "To evaluate how conventional VLA paradigms and our eVLM (Concertina) couple manipulation with cognition across representation, computation, and parameters, we conduct the Action Interface Audit using three checkpoint-level metrics summarized in Table 6 and Figure 5 (full protocols and sensitivity analyses in Appendices B.4 – B.5 ):",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "54bdf8faca9dfadf",
+      "section": "4.5 Action Interface Audit: Measuring Manipulation–Cognition Coupling",
+      "location": "4.5 Action Interface Audit: Measuring Manipulation–Cognition Coupling",
+      "text": "Checkpoint Action representation Trajectory generator H H Valid D D Interface NLR Full NLR ASCR Trajectory coupling locus π 0 \\pi_{0} base ( Black et al., 2024 ) 32D continuous External flow expert 50 32 0 8.141% 16.51% External action expert π 0.5 \\pi_{0.5} base ( Physical Intelligence et al., 2025 ) 32D continuous External flow expert 50 32 0 7.141% 19.17% External action expert SmolVLA base ( Shukor et al., 2025 ) 32D continuous External flow expert 50 32 – – 22.19% External action expert X-VLA base ( Zheng et al., 2025 ) 20D continuous External 24L Transformer 50 20 – – 35.10% External 24L Transformer Concertina (eVLM) pretraining 20D canonical latent Shared VLM backbone (36L) 50 20 0 4.058% 0.21% Shared VLM backbone Concertina (eVLM) CALVIN 10D absolute latent Shared VLM backbone (36L) 50 10 0 4.103% 0.21% Shared VLM backbone Concertina (eVLM) LIBERO 10D relative latent Shared VLM backbone (36L) 50 10 0 1.217% 0.21% Shared VLM backbone",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T6.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "bdcdd170e80ab84a",
+      "section": "4.5 Action Interface Audit: Measuring Manipulation–Cognition Coupling",
+      "location": "4.5 Action Interface Audit: Measuring Manipulation–Cognition Coupling",
+      "text": "Table 6: Action Interface Audit: Trajectory Coupling Attribution (TCA) and Action-Specific Capacity Ratio (ASCR) across external-expert VLAs and our eVLM (Concertina). All three Concertina rows evaluate 4.46B BARD-VL-B4 checkpoints at H = 50 H=50 under deterministic float32 math-only SDPA ( ϵ = 0.02 \\epsilon=0.02 ). Under packed blockwise BD3 attention ( M = 5 , K = 10 M=5,K=10 ), the three Concertina checkpoints likewise yield zero interface NLR and 2.595 % 2.595\\% , 3.163 % 3.163\\% , and 1.078 % 1.078\\% full-path NLR, respectively.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9a6507ce565e80a9",
+      "section": "(i) Error-Geometry Consistency (EGC) and Latent Manifold Rank: Representational Coupling.",
+      "location": "(i) Error-Geometry Consistency (EGC) and Latent Manifold Rank: Representational Coupling.",
+      "text": "Fixing a unit training-event error (one token substitution for discrete tokenizers; a unit coordinate error for continuous heads), we measure the resulting physical action error distribution on 512 contiguous CALVIN windows ( H = 30 , D = 7 H=30,D=7 ) and define EGC = p 95 / p 05 \\mathrm{EGC}=p_{95}/p_{05} . While continuous coordinate supervision guarantees EGC = 1 \\mathrm{EGC}=1 by construction, 256-bin uniform quantization ( Kim et al., 2024 ) yields p 05 = 0.0549 p_{05}=0.0549 and p 95 = 1.3804 p_{95}=1.3804 , an error-geometry span of EGC = 25.14 × \\mathrm{EGC}=25.14\\times ( 25.57 × 25.57\\times on an expanded 8,192-window sample) because cross-entropy penalizes adjacent and distant bin errors identically. For compressed frequency-domain tokenizers, single-token substitutions break sequence decodability in 82.23 % 82.23\\% of windows for FAST+ ( Pertsch et al., 2025 ) and 77.93 % 77.93\\% for repaired MolmoAct2-FAST, and shape-valid edits perturb a median of 30 / 30 30/30 timesteps across the entire window (Figure 5 a). Conversely, auditing the local Jacobian ∂ E ϕ ​ ( a ) / ∂ a ∈ ℝ 2560 × 20 \\partial E_{\\phi}(a)/\\partial a\\in\\mathbb{R}^{2560\\times 20} of Concertina’s continuous action encoder across pretraining checkpoints confirms that E ϕ E_{\\phi} embeds actions as a smooth, non-collapsed 20D chart inside the VLM hidden space (Figure 5 b): its entropy effective rank evolves from 19.78 / 20 19.78/20 at initialization to 19.30 19.30 , 18.90 18.90 , and 18.63 / 20 18.63/20 at 5 ​ k 5\\text{k} , 10 ​ k 10\\text{k} , and 15 ​ k 15\\text{k} updates (median condition number 1.73 → 3.22 1.73\\rightarrow 3.22 ), while retaining a 0.855 0.855 – 0.931 0.931 pairwise distance Spearman correlation with physical coordinates.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS5.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "408e090e305ab7d2",
+      "section": "(i) Error-Geometry Consistency (EGC) and Latent Manifold Rank: Representational Coupling.",
+      "location": "(i) Error-Geometry Consistency (EGC) and Latent Manifold Rank: Representational Coupling.",
+      "text": "Figure 5: Action Interface Audit across representational, computational, and parameter coupling. (a) Physical action error span ( p 05 p_{05} – p 50 p_{50} – p 95 p_{95} ) and structural decoding fragility under single-token substitutions: continuous coordinates (Concertina) preserve unit error geometry ( EGC = 1.0 × \\mathrm{EGC}=1.0\\times , 0 % 0\\% invalid), whereas 256-bin quantization induces a 25.1 × 25.1\\times error span and compressed DCT+BPE tokenizers (FAST+, MolmoAct2-FAST) suffer 82.2 % 82.2\\% and 77.9 % 77.9\\% invalid trajectory shapes while perturbing 30 / 30 30/30 steps on valid decodes. (b) Normalized Jacobian singular value spectrum ( σ i / σ 1 \\sigma_{i}/\\sigma_{1} ) of Concertina’s continuous action encoder ∂ E ϕ ​ ( a ) / ∂ a ∈ ℝ 2560 × 20 \\partial E_{\\phi}(a)/\\partial a\\in\\mathbb{R}^{2560\\times 20} across pretraining updates, maintaining a full-rank 20D manifold (effective rank 18.63 / 20 18.63/20 , Spearman ρ = 0.86 \\rho=0.86 – 0.93 0.93 ). (c) Layerwise emergence of cross-time trajectory coupling ( NLR \\mathrm{NLR} , | t − t 0 | ≥ 6 |t-t_{0}|\\geq 6 ) across the 36-layer BARD-VL-B4 backbone versus 0.0 % 0.0\\% for the position-wise interface ( D ψ ∘ E ϕ D_{\\psi}\\circ E_{\\phi} ) alone. (d) Action-Specific Capacity Ratio ( ASCR \\mathrm{ASCR} ) across VLA families, showing that Concertina uses 78 × 78\\times – 167 × 167\\times fewer action-specific parameters ( 0.21 % 0.21\\% ) than external-expert architectures ( 16.5 % 16.5\\% – 35.1 % 35.1\\% ).",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "263cc1f527cac814",
+      "section": "(ii) Trajectory Coupling Attribution (TCA): Computational Coupling.",
+      "location": "(ii) Trajectory Coupling Attribution (TCA): Computational Coupling.",
+      "text": "To localize where cross-time trajectory dependencies are computed, we perturb a single input action coordinate ( t 0 , d 0 ) (t_{0},d_{0}) by ± ϵ \\pm\\epsilon and measure the output action response tensor R ∈ ℝ H × D R\\in\\mathbb{R}^{H\\times D} via central finite differences under deterministic float32 math-only SDPA (zero repeated-forward jitter). We define the non-local response ratio as the fraction of response energy propagating at least six timesteps away:",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS5.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "83f229bd3de492e8",
+      "section": "(ii) Trajectory Coupling Attribution (TCA): Computational Coupling.",
+      "location": "(ii) Trajectory Coupling Attribution (TCA): Computational Coupling.",
+      "text": "NLR = ∑ | t − t 0 | ≥ 6 ∥ R t , : ∥ 2 2 ‖ R ‖ F 2 . \\mathrm{NLR}=\\frac{\\sum_{|t-t_{0}|\\geq 6}\\|R_{t,:}\\|_{2}^{2}}{\\|R\\|_{F}^{2}}. (9)",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.E9",
+      "kind": "table"
+    },
+    {
+      "id": "830cdc27d64ce81b",
+      "section": "(ii) Trajectory Coupling Attribution (TCA): Computational Coupling.",
+      "location": "(ii) Trajectory Coupling Attribution (TCA): Computational Coupling.",
+      "text": "Comparing the position-wise action interface alone ( D ψ ∘ E ϕ D_{\\psi}\\circ E_{\\phi} ) against the full shared-backbone forward pass ( D ψ ∘ F θ ∘ E ϕ D_{\\psi}\\circ F_{\\theta}\\circ E_{\\phi} ) across three 4.46B BARD-VL-B4 Concertina checkpoints ( H = 50 H=50 , 36 layers) shows that the interface path has strictly zero cross-time response ( NLR = 0 \\mathrm{NLR}=0 ), whereas including a single forward pass of the shared VLM backbone produces full-path NLR \\mathrm{NLR} of 4.058 % 4.058\\% (60k pretraining), 4.103 % 4.103\\% (CALVIN downstream), and 1.217 % 1.217\\% (LIBERO downstream), with total off-time energy ( t ≠ t 0 t\\neq t_{0} ) reaching 23.4 % 23.4\\% – 34.0 % 34.0\\% (Table 6 ). Layerwise hidden-state hooks across the 36-layer BARD backbone reveal that cross-time coupling is near zero in shallow layers ( 0.19 % 0.19\\% – 0.34 % 0.34\\% at layer 0 and 0.29 % 0.29\\% – 0.50 % 0.50\\% at layer 9) and forms progressively in the middle and late Transformer layers, peaking at 4.66 % 4.66\\% – 9.93 % 9.93\\% at layer 27 and 3.03 % 3.03\\% – 7.42 % 7.42\\% at layer 35 (Figure 5 c). By contrast, auditing π 0 \\pi_{0} , π 0.5 \\pi_{0.5} , SmolVLA, and X-VLA ( Black et al., 2024 ; Physical Intelligence et al., 2025 ; Shukor et al., 2025 ; Zheng et al., 2025 ) shows that their trajectory coupling and coordinate subspace alignment occur inside external modules outside the VLM: in π 0 \\pi_{0} and π 0.5 \\pi_{0.5} , full-path NLR \\mathrm{NLR} ( 8.141 % 8.141\\% and 7.141 % 7.141\\% ) is generated entirely inside the external flow expert; in π 0 \\pi_{0} and SmolVLA, 32D input/output principal-subspace overlap is near random chance before the expert’s action-time MLP ( 0.99 × 0.99\\times and 0.94 × 0.94\\times ) and rises to 4.36 × 4.36\\times and 9.51 × 9.51\\times only after the expert MLP; and in X-VLA, skipping the external 24-layer action Transformer retains only 3.72 % 3.72\\% of same-dimension action energy.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS5.SSS0.Px2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "4d812b1e88ea0e38",
+      "section": "(iii) Action-Specific Capacity Ratio (ASCR): Parameter Coupling.",
+      "location": "(iii) Action-Specific Capacity Ratio (ASCR): Parameter Coupling.",
+      "text": "Finally, quantifying the parameter share dedicated exclusively to action generation (Table 6 and Figure 5 d) shows that external-expert VLAs allocate 16.51 % 16.51\\% ( π 0 \\pi_{0} ), 19.17 % 19.17\\% ( π 0.5 \\pi_{0.5} ), 22.19 % 22.19\\% (SmolVLA ( Shukor et al., 2025 ) ), and 35.10 % 35.10\\% (X-VLA ( Zheng et al., 2025 ) ) of total model capacity to separate action generators and bridges. In Concertina’s 4.46B BARD-VL-B4 architecture, there is no separate action Transformer ( 0 % 0\\% external generator capacity), and the active 4-layer action encoder and decoder projections contain only 9.49 ​ M 9.49\\text{M} parameters ( ASCR = 0.21 % \\mathrm{ASCR}=0.21\\% , a 78 × 78\\times – 167 × 167\\times reduction in action-specific parameter share). Together, EGC, TCA, and ASCR confirm that Concertina preserves physical error geometry while unifying trajectory computation and parameter capacity inside the shared VLM backbone.",
+      "url": "https://arxiv.org/html/2611.07513v1#S4.SS5.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "beec1ceb5db8d9a6",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "We presented Concertina, an Embodied Vision-Language Model (eVLM) built on the principle that manipulation and cognition should be embodied within the same model rather than decoupled across a bolted-on VLA pipeline—enabling a pretrained diffusion VLM to natively output precise continuous actions while preserving its visual-language generalization, model architecture, and native training paradigm. By representing each control timestep as a continuous latent action token inside a shared diffusion VLM backbone and supervising temporally ordered action blocks directly in physical coordinates via packed teacher forcing, Concertina eliminates both discrete action tokenizers and external action experts while retaining the backbone’s native corrupt-and-reconstruct operator. Our Action Interface Audit across representative VLA families and Concertina demonstrates that an eVLM preserves unit error geometry ( EGC = 1 \\mathrm{EGC}=1 ) and a full-rank 20D action manifold ( 18.63 / 20 18.63/20 effective rank), uses only 0.21 % 0.21\\% active action-interface parameters ( ASCR \\mathrm{ASCR} ), and forms cross-time trajectory coupling directly within the middle and late layers of the shared 36-layer VLM backbone ( NLR = 1.22 % \\mathrm{NLR}=1.22\\% – 4.10 % 4.10\\% ). Controlled ablations further establish why blockwise bidirectional horizon partitioning ( K = 10 K=10 capturing 2.17 × 2.17\\times more coherent action mass and yielding + 34.5 +34.5 points on LIBERO), physical coordinate weighting with state masking ( + 1.431 +1.431 and + 0.744 +0.744 CALVIN AvgLen), multi-block pretraining continuation ( + 0.208 +0.208 AvgLen over single-block continuation), and unified single-objective supervision with probability-valued gripper BCE ( + 0.427 +0.427 mean AvgLen across 8,000 factorial chains) are essential when manipulation and cognition share one hidden space. On standard closed-loop benchmarks, Concertina achieves 98.15 % 98.15\\% average success on regular LIBERO, 85.9 % 85.9\\% on the 10,030-task LIBERO-Plus benchmark, and 4.142 4.142 average completed chain length on CALVIN ABC–D.",
+      "url": "https://arxiv.org/html/2611.07513v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "08f40170d82ca18a",
+      "section": "A.1 Architecture and Coordinate Interface",
+      "location": "A.1 Architecture and Coordinate Interface",
+      "text": "Concertina instantiates the shared diffusion VLM backbone F θ F_{\\theta} from BARD-VL-B4-Mask-4B-Instruct ( Chen et al., 2026 ) (36 Transformer layers, hidden dimension d = 2560 d=2560 ) with a unified D = 20 D=20 canonical coordinate width supporting both single-arm and bimanual embodiments. Each arm occupies ten canonical coordinates: three Cartesian translations, a continuous six-dimensional rotation representation, and one gripper closure coordinate. Inactive embodiment dimensions are zeroed at the input and masked from the loss via the coordinate-validity indicator q n , d ∈ { 0 , 1 } q_{n,d}\\in\\{0,1\\} (Figure 6 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c4824121a15ae7c7",
+      "section": "A.1 Architecture and Coordinate Interface",
+      "location": "A.1 Architecture and Coordinate Interface",
+      "text": "Both the position-wise action encoder E ϕ E_{\\phi} and action decoder D ψ D_{\\psi} are four-layer MLPs with hidden width 1,024, SiLU activations, and zero dropout. Proprioceptive robot state is encoded through the same input projection E ϕ E_{\\phi} because it shares the canonical 20D coordinate layout. Concertina introduces no action-boundary special tokens, embodiment-specific adapters, or soft prompts. Coordinate reconstruction weights are set to ω d = ( 500,500,500 , 10 , 10 , 10 , 10 , 10 , 10 , 1 ) \\omega_{d}=(500,500,500,10,10,10,10,10,10,1) per arm across both the numerator and denominator of Equation 6 , specifying the relative weighting among translation, 6D rotation, and gripper coordinates. Continuous pose coordinates are supervised with Smooth- L 1 L_{1} loss, and the gripper coordinate is supervised with probability-valued binary cross-entropy (Section A.3 ).",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "10fced35add84812",
+      "section": "A.1 Architecture and Coordinate Interface",
+      "location": "A.1 Architecture and Coordinate Interface",
+      "text": "Figure 6: Validity masks separate embodiment coordinates, reconstruction selection, and time padding. The canonical 20D layout provides fixed slots for single-arm and bimanual embodiments; coordinate validity q q , masking indicator m m , and timestep validity v v play orthogonal roles in the supervised objective.",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "928cc6cd2f0dd5d9",
+      "section": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "location": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "text": "In the standard mask-only corruption schedule (Section 3.3 ), each block b b draws a stratified corruption rate t n , b ∈ [ ϵ , 1 ] t_{n,b}\\in[\\epsilon,1] with ϵ = 10 − 3 \\epsilon=10^{-3} , and each timestep i i in block b b draws an independent binary mask indicator m n , i ∼ Bernoulli ⁡ ( t n , b ) m_{n,i}\\sim\\operatorname{Bernoulli}(t_{n,b}) replacing the entire vector a n , i a_{n,i} with the zero sentinel before encoding through E ϕ E_{\\phi} . Stage-1 pretraining also supports the three-state mixed corruption schedule inherited from BARD ( Chen et al., 2026 ) , which assigns each position a clean, visible-substitution, or masked state with pre-flooring probabilities",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "51d6c9291cb71a95",
+      "section": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "location": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "text": "p clean ​ ( t ) = 1 − sin ⁡ ( π ​ t / 2 ) , p sub ​ ( t ) = sin ⁡ ( π ​ t / 2 ) + cos ⁡ ( π ​ t / 2 ) − 1 , p mask ​ ( t ) = 1 − cos ⁡ ( π ​ t / 2 ) , \\begin{split}p_{\\mathrm{clean}}(t)&=1-\\sin(\\pi t/2),\\\\ p_{\\mathrm{sub}}(t)&=\\sin(\\pi t/2)+\\cos(\\pi t/2)-1,\\\\ p_{\\mathrm{mask}}(t)&=1-\\cos(\\pi t/2),\\end{split} (10)",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.E10",
+      "kind": "table"
+    },
+    {
+      "id": "0e4b31b641573152",
+      "section": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "location": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "text": "each floored at 10 − 3 10^{-3} and renormalized to sum to one, where visible substitution replaces the vector with a random vector and supervises both substituted and masked positions. For mask-only corruption, conditioning on the block corruption levels t t yields",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "93436cbb0163d6bf",
+      "section": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "location": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "text": "𝔼 m [ m i t b ⁡ ( i ) ℓ i ( m ) | t ] = 𝔼 m [ ℓ i ( m ) ∣ m i = 1 , t ] , \\mathbb{E}_{m}\\!\\left[\\frac{m_{i}}{t_{b(i)}}\\ell_{i}(m)\\,\\middle|\\,t\\right]=\\mathbb{E}_{m}[\\ell_{i}(m)\\mid m_{i}=1,t], (11)",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.E11",
+      "kind": "table"
+    },
+    {
+      "id": "983e622c2c911a07",
+      "section": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "location": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "text": "so the inverse- t t weighting in Equation 7 weights each masked slot inversely by its selection probability across corruption levels.",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS2.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "070b5babc76c3077",
+      "section": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "location": "A.2 Masking Schedules, Padding, and Packed Attention",
+      "text": "During packed teacher-forced training, invalid timesteps ( v n , i = 0 v_{n,i}=0 ) are masked out as attention keys and excluded from supervision; to prevent all-masked attention rows in Flash/SDPA kernels, an invalid query attends only to itself. Within the packed sequence X train = [ C , Z ~ , Z ] X_{\\mathrm{train}}=[C,\\widetilde{Z},Z] , the multimodal prefix C C is causal and isolated from both action branches. Queries in the corrupted branch Z ~ \\widetilde{Z} attend to C C , their own corrupted block Z ~ ( b ) \\widetilde{Z}^{(b)} , and strictly earlier clean blocks Z ( < b ) Z^{(<b)} , while queries in the clean branch Z Z attend to C C and clean blocks Z ( ≤ b ) Z^{(\\leq b)} . Because both action branches share aligned positional encodings and predictions are read exclusively from Z ~ \\widetilde{Z} , the clean branch provides exact teacher-forced block context without leaking current-block targets.",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3cab00853cbdf45a",
+      "section": "A.3 Probability-Valued Gripper Supervision",
+      "location": "A.3 Probability-Valued Gripper Supervision",
+      "text": "To unify heterogeneous gripper conventions across embodiments (e.g., [ − 1 , 1 ] [-1,1] in CALVIN and LIBERO versus [ 0 , 1 ] [0,1] in AgiBot and DROID), we map raw gripper commands to a canonical closure coordinate p = ( g − g open ) / ( g closed − g open ) ∈ [ 0 , 1 ] p=(g-g_{\\mathrm{open}})/(g_{\\mathrm{closed}}-g_{\\mathrm{open}})\\in[0,1] . The action decoder outputs a scalar logit r r for the gripper channel, supervised via binary cross-entropy with target-entropy subtraction:",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "83638a7d5eefc586",
+      "section": "A.3 Probability-Valued Gripper Supervision",
+      "location": "A.3 Probability-Valued Gripper Supervision",
+      "text": "ρ grip ( r , p ) = BCEWithLogits ( r , p ) − ℋ ( p ) = KL ( Ber ( p ) ∥ Ber ( σ ( r ) ) ) , \\rho_{\\mathrm{grip}}(r,p)=\\operatorname{BCEWithLogits}(r,p)-\\mathcal{H}(p)=\\operatorname{KL}\\!\\left(\\operatorname{Ber}(p)\\,\\|\\,\\operatorname{Ber}(\\sigma(r))\\right), (12)",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.E12",
+      "kind": "table"
+    },
+    {
+      "id": "9e859d1ac483aef4",
+      "section": "A.3 Probability-Valued Gripper Supervision",
+      "location": "A.3 Probability-Valued Gripper Supervision",
+      "text": "where ℋ ⁡ ( p ) \\mathcal{H}(p) denotes the Bernoulli entropy of the target. Subtracting ℋ ⁡ ( p ) \\mathcal{H}(p) leaves the parameter gradient unchanged while setting the minimum loss to zero for both hard binary targets and continuous intermediate closure targets. At inference, predicted logits are mapped through the sigmoid function p ^ = σ ⁡ ( r ) \\widehat{p}=\\sigma(r) before commitment and re-encoding through E ϕ E_{\\phi} , ensuring that iterative refinement operates consistently in probability coordinates.",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "d5d640c3a2b489ae",
+      "section": "A.4 Risk-Guided Decoding and KV-Cache Lifecycle",
+      "location": "A.4 Risk-Guided Decoding and KV-Cache Lifecycle",
+      "text": "Figure 7: Risk-guided decoding scores candidate action tokens and supports selective iterative refinement. The token-risk head predicts log reconstruction error from detached hidden states; candidate slots are committed in order of confidence, and optional refinement rounds remask and update low-scoring positions when the predicted score improves.",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "defd390c6e4ac658",
+      "section": "A.4 Risk-Guided Decoding and KV-Cache Lifecycle",
+      "location": "A.4 Risk-Guided Decoding and KV-Cache Lifecycle",
+      "text": "The token-risk head applies LayerNorm followed by a two-layer MLP (hidden width 256, SiLU activation, scalar output) to detached action hidden states h i h_{i} , predicting the log coordinate error log ⁡ ( ℓ n , i + 10 − 6 ) \\log(\\ell_{n,i}+10^{-6}) under a Smooth- L 1 L_{1} auxiliary loss weighted by 0.05 0.05 . Because its input is detached, the risk head provides a lightweight confidence score s i = − r i s_{i}=-r_{i} for inference-time slot selection without perturbing backbone gradients during training.",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7093a99780c9b7cf",
+      "section": "A.4 Risk-Guided Decoding and KV-Cache Lifecycle",
+      "location": "A.4 Risk-Guided Decoding and KV-Cache Lifecycle",
+      "text": "During blockwise decoding of block b b , pending action slots are initialized to the zero sentinel and committed over at most D D proposal rounds according to their confidence scores s i s_{i} , followed by up to R R selective refinement steps that remask low-scoring positions and accept updated predictions when confidence improves (Figure 7 ). Throughout proposal and refinement rounds within block b b , the multimodal prefix cache and earlier block caches B < b B_{<b} remain read-only (as illustrated in Figure 1 , bottom right). Once block b b is finalized, its committed continuous actions are re-encoded through E ϕ E_{\\phi} and appended to the KV cache for block b + 1 b+1 .",
+      "url": "https://arxiv.org/html/2611.07513v1#A1.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b3d5a8901784014e",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Tables 7 – 9 summarize the 80.2M-frame multi-embodiment pretraining mixture, the two-stage pretraining and downstream finetuning schedule, and the shared optimization and inference hyperparameters.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c42253c730a47329",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Dataset source Subsets / views Episodes Frames Sampling weight AgiBotWorld–Alpha 34 / 34 32,735 46,156,708 44.44 % 44.44\\% DROID (30 Hz aligned) 1 / 2 97,685 27,348,488 33.33 % 33.33\\% RoboMIND Franka 1 / 1 5,333 943,842 11.11 % 11.11\\% RoboMIND AgileX 1 / 1 8,906 5,387,380 7.78 % 7.78\\% RoboMIND FR3 1 / 1 1,774 375,807 3.33 % 3.33\\% Total pretraining mixture 38 / 39 146,433 80,212,225 100.00%",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T7.2",
+      "kind": "table"
+    },
+    {
+      "id": "a78f7cb6dbce7d63",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Table 7: Multi-embodiment pretraining dataset mixture totaling 146,433 episodes and 80.2M frames across five robot manipulation sources.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3b9bc6c4caa36048",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Stage Dataset Updates Configuration Stage-1 Pretraining Multi-embodiment mixture (Table 7 ) 60,000 Canonical 20D actions ( H = 50 , M = 5 , K = 10 H=50,M=5,K=10 ); active-dimension validity masks; 30 Hz temporal alignment Stage-2 Continued Pretraining Multi-embodiment mixture (Table 7 ) 30,000 Two-block continuation ( H = 20 , M = 2 , K = 10 H=20,M=2,K=10 ); mask-only inverse- t t objective; probability-valued gripper BCE Downstream Finetuning CALVIN ABC–D 5,000 Absolute end-effector actions; single-block horizon ( H = 10 , M = 1 , K = 10 H=10,M=1,K=10 ) Downstream Finetuning Regular LIBERO / LIBERO-Plus 5,000 Relative end-effector actions; single-block horizon ( H = 10 , M = 1 , K = 10 H=10,M=1,K=10 )",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T8.2",
+      "kind": "table"
+    },
+    {
+      "id": "285f0d28c918f067",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Table 8: Overview of pretraining and downstream finetuning stages.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "083a663f44c1a784",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Hyperparameter Value Compute & batch size 8 GPUs; global batch size 1,536 (192/GPU) for pretraining and CALVIN finetuning; global batch size 448 (56/GPU) for LIBERO finetuning Closed-loop execution H = 10 , K = 10 , M = 1 H=10,K=10,M=1 ; proposal budget D = 4 D=4 ; refinement steps R = 5 R=5 ; executed horizon H exec = 10 H_{\\mathrm{exec}}=10 Warmup & checkpointing 80-step linear warmup; checkpoints saved every 1,250 updates; seed 42",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T9.2",
+      "kind": "table"
+    },
+    {
+      "id": "4970932a678c86ae",
+      "section": "B.1 Pretraining Mixture and Training Stages",
+      "location": "B.1 Pretraining Mixture and Training Stages",
+      "text": "Table 9: Shared optimization and closed-loop inference configuration.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5346ade1169a88af",
+      "section": "B.2 Multi-Embodiment Data Curation and Boundary Handling",
+      "location": "B.2 Multi-Embodiment Data Curation and Boundary Handling",
+      "text": "To ensure high trajectory quality across heterogeneous robot datasets, we apply an offline multi-stage curation pipeline prior to pretraining. The pipeline verifies timestamp continuity, finite coordinate ranges, and frame-to-action alignment across all 146,433 episodes. Non-informative static intervals are identified by cross-checking canonical end-effector velocity, joint motion channels, and visual optical flow, while semantic phase rules explicitly preserve functional holds such as gripper stabilization and pouring phases. Whenever a non-informative static segment is excised from a demonstration, the curation pipeline resets local episode boundaries so that each retained motion segment forms a contiguous trajectory, and windows crossing a segment boundary are padded using the explicit timestep-validity mask v n , i ∈ { 0 , 1 } v_{n,i}\\in\\{0,1\\} .",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bc68123da940ba25",
+      "section": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "location": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "text": "Because Concertina generates an entire K = 10 K=10 continuous action block within the shared VLM backbone, it supports both single-pass parallel decoding ( D = 1 , R = 0 D=1,R=0 : all 10 action tokens predicted in one backbone forward pass after prefix prefill) and multi-step risk-guided proposal and refinement ( D ≤ 4 , R = 0 D\\leq 4,R=0 and D ≤ 4 , R = 5 D\\leq 4,R=5 ). We evaluate the effect of decoding budget and closed-loop replanning frequency across three complementary protocols: (i) an offline open-loop reconstruction probe over 32 fixed trajectory windows ( 2,880 2{,}880 non-gripper coordinates per arm, 10,000 10{,}000 paired bootstrap resamples) on both CALVIN and LIBERO; (ii) a 100-sequence closed-loop CALVIN ABC–D evaluation (sequences 0 0 – 99 99 ); and (iii) a 50-episode closed-loop LIBERO-Spatial evaluation ( 10 ​ tasks × 5 ​ initial states 10\\text{ tasks}\\times 5\\text{ initial states} ) comparing Concertina against π 0.5 \\pi_{0.5} across flow steps and execution horizons E ∈ { 1 , 10 , 50 } E\\in\\{1,10,50\\} .",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9571ba4b6bbee2cc",
+      "section": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "location": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "text": "Offline 32-Window MAE CALVIN Closed-Loop (100 chains) Decoding strategy Mean BB passes Latency p 50 p_{50} (ms) CALVIN MAE LIBERO MAE AvgLen SR@1 (%) SR@3 (%) SR@5 (%) D = 1 , R = 0 D=1,R=0 (single-pass parallel) 1.00 1.00 65.8 65.8 0.06282 0.06282 0.27692 0.27692 3.92 3.92 95.0 95.0 80.0 80.0 59.0 D ≤ 4 , R = 0 D\\leq 4,R=0 (proposals only) 2.00 2.00 91.7 91.7 0.06279 0.06279 0.27326 0.27326 3.90 3.90 93.0 93.0 79.0 79.0 56.0 56.0 D ≤ 4 , R = 5 D\\leq 4,R=5 (with risk refinement) 7.00 7.00 223.0 223.0 0.06196 0.26852 4.04 97.0 82.0 59.0",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T10.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "ebc1c68eaf973358",
+      "section": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "location": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "text": "Table 10: Offline reconstruction accuracy (32 windows, 2,880 2{,}880 non-gripper coordinates per arm) and 100-sequence closed-loop CALVIN ABC–D performance across decoding budgets at fixed checkpoint identity ( H = 10 , K = 10 , M = 1 H=10,K=10,M=1 ). Risk-guided refinement ( D ≤ 4 , R = 5 D\\leq 4,R=5 ) reduces offline MAE on 25/32 CALVIN windows ( Δ = − 0.00084 \\Delta=-0.00084 , 95% paired bootstrap CI [ − 0.00125 , − 0.00043 ] [-0.00125,-0.00043] ) and 25/32 LIBERO windows ( Δ = − 0.00840 \\Delta=-0.00840 vs. D = 1 , R = 0 D=1,R=0 , 95% CI [ − 0.01316 , − 0.00400 ] [-0.01316,-0.00400] ), while single-pass parallel decoding ( D = 1 , R = 0 D=1,R=0 ) already achieves 3.92 3.92 AvgLen at 65.8 ​ ms 65.8\\text{\\,ms} median latency ( 6.58 ​ ms 6.58\\text{\\,ms} per executed control step).",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f9cca92714c3bae1",
+      "section": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "location": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "text": "Method Decoding budget Chunk H H Exec. E E Success (50 eps) Mean capped steps Concertina D = 1 , R = 0 D=1,R=0 (1 pass) 10 10 10 10 50/50 (100.0%) 102.40 Concertina D ≤ 4 , R = 5 D\\leq 4,R=5 (7 passes) 10 10 10 10 50/50 (100.0%) 102.84 102.84 Concertina D ≤ 4 , R = 5 D\\leq 4,R=5 (replan every step) 10 10 1 1 46/50 (92.0%) 118.82 118.82 π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) Flow 2 steps 50 50 10 10 49/50 (98.0%) 105.92 105.92 π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) Flow 5 steps 50 50 10 10 49/50 (98.0%) 106.08 106.08 π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) Flow 10 steps (default) 50 50 10 10 48/50 (96.0%) 115.26 115.26 π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) Flow 10 steps (no replan) 50 50 50 50 42/50 (84.0%) 133.60 133.60",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T11.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "68c207f001950ef9",
+      "section": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "location": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "text": "Table 11: Closed-loop decoding budget and replanning frequency on LIBERO-Spatial ( 10 ​ tasks × 5 ​ initial states = 50 ​ episodes 10\\text{ tasks}\\times 5\\text{ initial states}=50\\text{ episodes} per arm; failed episodes capped at 280 steps). Executing a full E = 10 E=10 block before replanning outperforms step-by-step replanning ( E = 1 E=1 , + 8.0 ​ pp +8.0\\text{ pp} ) by preserving intra-block motion coherence, whereas open-loop 50-step execution in π 0.5 \\pi_{0.5} ( E = 50 E=50 ) degrades success by − 12.0 ​ pp -12.0\\text{ pp} (95% paired bootstrap CI [ − 24.0 , − 2.0 ] [-24.0,-2.0] ).",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "43cc89b8f5d24a83",
+      "section": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "location": "B.3 Decoding Budget and Closed-Loop Replanning Frequency",
+      "text": "Table 10 and Table 11 highlight three findings. First, single-pass parallel generation ( D = 1 , R = 0 D=1,R=0 ) is already highly accurate: because the shared 36-layer VLM backbone jointly contextualizes all 10 action slots within the block, a single forward pass achieves 100.0 % 100.0\\% (50/50) success on the LIBERO-Spatial benchmark subset in 102.40 102.40 mean steps and 3.92 3.92 AvgLen on CALVIN at 65.8 ​ ms 65.8\\text{\\,ms} per 10-step block ( 6.58 ​ ms 6.58\\text{\\,ms} per control step). Second, iterative risk-guided refinement ( D ≤ 4 , R = 5 D\\leq 4,R=5 ) consistently improves open-loop reconstruction on 25 of 32 windows on both CALVIN and LIBERO and raises closed-loop CALVIN AvgLen from 3.92 3.92 to 4.04 4.04 . Third, executing the full E = 10 E=10 coherent block outperforms both extremes of replanning frequency: replanning at every single control step ( E = 1 E=1 ) discards the committed trajectory structure and increases completion steps by + 15.98 +15.98 ( 92.0 % 92.0\\% success), while executing a 50-step chunk without visual feedback in π 0.5 \\pi_{0.5} ( E = 50 E=50 ) drops success from 96.0 % 96.0\\% to 84.0 % 84.0\\% .",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f54f27303e41eed2",
+      "section": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "location": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "text": "The representation audit evaluates 512 contiguous CALVIN relative-action windows ( H = 30 , D = 7 H=30,D=7 , normalized range [ − 1 , 1 ] [-1,1] , seed 20260901), together with an expanded 8,192-window sample and four independently seeded 2,048-window samples (Tables 12 – 13 ). The uniform quantizer uses 256 bin boundaries and 255 reconstruction centers (bin width 2 / 255 2/255 ), evaluated over 10,000 random single-token substitutions; frequency-compressed tokenizers (FAST+ ( Pertsch et al., 2025 ) and MolmoAct2-FAST with byte-fallback repair for 44 out-of-vocabulary symbols) are evaluated under one single-token substitution per window.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "63fda21dc66695b5",
+      "section": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "location": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "text": "Representation Unperturbed MAE Mean tokens EGC ( p 95 / p 05 p_{95}/p_{05} ) Invalid shape (%) Valid RMSE median Continuous coordinates (Concertina) 0.0000 0.0000 30.0 30.0 1.00 1.00 0.00 0.00 n/a Uniform quantizer (256 bins) 0.0023 0.0023 210.0 210.0 25.14 25.14 0.00 0.00 n/a FAST+ ( Pertsch et al., 2025 ) 0.0200 0.0200 57.7 57.7 – 82.23 82.23 0.0526 0.0526 MolmoAct2-FAST (repaired) 0.0200 0.0200 90.2 90.2 – 77.93 77.93 0.0690 0.0690",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T12.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "f2d09588feb78445",
+      "section": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "location": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "text": "Table 12: Error-Geometry Consistency (EGC) and representation diagnostics on 512 CALVIN windows ( H = 30 , D = 7 H=30,D=7 ). Unperturbed MAE measures round-trip reconstruction error; EGC, invalid shape, and valid RMSE refer to single-token substitution.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "581ce92c8c6b9ade",
+      "section": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "location": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "text": "Run Windows FAST+ invalid (%) FAST+ RMSE median Molmo invalid (%) Molmo RMSE median Time support Canonical 512 82.23 0.0526 77.93 0.0690 30/30 Expanded 8,192 84.52 0.0590 79.24 0.1173 30/30 Four-seed range 4 × 2,048 4\\times 2{,}048 81.30–85.11 0.0552–0.0631 76.22–79.00 0.0966–0.1171 30/30",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T13.2",
+      "kind": "table"
+    },
+    {
+      "id": "aec79a6561ed8041",
+      "section": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "location": "B.4 Action Interface Audit: Error-Geometry Consistency (EGC) Protocol",
+      "text": "Table 13: Expanded representation stress test across 512, 4 × 2,048 4\\times 2{,}048 , and 8,192 windows. Invalid shape is the fraction of single-token edits that fail to decode into 30 × 7 30\\times 7 coefficients. Time support counts affected steps with a coordinate change exceeding 0.01 normalized units.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "44c7008419d686c5",
+      "section": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "location": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "text": "The Trajectory Coupling Attribution (TCA) probe compares the position-wise action interface composition ( D ψ ∘ E ϕ D_{\\psi}\\circ E_{\\phi} ) against one complete shared-backbone forward pass ( D ψ ∘ F θ ∘ E ϕ D_{\\psi}\\circ F_{\\theta}\\circ E_{\\phi} ) on the 4.46B BARD-VL-B4 Concertina checkpoints ( H = 50 H=50 , 36 Transformer layers). Central finite differences are evaluated at 11 time/dimension coordinates ( t 0 ∈ { 0 , 12 , 25 , 37 , 49 } t_{0}\\in\\{0,12,25,37,49\\} at d 0 = 0 d_{0}=0 , plus d 0 ∈ { 1 , … , 6 } d_{0}\\in\\{1,\\ldots,6\\} at t 0 = 25 t_{0}=25 ) in deterministic float32 math-only SDPA with zero repeated-forward jitter. Table 14 verifies that the resulting non-local response ratios ( NLR \\mathrm{NLR} , | t − t 0 | ≥ 6 |t-t_{0}|\\geq 6 ) remain invariant across perturbation magnitudes ϵ ∈ { 0.01 , 0.02 , 0.04 } \\epsilon\\in\\{0.01,0.02,0.04\\} .",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8e0f8a1823ae826b",
+      "section": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "location": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "text": "Checkpoint (4.46B BARD-VL-B4) ϵ = 0.01 \\epsilon=0.01 ϵ = 0.02 \\epsilon=0.02 ϵ = 0.04 \\epsilon=0.04 Interface NLR Concertina pretraining ( H = 50 , D = 20 H=50,D=20 ) 4.058 % 4.058\\% 4.058 % 4.058\\% 4.056 % 4.056\\% 0 0 Concertina downstream (CALVIN, D = 10 D=10 ) 4.103 % 4.103\\% 4.103 % 4.103\\% 4.102 % 4.102\\% 0 0 Concertina downstream (LIBERO, D = 10 D=10 ) 1.215 % 1.215\\% 1.217 % 1.217\\% 1.216 % 1.216\\% 0 0",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T14.2",
+      "kind": "table"
+    },
+    {
+      "id": "225c0d02b4721a04",
+      "section": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "location": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "text": "Table 14: Full-path NLR stability across finite-difference step sizes ϵ ∈ { 0.01 , 0.02 , 0.04 } \\epsilon\\in\\{0.01,0.02,0.04\\} on the 4.46B BARD-VL-B4 checkpoints. Each cell averages 11 coordinate probes with zero repeated-forward jitter; interface-only NLR is identically zero.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.T14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d4f3d0e3be464574",
+      "section": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "location": "B.5 Action Interface Audit: Trajectory Coupling Attribution (TCA) and Capacity (ASCR)",
+      "text": "In the 4.46B BARD-VL-B4 Concertina architecture ( d = 2560 d=2560 ), the active 4-layer action encoder E ϕ E_{\\phi} ( 4,744,704 4{,}744{,}704 parameters) and 4-layer action decoder D ψ D_{\\psi} ( 4,742,164 4{,}742{,}164 parameters) total 9,486,868 9{,}486{,}868 active interface parameters out of 4,447,963,669 4{,}447{,}963{,}669 active model parameters ( ASCR = 0.213 % \\mathrm{ASCR}=0.213\\% , or 10,147,861 10{,}147{,}861 parameters / 0.228 % 0.228\\% including the 660,993 660{,}993 -parameter token-risk head), with zero separate action-generator layers.",
+      "url": "https://arxiv.org/html/2611.07513v1#A2.SS5.p2.1",
+      "kind": "p"
+    }
+  ]
+}

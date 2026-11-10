@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.08920",
+    "source_signature": "3bb72d23c14389c81a582cf31a636b0d29e2021a6f2575462c5391fce592d150",
+    "level": 1,
+    "reason": "冻结视觉特征加接触计数定位头可提人视频伪标签，30任务量化对照明确，但机器人仅六序列三成功，接触提取改善不等同广泛策略迁移。",
+    "quote": "HOC2R: Hand-Object C"
+  },
+  {
+    "item_id": "arxiv:2611.08917",
+    "source_signature": "7a6a618d2c42a4dfe6eecd2e01d1577e07012271be6b0b3d3f1b1fba42564af7",
+    "level": 2,
+    "reason": "冻结原子技能LoRA并逐块路由有保留与组合对照，56.43对17.86原子技能差提示可能改变持续适配路线；需核共享模块更新与oracle标签成本。",
+    "quote": "PRISM: Primitive Rou"
+  },
+  {
+    "item_id": "arxiv:2611.08895",
+    "source_signature": "614536934dc2747c320d55a46475a5e34d07fb93482101940242671673f7b170",
+    "level": 2,
+    "reason": "否定指令失败结合激活patch和监控有因果干预证据，可能改变VLA约束执行与可解释性实践；需核单模型单场景及外部probe同等效果边界。",
+    "quote": "Localizing and Editi"
+  },
+  {
+    "item_id": "arxiv:2611.05119",
+    "source_signature": "72c5136ec4a1c58cdb0ffcde3fd7dde71f4b6068bcd36b88f4b5f6e110bc1338",
+    "level": 2,
+    "reason": "当前版本以显式手物配置作可组合接口，合成对学习与未见物体及200次实机对照支持复用原语路线；需核人类示范引导与下游任务筛选。",
+    "quote": "DexHOT: Learning Han"
+  },
+  {
+    "item_id": "arxiv:2610.41009",
+    "source_signature": "bf7019e31e3a5e2c1ffebb4f3842526c6dbc53b7df6275a89f8dd2e68eca8328",
+    "level": 1,
+    "reason": "训练外残差方向EMA及本体状态调混合提升四个百分点，部署成本低但限晚层表征修正，尚需核延迟和基线模型范围。",
+    "quote": "STAR: Steering Actio"
+  },
+  {
+    "item_id": "arxiv:2611.09847",
+    "source_signature": "9871b6d4722c18bde4c1733f69f5ca65c2d4eed7e376fe9dd8a919393cc4b4a0",
+    "level": 1,
+    "reason": "屏幕控制接口迁移CUA到具身任务有跨赛事结果，但奖项不等于同预算操作强基线比较，主要是界面整合与可复用系统证据。",
+    "quote": "Computer-Use Agents "
+  },
+  {
+    "item_id": "arxiv:2611.09794",
+    "source_signature": "da24ee597e6b3fa30ecb310a29a640d57b90c31388369124a6dcef17f1385f02",
+    "level": 2,
+    "reason": "以命令所需证据评价视角选择并有RGB替换和打乱对照，可能改变空间能力诊断；脚本技能与隐藏后置条件造成的特权差异须核。",
+    "quote": "Seeing What Matters:"
+  },
+  {
+    "item_id": "arxiv:2611.09777",
+    "source_signature": "b2d95207a3e9606c2985f71f70e7b4e7f1accae942794e15646e6b19023b25aa",
+    "level": 1,
+    "reason": "接触隐式全阶模型让蛇全身任意部位推动物体，有硬件验证但平台特定且缺量化强基线，先按接触规划增量处理。",
+    "quote": "Autonomous Whole-bod"
+  },
+  {
+    "item_id": "arxiv:2611.05847",
+    "source_signature": "c726e0d2067b18adbc025ae40d88572ab934c0d1fd419540e0053df05baaed71",
+    "level": 2,
+    "reason": "冻结JEPA只学习时间排序度量替代欧氏目标，32.7到63.0四基准比较可改变潜规划失败归因与低成本修复路线，需核离线轨迹和规划预算。",
+    "quote": "Time-to-Goal: Learne"
+  },
+  {
+    "item_id": "arxiv:2611.05897",
+    "source_signature": "6266bc3acdc599a44a4f89a4174f6574e1f76ebef4a4dae46ed2e8fe16675eac",
+    "level": 1,
+    "reason": "多路点小窗口图搜索配合碰撞筛选和既有规划器减少计划时长，八机器人规划器设置有公平比较，主要是IK选择专门增量且无硬件时耗。",
+    "quote": "FWIK: Multi-Waypoint"
+  },
+  {
+    "item_id": "arxiv:2611.06120",
+    "source_signature": "adec4eec6f18b6abbe3562d91f7a1b214678db81543df3c05a9105b2df99b25c",
+    "level": 1,
+    "reason": "交互响应场与特征反馈引导视频预测提高九类别评分，但尚无下游控制或成本隔离，先视为生成器配方增量。",
+    "quote": "ReactWorld: Structur"
+  },
+  {
+    "item_id": "arxiv:2611.06214",
+    "source_signature": "421a8572c409092b41e09ac717566ec2de3285f9c756ae59574dffae001e8aea",
+    "level": 1,
+    "reason": "全局规划与黎曼局部形变协调连续体底座，有模拟与实机，但摘要未给效应量或复用复杂度，范围限连续体避障。",
+    "quote": "Riemannian Optimizat"
+  },
+  {
+    "item_id": "arxiv:2611.06359",
+    "source_signature": "4c4fef0ee45fa03ffd8b343448d9a6a931cee1fcd65f6aa0c74623f84b99b99f",
+    "level": 1,
+    "reason": "几何与气动参数揭示柔物涡旋抓取扭矩规律，重复交叉验证有具体物理意义，适用专门末端硬件而非通用策略路线。",
+    "quote": "Vortex-Induced Torqu"
+  },
+  {
+    "item_id": "arxiv:2611.06627",
+    "source_signature": "83cef2a1e877454282d7f7922c56762b1e4d385e09ebd26e02d4a0437a41f8f4",
+    "level": 1,
+    "reason": "统一交互Cosmos框架和公开资源可复用，但摘要主要展示多场景功能，没有实时预算或下游受控收益，不能以发布规模判突破。",
+    "quote": "Interactive World Si"
+  },
+  {
+    "item_id": "arxiv:2611.06724",
+    "source_signature": "6d6075ba3f7ac11a960d81b1dbd9e737f49aca76b8ff65d70380606e3f7fdf2e",
+    "level": 0,
+    "reason": "叙述综述可作灵巧手路线索引，但不是新方法验证或系统性能比较；摘要明确非穷尽系统综述，当前不优先占单篇技术精读。",
+    "quote": "Dexterous Robotic Ha"
+  },
+  {
+    "item_id": "arxiv:2610.38657",
+    "source_signature": "8682c2179e22c3680a0e8a075f3510c306853dc8b2b0a64c362fb524487eab99",
+    "level": 2,
+    "reason": "奖励相关模型误差引导探索在三至五次实机坡面试验适配，可能改变高成本部署时数据收集预算；需核重置、先验和模型更新对照。",
+    "quote": "Explore Where It Mat"
+  },
+  {
+    "item_id": "arxiv:2611.09293",
+    "source_signature": "3b7938e64ebbe3043347e45250e025ef128205f6909c7dd2042cda05890ec346",
+    "level": 1,
+    "reason": "跨模态多任务避免端到端WAM表征塌缩并有实机接触任务，但最高50%未给具体控制和成本口径，先核多任务与冻结表征贡献。",
+    "quote": "MDF++: Visuo-Tactile"
+  },
+  {
+    "item_id": "arxiv:2610.39528",
+    "source_signature": "9ad2496627f6c6096e78b74fec89f2169bcfe553da4ae67cb5ecdf6792f4b3aa",
+    "level": 0,
+    "reason": "KV注入、世界模型和协方差流噪声叠加且四阶段训练，摘要无量化控制或资源预算，自称SOTA不足判断通用路线收益，证据待补。",
+    "quote": "PRIME W0: Physical P"
+  },
+  {
+    "item_id": "arxiv:2611.08664",
+    "source_signature": "6d1b2e518438e03cbba96c3de9630e13617bd980e2d13e71ac6d90b668dd05db",
+    "level": 1,
+    "reason": "无外力传感器的力潜变量与残差全身控制使30kg推车实机迁移，比较和载荷具体，但集中单交互任务，需核真实力估计和性能对照。",
+    "quote": "ForPC: Force-Aware W"
+  },
+  {
+    "item_id": "arxiv:2611.09030",
+    "source_signature": "7610000033b4547c7c19b43e98da27e107a615a0b4038787103a754626a581c9",
+    "level": 1,
+    "reason": "九任务631配置28K代理rollout的控制研究有诊断价值，但摘要结论定性、缺特定因素效应量与预算，需要全文才能定位可复用决策。",
+    "quote": "A Controlled Study o"
+  },
+  {
+    "item_id": "arxiv:2611.08698",
+    "source_signature": "939795105d6652495b1264e7682832f5bb5a8b3fadcd99190bb3ae354beb550b",
+    "level": 2,
+    "reason": "按任务进度对齐检索示范替代视觉相似，可影响跨任务ICL上下文选择，未见实机成功6.2到23.8且进度翻倍，需核参考示范与后训练成本。",
+    "quote": "VICTR: Value-Informe"
+  },
+  {
+    "item_id": "arxiv:2611.08577",
+    "source_signature": "338cb0da9d58839e188ffab19826bcccec2122917c2935940bc5a5f3e37e76e7",
+    "level": 1,
+    "reason": "大规模跨本体三阶段训练与Rollback负监督有实机匹配对照，但资源高且众多模块捆绑，agent恢复仅定性，先按完整系统配方处理。",
+    "quote": "Meituan-Robotics-0: "
+  },
+  {
+    "item_id": "arxiv:2611.08914",
+    "source_signature": "2d3e339a86378a7b13077372884d04a80d3c1a1e51ed19b442df9f08fbc174f4",
+    "level": 1,
+    "reason": "模拟机器人IoT危险演化与时序逻辑评价能测过度反应，六模型结果明确，但布局资源待发布且场景特权和预定义动作成本限制外推。",
+    "quote": "HomeLoop: A Simulati"
+  },
+  {
+    "item_id": "arxiv:2611.08898",
+    "source_signature": "482f38c791a187a3dd9f06baf7081d6e5f4f2d97c73c541aa1e592ed32106ea6",
+    "level": 1,
+    "reason": "多模态信念加扩散候选潜模型选择有真实AUV消融与板上实时，适用稀疏标记跟踪，摘要缺效果量及模型预算，先评专门控制增量。",
+    "quote": "FATHOM: World-Model-"
+  }
+]

@@ -1,0 +1,1207 @@
+{
+  "id": "e9d3cc489bcb83c3317e99d4630e36aa50ef195eecae2ed8db3e69450e781cc0",
+  "url": "https://arxiv.org/html/2611.08373v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "c2130bcaa4038d5a",
+      "section": "正文",
+      "location": "正文",
+      "text": "1]The Hong Kong University of Science and Technology (Guangzhou) 2]OLA Dimensions 3] Beijing Academy of Artificial Intelligence 4]Tsinghua University \\contribution [*]Equal Contribution \\contribution [†]Project Lead \\contribution [ 🖂 ]Corresponding Author \\metadata [Code] GitHub \\metadata [Project Page] Project Website",
+      "url": "https://arxiv.org/html/2611.08373v1#p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "824f6e714d250e48",
+      "section": "SLA: Scaling Spatial-Language-Action Model via Continual Pre-training",
+      "location": "SLA: Scaling Spatial-Language-Action Model via Continual Pre-training",
+      "text": "Reliable robotic manipulation requires both semantic understanding and precise control in three-dimensional space. However, vision-language-action (VLA) foundations largely inherit visual representations from 2D vision-language pre-training, while spatial supervision is often introduced only during task-specific adaptation. Developing spatial understanding as a transferable foundation-model capability therefore calls for learning from broader robot experience. We present SLA, a Spatial-Language-Action Model that scales implicit spatial alignment to continual pre-training and maintains it during downstream post-training. Initialized from a pretrained π 0.5 \\pi_{0.5} policy, SLA jointly optimizes action prediction and alignment between intermediate visual embeddings and spatial representations from a frozen 3D perception model. We curate and unify heterogeneous robot datasets to support spatial learning across diverse embodiments, tasks, and scenes. To accommodate this diversity, we introduce feature-dependent gates that adaptively aggregate visual embeddings from multiple VLA layers for spatial supervision. The teacher further exploits partially available depth and camera calibration alongside RGB observations, enabling effective use of heterogeneous geometric annotations. Probabilistic state dropout encourages reliance on visual cues and mitigates overfitting to demonstration trajectories. All auxiliary components are used only during training, allowing direct reuse of pretrained VLA weights and preserving the original inference architecture. Extensive evaluations demonstrate that SLA achieves state-of-the-art performance on RoboDojo-Real, RoboTwin 2.0 under the Clean2Random setting, RoboCasa-Panda, and LIBERO-Plus, highlighting its strong generalization and downstream data efficiency. Across eight real-world deployment conditions, SLA further improves the average success rate over π 0.5 \\pi_{0.5} by 24.0 percentage points.",
+      "url": "https://arxiv.org/html/2611.08373v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f17abde4881015bd",
+      "section": "SLA: Scaling Spatial-Language-Action Model via Continual Pre-training",
+      "location": "SLA: Scaling Spatial-Language-Action Model via Continual Pre-training",
+      "text": "Figure 1 : SLA unifies heterogeneous robot data, aligns intermediate visual embeddings with frozen 3D features during training, and improves benchmark and real-world manipulation performance.",
+      "url": "https://arxiv.org/html/2611.08373v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "259d134d454a54a5",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "The development of robotic manipulation hinges on integrating semantic reasoning with accurate physical control in the 3D real world. Recently, vision-language-action (VLA) models ( Black et al., 2025 ; Intelligence, 2025 ; Yuan et al., 2026a ; Team et al., 2026b ; Liu et al., 2026b ; Bu et al., 2025 ; Song et al., 2026 ) , capable of instruction following and robotic action execution, have attracted significant attention. By combining the pretrained vision-language model (VLM) with action experts learning on diverse robot demonstrations, these models offer a promising foundation for general-purpose manipulation. However, successful manipulation requires not only recognizing objects and understanding instructions but also executing precise actions in the 3D physical world. Typical 2D VLA foundation models inherit knowledge from VLMs pretrained on 2D image–text pairs and learn robot control without explicitly incorporating 3D physical knowledge during pre-training. This limits their reliability in scenes that demand fine-grained spatial reasoning.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ed720d7fc2b5e34c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "A direct approach to improving spatial understanding is to introduce 3D modalities during post-training on top of a pretrained 2D VLA foundation model. Several approaches ( Li et al., 2026a ; Sun et al., 2025 ; Li et al., 2026c ) use depth maps or point clouds obtained from depth cameras or other 3D sensors, encode their geometric information, and feed it into the VLM backbone or action head. However, some limitations make it difficult to develop a universal and scalable 3D strategy for this paradigm: (1) Reliable 3D sensor data is hard to acquire, as measured depth maps and point clouds can be noisy or incomplete. (2) Robotic sensors vary in types, positions, and calibration status, which introduces substantial heterogeneity into the data. (3) Portions of existing large-scale robot datasets ( O’Neill et al., 2024 ; Wu et al., 2025b ; Lee et al., 2026 ; Walke et al., 2023 ; Brohan et al., 2022 ) do not include depth information, which limits the potential of scaling.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6de2b0315c00c85c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "To address these questions, Spatial Forcing ( Li et al., 2025a ) has propose a implicit 3D representation alignment strategy to enbow 2D VLA with spatial intelligence without explicit demand of depth information. However, Spatial Forcing still concentrate on post-training, leaving spatial competence as a task-specific add-on and limiting the development of scalable 3D VLA foundation models with transferable spatial understanding.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6378097c785102dc",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Recently, continual pre-training has been widely adopted as a means of developing specific capabilities at scale while preserving the knowledge acquired during foundation model pre-training ( Yu et al., 2026 ; Guo et al., 2026b ) . Motivated by this approach, we propose to build on the strong 2D foundation model and develop spatial understanding through continual pre-training, laying the foundation for subsequent adaptation. We therefore propose SLA , a robotic foundation model with generalized spatial understanding capabilities developed through implicit representation alignment during both continual pre-training and post-training. Intuitively, action generation is conditioned on visual and linguistic representations, making the spatial content of visual tokens directly relevant to action. Higher-quality visual tokens that contain richer spatial information can facilitate generating more precise manipulation actions. Inspired by this, we align the intermediate visual embeddings of the VLA with external spatial representations extracted from a frozen 3D perception foundation model. This spatial alignment objective complements the standard action-learning objective, encouraging the policy to internalize geometric information in the representations used for action prediction. Crucially, this supervision requires no changes to the pretrained VLA architecture or the action-generation head. We can therefore initialize the policy directly from the pretrained π 0.5 \\pi_{0.5} foundation ( Intelligence, 2025 ) and continue training from its learned robotic knowledges. This architectural compatibility allows spatial supervision to shape the foundation model while retaining access to the general knowledge encoded in its pretrained weights.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "370fef0c04501764",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Technically, to support continual pre-training across heterogeneous robot data, we combines a unified training corpus. We curate multiple large-scale public datasets covering diverse embodiments, tasks, scenes, and visual appearances, and unify their state and action annotations through consistent end-effector representations and coordinate conventions. This processing provides a common basis for learning how different robots act in space. The resulting visual diversity also makes a single manually chosen alignment layer restrictive: a certain intermediate visual layer of VLA models suited to one domain data may not be equally suitable for another. We therefore develop adaptive layer selection mechanism, using feature-dependent gates to aggregate visual embeddings from multiple VLA layers for spatial supervision. In addition, we adopt OmniVGGT ( Peng et al., 2025 ) as the external 3D perception foundation to exploit partially available camera calibrations and depth annotations alongside RGB images. We further introduce probabilistic state dropout during training to mitigate overfitting to demonstration trajectories and encourage the policy to make better use of visual cues, thereby improving generalization. After continual pre-training, we retain spatial alignment during post-training to adapt the resulting foundation model to specific down-streaming tasks. The teacher, alignment projector, and layer-selection gates are used only during training. At deployment, the policy retains its original inference architecture without requiring the external perception model, alignment projector, or layer-selection gates.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "c3e0cc7af4e15f0b",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Extensive evaluations across three public simulation benchmarks, one public real-world benchmark, and eight real-world deployment conditions are conducted to demonstrate the effectiveness of our SLA. On LIBERO-Plus ( Fei et al., 2025 ) , it achieves an overall success rate of 87.4% under diverse observation, language, and scene perturbations, outperforming the compared baselines. On RoboTwin 2.0 ( Chen et al., 2025a ) , training on clean demonstrations yields a 72.3% success rate in the Clean2Random setting and a 79.2% average across Clean2Clean and Clean2Random, demonstrating generalization beyond the training conditions. On RoboCasa-Panda ( Nasiriany et al., 2024 ) , SLA achieves 68.4% success with only 50 downstream demonstrations per task, exceeding compared policies trained with 300–3,000 demonstrations per task. On RoboDojo-Real ( Chen et al., 2026b ) , a single policy adapted across three embodiments achieves 33.9% overall success, compared with 12.8% for π 0.5 \\pi_{0.5} , supporting its applicability to real robot manipulation. Our eight deployment conditions further examine bimanual coordination, spatial and dynamic generalization, few-shot cross-embodiment adaptation, and instruction following. SLA achieves the highest success rate among the compared methods in every condition, averaging 83.8% and improving over π 0.5 \\pi_{0.5} by 24.0 percentage points. Controlled data-scaling experiments further show that applying spatial alignment in both training stages outperforms either single-stage alternative at every tested data proportion. Together, these results support developing spatial understanding during continual pre-training and stengthen it during downstream adaptation.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "52d9e9f36ed6b8b2",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Our contributions are summarized as follows:",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8bda3a678e44368",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We introduce SLA, a robotic foundation model that implicitly enforces the integration of visual embeddings in VLAs with external spatial representations.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cdeea608b71ef7c4",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We extend SLA to continual pre-training on a carefully curated and unified corpus of public robot datasets, developing a spatially informed foundation model.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "eb1ed94f9ea70790",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We apply SLA training principle during downstream post-training and demonstrate strong benchmark performance, together with bimanual coordination, spatial and dynamic generalization, few-shot cross-embodiment adaptation, and instruction following.",
+      "url": "https://arxiv.org/html/2611.08373v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ac9677c29c095e0f",
+      "section": "2.1 VLA Foundation Models",
+      "location": "2.1 VLA Foundation Models",
+      "text": "VLA foundation models learn generalist manipulation policies from large, diverse datasets and adapt them to downstream tasks. Cross-embodiment datasets ( O’Neill et al., 2024 ; Walke et al., 2023 ; Brohan et al., 2022 ; Wu et al., 2024 ; Fang et al., 2024 ; Allshire et al., 2026 ; Jiang et al., 2026 ) have accelerated this development. OpenVLA ( Kim et al., 2024 ) , π 0 \\pi_{0} ( Black et al., 2025 ) , RDT-1B ( Liu et al., 2024 ) , and GR00T N1 ( Bjorck et al., 2025 ) learn language-conditioned action prediction from robot demonstrations, while GR-2 ( Cheang et al., 2024 ) combines large-scale video pre-training with policy learning on robot trajectories. To improve task understanding, RT-H ( Belkhale et al., 2024 ) and π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) adopt language-conditioned task hierarchies, whereas MolmoAct ( Lee et al., 2026 ) and MolmoAct2 ( Fang et al., 2026 ) incorporate action reasoning into robot control. RT-2 ( Brohan et al., 2023 ) , π 0.5 \\pi_{0.5} , and Xiaomi-Robotics-0 ( Cai et al., 2026b ) also co-train on robot and vision-language data to support semantic generalization and instruction following. The scarcity of teleoperated robot data has further motivated alternative sources of supervision. HumanScale ( Ma et al., 2026 ) investigates pre-training on egocentric human videos followed by adaptation with robot data. Separately, the Universal Manipulation Interface (UMI) ( Chi et al., 2024 ) enables portable demonstration collection using handheld grippers without requiring robots at collection sites. RDT2 ( Liu et al., 2026a ) and Xiaomi-Robotics-1 ( Team et al., 2026b ) exploit UMI data to expand training scale and coverage of environments and tasks. These advances support generalist action learning, but data scaling alone does not specify how geometric representations should be supervised during pre-training. Our complementary goal is to develop 3D spatial understanding in an existing VLA foundation model through spatially supervised continual pre-training.",
+      "url": "https://arxiv.org/html/2611.08373v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3e9d3601353ebf29",
+      "section": "2.2 3D VLA Models",
+      "location": "2.2 3D VLA Models",
+      "text": "Existing 3D VLA methods introduce geometry through explicit inputs, feature fusion, or representation supervision. PointVLA ( Li et al., 2026a ) and GeoVLA ( Sun et al., 2025 ) integrate point cloud features into action prediction. BridgeVLA ( Li et al., 2026c ) projects 3D observations into multi-view images; and FALCON ( Zhang et al., 2025 ) extracts geometric tokens from spatial foundation models for fusion within the action head. These approaches still require additional geometric input extraction at deployment. Another works use training-time supervision to encode spatial structure in internal policy representations. ROCKET ( Sun et al., 2026 ) explores multilayer spatial alignment, VEGA ( Wang et al., 2026a ) supervises visual encoder outputs, and Mind-VLA ( Ding et al., 2026 ) introduces instruction-aware alignment of target-object representations. Such approaches emphasize adding 3D capabilities during post-training on top of generic 2D VLA pre-training ( Intelligence, 2025 ; Bu et al., 2025 ; Kim et al., 2025 ) , leaving spatial understanding as a supplementary capability rather than establishing a scalable 3D-aware foundation. Recent studies incorporate geometry into pre-training through egocentric spatial embeddings ( Qu et al., 2025 ) , egocentric 3D annotations ( Feng et al., 2026 ) , and object pose estimation ( Lin et al., 2026 ) . However, these 3D-aware pre-training efforts remain relatively limited in scale compared with large-scale 2D VLA pre-training. In contrast, we build on pretrained 2D VLA through continual pre-training to develop generalizable 3D-aware foundation models.",
+      "url": "https://arxiv.org/html/2611.08373v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "617da6281dcfb156",
+      "section": "2.3 Continual Pre-training",
+      "location": "2.3 Continual Pre-training",
+      "text": "Continual pre-training extends the domain capabilities of existing foundation models through further large-scale pre-training, providing a basis for downstream adaptation. Early studies ( Lee et al., 2020 ; Alsentzer et al., 2019 ; Araci, 2019 ; Chalkidis et al., 2020 ; Gururangan et al., 2020 ) focus on adapting to domain-specific data distributions. Llemma ( Azerbayev et al., 2024 ) strengthens mathematical reasoning through continual pre-training on mathematical text and code. AgentFounder ( Su et al., 2026b ) uses diverse reasoning and action data to establish a foundation for agent capabilities before post-training. Recent efforts extend this paradigm to robotics: ET-VLA ( Li and Peng, 2025 ) uses synthetic data for continual pre-training to transfer existing VLAs to new embodiments, whereas AXIS ( Zhao et al., 2026 ) investigates how policy performance scales with data. These VLA efforts primarily focus on training data sources. In contrast, we use implicit spatial alignment framework during continual pre-training to develop generalizable 3D spatial understanding while preserving the pretrained VLA backbone architecture.",
+      "url": "https://arxiv.org/html/2611.08373v1#S2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5aca8fe022440413",
+      "section": "3 Methodology",
+      "location": "3 Methodology",
+      "text": "SLA aims to develop a scalable 3D VLA foundation model through continual pre-training. Starting from a pretrained 2D VLA backbone ( Intelligence, 2025 ) , we use external spatial representation supervision to shape its visual representations while retaining its backbone and action-generation architecture. Section 3.1 motivates this approach, Section 3.2 presents the model and training mechanisms, and Section 3.3 describes the continual-pre-training corpus and its unified processing.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "25616fc221526f81",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "VLA models are built upon pretrained VLMs and generate actions through specialized designs for action experts. A θ \\theta -parameterized VLM model employs multiple causal attention layers in an auto-regressive manner to generate the next tokens, formed as 𝒙 t ∼ p θ ​ ( 𝒙 t ∣ 𝒙 < t ) , \\bm{x}_{t}\\sim p_{\\theta}(\\bm{x}_{t}\\mid\\bm{x}_{<t}), where { 𝒙 t } t = 1 T \\{\\bm{x}_{t}\\}_{t=1}^{T} denotes a sequence of tokens.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9d81111ac3bbdf68",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "When adapted to VLA models, three modalities of information will be processed: vision, text, and action. The vision modality consists of multi-view images captured by robots, which are transformed into N N visual tokens { 𝒙 t 𝒱 } t = 1 N \\{\\bm{x}_{t}^{\\mathcal{V}}\\}_{t=1}^{N} through pretrained visual encoders such as DINOv2 ( Oquab et al., 2023 ) or SigLIP ( Zhai et al., 2023 ) . The text modality consists of task instructions, which are converted into M M linguistic tokens { 𝒙 t ℒ } t = 1 M \\{\\bm{x}_{t}^{\\mathcal{L}}\\}_{t=1}^{M} by a text tokenizer. Then, the VLA models generate K K action tokens { 𝒙 t 𝒜 } t = 1 K \\{\\bm{x}_{t}^{\\mathcal{A}}\\}_{t=1}^{K} conditioned on the preceding visual and linguistic tokens:",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "88fa40732efddaf8",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "𝒙 t 𝒜 ∼ p θ ​ ( 𝒙 t 𝒜 ∣ { 𝒙 i 𝒱 } i = 1 N , { 𝒙 j ℒ } j = 1 M , 𝒙 < t 𝒜 ) , \\bm{x}_{t}^{\\mathcal{A}}\\sim p_{\\theta}\\big(\\bm{x}_{t}^{\\mathcal{A}}\\mid\\{\\bm{x}_{i}^{\\mathcal{V}}\\}_{i=1}^{N},\\{\\bm{x}_{j}^{\\mathcal{L}}\\}_{j=1}^{M},\\bm{x}_{<t}^{\\mathcal{A}}\\big), (1)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "f7403eb51062abb3",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "ℒ action = ℒ ⁡ [ 𝒢 ⁡ ( { 𝒙 t 𝒜 } t = 1 K ) , A g ​ t ] , \\displaystyle\\mathcal{L}_{\\mathrm{action}}=\\mathcal{L}[\\mathcal{G}(\\{\\bm{x}_{t}^{\\mathcal{A}}\\}_{t=1}^{K}),A_{gt}], (2)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "3dc42f961849a1b3",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "where ℒ ⁡ [ ⋅ , ⋅ ] \\mathcal{L}[\\cdot,\\cdot] denotes the training loss ( e.g. L1, L2, or cross-entropy loss), 𝒢 \\mathcal{G} denotes the trainable action expert ( e.g. multi-layer MLP or flow-matching head ( Lipman et al., 2022 ) ). Equation 1 illustrates that the visual tokens as intermediate scene representations play a crucial role in generating action tokens and should be supervised properly.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS1.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "f188a2968edd6b69",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "Since VLA models must capture 3D information and reason about the relative positions between robots and objects to generate precise spatial movements, we hypothesize that the 3D information is implicitly embedded within the visual embeddings of VLAs. Such embeddings would allow action tokens to acquire 3D cues through the auto-regressive mechanism during inference.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d59335e8d1e20b98",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "To evaluate this hypothesis, we follow linear probing ( He et al., 2020 ; Wu et al., 2025a ) to conduct a lightweight depth probing experiment. Specifically, we freeze all the parameters of a VLA model ( Kim et al., 2025 ) and only train a DPT head ( Ranftl et al., 2021 ) to transform the visual embeddings of VLA to depth maps. This enables us to quantify the richness of spatial information embedded in the VLA representation space. As shown in Figure 2 , the probing results show that visual embeddings learned solely from 2D images do not produce meaningful spatial structures, suggesting a limited capacity of the model to encode 3D structure information without explicit spatial input or guidance.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "22513833eadf9c82",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "Figure 2 : Depth probing of the visual embeddings of VLAs. Embeddings learned solely from 2D images without alignment do not produce meaningful spatial structures. The aligned embeddings inherently contain rich spatial information, leading to better performance in depth probing.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "cb478ce0221090d9",
+      "section": "3.1 Motivation",
+      "location": "3.1 Motivation",
+      "text": "However, bridging this 3D physical gap through additional sensor inputs or depth-estimation modules would change the architecture of the original 2D VLA foundation model and may disrupt the general knowledge already acquired during its pre-training. We therefore seek a training strategy that reuses the existing VLA architecture and pretrained parameters to unlock its generalizable understanding of the 3D physical world through continual pre-training.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "73ffa26a6f471273",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "Our main philosophy is to employ external supervision signals to supervise the visual tokens 𝒙 𝒱 \\bm{x}^{\\mathcal{V}} . To provide the signals with rich spatial information, we first input a set of multi-view images ℐ \\mathcal{I} into a frozen external 3D perception foundation model f 3 ​ D f^{\\mathrm{3D}} , which outputs pixel-level 3D representations f 3 ​ D ​ ( ℐ ) f^{\\mathrm{3D}}(\\mathcal{I}) for each image. Available geometric annotations like camera parameters and depth images are also provided to this external 3D foundation model, as described in Section 3.2.2 . Additionally, these spatial representations are augmented with positional embeddings E E to ensure that the supervised tokens preserve the critical spatial position order during supervised training. We extract the final-layer representations of f 3 ​ D ​ ( ℐ ) f^{\\mathrm{3D}}(\\mathcal{I}) and bilinearly resample the feature grids with positional embeddings to the VLA token resolution, obtaining a spatial target 𝐲 i \\mathbf{y}_{i} at each visual token location:",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a5c8171f4c4be7d2",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "𝐲 = ℛ ⁡ [ f 3 ​ D ​ ( ℐ ) + E ] , \\mathbf{y}=\\mathcal{R}\\!\\left[f^{\\mathrm{3D}}(\\mathcal{I})+E\\right], (3)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "b30ddc4896f87137",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "where ℛ ⁡ [ ⋅ ] \\mathcal{R}\\left[\\cdot\\right] denotes bilinear resampling to the VLA visual token resolution. For brevity, the available geometric annotations like camera parameters are implicit in ℐ \\mathcal{I} .",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "c41178b183e0080a",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "To align the VLA’s per-pixel visual tokens with this external 3D perception foundation model, we first process each VLA visual token 𝒙 𝒱 \\bm{x}^{\\mathcal{V}} with layer normalization LN \\mathrm{LN} followed by a two-layer MLP to ensure compatibility in feature dimension. Let 𝒙 𝒱 ( ℓ ) {}^{(\\ell)}\\bm{x}^{\\mathcal{V}} denote the VLA visual tokens after attention layer ℓ \\ell of the VLA’s vision-language backbone. The normalization and MLP parameters are shared across layers. As there are multiple causal attention layers in the VLA model, visual tokens can be obtained after different layers. We adaptively aggregate their projected features into 𝐳 \\mathbf{z} :",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "dfeec432f3fe10af",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "𝐳 \\displaystyle\\mathbf{z} = ℱ ⁡ [ { 𝒙 𝒱 ( ℓ ) } ℓ = 1 L ] \\displaystyle=\\mathcal{F}\\!\\left[\\left\\{{}^{(\\ell)}\\bm{x}^{\\mathcal{V}}\\right\\}_{\\ell=1}^{L}\\right] (4) = ∑ ℓ = 1 L 𝐠 ( ℓ ) ⊙ MLP ⁡ [ LN ⁡ ( 𝒙 𝒱 ( ℓ ) ) ] , \\displaystyle=\\sum_{\\ell=1}^{L}{}^{(\\ell)}\\mathbf{g}\\odot\\mathrm{MLP}\\!\\left[\\mathrm{LN}\\!\\left({}^{(\\ell)}\\bm{x}^{\\mathcal{V}}\\right)\\right],",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "8dd6874537b9f5cf",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "where L L is the number of VLA attention layers, 𝐠 i ( ℓ ) {}^{(\\ell)}\\mathbf{g}_{i} is a token- and channel-wise gate, and ⊙ \\odot denotes element-wise multiplication. This fusion operator ℱ ⁡ [ ⋅ ] \\mathcal{F}\\left[\\cdot\\right] denotes the adaptive layer selection strategy, which is detailed in Section 3.2.3 .",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "ce6e2f48cb9e8072",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "Then we employ a cosine similarity score to maximize the alignment between the visual tokens of the VLA and the external spatial representation signals. The alignment loss is",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "81f3f68d118daafd",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "ℒ align = 1 N ​ ∑ i = 1 N [ 1 − 𝒮 ⁡ ( 𝐳 i , 𝐲 i ) ] , \\mathcal{L}_{\\mathrm{align}}=\\frac{1}{N}\\sum_{i=1}^{N}\\left[1-\\mathcal{S}(\\mathbf{z}_{i},\\mathbf{y}_{i})\\right], (5)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "eaf79ac019a5cc9f",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "where 𝒮 ⁡ [ ⋅ , ⋅ ] \\mathcal{S}\\left[\\cdot,\\cdot\\right] denotes cosine similarity and N N is the number of visual tokens across views. The target 𝐲 i \\mathbf{y}_{i} corresponds to the same view and image location as visual token 𝐳 i \\mathbf{z}_{i} . Gradients update the VLA, MLP projector, and aggregation gates, while the external 3D perception model f 3 ​ D f^{\\mathrm{3D}} remains frozen.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "cf5bd3b5ac1b2f7b",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "The final training objective combines both the standard training loss for action generation and the 3D foundation model alignment loss with a weighting factor α \\alpha :",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "21d04ee7dcd6442c",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "ℒ = ℒ action + α ​ ℒ align , \\mathcal{L}=\\mathcal{L}_{\\mathrm{action}}+\\alpha\\mathcal{L}_{\\mathrm{align}}, (6)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "b5c596c49b11f58c",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "where α \\alpha controls the spatial alignment strength. We instantiate SLA with the pretrained π 0.5 \\pi_{0.5} policy ( Intelligence, 2025 ) , whose action expert generates continuous action chunks through flow matching.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "4f3fbb0a8cb78538",
+      "section": "3.2.1 Model Architecture",
+      "location": "3.2.1 Model Architecture",
+      "text": "During inference, the VLA model trained in the SLA manner operates identically to the original VLA, introducing no additional structures or computational overhead. The frozen 3D foundation model, alignment projector, and adaptive layer gates are used only during training and are discarded at inference. Neither depth maps nor camera calibration are required as additional policy inputs for inference.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "b509bc31b76f0568",
+      "section": "3.2.2 External Spatial Supervision",
+      "location": "3.2.2 External Spatial Supervision",
+      "text": "The external 3D perception foundation model f 3 ​ D f^{\\mathrm{3D}} provides the spatial representations as alignment signals. Apart from RGB image observations, some source datasets provide calibrated camera parameters and depth images, while others provide only partial geometric annotations or none at all. Discarding these annotations would leave useful geometric constraints unused, whereas requiring complete annotations would exclude otherwise valuable demonstrations. Therefore, the external model should accommodate the uneven availability of geometric annotations across the continual-pre-training corpus.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0cb931c1c6501a70",
+      "section": "3.2.2 External Spatial Supervision",
+      "location": "3.2.2 External Spatial Supervision",
+      "text": "We adopt OmniVGGT ( Peng et al., 2025 ) as the external spatial model. Built on VGGT ( Wang et al., 2025 ) , it alternates frame-wise and cross-view attention to integrate local structure with relationships across images. Its GeoAdapter encodes available camera intrinsics, extrinsics, and depth maps through separate camera and depth branches, using placeholder tokens when annotations are missing. Stochastic multimodal fusion exposes the model to different combinations of geometric inputs, including RGB-only observations. These mechanisms combine visual evidence and arbitrary available geometric constraints in a unified latent representation. We therefore argue that its backbone features contain sufficiently rich spatial information to serve as external supervision for the VLA’s visual tokens.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "fd6d17085407b9bc",
+      "section": "3.2.3 Adaptive Layer Selection",
+      "location": "3.2.3 Adaptive Layer Selection",
+      "text": "A heterogeneous pre-training corpus makes a fixed alignment layer a restrictive choice. Manually selecting a single layer requires separate training experiments, and a layer selected for one data domain need not offer the same balance of visual detail and task context in another. Differences in scenes, textures, and embodiments motivate a mechanism that can adapt the contribution of each layer to the observed visual content.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "67a56879351cbe8d",
+      "section": "3.2.3 Adaptive Layer Selection",
+      "location": "3.2.3 Adaptive Layer Selection",
+      "text": "Inspired by Gated Attention ( Qiu et al., 2025 ) , we learn a feature-dependent gate for every visual token at every VLA transformer layer. Given the unprojected embedding 𝒙 𝒱 i ( ℓ ) {}^{(\\ell)}\\bm{x}_{i}^{\\mathcal{V}} , the gate is",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "22cdf1080f1edc60",
+      "section": "3.2.3 Adaptive Layer Selection",
+      "location": "3.2.3 Adaptive Layer Selection",
+      "text": "𝐠 i ( ℓ ) = σ ⁡ ( W g ​ 𝒙 𝒱 i ( ℓ ) + 𝐛 g ) , {}^{(\\ell)}\\mathbf{g}_{i}=\\sigma\\!\\left(W_{g}\\,{}^{(\\ell)}\\bm{x}_{i}^{\\mathcal{V}}+\\mathbf{b}_{g}\\right), (7)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.E7",
+      "kind": "table"
+    },
+    {
+      "id": "0075f8b5f52f884e",
+      "section": "3.2.3 Adaptive Layer Selection",
+      "location": "3.2.3 Adaptive Layer Selection",
+      "text": "where W g W_{g} and 𝐛 g \\mathbf{b}_{g} are the learnable weight matrix and bias vector of the gate, respectively, and σ \\sigma is the element-wise sigmoid. These gate parameters are shared across layers. The fusion operator ℱ \\mathcal{F} in Equation 4 uses these gates to weight the projected features and sums them across layers to obtain 𝐳 i \\mathbf{z}_{i} .",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "cf906c4afb3fe16a",
+      "section": "3.2.3 Adaptive Layer Selection",
+      "location": "3.2.3 Adaptive Layer Selection",
+      "text": "Through this mechanism, multi-layer VLA visual tokens can be supervised simultaneously, allowing different visual cues like depth and channel informations contribute to a unified spatial representation. The gates belong exclusively to the auxiliary training branch and introduce no additional policy computation at deployment.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2f11b066cd93e927",
+      "section": "3.2.4 State Dropout",
+      "location": "3.2.4 State Dropout",
+      "text": "Spatial supervision is useful only when the policy learns to rely on visual evidence for control. Robot states provide precise proprioceptive information, but can become shortcuts: a policy may associate particular states with demonstrated trajectories instead of responding to visual changes in the scene ( Lu et al., 2026 ; Zhao et al., 2025 ) . We apply state dropout to discourage this shortcut during both training stages. Independently for each training sample, we randomly omit the entire state-token segment during tokenization; the instruction and image tokens are retained. Together, our external spatial alignment and state dropout encourage the model to encode scene geometry and to use visual observations when generating actions. This dropout is disabled at inference when the normal state input is available.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS2.SSS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e890813b8672d0b7",
+      "section": "3.3 Data",
+      "location": "3.3 Data",
+      "text": "The quality and diversity of training data are fundamental to the generalization ability of VLAs. To build a VLA model that generalizes well across embodiments, tasks, and environments, we carefully curate a large-scale corpus for continual pre-training. Furthermore, we apply a unified data curation and preprocessing pipeline to all sources to ensure consistent robot state and action annotations.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ed094ae9ac473ff7",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "The six source datasets summarized in Table 1 collectively contain approximately 1.7 million episodes and 14,330 hours of demonstrations.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "00dd2270cf58e1fa",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "Table 1 : Overview of the source datasets for continual pre-training. Statistics refer to the source datasets before our data selection and processing; task counts are summed across datasets.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a2618ed2c7f99b56",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "Data source Episodes Tasks Hours InternData-A1 ( Tian et al., 2025 ) 630K 70 7430 AgiBotWorld-Beta ( AgiBot-World-Contributors et al., 2025 ) 168K 217 2970 RoboCasa365-Pretrain ( Nasiriany et al., 2026 ) 630K 300 2090 RoboCOIN ( Wu et al., 2025b ) 183K 808 1300 DROID ( Khazatsky et al., 2024 ) 95K 86 510 MolmoAct ( Lee et al., 2026 ) 7.9K 23 30 Total 1,713.9K 1,504 14,330",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.T1.5",
+      "kind": "table"
+    },
+    {
+      "id": "3897234eb7a16b19",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "RoboCOIN ( Wu et al., 2025b ) provides real-world bimanual manipulation demonstrations collected across heterogeneous robotic platforms, adding variation in embodiment and observation configuration.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee4320108f011d26",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "AgiBot World Beta ( AgiBot-World-Contributors et al., 2025 ) offers a large collection of real-world manipulation demonstrations with broad coverage of tasks and scenes. We retain its two-finger-gripper demonstrations without mobile-base motion.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ed2bb8ce981c178c",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "DROID ( Khazatsky et al., 2024 ) supplies demonstrations collected with Franka robots in varied real-world environments. Demonstration quality and annotation precision vary somewhat. We include it for its single-arm real-robot experience, which remains comparatively scarce in public datasets.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "15fd6645a907c098",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "InternData-A1 ( Tian et al., 2025 ) provides synthetic manipulation trajectories generated by scripted policies, which tend to produce regular, recurring motion patterns. We use its Split ALOHA, Lift2, and Franka subsets for their rich variation in simulated scenes, assets, and textures, broadening visual coverage.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "faea1b1288659a79",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "MolmoAct ( Lee et al., 2026 ) contributes real-world franka demonstrations centered on a focused set of tasks and scenes. It further complements valuable single-arm real-robot experience to the corpus.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "b97b98295cb9edf8",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "RoboCasa365 ( Nasiriany et al., 2026 ) provides demonstrations of household tasks in simulated kitchens. We use its pre-training atomic, composite, and MimicGen subsets after removing trajectories with base motion. Its post-train subsets are not used.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "faf0ec5cf80b8849",
+      "section": "3.3.1 Data Sources",
+      "location": "3.3.1 Data Sources",
+      "text": "To ensure fair and valid comparisons after post-training, our continual pre-training corpus excludes downstream benchmark data that would cause evaluation leakage.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS1.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "56dbacfb13b68310",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "Different robot morphologies induce incompatible joint-state and joint-action spaces, making joint coordinates a difficult basis for shared control representations. We instead express action through end-effector (EEF) poses, which describe the spatial effect of an action independently of the number and arrangement of arm joints. We use absolute EEF states as observations and chunk-wise delta EEF actions as prediction targets.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "65d9b39caa6e2118",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "We first express all poses in a consistent robot-centered EEF coordinate frame. We unified the coordinate origin to the arm base for single-arm robots and the midpoint between the two arm bases for bimanual robots. Besides, we unified its axes point to forward ( + x +x ), left ( + y +y ), and upward ( + z +z ). A rigid coordinate transformation maps each source data’s EEF positions and orientations into this convention. Thus, the numerical axes of the shared action representation have consistent physical meanings across embodiments.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "29048d85f7088194",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "Rotation format is equally important for consistent action targets. Common choices include Euler angles, continuous 6D representations, rotation vectors, and quaternions. Directly subtracting Euler angles as delta actions may convert a small physical rotation across an angular wrap boundary into a large numerical displacement. We observe such wrap-induced outliers in the pre-training action distributions shown in Figure 3 . Our controlled comparisons motivate representing orientation with rotation vectors while computing relative rotations through SO ⁡ ( 3 ) \\mathrm{SO}(3) composition.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "b95f28f4c7bc4401",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "Specifically, for one arm, let ( 𝐩 0 , R 0 ) (\\mathbf{p}_{0},R_{0}) be its current absolute EEF pose and ( 𝐩 t , R t ) (\\mathbf{p}_{t},R_{t}) the absolute target pose of action t ∈ { 1 , … , H } t\\in\\{1,\\ldots,H\\} within a chunk of H H actions. We construct",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c841165cd58d2bf",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "Δ ​ 𝐩 t \\displaystyle\\Delta\\mathbf{p}_{t} = 𝐩 t − 𝐩 0 , \\displaystyle=\\mathbf{p}_{t}-\\mathbf{p}_{0}, (8) Δ ​ R t \\displaystyle\\Delta R_{t} = R t ​ R 0 ⊤ , \\displaystyle=R_{t}R_{0}^{\\top}, (9) Δ ​ 𝐫 t \\displaystyle\\Delta\\mathbf{r}_{t} = Log ⁡ ( Δ ​ R t ) ∨ , \\displaystyle=\\operatorname{Log}(\\Delta R_{t})^{\\vee}, (10)",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.EGx1",
+      "kind": "table"
+    },
+    {
+      "id": "2c319aa04b15ccd4",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "where Log ⁡ ( ⋅ ) ∨ \\operatorname{Log}(\\cdot)^{\\vee} maps a relative rotation matrix to its rotation-vector representation. Every action in the chunk uses the same current pose as its reference, rather than the preceding action.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px1.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "92ab57c068d21383",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "Figure 3 : Comparison of rotational action distributions. (a) Euler-angle representations with direct subtraction for relative-rotation targets. (b) Rotation-vector representations with relative rotations computed through SO ⁡ ( 3 ) \\mathrm{SO}(3) composition. In (a), angular wrapping produces outliers near ± 2 ​ π \\pm 2\\pi , which widen the interval between the 1st and 99th percentiles. This severely compresses the range of typical action values after normalization, hindering training.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7f62ee1a7862964a",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "A rotation vector has a unified physical meaning through its direction and magnitude, making it natural to normalize its three channels using a shared scale. However, our controlled experiments show that channel-wise normalization yields substantially better performance, and we therefore adopt this approach in our experiments.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "7e1e9eb7cd71e968",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "Large numbers of similar trajectories can dominate a mixed training corpus without adding comparable behavioral diversity. This is particularly relevant to scripted simulation data, where repeated executions may follow highly regular motion patterns. We reduce such redundancy by subsampling complete episodes within tasks, preserving the original temporal sampling rate of every retained trajectory.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c9ccf4035b59351a",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "For example, for InternData-A1, we retain 3% of episodes for selected tasks with highly repetitive trajectories, and 10% for the other tasks. For the pre-training subsets of RoboCasa365, we retain 0.5% of the MimicGen episodes and 15% of the composite episodes. These source-dependent and task-dependent retention rates bring episode counts closer to a comparable order of magnitude, reducing the dominance of a small number of scenes or tasks.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "aeef7d0c381718ac",
+      "section": "3.3.2 Data Processing",
+      "location": "3.3.2 Data Processing",
+      "text": "We focus on manipulation with two-finger grippers and exclude dexterous-hand data and trajectories involving robot-base motion. We additionally use action statistics to identify and remove data with anomalous arm-motion speeds. Where existing annotations are available ( Ye et al., 2026 ) , we remove idle frames in which both the robot and the scene remain stationary. Together, these filters keep the corpus aligned with the intended control setting and reduce uninformative or inconsistent supervision.",
+      "url": "https://arxiv.org/html/2611.08373v1#S3.SS3.SSS2.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ff603772aaecb2aa",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "We evaluate SLA through benchmark-specific post-training on three simulation benchmarks, one real-world benchmark, and plenty real-world deployments. These evaluations cover robustness to visual and language perturbations, manipulation under scene variation, and applicability across robot embodiments.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec1c504b6f500e39",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "LIBERO-Plus ( Fei et al., 2025 ) tests robustness along seven perturbation dimensions: camera, robot, language, lighting, background, observation noise, and object layout. We post-train on the standard LIBERO demonstrations and evaluate the perturbed environments without additional training on LIBERO-Plus. Evaluation comprises 10,030 rollouts; the overall SR weights each dimension by its number of evaluation episodes.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8001abdc9243d9d0",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "RoboTwin 2.0 ( Chen et al., 2025a ) contains 50 bimanual manipulation tasks. We jointly post-train on 50 clean demonstrations per task and evaluate each task for 100 trials in both the Clean2Clean and Clean2Random settings. Clean2Random introduces domain randomization to test generalization beyond the clean training conditions. We report the task-averaged SR for each setting and their equal-weight average.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9114b3fcc142d84e",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "RoboCasa-Panda ( Nasiriany et al., 2024 ) contains 24-task kitchen manipulation benchmark covering pick-and-place, articulated-object interaction, and appliance operation with a Panda robot. Our post-training uses 50 demonstrations per task. Each task is evaluated for 50 trials under each of three evaluation seeds, yielding 3,600 trials in total. Results are averaged over seeds and tasks.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "5060a8fefcb7f9ad",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "RoboDojo-Real ( Chen et al., 2026b ) covers 18 tasks across ARX X5, Piper, and Piper X, with six tasks per embodiment. We jointly post-train a single model on demonstrations from all three embodiments. We report scores on a 0–100 scale to measure partial task progress and success rates to measure complete task success. Aggregation equally weights tasks within each embodiment and then the three embodiments.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "9cc4f8a6eb274943",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Apart from these benchmark evaluation, we additionally conduct real-world deployment experiments under eight private deployment conditions A–H on a bimanual Piper platform and a single-arm Franka robot. Piper platform uses one main camera and two wrist cameras while Franka uses one main camera and one wrist camera. The type of All cameras is Realsense D435. For each method, we post-train one policy on 100 demonstrations of A and reuse it for A–C evaluation. For D, we jointly post-train on the 100 Piper demonstrations of A and 10 additional Franka demonstrations. For task E–H, one policy is post-trained on 100 demonstrations collected in the E scene configuration and evaluated across E–H. We report object-level successs rates over 50 evaluated object instances per method and condition. For A, B, and D, these instances come from 10 rollouts with five objects per rollout, and each object is scored separately. C and E–H each comprise 50 single-object rollouts. Success requires complete manipulation sequence for the evaluated object.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "7111e59b07fef352",
+      "section": "4.2 Implementation Details",
+      "location": "4.2 Implementation Details",
+      "text": "We initialize SLA from the pretrained π 0.5 \\pi_{0.5} policy ( Intelligence, 2025 ) to conduct continual pre-training, followed by post-training for specific tasks.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "558c3b8bae350f13",
+      "section": "4.2 Implementation Details",
+      "location": "4.2 Implementation Details",
+      "text": "The continual pre-training runs for 36k optimizer steps with an effective global batch size of 4,608, obtained by accumulating gradients over two microsteps with a global batch size of 2,304 each. The learning rate warms up to 5 × 10 − 5 5\\times 10^{-5} over the first 1k steps, follows cosine decay to 1 × 10 − 5 1\\times 10^{-5} at step 30k, and remains constant thereafter. Continual pre-training takes approximately 110 hours on 48 NVIDIA H100 GPUs.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "38afd0aea0207c76",
+      "section": "4.2 Implementation Details",
+      "location": "4.2 Implementation Details",
+      "text": "As for post-training, LIBERO-Plus takes 512 batch size and 30k steps, RoboTwin takes 256 batch size and 30k steps, RoboCasa-Panda takes 64 batch size and 60k steps, RoboDojo-Real takes 512 batch size and 40k steps, and all real-world deployment experiments take 64 batch size and 20k steps.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4870d52ace423623",
+      "section": "4.3 Comparisons with State-of-The-Art Methods",
+      "location": "4.3 Comparisons with State-of-The-Art Methods",
+      "text": "We compare against the methods listed in the benchmark tables. Spatial Forcing denotes our original method applied only during post-training from pretrained π 0.5 \\pi_{0.5} , without our continual pre-training stage.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "422768a2865da5d4",
+      "section": "4.3.1 LIBERO-Plus",
+      "location": "4.3.1 LIBERO-Plus",
+      "text": "Table 2 : LIBERO-Plus benchmark success rates (%, ↑ \\uparrow ). Models are fine-tuned on the standard LIBERO training set without LIBERO-Plus set. Average is weighted by the number of evaluation episodes. Bold and underline denote the best and second-best displayed values, respectively.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "def3e6f7a6848700",
+      "section": "4.3.1 LIBERO-Plus",
+      "location": "4.3.1 LIBERO-Plus",
+      "text": "Method Camera Robot Language Light Background Noise Layout Average π 0 \\pi_{0} ( Black et al., 2025 ) 13.8 6.0 58.8 85.0 81.4 79.0 68.9 53.6 π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) 78.4 73.6 80.8 96.2 94.1 89.0 84.5 84.4 StarVLA ( Community, 2026 ) 52.5 49.8 88.5 95.7 95.7 73.0 76.9 74.1 4D-WAM ( Yang et al., 2026a ) 45.1 64.3 90.6 94.3 57.7 69.1 79.2 71.0 Abot-M0 ( Yang et al., 2026c ) 60.4 67.9 86.4 96.2 91.6 86.4 82.6 80.5 Cosmos Policy ( Kim et al., 2026 ) 75.8 63.3 81.7 96.5 88.9 92.7 82.2 82.2 Being-H0.7 ( Luo et al., 2026 ) 82.0 59.0 82.8 97.8 90.0 93.5 88.5 84.8 Qwen-RobotManip (robot-only) ( Yuan et al., 2026b ) 72.8 78.2 88.7 97.5 97.6 95.4 85.4 87.1 Spatial Forcing 70.2 79.3 85.6 96.8 96.2 86.0 88.3 85.1 SLA (Ours) 82.2 73.8 83.5 98.8 98.0 95.4 86.2 87.4",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T2.8.1",
+      "kind": "table"
+    },
+    {
+      "id": "e7aff1859cf2d39c",
+      "section": "4.3.1 LIBERO-Plus",
+      "location": "4.3.1 LIBERO-Plus",
+      "text": "Table 2 shows that SLA achieves a weighted SR of 87.4%, improving over π 0.5 \\pi_{0.5} and Spatial Forcing by 3.0 and 2.3 percentage points, respectively. It exceeds the robot-only Qwen-RobotManip model ( Yuan et al., 2026b ) by 0.3 percentage points. Relative to the baseline π 0.5 \\pi_{0.5} , improvements occur in all seven perturbation dimensions, including observation noise (89.0% to 95.4%) and background changes (94.1% to 98.0%). SLA also achieves the highest lighting-perturbation SR among the compared methods, at 98.8%. These results indicate that the benefits extend across a range of perturbations. These gains may stem in part from spatially informed visual representations that help the policy preserve task-relevant scene structure under challenging observation perturbations.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b6cee8139dd49fcc",
+      "section": "4.3.2 RoboTwin",
+      "location": "4.3.2 RoboTwin",
+      "text": "Table 3 : RoboTwin 2.0 benchmark success rates (%, ↑ \\uparrow ). Models are fine-tuned jointly on the 50 standard tasks using 50 demonstrations from the Clean setting per task. Per-task results are shown in Table 12 . Bold and underline denote the best and second-best displayed values, with ties treated equally.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "92a795c711d1b0de",
+      "section": "4.3.2 RoboTwin",
+      "location": "4.3.2 RoboTwin",
+      "text": "Method Clean2Clean Clean2Random Average Discrete Forcing ( Wang et al., 2026c ) 59.3 11.2 35.3 X-WAM ( Guo et al., 2026a ) 70.0 25.8 47.9 π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) 70.7 46.0 58.3 4D-WAM ( Yang et al., 2026a ) 81.5 41.8 61.7 WorldScape Policy 2.0 ( Su et al., 2026a ) 84.9 38.5 61.7 GigaBrain-0.7 ( Team et al., 2026a ) 66.8 67.9 67.4 UniWAM ( Chen et al., 2026a ) 75.1 67.6 71.3 ViGAR ( Gong et al., 2026 ) 82.0 67.0 74.5 ME-Dex-1.0 ( Zhang et al., 2026 ) 89.6 68.1 78.9 Spatial Forcing 74.7 62.6 68.7 SLA (Ours) 86.0 72.3 79.2",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T3.8",
+      "kind": "table"
+    },
+    {
+      "id": "7a34f30066c5138a",
+      "section": "4.3.2 RoboTwin",
+      "location": "4.3.2 RoboTwin",
+      "text": "Table 3 shows that SLA achieves 86.0% Clean2Clean SR, 72.3% Clean2Random SR, and a 79.2% average on RoboTwin 2.0. The Clean2Random and average results exceed π 0.5 \\pi_{0.5} by 26.3 and 20.9 percentage points, respectively. Clean2Clean primarily assesses performance under conditions similar to the training demonstrations, whereas Clean2Random tests generalization under domain randomization and thus provides a more demanding measure of robustness to scene variation. Compared with ME-Dex-1.0 ( Zhang et al., 2026 ) , the strongest competing method by average SR in the table, SLA improves Clean2Random SR by 4.2 points while trailing its Clean2Clean SR. The average also exceeds the original Spatial Forcing method by 10.5 points, supporting the effectiveness of the complete training approach beyond post-training-only spatial alignment. The substantial gain in the Clean2Random setting suggests that SLA helps the policy generalize beyond the clean training conditions to more varied manipulation scenes.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS3.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "848a026a0183c6e6",
+      "section": "4.3.3 RoboCasa-Panda",
+      "location": "4.3.3 RoboCasa-Panda",
+      "text": "Table 4 : RoboCasa-Panda benchmark success rates (%, ↑ \\uparrow ). Per-task results are shown in Table 13 . Bold and underline denote the best and second-best displayed values.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "877c279d90cfad3a",
+      "section": "4.3.3 RoboCasa-Panda",
+      "location": "4.3.3 RoboCasa-Panda",
+      "text": "Method Training Demos per Task Average GR00T-N1 ( Bjorck et al., 2025 ) 300 49.6 UVA ( Li et al., 2025b ) 50 50.0 DP-VLA ( Han et al., 2024 ) 3000 57.3 DreamGen ( Jang et al., 2025 ) 300 57.6 DUST ( Won et al., 2025 ) 300 58.5 UWM ( Zhu et al., 2025 ) 1000 60.8 π 0 \\pi_{0} ( Black et al., 2025 ) 300 62.5 GR00T-N1.5 ( NVIDIA, 2025 ) 300 64.1 Video Policy ( Liang et al., 2025 ) 300 66.0 FLARE ( Zheng et al., 2025b ) 300 66.4 HAMLET ( Koo et al., 2026 ) 300 66.4 Cosmos Policy ( Kim et al., 2026 ) 50 67.1 Spatial Forcing 50 67.6 SLA (Ours) 50 68.4",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T4.8",
+      "kind": "table"
+    },
+    {
+      "id": "1389839068763bfd",
+      "section": "4.3.3 RoboCasa-Panda",
+      "location": "4.3.3 RoboCasa-Panda",
+      "text": "Table 4 shows that SLA reaches a mean success rate of 68.4% on RoboCasa-Panda, the highest result among the compared methods. It exceeds Cosmos Policy ( Kim et al., 2026 ) by 1.3 percentage points and Spatial Forcing by 0.8 points, with all three using 50 post-training demonstrations per task. Other models use different demonstration budgets, as explicitly reported in the table. This comparison shows that our proposed approach remains competitive when adaptation data are limited. The task-specific breakdown in Table 13 shows that SLA achieves success rates above 80% on 10 of the 24 tasks, including 100.0% on TurnOffMicrowave.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS3.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dfe30b5efd34a5cb",
+      "section": "4.3.4 RoboDojo-Real",
+      "location": "4.3.4 RoboDojo-Real",
+      "text": "Table 5 : RoboDojo real-world benchmark results across three embodiments. Score ( ↑ \\uparrow ) captures partial task progress, and SR (%, ↑ \\uparrow ) measures binary task completion. Per-task results are shown in Table 14 . Bold and underline denote the best and second-best displayed values.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9662e7e5b68782ae",
+      "section": "4.3.4 RoboDojo-Real",
+      "location": "4.3.4 RoboDojo-Real",
+      "text": "Method ARX X5 Piper Piper X Average Score SR Score SR Score SR Score SR Spirit v1.5 ( Team, 2026 ) 0.0 0.0 4.0 1.7 0.7 0.0 1.6 0.6 StarVLA ( Community, 2026 ) 0.0 0.0 12.0 5.0 0.5 0.0 4.1 1.7 π 0 \\pi_{0} ( Black et al., 2025 ) 8.1 0.0 9.0 5.0 0.3 0.0 5.8 1.7 GR00T-N1.7 ( Bjorck et al., 2025 ) 9.3 1.7 6.8 3.3 1.4 0.0 5.9 1.7 X-VLA ( Zheng et al., 2025a ) 6.8 1.7 15.9 8.3 0.1 0.0 7.6 3.3 Xiaomi-Robotics-0 ( Cai et al., 2026b ) 15.0 8.3 7.6 3.3 1.2 0.0 7.9 3.9 GalaxeaVLA ( Jiang et al., 2026 ) 3.4 0.0 22.0 13.3 1.7 0.0 9.0 4.4 InternVLA-A1 ( Cai et al., 2026a ) 10.0 3.3 23.2 18.3 2.7 0.0 12.0 7.2 π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) 27.7 13.3 32.0 21.7 9.1 3.3 22.9 12.8 OpenWAM- α \\alpha ( Wang et al., 2026e ) 39.0 23.3 46.7 36.7 27.2 13.3 37.6 24.4 InternW0- Δ \\Delta ( Miao et al., 2026 ) 59.7 50.0 39.3 31.7 17.8 13.3 38.9 31.7 SLA (Ours) 50.3 36.7 60.3 55.0 16.3 10.0 42.3 33.9",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T5.8",
+      "kind": "table"
+    },
+    {
+      "id": "94aa3ec6ce3abe6a",
+      "section": "4.3.4 RoboDojo-Real",
+      "location": "4.3.4 RoboDojo-Real",
+      "text": "Table 5 evaluates whether our approach remains useful for real-world benchmarks, especially when a single policy is adapted jointly to several physical embodiments. To address long-horizon tasks and long-term memory requirements in RoboDojo-Real benchmark, we incorporate a memory mechanism into the policy during post-training, as detailed in appendix B . SLA achieves the highest overall score and success rate among the compared methods at 42.3 and 33.9%, exceeding π 0.5 \\pi_{0.5} by 19.4 score points and 21.1 percentage points, respectively. It also surpasses InternW0- Δ \\Delta ( Miao et al., 2026 ) , the strongest competing method overall, by 3.4 score points and 2.2 percentage points. On Piper, SLA leads in both metrics, with a Score of 60.3 and SR of 55.0%. On ARX X5, it ranks second in both metrics behind InternW0- Δ \\Delta . These results support the effectiveness of our training approach to joint multi-embodiment adaptation, highlighting its potential for real-world manipulation. The spatial alignment branch is used only during training, while the historical image inputs of the memory mechanism are retained at inference.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS3.SSS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "63dfdf49aa70bc97",
+      "section": "4.4.1 Data Scaling Trend",
+      "location": "4.4.1 Data Scaling Trend",
+      "text": "Table 6 : Continual pre-training data scaling ablation. SLA alignment is independently enabled or disabled during continual pre-training and post-training. The corresponding line chart is plotted in Figure 4 . Experiments are conducted under the RoboTwin Clean2Random settings to evaluate success rates (%, ↑ \\uparrow ).",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6cf10ca049816a1c",
+      "section": "4.4.1 Data Scaling Trend",
+      "location": "4.4.1 Data Scaling Trend",
+      "text": "SLA Alignment Continual Pre-training Data (%) Pre-training Post-training 5 25 50 100 ✗ ✗ 43.8 46.5 46.1 48.2 ✗ ✓ 45.6 53.4 55.3 57.1 ✓ ✗ 46.6 52.0 58.4 63.2 ✓ ✓ 49.2 60.5 67.4 72.3",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T6.6",
+      "kind": "table"
+    },
+    {
+      "id": "2eca2398e0f4ae5e",
+      "section": "4.4.1 Data Scaling Trend",
+      "location": "4.4.1 Data Scaling Trend",
+      "text": "Figure 4 : Continual pre-training data scaling ablation. SLA alignment is independently enabled or disabled during continual pre-training and post-training. All curves start at the shared π 0.5 \\pi_{0.5} baseline. Experiments are conducted under RoboTwin Clean2Random settings to evaluate success rates (%, ↑ \\uparrow ).",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f5ef44362911b37c",
+      "section": "4.4.1 Data Scaling Trend",
+      "location": "4.4.1 Data Scaling Trend",
+      "text": "A key question for continual pre-training is whether additional training data translate into better downstream performance. To examine this relationship, we sample demonstrations within each task of the full pre-training mixture to construct subsets containing 5%, 25%, 50%, and 100% of the original data. For each subset, we perform continual pre-training with and without SLA alignment to obtain separate checkpoints. We then independently enable or disable alignment during post-training to examine how spatial supervision in the two stages interacts, yielding the four configurations shown in Table 6 and Figure 4 .",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0ee62a8650a5ef49",
+      "section": "4.4.1 Data Scaling Trend",
+      "location": "4.4.1 Data Scaling Trend",
+      "text": "We report RoboTwin 2.0 Clean2Random SR averaged over all 50 tasks. With SLA alignment in both stages, SR increases from 49.2% at 5% data to 72.3% at full data, a gain of 23.1 percentage points. This configuration performs best at every tested proportion. Without alignment in either stage, SR changes from 43.8% to 48.2%, with a small decline between 25% and 50% data. Increasing data alone therefore provides a much smaller benefit in this comparison.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "94feb805e5857937",
+      "section": "4.4.1 Data Scaling Trend",
+      "location": "4.4.1 Data Scaling Trend",
+      "text": "The two single-stage variants further clarify the role of spatial supervision. At full data, SLA alignment only during continual pre-training reaches 63.2%, compared with 57.1% when applied only during post-training. Applying alignment in both stages improves on these variants by 9.1 and 15.2 percentage points, respectively. Overall, the consistently stronger joint configuration supports using spatial supervision both to shape the pretrained representation and to guide its downstream adaptation.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d0e934722587aa1c",
+      "section": "4.4.2 Adaptive Layer Selection",
+      "location": "4.4.2 Adaptive Layer Selection",
+      "text": "Table 7 : Adaptive layer selection ablation. Fixed variants use visual tokens from a single VLA transformer layer for alignment; Adaptive variants use the learned fusion mechanism. Experiments are conducted on RoboTwin to evaluate success rates (%, ↑ \\uparrow ).",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c61b29b1b1cbbea2",
+      "section": "4.4.2 Adaptive Layer Selection",
+      "location": "4.4.2 Adaptive Layer Selection",
+      "text": "Alignment Layer Clean2Clean Clean2Random Average 1 60.0 43.4 51.7 6 63.0 45.0 54.0 12 84.0 67.3 75.7 18 78.0 64.6 71.3 Adaptive 86.0 72.3 79.2",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T7.6",
+      "kind": "table"
+    },
+    {
+      "id": "9d28035b63d97e04",
+      "section": "4.4.2 Adaptive Layer Selection",
+      "location": "4.4.2 Adaptive Layer Selection",
+      "text": "A fixed alignment layer requires manual selection and may not suit different data domains. We therefore introduce the adaptive layer selection mechanism to learn each layer’s contribution to spatial supervision, as explained in Section 3.2.3 . Specifically, our PaliGemma VLM ( Beyer et al., 2024 ) has 18 transformer layers in its language backbone. We compare single-layer alignment at layers 1, 6, 12, and 18 with adaptive fusion across all 18 layers. In Table 7 , fixed-layer Clean2Random success rates range from 43.4% to 67.3%. Layer 12 performs best, while layer 18 drops to 64.6%, showing that deeper alignment is not necessarily better. Adaptive fusion achieves 72.3% Clean2Random success rates and 79.2% average success rates, exceeding layer 12 by 5.0 and 3.5 percentage points, respectively. This result supports learning the contributions of multiple layers instead of committing to a single layer depth. The improvement is consistent with the motivation for token- and channel-wise gating: allowing the spatial alignment signal to draw on features from different representation depths.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "31352f8a36d76e76",
+      "section": "4.4.3 State Dropout",
+      "location": "4.4.3 State Dropout",
+      "text": "Table 8 : State dropout ablation. Experiments are conducted on RoboTwin to evaluate success rates (%, ↑ \\uparrow ).",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9f2316340ce4e4c9",
+      "section": "4.4.3 State Dropout",
+      "location": "4.4.3 State Dropout",
+      "text": "State Dropout Probability Clean2Clean Clean2Random Average 0% 55.5 20.7 38.1 25% 86.0 72.3 79.2 50% 66.5 41.3 53.9 75% 72.1 51.6 61.9 100% 62.4 50.9 56.7",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T8.6",
+      "kind": "table"
+    },
+    {
+      "id": "bf766a9a66cb082f",
+      "section": "4.4.3 State Dropout",
+      "location": "4.4.3 State Dropout",
+      "text": "State dropout is intended to discourage shortcuts based on associations between robot states and demonstrated trajectories, encouraging the policy to encode scene geometry and use visual observations for action generation. To assess its effect on manipulation performance, we vary the state dropout probability during post-training, starting from the same continually pretrained checkpoint and evaluating all 50 RoboTwin tasks. As shown in Table 8 , 25% dropout achieves the best average SR of 79.2%, compared with 38.1% without dropout. It also yields the highest Clean2Clean and Clean2Random results. Larger dropout probabilities perform less well: even 75%, the next-best setting, reaches only 61.9% on average. The response is not monotonic, and removing state inputs from every training sample is also suboptimal. These observations favor partial state dropout, consistent with a balance between encouraging reliance on visual evidence and preserving access to proprioceptive information during training.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "114c3d174fc4dc2e",
+      "section": "4.4.4 Rotation Representation",
+      "location": "4.4.4 Rotation Representation",
+      "text": "Table 9 : Rotation representation ablation. All variants compute relative rotations through SO ⁡ ( 3 ) \\mathrm{SO}(3) composition rather than direct subtraction to avoid wrap-induced outliers, as detailed in Equation 10 . Experiments are conducted on RoboTwin to evaluate success rates (%, ↑ \\uparrow ).",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "766cff3612059cc9",
+      "section": "4.4.4 Rotation Representation",
+      "location": "4.4.4 Rotation Representation",
+      "text": "Rotation Representation Clean2Clean Clean2Random Average Euler Angle 71.6 59.3 65.5 Rot6D 66.9 58.8 62.9 Quaternion 81.1 67.5 74.3 Rotation Vector 86.0 72.3 79.2",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T9.6",
+      "kind": "table"
+    },
+    {
+      "id": "340452ca89c343cf",
+      "section": "4.4.4 Rotation Representation",
+      "location": "4.4.4 Rotation Representation",
+      "text": "Because our action space is defined in terms of end-effector poses, the rotation representation determines how orientation changes are encoded as action targets. We compare four rotation representations during post-training from the same continually pretrained checkpoint on all 50 RoboTwin tasks. Table 9 shows that rotation vectors achieve the highest average SR of 79.2%, followed by quaternions at 74.3%, Euler angles at 65.5%, and Rot6D at 62.9%. Rotation vectors also achieve the best results in both Clean2Clean and Clean2Random settings, supporting their use for downstream action learning. All four variants compute relative rotations through SO ⁡ ( 3 ) \\mathrm{SO}(3) composition, following equation 10 . The comparison therefore isolates how the composed rotation is represented for learning; it does not compare composition with direct coordinate subtraction. The results identify rotation vectors as the most effective representation within this controlled post-training setting.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "653c6d90664b3180",
+      "section": "4.4.5 Camera Calibration",
+      "location": "4.4.5 Camera Calibration",
+      "text": "Table 10 : Camera calibration ablation. Calibration comprises camera intrinsics and extrinsics supplied to the OmniVGGT for spatial supervision. Experiments are conducted on RoboTwin to evaluate success rates (%, ↑ \\uparrow ). Models are fine-tuned on personal-collected RoboTwin clean data.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "676abeb55bddd28d",
+      "section": "4.4.5 Camera Calibration",
+      "location": "4.4.5 Camera Calibration",
+      "text": "SLA Alignment Clean2Clean Clean2Random Average ✗ 36.9 26.7 31.8 VGGT 50.2 34.8 42.5 OmniVGGT w/o Calibration 49.9 35.6 42.8 OmniVGGT w/ Calibration 54.7 37.3 46.0",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T10.6",
+      "kind": "table"
+    },
+    {
+      "id": "9bd922adb8c55208",
+      "section": "4.4.5 Camera Calibration",
+      "location": "4.4.5 Camera Calibration",
+      "text": "OmniVGGT, our external spatial supervision model, can incorporate camera calibration alongside RGB images to provide additional geometric constraints on its spatial representations. We evaluate the benefit of this information using our collected RoboTwin Clean demonstrations across all 50 tasks. Starting from the same continually pretrained checkpoint, we change only the spatial supervision used during post-training. In Table 10 , the average SR increases from 31.8% without post-training alignment to 42.8% with supervision from an RGB-only OmniVGGT teacher. Providing camera intrinsics and extrinsics to this spatial foundation model further raises the average to 46.0%, with improvements in both Clean2Clean and Clean2Random settings. Spatial supervision thus provides the larger gain, while calibration contributes an additional 3.2 percentage points. This pattern is consistent with geometric annotations complementing the spatial information inferred from RGB observations. Calibration is supplied only to the external teacher during training and is not required as an additional policy input at deployment.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS4.SSS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "126f324cc1c072c3",
+      "section": "4.5 Comparisons on Real-world Deployment",
+      "location": "4.5 Comparisons on Real-world Deployment",
+      "text": "Figure 5 : Produce manipulation tasks under human perturbations and embodiment changes. A–C conditions share a policy post-trained on 100 demonstrations collected in the A scene configuration, with no additional demonstrations of the perturbations in B or C scene. D condition evaluates a policy jointly post-trained on 100 Piper demonstrations collected in the A scene and 10 Franka demonstrations collected in the D scene.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f3b97966e0fd5946",
+      "section": "4.5 Comparisons on Real-world Deployment",
+      "location": "4.5 Comparisons on Real-world Deployment",
+      "text": "Figure 6 : Tabletop manipulation tasks under changes in object, table height, and instruction target. All four conditions share a policy post-trained on 100 demonstrations collected in the E scene configuration. The bottle, tissue box, pen, and watch are included in these demonstrations while black tape and carrot are excluded.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d08d5fd8c2aefa85",
+      "section": "4.5.1 Real-world Tasks",
+      "location": "4.5.1 Real-world Tasks",
+      "text": "We design a diverse set of challenging real-world tasks to evaluate bimanual coordination, spatial and dynamic generalization, few-shot cross-embodiment adaptation, and instruction following. The training and evaluation protocols are specified in Section 4.1 .",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4954b307afdedea1",
+      "section": "4.5.1 Real-world Tasks",
+      "location": "4.5.1 Real-world Tasks",
+      "text": "For the produce tasks in Figure 5 , we post-train a single policy on 100 demonstrations of the base scene A and evaluates it in A–C. A (Base) Robot grasps five vegetables between both hands: the robot passes five objects between its arms and places them into a bowl, testing bimanual coordination. B (Position Generalization) Human throw fruit out, and robot picks it back up: we tests recovery after a person throws objects from the bowl onto the table, and the policy must retrieve them and repeat handover and placement. C (Dynamic) Human intentionally move fruit while robot pick it: we tests responsiveness to target motion during grasping, while still requiring subsequent handover and placement. D (Few-shot cross-embodiment) Another Robot grasps vegetables: To examine adaptation with limited target-robot data, we use a separate policy jointly post-trained on the 100 Piper demonstrations and 10 additional Franka demonstrations, and deploy it to a single Franka arm to place five objects into a basket.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2cb15131d2c39067",
+      "section": "4.5.1 Real-world Tasks",
+      "location": "4.5.1 Real-world Tasks",
+      "text": "For the tabletop tasks in Figure 6 , we post-train one policy on 100 demonstrations collected in the E scene configuration and evaluates it across E–H. E (Level 1) Grasp water bottle: we provide a reference for basic manipulation: the robot grasps a bottle and stably places it on the destination table. F (Level 2) Grasp watch from stationary table: we test adaptation to a different static table height by transferring a watch that is already represented in the training data. G (Level 3) Grasp watch from dynamic table: we further test responsiveness to changing target height as the supporting table rises and lowers during grasping, without additional table-motion demonstrations. H (Instruction-following) Grasp black tape: Finally, we retain the E table configuration and tests instruction following with objects absent from downstream training: the robot must select and transfer black tape as instructed while ignoring a carrot distractor.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a7e2798b9a3dfdd5",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "Table 11 : Real-world deployment comparisons. Each method is evaluated on 50 separately scored object instances per task to report the object-level success rates (%, ↑ \\uparrow ). Average is the arithmetic mean over A–H. Bold and underline denote the best and second-best displayed values.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e7cbce55c139eb6e",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "Method A: Pass vegetables between hands B: Grasp fruit thrown by a human C: Grasp fruit moved by a human D: Another robot grasps vegetables OpenVLA-OFT ( Kim et al., 2025 ) 62 38 30 36 SpatialVLA ( Qu et al., 2025 ) 70 46 46 44 π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) 74 52 42 48 Spatial Forcing 84 66 58 62 SLA (Ours) 94 82 76 78",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T11.8",
+      "kind": "table"
+    },
+    {
+      "id": "3270b730798440ed",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "Method E: Grasp water bottle F: Grasp watch from static table G: Grasp watch from moving table H: Grasp unseen black tape Average OpenVLA-OFT ( Kim et al., 2025 ) 82 50 28 42 46.0 SpatialVLA ( Qu et al., 2025 ) 88 58 38 38 53.5 π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) 90 68 44 60 59.8 Spatial Forcing 94 64 60 56 68.0 SLA (Ours) 98 84 78 80 83.8",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.T11.9",
+      "kind": "table"
+    },
+    {
+      "id": "6510d0702b5fb7fa",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "We compare OpenVLA-OFT ( Kim et al., 2025 ) , SpatialVLA ( Qu et al., 2025 ) , π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) , Spatial Forcing, and SLA. Spatial Forcing applies spatial supervision only during post-training from π 0.5 \\pi_{0.5} , whereas SLA combines spatially supervised continual pre-training with downstream post-training. As shown in Table 11 , SLA achieves the highest success rate across all tasks while Spatial Forcing ranks second on most tasks, which supports the effectiveness of our approach. The task-specific discussion below examines several complementary capabilities of our model that are essential for real-world applications.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6fd5494cb59c76bb",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "A: Bimanual coordination. The success rates are 74% for π 0.5 \\pi_{0.5} , 84% for Spatial Forcing, and 94% for SLA, corresponding to gains of 10 and 20 percentage points over the base policy. These gains support the value of spatial supervision for the complete grasp–handover–placement sequence, with the full SLA recipe providing an additional benefit over post-training-only Spatial Forcing.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7b64cca7c59feb86",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "B: Recovery from positional changes. The success rates increase from 52% with π 0.5 \\pi_{0.5} to 66% with Spatial Forcing and 82% with SLA. Relative to A, the corresponding reductions are 22, 18, and 12 points. A smaller reduction for SLA indicates more robust reuse of the learned manipulation skill after object relocation. Because A and B share a trained policy, this comparison concerns generalization to the intervention rather than fitting additional recovery demonstrations.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d2e6bcddf3178164",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "C: Response to moving targets. The success rates are 42%, 58%, and 76% for π 0.5 \\pi_{0.5} , Spatial Forcing, and SLA, respectively, placing SLA 18 points above Spatial Forcing. This advantage is consistent with more effective use of current visual observations when the target moves during grasping, while retaining the ability to finish the subsequent handover and placement.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "347c26699acd874e",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "D: Adaptation with limited target-embodiment data. Under the training budget of 100 Piper and 10 Franka demonstrations, the success rates are 48% for π 0.5 \\pi_{0.5} , 62% for Spatial Forcing, and 78% for SLA. Such a result supports the usefulness of spatial supervision when adapting manipulation across embodiments with limited target domain data. The 16-point margin over Spatial Forcing further favors the complete SLA recipe in this joint-training setting.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "1097a55ad5484d3b",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "E: Execution in the training scene configuration. The success rates of 90%, 94%, and 98% means that both π 0.5 \\pi_{0.5} and our policies are near the upper end of the metric. The 4-point margin between SLA and Spatial Forcing corresponds to two additional successful object instances out of 50. Such closely spaced values would establish basic manipulation competence while leaving limited headroom for improvement, making the changed conditions in F–H more informative about generalization.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "ad612cbf6c248176",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "F: Adaptation to a different table height. The success rates of Spatial Forcing is 64%, below the 68% of π 0.5 \\pi_{0.5} , while SLA reaches 84%. This result indicates that the benefits of post-training-only spatial supervision are not uniform across conditions. The 20-point margin over Spatial Forcing favors the complete recipe under the table height changes.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "df5889b57307725b",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "G: Manipulation during table motion. The success rates are 44% for π 0.5 \\pi_{0.5} , 60% for Spatial Forcing, and 78% for SLA. Compared with F, the reductions are 24, 4, and 6 points, respectively. The result means that both spatially supervised policies retain more abilities of their static-condition performance, while SLA maintains the highest absolute success rate. This pattern supports spatial supervision under changing geometry and the additional benefit of the full recipe, suggesting that our methods has the powerful static-to-dynamic fitness.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "09d42e4e3c4b4513",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "H: Instruction-guided manipulation of an unseen object. The success rates are 60% for π 0.5 \\pi_{0.5} , 56% for Spatial Forcing, and 80% for SLA. A 24-point gain over Spatial Forcing supports the ability to follow the specified target while transferring grasp-and-place behavior to an object excluded from downstream training. This comparison attributes the gains of our method to language-following and geometric reasoning abilities.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p9.1",
+      "kind": "p"
+    },
+    {
+      "id": "d68632f91703255e",
+      "section": "4.5.2 Results",
+      "location": "4.5.2 Results",
+      "text": "Taken together, these results supports the significance of our SLA training approach across spatial perturbations, embodiment adaptation, and language-guided object manipulation. our SLAsupervision uses auxiliary components only during training, retaining the original policy backbone and action-generation architecture for deployment. This compatibility enables continued training without adding policy computation at inference.",
+      "url": "https://arxiv.org/html/2611.08373v1#S4.SS5.SSS2.p10.1",
+      "kind": "p"
+    },
+    {
+      "id": "681c0f174c60eb40",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "In this work, we presented SLA, a Spatial-Language-Action Model that develops transferable spatial understanding through continual pre-training and downstream post-training. By aligning intermediate visual representations with a frozen 3D perception model, our approach integrates geometric supervision into action learning while directly reusing pretrained VLA weights. A unified robot-data corpus and adaptive layer selection support training across heterogeneous embodiments and scenes, while available depth and calibration annotations enrich the spatial supervision. The teacher and alignment modules are required only during training. Extensive evaluations demonstrate state-of-the-art performance on RoboDojo-Real, RoboTwin 2.0 under the Clean2Random setting, RoboCasa-Panda, and LIBERO-Plus, alongside improved spatial and dynamic generalization, downstream data efficiency, and few-shot cross-embodiment adaptation. Controlled experiments further show that applying spatial alignment during both training stages consistently outperforms either single-stage alternative across the tested data scales. These findings support developing spatial understanding during continual pre-training and reinforcing it during downstream adaptation, offering a practical path toward spatially informed robotic foundation models.",
+      "url": "https://arxiv.org/html/2611.08373v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bb0938a347656bda",
+      "section": "Appendix A Additional Results",
+      "location": "Appendix A Additional Results",
+      "text": "This section provides additional experimental results to complement the evaluations in the main paper. These results offer a more detailed view of the downstream performance of SLA following continual pre-training and task-specific post-training, illustrating its strengths and remaining challenges across manipulation tasks and evaluation settings.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "04553f626671e658",
+      "section": "A.1 Per-task Results on RoboTwin 2.0 Benchmark",
+      "location": "A.1 Per-task Results on RoboTwin 2.0 Benchmark",
+      "text": "Table 12 : Per-task success rates of SLA on RoboTwin 2.0 (%, ↑ \\uparrow ). Each task is evaluated for 100 trials per setting. Task order follows the official leaderboard ( Chen et al., 2025b ) : tasks 1–25 are on the left and 26–50 on the right.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "de21c25f1f11df6f",
+      "section": "A.1 Per-task Results on RoboTwin 2.0 Benchmark",
+      "location": "A.1 Per-task Results on RoboTwin 2.0 Benchmark",
+      "text": "Task Clean2Clean Clean2Random Task Clean2Clean Clean2Random Adjust Bottle 99 99 Place Can Basket 80 57 Beat Block Hammer 83 68 Place Cans Plasticbox 96 40 Blocks Ranking RGB 94 90 Place Container Plate 100 98 Blocks Ranking Size 68 54 Place Dual Shoes 61 41 Click Alarmclock 100 96 Place Empty Cup 99 94 Click Bell 100 93 Place Fan 75 66 Dump Bin Bigbin 97 85 Place Mouse Pad 70 53 Grab Roller 100 100 Place Object Basket 81 72 Handover Block 91 38 Place Object Scale 90 71 Handover Mic 100 94 Place Object Stand 93 80 Hanging Mug 41 31 Place Phone Stand 88 84 Lift Pot 100 96 Place Shoe 89 78 Move Can Pot 93 62 Press Stapler 85 65 Move Pillbottle Pad 94 67 Put Bottles Dustbin 71 50 Move Playingcard Away 100 95 Put Object Cabinet 73 66 Move Stapler Pad 33 41 Rotate QRcode 89 77 Open Laptop 96 94 Scan Object 74 57 Open Microwave 96 59 Shake Bottle Horizontally 100 99 Pick Diverse Bottles 80 50 Shake Bottle 100 100 Pick Dual Bottles 97 55 Stack Blocks Three 41 27 Place A2B Left 97 89 Stack Blocks Two 100 86 Place A2B Right 92 80 Stack Bowls Three 83 62 Place Bread Basket 87 79 Stack Bowls Two 97 96 Place Bread Skillet 89 73 Stamp Seal 77 52 Place Burger Fries 98 96 Turn Switch 61 62 Mean over all 50 tasks 85.96 72.34",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T12.5.1",
+      "kind": "table"
+    },
+    {
+      "id": "8d520d0808bbe2b9",
+      "section": "A.1 Per-task Results on RoboTwin 2.0 Benchmark",
+      "location": "A.1 Per-task Results on RoboTwin 2.0 Benchmark",
+      "text": "Table 12 reports the success rates of SLA on all 50 RoboTwin 2.0 tasks. The policy is post-trained on clean demonstrations and evaluated for 100 trials per task in the Clean2Clean and Clean2Random settings, with the latter introducing domain randomization. Performance remains strong in both settings on several tasks: Grab Roller and Shake Bottle each achieve 100% success, while Adjust Bottle reaches 99%. Other tasks show larger gaps between the two settings. For example, success rates decrease from 96% to 40% on Place Cans Plasticbox and from 91% to 38% on Handover Block. These differences reveal task-dependent sensitivity to scene variation: strong performance under clean conditions does not always translate into equally reliable execution under randomization.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d779dea93cdef4b8",
+      "section": "A.2 Per-task Results on RoboCasa-Panda Benchmark",
+      "location": "A.2 Per-task Results on RoboCasa-Panda Benchmark",
+      "text": "Table 13 : Per-task success rates of SLA on RoboCasa-Panda (%, ↑ \\uparrow ). Each value is the arithmetic mean over three evaluation seeds (195, 196, and 197), with 50 trials per task and seed (150 trials per task; 3,600 trials in total). Tasks follow the evaluation-protocol order, with tasks 1–12 on the left and 13–24 on the right.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ea0ae30716a49f5a",
+      "section": "A.2 Per-task Results on RoboCasa-Panda Benchmark",
+      "location": "A.2 Per-task Results on RoboCasa-Panda Benchmark",
+      "text": "Task Mean SR (%) ↑ \\uparrow Task Mean SR (%) ↑ \\uparrow PnPCounterToCab 54.7 OpenDrawer 84.0 PnPCabToCounter 21.3 CloseDrawer 97.3 PnPCounterToSink 68.0 TurnOnStove 49.3 PnPSinkToCounter 58.0 TurnOffStove 22.7 PnPCounterToMicrowave 41.3 TurnOnSinkFaucet 72.0 PnPMicrowaveToCounter 34.7 TurnOffSinkFaucet 94.0 PnPCounterToStove 75.3 TurnSinkSpout 82.0 PnPStoveToCounter 67.3 CoffeeSetupMug 25.3 OpenSingleDoor 77.3 CoffeeServeMug 61.3 CloseSingleDoor 92.0 CoffeePressButton 85.3 OpenDoubleDoor 95.3 TurnOnMicrowave 93.3 CloseDoubleDoor 90.0 TurnOffMicrowave 100.0 Mean over all 24 tasks 68.4",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T13.5",
+      "kind": "table"
+    },
+    {
+      "id": "bb5e2486d26a296b",
+      "section": "A.2 Per-task Results on RoboCasa-Panda Benchmark",
+      "location": "A.2 Per-task Results on RoboCasa-Panda Benchmark",
+      "text": "Table 13 presents the per-task success rates of SLA on the 24 RoboCasa-Panda tasks. Each value is averaged over three evaluation seeds, with 50 trials per task and seed. The breakdown reveals substantial variation across kitchen manipulation tasks. SLA performs well on several articulated-object interactions, reaching 97.3% on CloseDrawer and 95.3% on OpenDoubleDoor. Strong performance also extends to appliance operation, with 93.3% success on TurnOnMicrowave.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ced3daeb3d2db279",
+      "section": "A.3 Per-task Results on RoboDojo-Real Benchmark",
+      "location": "A.3 Per-task Results on RoboDojo-Real Benchmark",
+      "text": "Table 14 : Per-task results of SLA on the RoboDojo real-world benchmark. Score ( ↑ \\uparrow ) is scaled to 0–100, and SR (%, ↑ \\uparrow ) measures task completion. Means give equal weight to the six tasks within each embodiment; the overall average gives equal weight to the three embodiments.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9278c708a82acaba",
+      "section": "A.3 Per-task Results on RoboDojo-Real Benchmark",
+      "location": "A.3 Per-task Results on RoboDojo-Real Benchmark",
+      "text": "Embodiment Task Score ↑ \\uparrow SR (%) ↑ \\uparrow ARX X5 cover_blocks 65.0 50 store_in_safe 100.0 100 pack_and_pour_fruit 70.0 40 make_bread 0.0 0 make_food 29.0 20 insert_tubes 40.0 20 Mean 50.7 38.3 Piper stand_up_bottles 95.0 90 stack_bowls 90.0 90 stack_and_cover_blocks 30.0 10 insert_charger 5.0 0 fill_pen_holder 72.0 60 put_objects_into_basket 70.0 70 Mean 60.3 53.3 Piper X sweep_blocks 0.0 0 disassemble_LEGO 0.0 0 classify_objects 48.0 40 hang_mugs 8.0 0 cap_pen 18.0 0 pack_objects_into_backpack 22.0 20 Mean 16.0 10.0 Overall average 42.3 33.9",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T14.5",
+      "kind": "table"
+    },
+    {
+      "id": "951a9362056df79b",
+      "section": "A.3 Per-task Results on RoboDojo-Real Benchmark",
+      "location": "A.3 Per-task Results on RoboDojo-Real Benchmark",
+      "text": "Table 14 details the results of SLA on 18 RoboDojo-Real tasks across ARX X5, Piper, and Piper X, following joint post-training of a single policy on all three embodiments. Scores on a 0–100 scale capture partial task progress, whereas success rates measure complete task execution. On ARX X5, store_in_safe achieves a score of 100.0 and a success rate of 100%. On Piper, stand_up_bottles and stack_bowls each reach 90% success. On Piper X, classify_objects achieves 40% success, while cap_pen and hang_mugs obtain scores of 18.0 and 8.0 despite zero complete successes.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4a03790d12a1602f",
+      "section": "A.4 RoboDojo-Sim Benchmark",
+      "location": "A.4 RoboDojo-Sim Benchmark",
+      "text": "Table 15 : RoboDojo simulation benchmark results across five capability dimensions. Score ( ↑ \\uparrow ) captures partial task progress, and SR (%, ↑ \\uparrow ) measures binary task completion. Results of the compared methods are taken from the official leaderboard ( Chen et al., 2026b ) , and SLA is evaluated locally. Per-task results are shown in Table 16 . Bold and underline denote the best and second-best displayed values.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T15",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f6a4af4779cc15b5",
+      "section": "A.4 RoboDojo-Sim Benchmark",
+      "location": "A.4 RoboDojo-Sim Benchmark",
+      "text": "Method Generalization Precision Long-Horizon Memory Open Average Score SR Score SR Score SR Score SR Score SR Score SR InternVLA-A1.5 ( Cai et al., 2026a ) 10.4 6.8 15.2 10.2 23.8 13.8 4.9 3.6 1.4 1.4 11.2 7.1 π 0.5 \\pi_{0.5} ( Intelligence, 2025 ) 13.4 8.2 12.4 5.5 23.5 14.7 5.9 4.7 2.0 1.7 11.4 6.9 SimpleMemVLA ( Yin et al., 2026 ) 6.4 4.0 7.4 2.9 14.6 5.5 33.7 33.2 0.9 0.8 12.6 9.3 KinRT ( Yang et al., 2026b ) 14.0 8.6 15.7 9.9 26.4 18.1 4.8 3.6 4.2 3.8 13.0 8.8 CogWAM ( Wang et al., 2026d ) 12.8 9.3 20.5 14.6 27.4 18.2 8.2 7.0 2.9 2.7 14.3 10.3 EWAM ( Wang et al., 2026b ) 15.1 9.7 22.2 12.3 30.2 18.1 7.4 6.0 1.1 0.8 15.2 9.4 Spatial Forcing 14.1 9.3 17.3 10.6 23.3 14.6 5.4 4.1 1.8 1.6 12.4 8.0 SLA (Ours) 15.3 9.4 16.0 11.2 22.3 11.9 26.2 25.8 2.0 1.9 16.4 12.0",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T15.8.1",
+      "kind": "table"
+    },
+    {
+      "id": "9a8d8c0b1e3d4589",
+      "section": "A.4 RoboDojo-Sim Benchmark",
+      "location": "A.4 RoboDojo-Sim Benchmark",
+      "text": "Table 16 : Per-task results of SLA on the RoboDojo simulation benchmark. Score ( ↑ \\uparrow ) is scaled to 0–100, and SR (%, ↑ \\uparrow ) measures task completion, as in Table 15 . Task order follows the official leaderboard ( Chen et al., 2026b ) , with each Generalization task followed by its randomized (_random) variant; configurations 1–27 are on the left and 28–54 on the right. The overall average gives equal weight to the five capability dimensions.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T16",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bd9da8bdded8377a",
+      "section": "A.4 RoboDojo-Sim Benchmark",
+      "location": "A.4 RoboDojo-Sim Benchmark",
+      "text": "Task Score ↑ \\uparrow SR (%) ↑ \\uparrow Task Score ↑ \\uparrow SR (%) ↑ \\uparrow stack_bowls 74.5 70 pour_balls_into_vase 20.0 20 stack_bowls_random 19.0 10 play_Xylophone 0.0 0 push_T 0.0 0 deposit_coin 2.0 0 push_T_random 0.0 0 insert_key 12.8 0 pack_objects_into_box 17.2 5 build_tower 69.0 65 pack_objects_into_box_random 14.8 0 put_bottles_into_dustbin 76.8 65 fold_clothes 39.0 35 play_tic_tac_toe 3.0 0 fold_clothes_random 29.0 20 classify_objects 34.0 25 hang_mugs 14.8 0 fill_pen_holder 21.2 5 hang_mugs_random 3.0 0 fill_egg_holder 2.2 0 sweep_blocks 5.0 5 organize_table 41.2 0 sweep_blocks_random 0.0 0 play_stacking_toy 0.0 0 pour_liquid_into_cup 45.0 45 make_kong 0.0 0 pour_liquid_into_cup_random 15.0 15 cover_blocks 92.2 90 make_toast 13.8 0 match_and_pick_from_conveyor 65.0 65 make_toast_random 2.5 0 swap_T 0.0 0 arrange_largest_number 5.5 0 press_by_number 0.0 0 arrange_largest_number_random 1.0 0 imitate_sorting_sequence 0.2 0 sort_nesting_dolls_by_size 0.0 0 swap_blocks 0.0 0 sort_nesting_dolls_by_size_random 0.0 0 align_blocks 0.0 0 store_laptop_and_headphones 34.0 15 solve_equation 0.0 0 store_laptop_and_headphones_random 15.0 0 stack_blocks_by_language 0.0 0 stack_blocks 17.0 5 general_pickup 15.0 15 stack_blocks_random 1.5 0 classify_objects_by_language 1.0 0 fasten_screws 4.5 0 pick_from_conveyor_by_image 0.0 0 insert_tubes 20.0 5 store_tools_in_toolbox 0.0 0 plug_in_charger 0.0 0 pour_by_language 0.0 0 Mean over all five dimensions 16.4 12.0",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.T16.5",
+      "kind": "table"
+    },
+    {
+      "id": "637698c3d03aa271",
+      "section": "A.4 RoboDojo-Sim Benchmark",
+      "location": "A.4 RoboDojo-Sim Benchmark",
+      "text": "Table 15 compares SLA with methods from the official RoboDojo-Sim leaderboard ( Chen et al., 2026b ) , which evaluates 42 base tasks across five capability dimensions; each Generalization task also has a randomized variant, giving 54 task configurations. A single policy is post-trained on the simulation demonstrations with the memory mechanism in appendix B ; for this benchmark, spatial alignment is applied only during continual pre-training. SLA obtains the highest average Score and SR among the compared methods, 16.4 and 12.0%, exceeding π 0.5 \\pi_{0.5} by 5.0 points and 5.1 percentage points. The largest gain appears in Memory, where SLA reaches 26.2 and 25.8%, second only to SimpleMemVLA and well above the other methods, which reach at most 8.2 and 7.0%. Generalization achieves the highest Score of 15.3, whereas Long-Horizon remains below most baselines at 22.3 and 11.9%.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ac25c96d0460b625",
+      "section": "A.4 RoboDojo-Sim Benchmark",
+      "location": "A.4 RoboDojo-Sim Benchmark",
+      "text": "Table 16 details the results on all 54 configurations. The best result is obtained on cover_blocks, with a Score of 92.2 and 90% success, while stack_bowls, put_bottles_into_dustbin, build_tower, and match_and_pick_from_conveyor reach 65% to 70% success. Within Memory, however, swap_blocks, swap_T, press_by_number, and imitate_sorting_sequence have no successful episodes. Randomized layouts substantially reduce performance: success decreases from 70% to 10% on stack_bowls and from 45% to 15% on pour_liquid_into_cup. Several tasks also show partial progress without completion, such as organize_table with a Score of 41.2 and 0% success. In the Open dimension, general_pickup is the only task with non-zero success, and seven of the eight Open tasks are absent from the post-training demonstrations. These results indicate that randomized layouts, full multi-stage completion, and tasks without demonstrations remain the main challenges.",
+      "url": "https://arxiv.org/html/2611.08373v1#A1.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "ac44148fc39f750c",
+      "section": "Appendix B Memory Mechanism",
+      "location": "Appendix B Memory Mechanism",
+      "text": "As illustrated in Section 4.3.4 , we utilize a memory mechanism for RoboDojo-Real post-training stage. Several recent VLA models incorporate memory through dedicated modules ( Shi et al., 2026b ; Shi et al., 2026a ; Zeng et al., 2026 ; Sridhar et al., 2025 ; Li et al., 2026b ) . Our memory mechanism instead supplies selected past frames of the main camera to the policy as additional image inputs, which are processed by the same vision-language backbone as the current views.",
+      "url": "https://arxiv.org/html/2611.08373v1#A2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3b485849cd7680a1",
+      "section": "B.1 Memory Construction",
+      "location": "B.1 Memory Construction",
+      "text": "Let I k I_{k} denote the k k -th main-camera frame of the current episode, where k = 0 k=0 is the first frame, and let f f be the recording frequency of the embodiment ( f = 25 f=25 for Piper X and f = 30 f=30 for ARX X5 and Piper). When generating an action chunk at frame t t , the memory context consists of nine main-camera frames:",
+      "url": "https://arxiv.org/html/2611.08373v1#A2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dd863d96dc8a4735",
+      "section": "B.1 Memory Construction",
+      "location": "B.1 Memory Construction",
+      "text": "ℳ t = [ I 0 , I max ⁡ ( t − 8 ​ f , 0 ) , I max ⁡ ( t − 7 ​ f , 0 ) , … , I max ⁡ ( t − f , 0 ) ] , \\mathcal{M}_{t}=\\big[\\,I_{0},\\;I_{\\max(t-8f,\\,0)},\\;I_{\\max(t-7f,\\,0)},\\;\\ldots,\\;I_{\\max(t-f,\\,0)}\\,\\big], (11)",
+      "url": "https://arxiv.org/html/2611.08373v1#A2.E11",
+      "kind": "table"
+    },
+    {
+      "id": "3e7282380eba0958",
+      "section": "B.1 Memory Construction",
+      "location": "B.1 Memory Construction",
+      "text": "that is, the episode-initial frame followed by one frame per second over the preceding eight seconds, ordered from the oldest to the most recent. The initial frame records the scene layout before manipulation and remains available throughout the episode, while the recent frames capture short-term progress and motion that a single frame cannot convey. Within the first eight seconds of an episode, the missing recent frames are replaced by the initial frame. Memory frames are taken only from the main camera, while the wrist cameras contribute only their current frames.",
+      "url": "https://arxiv.org/html/2611.08373v1#A2.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "b2e5792a42625c2e",
+      "section": "B.2 Memory Encoding",
+      "location": "B.2 Memory Encoding",
+      "text": "Each memory frame is resized to the resolution of the current views and encoded by the same SigLIP encoder ( Zhai et al., 2023 ) into 256 visual tokens. Within the prefix, the image tokens are arranged in temporal order, namely the initial frame, the recent frames from the oldest to the most recent, and the three current views, followed by the language tokens. This order is conveyed only by the token positions, without additional temporal embeddings. Like the current-view tokens, the memory tokens interact with the other prefix tokens through full attention and are accessible to the action expert. The memory frames are excluded from the spatial alignment branch: they are not passed to OmniVGGT, and ℒ align \\mathcal{L}_{\\mathrm{align}} in Equation 5 is computed only over the current-view tokens.",
+      "url": "https://arxiv.org/html/2611.08373v1#A2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9048740995384898",
+      "section": "B.3 Training and Inference",
+      "location": "B.3 Training and Inference",
+      "text": "During post-training, the data loader retrieves the memory frames of each training sample according to Equation 11 .During deployment, an online buffer records the main-camera frame at the camera frequency, including the control steps at which no new action chunk is requested, and retains the initial frame together with the frames of the most recent eight seconds. Whenever a new action chunk is requested, the buffer assembles ℳ t \\mathcal{M}_{t} following Equation 11 , so that the memory observed at inference matches the one constructed during training. The buffer is cleared at the start of each episode to prevent leakage across episodes.",
+      "url": "https://arxiv.org/html/2611.08373v1#A2.SS3.p1.1",
+      "kind": "p"
+    }
+  ]
+}

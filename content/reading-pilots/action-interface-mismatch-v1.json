@@ -1,0 +1,418 @@
+{
+  "item_id": "arxiv:2611.06653",
+  "document_id": "427099489804469098165a5328265565570f407f869f66c6db2479e75cb53d12",
+  "source_url": "https://arxiv.org/html/2611.06653v1",
+  "paper_version": "2611.06653v1",
+  "paper": {
+    "id": "arxiv:2611.06653",
+    "title": "Detecting Silent Action-Interface Mismatch with Calibrated Relational World Models",
+    "url": "https://arxiv.org/abs/2611.06653v1",
+    "published": "2026-11-04",
+    "updated": "2026-11-04",
+    "topics": [
+      "world",
+      "planning",
+      "evaluation"
+    ],
+    "summary": "A robot action can satisfy shape and range constraints yet carry the wrong semantics: axes may be permuted, signs inverted, rotations rescaled, or gripper polarity reversed. We study learned state-action-effect relations as offline contracts for detecting these mismatches and ranking their likely fields. Clean held-out transitions calibrate alarms; a fixed inverse vocabulary supports closed-set localization. On ten LIBERO Spatial tasks comprising 432 source episodes, a capacity-controlled comparison at 2.5% empirical clean false-positive rate gives 46.1% recall for a ridge forward residual, 61.0% for a four-component joint Gaussian mixture, and 65.7% for the exact conditional of that same mixture. The joint score retains a 14.9 percentage-point advantage over ridge, while conditioning improves recall by a further 4.7 points. Joint scoring instead has higher localization: 95.8% versus 94.6%. These matched-rate comparisons are retrospective diagnostics, not deployment calibration guarantees. Earlier Object/Goal results broaden tasks within the LIBERO convention; DROID, all three HYDRA tasks, short temporal faults, small offsets, exact repair, and simulated mitigation fail their respective gates, while xArm contributes one task only. The evidence supports a bounded offline diagnostic and a detection-localization tradeoff, rather than joint-density superiority or cross-robot safety."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-05T23:57:36.756883+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "可复用的改动是异常分数：同一联合GMM改算条件似然，在匹配误报率下提升接口故障召回；联合分数反而更会定位。适合离线审计选型，尚不能用于自动修复。",
+  "coverage": {
+    "read": 162,
+    "total": 162,
+    "evidence_ids": [
+      "229754b85bd9b6ba",
+      "d35f32e10e7527fb",
+      "130aa8ab192fb653",
+      "d2e35feccb7acfbc",
+      "89bf5a21c892abcd",
+      "eec50de68b092a67",
+      "9124dc3bd329df65",
+      "e6e22a793719e379",
+      "ad48335116dcbf14",
+      "0906916ba51b978b",
+      "4a087255d6f60fcc",
+      "e9de6fc92d92cb5c",
+      "326e62466c487700",
+      "483f63fbbc772470",
+      "f0d533aa109927bb",
+      "dce1799d2f1fdb68",
+      "deaae1858de0e82e",
+      "b7303159fa350c71",
+      "797ad8e8ade92507",
+      "b3ab8359fca2d87e",
+      "6f0b3c69bf9b092d",
+      "58c956bf6c09b60e",
+      "4c5cde464ce12cba",
+      "cfe63d715140139a",
+      "072daedaa506c29e",
+      "3ca69886ba258fe5",
+      "8f05aafc6cdfc65d",
+      "f0e7f81d22fb1cfc",
+      "410c7ba85c9d647d",
+      "82295af6c00e1051",
+      "7502a8e573793a17",
+      "eae9602198a330a6",
+      "93aaf0b6ba294837",
+      "130f1a02be6712e9",
+      "4516be8aca831986",
+      "5535eb414da018a1",
+      "257d998875c3ade7",
+      "7a3d59bafb7c0b1d",
+      "079ec7a020fe097a",
+      "bec0700b20486993",
+      "bdb4f35394aefa2a",
+      "f61e43532dd56d49",
+      "c69150071ab3cbda",
+      "da1d5375ee886477",
+      "dc864edc44aba83f",
+      "9e481b6c86995c4d",
+      "5e6e1ad4d2365e60",
+      "4c825a724f951310",
+      "71e4124ff07fad07",
+      "fb3dafbc21c88e1e",
+      "f4b1b10f9c4df37d",
+      "c1e44537d4f83908",
+      "ca2867c212cf6da1",
+      "a22fc8d080b1aed8",
+      "bd5f842341595eac",
+      "0be7f004e322a093",
+      "1ea1b72f38f0abba",
+      "a97d7c03aaaab5db",
+      "14597d67d27d05e0",
+      "d3687b446994323a",
+      "4de95b1a79871eae",
+      "a21d207fdbdc06d6",
+      "a19c3369048627fb",
+      "8b61dc9582eb53b2",
+      "bb65e57590444398",
+      "c00b3809caf7b56f",
+      "b34b3b26ab77eab2",
+      "65ccc5b9c7ba2362",
+      "53de92486336fa61",
+      "052424f4e9c76d84",
+      "ee509c93df967d52",
+      "aa752ffe09509851",
+      "979cca07f42358e0",
+      "eba962af1d5acc8b",
+      "e3963c600f18b3ec",
+      "8c1b62a727f94d7f",
+      "d3bc7fe6889037ba",
+      "ab188c941d283455",
+      "0d9ada6e53d07df0",
+      "f020e441731b2863",
+      "762904f290c8dd1a",
+      "2454e10a4d9ccb97",
+      "b84e7bb924fd82ef",
+      "ae66bb504355c619",
+      "1395fd46c3ef0939",
+      "2261f3ac06a0e82e",
+      "5e38c353ada7c7e2",
+      "c1c7f6960683d4c9",
+      "691d3d1e7ac4cc48",
+      "4837173fbeb1061c",
+      "cccc88990a795192",
+      "68edaff64e243d6f",
+      "1e9904f2def4f3cd",
+      "94732f01a5276e2d",
+      "444c60969874e248",
+      "b8b9b295f67b5d00",
+      "e29df3ac9c85101a",
+      "43ae0ca6c5cf415a",
+      "32421c5a12a22e41",
+      "18e00de6f3f0f50b",
+      "69a27b9dcccedd3a",
+      "cf769c6afe9e4cfe",
+      "9c78023a21807b5f",
+      "d65abf6f26015b58",
+      "dc15e473bb7b5efd",
+      "02db546f65c73592",
+      "bacd26caa584b1fd",
+      "50bddc26dd45c865",
+      "966d017ca1fde38a",
+      "b9ddce5ed0db0c0f",
+      "9e843e655161fc93",
+      "e4c7b48e2135b451",
+      "703ac4ce80c7137d",
+      "e57258a45dc90ef7",
+      "62177afca191fea8",
+      "c3a40826a4899157",
+      "20f2ecd9ea18064a",
+      "d726767506ee7ee3",
+      "7fcf0135b9383fe4",
+      "cebb58951ea24319",
+      "9c89a5812042f54a",
+      "1cdf50132407262b",
+      "27ba5650501f7cd7",
+      "1d77ff450446b822",
+      "3b665af439b96ce3",
+      "3c616781d32614ba",
+      "e975456afd8e1e4b",
+      "8ea249fcc18fdb14",
+      "d67200799d71cb11",
+      "e923d1569880ddae",
+      "b33fd4c93887302e",
+      "cfe06d34d3055e54",
+      "e6adfa28969191a3",
+      "7d89b89486bf2121",
+      "6ff4e92bffee0570",
+      "a4f1cb1159eca9ac",
+      "59bb6fabd786d80a",
+      "43867994e8c1c123",
+      "0791c2131804fb85",
+      "8071c35aec47ce1f",
+      "ba7956bf362a1048",
+      "d3e128a59ce308d1",
+      "134390891656b693",
+      "cf93a76fde0d1b66",
+      "45e86289962ede1f",
+      "72e541bc24ee4933",
+      "35c9fb7447e67e15",
+      "bf5c3c566edfb179",
+      "ec8a3ec8b370355f",
+      "cbbe40c370fb2f16",
+      "da20411d45fa8e82",
+      "6c5b2e24a40aee00",
+      "c9ebf00c12cdce25",
+      "20a6cf16242c9bec",
+      "cfb92872e7d31709",
+      "63935759a55f3191",
+      "dc96c8d467bc53a0",
+      "f8c59403d91b0430",
+      "33d06e61e7ed7511",
+      "f859220d4c5f7af5",
+      "423d09b8b6b16f32",
+      "3624b0dc2c7d91de"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      5,
+      16,
+      17
+    ],
+    "pdf_sha256": "312c0bc5e249001eaf7f9fc503aa3b3a39956b978fd91c699670db027b90bdd8"
+  },
+  "notice": "已完整阅读162个提取片段，覆盖主文、方法公式、实验、补充材料、负结果和资源记录。PDF共20页；目视核对物理页4、5、16、17的表1/2/11/12/13/14、图1与条件分数公式，补充材料内部页码与PDF物理页码不同。缓存HTML没有额外listing块。未逐图核查其他图片、逐篇核查参考文献或执行论文中的代码/命令；所引代码和结果路径未验证为可公开取得，作者实验未复现。",
+  "findings": [
+    {
+      "title": "问题：数值合法，动作含义仍可能错",
+      "text": "审计的是轴、符号、单位和夹爪极性等接口语义。仅检查形状与范围会漏掉这类错误；本文用状态、动作和实际状态变化的关系做离线一致性检查。",
+      "evidence_ids": [
+        "229754b85bd9b6ba",
+        "0906916ba51b978b",
+        "e9de6fc92d92cb5c",
+        "326e62466c487700"
+      ],
+      "quote": "wrong semantics",
+      "kind": "problem"
+    },
+    {
+      "title": "改动：同一个GMM，改算条件分数",
+      "text": "先拟合标准化的x=(s,a)、y=s_next−s的四分量全协方差联合GMM，再算R_C=−log p(x,y)+log p(x)。复用同一组参数和协方差块，无需增加容量或另训模型；隔离的是输入边缘密度对分数的贡献。",
+      "evidence_ids": [
+        "b7303159fa350c71",
+        "b3ab8359fca2d87e",
+        "6f0b3c69bf9b092d",
+        "58c956bf6c09b60e",
+        "4c5cde464ce12cba",
+        "cfe63d715140139a",
+        "d67200799d71cb11"
+      ],
+      "quote": "without adding parameters",
+      "kind": "method"
+    },
+    {
+      "title": "校准：用干净轨迹定阈值，另做匹配误报率诊断",
+      "text": "按完整episode分60/20/20训练、校准与测试，每个划分最多2000个transition；只用干净校准集取上分位阈值。匹配实际误报率的另一分析使用留出干净测试分数并插值，仅供回顾性比较，不能直接当部署阈值。",
+      "evidence_ids": [
+        "cfe63d715140139a",
+        "3ca69886ba258fe5",
+        "82295af6c00e1051",
+        "e923d1569880ddae",
+        "b33fd4c93887302e"
+      ],
+      "quote": "not proposed as deployable thresholds",
+      "kind": "method"
+    },
+    {
+      "title": "定位：在预先声明的逆变换里排序",
+      "text": "对含identity在内的固定逆变换候选逐个重算关系分数，选择最低者。Top-1衡量已知故障字段的闭集定位，不是连续动作修复；它与是否报警是两个决策。",
+      "evidence_ids": [
+        "072daedaa506c29e",
+        "257d998875c3ade7",
+        "ba7956bf362a1048"
+      ],
+      "quote": "fixed inverse vocabulary",
+      "kind": "method"
+    },
+    {
+      "title": "结果：条件分数多检出4.70个百分点",
+      "text": "10个LIBERO Spatial任务、432个源episode、5类变换，实际干净误报率匹配为2.5%时，ridge/联合GMM/条件GMM召回为46.08/60.96/65.66%。条件相对联合提高4.70个百分点，配对95%区间[3.50,6.32]；十个任务均提高。",
+      "evidence_ids": [
+        "82295af6c00e1051",
+        "7502a8e573793a17",
+        "eae9602198a330a6",
+        "93aaf0b6ba294837",
+        "130f1a02be6712e9",
+        "43867994e8c1c123",
+        "8071c35aec47ce1f"
+      ],
+      "quote": "exceeding joint recall on all ten tasks",
+      "kind": "evidence"
+    },
+    {
+      "title": "权衡：更会检出，不代表更会定位",
+      "text": "联合GMM定位95.81%，条件GMM为94.62%，ridge为92.70%。分母是全部有效故障行，不限于已报警样本；不能把这组数读成端到端“检出且定位”成功率，或安全修复率。",
+      "evidence_ids": [
+        "130f1a02be6712e9",
+        "257d998875c3ade7",
+        "ba7956bf362a1048"
+      ],
+      "quote": "all valid fault rows",
+      "kind": "evidence"
+    },
+    {
+      "title": "误报率：同一个名义目标，不是同一个工作点",
+      "text": "校准目标同为2.5%时，测试误报率实际为ridge 2.63%、联合3.22%、条件2.85%；对应召回44.13/60.86/65.04%。这些是独立于匹配分析的校准结果。匹配误报率按划分内transition计，校准测试指标按episode等权，不能混用分母。",
+      "evidence_ids": [
+        "93aaf0b6ba294837",
+        "5535eb414da018a1",
+        "e923d1569880ddae",
+        "b33fd4c93887302e",
+        "6ff4e92bffee0570"
+      ],
+      "quote": "does not establish a matched operating point",
+      "kind": "evidence"
+    },
+    {
+      "title": "统计边界：重划分不等于新增机器人经验",
+      "text": "每任务100次划分复用同432个episode，1000次GMM拟合不是独立新轨迹。先合并重复episode—故障观测，再做2万次任务/episode分层bootstrap；区间条件于已拟合分数与参考阈值，未传播重新训练和阈值估计的不确定性。新条件分数比较仅限Spatial。",
+      "evidence_ids": [
+        "3ca69886ba258fe5",
+        "82295af6c00e1051",
+        "7502a8e573793a17",
+        "f4b1b10f9c4df37d",
+        "3c616781d32614ba",
+        "a4f1cb1159eca9ac"
+      ],
+      "quote": "not an independent replication",
+      "kind": "limitation"
+    },
+    {
+      "title": "故障边界：偏移、短时序和未知类仍会漏",
+      "text": "小X偏移GMM召回仅3.40%，0/10任务过门槛；短延迟、保持与分块倒序也0/10。留一故障族时，隐藏X反号的拒识仅37.20%，64.67%被强归为XY交换。无报警不能证明接口正确，候选排名也不能支持自动改写未知动作。",
+      "evidence_ids": [
+        "e9de6fc92d92cb5c",
+        "f61e43532dd56d49",
+        "c69150071ab3cbda",
+        "dc864edc44aba83f",
+        "ca2867c212cf6da1"
+      ],
+      "quote": "no alarm cannot certify a correct interface",
+      "kind": "limitation"
+    },
+    {
+      "title": "外部边界：尚无跨机器人可靠性证据",
+      "text": "DROID-100三类召回1.93–8.65%；HYDRA三个任务10.63–12.13%，0/3过门槛，序列改造也未挽回。xArm Lift召回60.16%、误报2.45%，但800个episode都来自一个任务。Object/Goal扩展仍沿用LIBERO动作约定，不能替代独立接口复验。",
+      "evidence_ids": [
+        "229754b85bd9b6ba",
+        "8f05aafc6cdfc65d",
+        "9e481b6c86995c4d",
+        "5e6e1ad4d2365e60",
+        "f4b1b10f9c4df37d"
+      ],
+      "quote": "bounded one-task offline sanity check",
+      "kind": "limitation"
+    },
+    {
+      "title": "因果边界：改动作字段，没有执行错误动作",
+      "text": "评测把动作替换成T(a)，下一状态仍保留干净动作a的事实结果；这是有标签的关系不一致测试，不是错误命令的真实后果。连续偏移修复0/10过门槛；小仿真fallback与ridge打平且GMM误报超门槛，未证明闭环任务收益。",
+      "evidence_ids": [
+        "326e62466c487700",
+        "f61e43532dd56d49",
+        "4c825a724f951310",
+        "71e4124ff07fad07"
+      ],
+      "quote": "not environment rollouts or causal effects",
+      "kind": "limitation"
+    },
+    {
+      "title": "成本：CPU可做的分数消融，复现仍待完成",
+      "text": "作者报告新一轮1000次GMM拟合及条件/匹配分析共40.40秒，单CPU进程、单BLAS/OpenMP线程、无GPU。该数字是整次离线工作负载，不是机器人单步时延。本轮核对原文与表格，未运行源码、验证私有路径工件或复现实验。",
+      "evidence_ids": [
+        "a22fc8d080b1aed8",
+        "d3e128a59ce308d1",
+        "cf93a76fde0d1b66",
+        "45e86289962ede1f"
+      ],
+      "quote": "no GPU was used",
+      "kind": "evidence"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "验证：条件分数的收益能否跨动作约定保留？",
+      "text": "待验证假设：同一GMM改用条件分数后，在另一套明确动作约定的多任务数据上，仍能在可接受误报下提高故障召回。选择至少3个具有多个独立episode的公开任务，先核对源动作语义；各任务以整episode隔离训练、干净校准和最终测试。固定相同预处理、训练样本、四分量全协方差GMM和训练预算，比较ridge、联合分数与该GMM解析条件分数；这不是零样本迁移。预先声明与源语义相符的五类变换，只计真正改变且仍在训练范围内的行，逐类报告有效行数，不能删除零有效样本任务来抬分。主结果只用干净校准集按名义2.5%定阈值，报告最终测试实际误报率与召回，并预先设5%误报上限；超限不算有效提升。将测试干净分数匹配2.5%误报率的曲线另列为回顾性分数诊断，不回填部署阈值。以任务和源episode做配对不确定性分析，合并重复划分而非把随机种子当新数据；分别统计全部故障行的定位、报警后的定位及检出且定位。若条件分数不能在多任务中稳定改善召回，或实际误报反复超限，则反对该收益可跨接口保留的假设。只对公开离线记录做合成字段审计，不执行错误机器人命令；未知故障拒识与真实闭环修复另设实验。本实验未运行，未宣称研究空白。",
+      "evidence_ids": [
+        "cfe63d715140139a",
+        "82295af6c00e1051",
+        "7502a8e573793a17",
+        "dc864edc44aba83f",
+        "f4b1b10f9c4df37d",
+        "ca2867c212cf6da1",
+        "3b665af439b96ce3",
+        "3c616781d32614ba",
+        "b33fd4c93887302e",
+        "a4f1cb1159eca9ac",
+        "ba7956bf362a1048"
+      ],
+      "quote": "multiple independent tasks under a second auditable action convention"
+    }
+  ],
+  "frontier_brief": {
+    "title": "动作接口审计：同一GMM改用条件分数，多检出4.70个百分点",
+    "change_type": "异常检测 · 分数消融",
+    "delta": "把−log p(s,a,Δs)改成−log p(Δs|s,a)：复用同一四分量GMM，解析消去输入边缘密度，不另训模型。条件分数提高故障召回，联合分数的定位率仍更高。",
+    "before": "用联合密度给状态、动作和效果整体打异常分，混入输入本身是否少见。",
+    "after": "给定状态和动作，评估实际变化是否一致；在相同实际误报率下单独比较检出能力。",
+    "relevance": "做动作单位、坐标轴或夹爪接口的离线验收时，先比较同一模型的两种分数；检出、定位和实际误报率分开决定是否值得采用。",
+    "caveat": "仅432个既有LIBERO Spatial episode上的回顾性匹配；阈值用留出干净测试参考，不是部署保证。外部多任务、短时序和自动修复仍失败。未复现。",
+    "question": "换一套动作约定后，只用干净校准数据定阈值，条件分数还能保留这项收益吗？",
+    "evidence": [
+      {
+        "label": "同容量、同实际误报率",
+        "value": "65.66% vs 60.96% 召回",
+        "context": "条件/联合GMM；10任务、432源episode、5类变换，实际误报匹配2.5%。差4.70个百分点，配对95%区间[3.50,6.32]；条件于拟合分数与参考阈值。"
+      },
+      {
+        "label": "检出与定位的取舍",
+        "value": "94.62% vs 95.81% 定位",
+        "context": "条件/联合GMM，全部有效故障行的闭集Top-1；不是报警后的定位，也不代表能修复动作。"
+      },
+      {
+        "label": "名义校准与实际误报不同",
+        "value": "2.85% vs 3.22% 实际误报",
+        "context": "条件/联合GMM，均用独立干净校准集按名义2.5%取阈值；测试误报按episode等权。与上方回顾性匹配分析分开。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "拟合关系",
+        "text": "干净episode训练四分量GMM，联合描述(s,a,Δs)。"
+      },
+      {
+        "title": "只换分数",
+        "text": "联合负对数似然加log p(s,a)，得到同一模型的条件负对数似然。"
+      },
+      {
+        "title": "分开验收",
+        "text": "独立干净集校准；分别测实际误报、故障召回与固定逆变换定位。"
+      }
+    ]
+  }
+}

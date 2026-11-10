@@ -1,0 +1,1575 @@
+{
+  "id": "2ec448e49d0118914e4dbf55dd57d4cd9789366c4dcc2b0b46026d015118ae69",
+  "url": "https://arxiv.org/html/2611.08425v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "746309b9c98652f2",
+      "section": "正文",
+      "location": "正文",
+      "text": "marginparsep has been altered. topmargin has been altered. marginparwidth has been altered. marginparpush has been altered.",
+      "url": "https://arxiv.org/html/2611.08425v1#p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d2c7d014a1d970eb",
+      "section": "正文",
+      "location": "正文",
+      "text": "The page layout violates the ICML style.",
+      "url": "https://arxiv.org/html/2611.08425v1#p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0108c3f4f6dad634",
+      "section": "正文",
+      "location": "正文",
+      "text": "Please do not change the page layout, or include packages like geometry, savetrees, or fullpage, which change it for you.",
+      "url": "https://arxiv.org/html/2611.08425v1#p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "c63cd633ba0c9091",
+      "section": "正文",
+      "location": "正文",
+      "text": "We’re not able to reliably undo arbitrary changes to the style. Please remove the offending package(s), or layout-changing commands and try again.",
+      "url": "https://arxiv.org/html/2611.08425v1#p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "968561a3c880e613",
+      "section": "正文",
+      "location": "正文",
+      "text": "Failure Prediction and Classification in Vision-Language-Action Models via Calibrated Latent Probing",
+      "url": "https://arxiv.org/html/2611.08425v1#p5.1",
+      "kind": "table"
+    },
+    {
+      "id": "f315ea78ffe4b92d",
+      "section": "正文",
+      "location": "正文",
+      "text": "Michal P. Podolinsky 1 Yunhao Yang 1 Daniel Little 2 Hong Lu 2 Rohan Siva 1 Olin Goudey 2 Neel P. Bhatt 3 Matthias Scheutz 2 Ufuk Topcu 1",
+      "url": "https://arxiv.org/html/2611.08425v1#p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "9cebf22d9de92151",
+      "section": "正文",
+      "location": "正文",
+      "text": "Figure 1: We introduce VLA-Tug , a probe on the VLA backbone embeddings that predicts failures and their mode. (a) A recurrent encoder maps the embedding into a latent failure space; a score head and a calibrated trigger raise the alarm, and a mode head then predicts the failure mode. (b) VLA-Tug alarms before the failure, allowing early stopping or intervention by an expert model.",
+      "url": "https://arxiv.org/html/2611.08425v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "00dcb3b8c4cb220c",
+      "section": "正文",
+      "location": "正文",
+      "text": "Vision-Language-Action models (VLAs) enable general-purpose embodied intelligence, but their performance is brittle under distribution shift, where unanticipated failures can damage equipment or endanger people. Deploying VLAs in real-world systems therefore requires a runtime monitor that is timely , calibrated , and informative while being efficient enough to run on the edge. Existing methods fail to fulfill these requirements. We present VLA-Tug , a lightweight probe over the latent layers of a VLA backbone that improves early failure detection and bounds the missed-detection and false-alarm rates, with minimal inference overhead. We show that supervising on the pre-failure segment of a trajectory increases early failure detection at matched false-positive rates by up to 30 % 30\\% over the strongest learned baseline. Under shift to unseen tasks, the bounds on missed-detection and false-alarm rates remain valid in up to 86 % 86\\% of runs, versus at most 21 % 21\\% for baselines. Unlike existing methods, VLA-Tug predicts the failure mode to enable corrective actions, raising top-3 accuracy on unseen tasks by up to 44 % 44\\% over a majority baseline. VLA-Tug enables real-time monitoring where the well-timed and informative probe supports lightweight steering that improves task success. We release a dataset of 3,180 3{,}180 annotated manipulation episodes to support future work on latent failure detection in VLAs at vla-tug.github.io .",
+      "url": "https://arxiv.org/html/2611.08425v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "965dfb6103a249e7",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Vision-Language-Action models (VLAs) Physical Intelligence et al. (2025) ; Physical Intelligence et al. (2026) ; NVIDIA et al. (2025) are strong candidates for general-purpose embodied intelligence. By pairing a VLM backbone pre-trained on internet-scale data with an action expert fine-tuned on demonstration trajectories, they excel at complex dexterous tasks such as tightening screws or assembling cardboard boxes. Yet their performance is brittle and can degrade significantly under distribution shift, such as changes in lighting, novel textures, or rare object combinations Wang et al. (2026) ; Fei et al. (2025) . A VLA can therefore fail unexpectedly, especially as task and environment novelty increases, and such failures can be costly, damaging materials and robots, or outright dangerous to humans. This brittleness has slowed the adoption of VLAs in factories, homes, and public spaces.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cd0ef6c779e3bbcd",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Among multiple solutions, one solution that the robotics community is exploring is VLA steering. The idea of steering comes from research on LLMs, where activations are selectively modified to nudge a model towards a desired output Turner et al. (2024) . Steering VLAs is particularly interesting because it can unlock behaviors that cannot be reached through prompting alone Buurmeijer et al. (2026) ; Swann et al. (2026) . Various steering methods have recently been proposed ( Li et al., 2026b ; Liu et al., 2026a ; Tan et al., 2026 ; Swann et al., 2026 ; Cui et al., 2026 ; Jeong et al., 2026 ; Li, 2025 ) , but they rarely use a calibrated probe to decide when to steer. Some steer continuously Li et al. (2026b) ; Liu et al. (2026a) ; Cui et al. (2026) , some rely on human-specified offline triggers Swann et al. (2026) ; Li (2025) , and others are gated by a one-sided calibrated trigger Tan et al. (2026) ; Jeong et al. (2026) . Overall, they lack an efficient and principled trigger that would make them deployable in real-world systems.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4409027545b5e6cb",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Research on failure detection for VLAs is becoming increasingly mainstream Gu et al. (2025) ; Agia et al. (2024) ; Ma et al. (2026) ; Huang et al. (2026) . In a nutshell, these methods compute a failure score from signals available in the VLA, often its latent variables Gu et al. (2025) or predicted actions Agia et al. (2024) ; Huang et al. (2026) ; Ma et al. (2026) , that encode how likely the policy is to fail at the current task. A detection threshold is then calibrated to give probabilistic guarantees on the detector’s performance Gu et al. (2025) . However, these guarantees often cover only the false-positive rate (FPR), i.e. the rate of successes misclassified as failures, and not a target true-positive rate (TPR), i.e. the rate of correctly classified failures, which is arguably even more important in safety-critical settings where a single failure could harm a person or damage costly equipment. These methods are also seldom evaluated systematically against ground-truth failure times, which we argue is crucial to assess whether they can prevent failures before they happen and thus enable VLA steering. Finally, they cannot predict failure modes (grasping, pushing, opening), so steering cannot be targeted towards the root cause and would require human interventions.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5743358239fadcfa",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We argue that steering would be best supported by a probe that is (T.) timely , detecting failures before they occur; (I.) informative , outputting semantic information beyond a numerical score; (C.) calibrated , achieving the desired error rates; and (E.) efficient to train, calibrate, and deploy.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "b5ac3eeb5afc2c9f",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We address this with VLA-Tug 1 1 1 Like a tugboat beside the vessel it guides, the probe is small next to the policy it monitors and acts only when needed. , a well-behaved probe designed to support VLA steering in the real world. We train VLA-Tug on the latent layers of two VLAs Physical Intelligence et al. (2025) ; NVIDIA et al. (2025) using 228 distinct tasks in two simulation environments and 8 real-world tasks, and evaluate it against ground-truth failure times. We show that supervision should focus on the pre-failure part of the trajectory to improve early failure detection, and that calibrating the detection threshold to guarantee both TPR and FPR simultaneously yields guarantees that hold far more often, including on unseen tasks. Building on these findings, we propose a real-time architecture that incorporates VLA-Tug to autonomously support the detection and prevention of VLA failures. Our contributions are as follows:",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "f3d21b51ea924655",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "VLA-Tug : A timely, informative, and efficient probe for early failure detection. On unseen tasks, our probe improves the area under the early-detection curve by up to 30 % 30\\% over the strongest learned baseline. VLA-Tug also predicts the failure mode, raising the top-3 accuracy on unseen tasks by up to 44 % 44\\% over a majority baseline, at under 1 1 ms per step.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "910a8c5bad759b54",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Guarantees on false alarms and missed detections. We certify FPR and TPR early {\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}} targets jointly; both held in every certified run, compared to 57 57 – 71 % 71\\% of runs for baselines. Under distribution shift to unseen tasks, the false-alarm target still held in 40 40 – 86 % 86\\% of certified runs, compared to 0 0 – 21 % 21\\% for baselines.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cbc5012cb02fbc3e",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "A deployable failure-monitoring system. Through real-world experiments, we demonstrate that integrating the timely failure predictions and associated modes with steering strategies can lead to enhanced success rates.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "04be6bbc7bbd26b3",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "An annotated VLA failure dataset. We release a dataset of ≈ \\approx 289k policy-step VLA backbone embeddings from annotated 3,180 3{,}180 episodes of diverse tasks.",
+      "url": "https://arxiv.org/html/2611.08425v1#S1.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d529fd81e1c6001a",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Existing methods can detect failures, but their alarms are not necessarily timely, informative, or sufficiently calibrated. Our method addresses these limitations through failure-aware representations, onset-based detection, and joint statistical guarantees.",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "81e05284923b29fa",
+      "section": "Existing works and their limitations.",
+      "location": "Existing works and their limitations.",
+      "text": "Existing VLA failure detectors leverage different signals to identify potential failures, including external assessments from world models or LLM judges ( Liu et al., 2026b ; Li et al., 2026b ) , action consistency across sampled or consecutive action chunks ( Agia et al., 2024 ; Huang et al., 2026 ) , distributional deviations in policy inputs, outputs, or embeddings ( Xu et al., 2025 ; Gu et al., 2025 ) , and internal policy representations ( Gu et al., 2025 ; Rajaprakash et al., 2026 ; Ma et al., 2026 ; Chen, 2026 ; Park et al., 2026 ; Francis-Meretzki et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "511033bb142f7398",
+      "section": "Existing works and their limitations.",
+      "location": "Existing works and their limitations.",
+      "text": "These approaches have three key limitations. (1) Detection performance is commonly evaluated at fixed time points using metrics such as AUROC or balanced accuracy ( Gu et al., 2025 ; Huang et al., 2026 ) , without explicitly measuring whether alarms precede the actual failure onset. Moreover, supervision ranges from episode-level failure labels assigned to all timesteps ( Gu et al., 2025 ) , to heuristic or human-refined timestep labels ( Ma et al., 2026 ) , to failure-free training ( Xu et al., 2025 ) , without explicitly accounting for the timing of failures. (2) Most detectors produce scalar risk scores without identifying the underlying failure modes. While semantic supervision and representation interpretability have been explored for embodied policies ( Xu et al., 2024 ; Swann et al., 2026 ; Buurmeijer et al., 2026 ) , they do not directly establish informative failure alarms. (3) Existing calibration methods typically control a single criterion. Conformal methods provide false-positive guarantees for sequential failure detection ( Gu et al., 2025 ; Rajaprakash et al., 2026 ; Park et al., 2026 ) , calibrate anomaly or failure scores ( Xu et al., 2025 ; Ma et al., 2026 ) , or provide guarantees for one-shot policy compliance and embodied decision making ( Yang et al., 2025a ; Chen et al., 2026 ; Bhatt et al., 2025 ; Yang et al., 2025b ) . However, these guarantees do not jointly account for false alarms and timely failure detection.",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.SS0.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f05114f1831a1dbe",
+      "section": "VLA-Tug addresses the limitations.",
+      "location": "VLA-Tug addresses the limitations.",
+      "text": "We address these limitations by developing a failure detector that is timely, informative, and jointly calibrated . Following the internal-representation probing direction, we reuse the VLA’s latent representations and align them with failure-mode semantics, enabling the detector to identify both potential failures and their types. To evaluate timeliness, we measure detection relative to annotated failure onsets and investigate supervision strategies that explicitly account for when failures occur. To provide statistical guarantees, we adopt Learn-then-Test ( Angelopoulos et al., 2022 ) to jointly calibrate multiple detection criteria, including the false-positive rate (FPR) and early true-positive rate ( TPR early \\mathrm{TPR}_{\\mathrm{early}} ). Existing failure detectors primarily raise alarms without steering, while steering methods rely on predefined schedules or calibrated triggers. In contrast, to the best of our knowledge, VLA-Tug is the first framework to combine joint FPR and early-TPR calibration, failure-onset-aware evaluation, and failure-mode prediction for calibrated failure-triggered steering. Table 1 compares VLA-Tug against the existing works.",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "518712a7dbcb955f",
+      "section": "VLA-Tug addresses the limitations.",
+      "location": "VLA-Tug addresses the limitations.",
+      "text": "Table 1: Comparison with related methods. FPG / TPG: formal calibrated guarantee on the false-positive / true-positive rate. EE: early evaluation, i.e. a per-episode criterion against annotated failure time; ∘ \\circ denotes partial use. FM: predicts the failure mode. Trigger: what decides when steering happens. A dash means n/a.",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "184354a2c64edffc",
+      "section": "VLA-Tug addresses the limitations.",
+      "location": "VLA-Tug addresses the limitations.",
+      "text": "Method Trigger FPG TPG EE FM Failure detectors (no steering) SAFE ( Gu et al., 2025 ) one-sided conformal ✓ × \\times ∘ † \\circ^{\\dagger} × \\times ActProbe ( Huang et al., 2026 ) split conformal ✓ × \\times × ‡ \\times^{\\ddagger} × \\times STAC ( Agia et al., 2024 ) one-sided conformal ✓ × \\times × \\times × \\times FailureSpot ( Ma et al., 2026 ) one-sided conformal ✓ × \\times ∘ † \\circ^{\\dagger} × \\times Steering methods VLA-Pilot ( Li et al., 2026b ) always on – – – – VLS ( Liu et al., 2026a ) always on § – – – – DreamSteer ( Cui et al., 2026 ) fixed period – – – – SAE-VLA ( Swann et al., 2026 ) human-specified – – – – TLI ( Li, 2025 ) human-specified – – – – RL 2 -VLA ( Tan et al., 2026 ) one-sided conformal ✓ × \\times × \\times × \\times LFP ( Jeong et al., 2026 ) one-sided conformal ✓ ∓ × \\times × \\times × \\times VLA-Tug (Ours) jointly calibrated ✓ ✓ ✓ ✓",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.T1.4",
+      "kind": "table"
+    },
+    {
+      "id": "fd412e3520ba965b",
+      "section": "VLA-Tug addresses the limitations.",
+      "location": "VLA-Tug addresses the limitations.",
+      "text": "† \\dagger Annotated failure time used only in aggregate or qualitatively. ‡ \\ddagger Timeliness measured via normalized detection time and early-window AUC relative to the episode length; no annotated failure time. § \\lx@sectionsign Threshold on VLM-generated rewards. ∓ \\mp Class-conditional bound on harmful steering.",
+      "url": "https://arxiv.org/html/2611.08425v1#S2.T1.5",
+      "kind": "p"
+    },
+    {
+      "id": "3b61457a8f3bfcc6",
+      "section": "3 Problem Statement",
+      "location": "3 Problem Statement",
+      "text": "In this section, we start by giving several broad definitions used to describe how failure detectors for VLAs function. Next, we give a mathematical formulation of our problem and then introduce how VLA-Tug addresses it.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "78d0ed5a44ce7e14",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "To facilitate comparisons across methods, we give general definitions for the concepts of failure score, detection threshold, detection time, failure time, and failure mode.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b8ea3123a23e5887",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "Failure score. The score s t ∈ ℝ s_{t}\\in\\mathbb{R} , defined at every timestep t t , encodes the probe’s belief that the VLA is failing. It need not be a probability in the strict sense.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e5fee2a4b1bff1e9",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "Detection threshold. The threshold h ⋆ h^{\\star} over s t s_{t} separates failures from successes.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4b9b738531dc8072",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "Detection time. The time t det = min ⁡ { t : s t ≥ h ⋆ } t_{\\mathrm{det}}=\\min\\{t:s_{t}\\geq h^{\\star}\\} is the first time the score crosses the threshold.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "440524e4abbe8881",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "Failure time. The time t fail t_{\\mathrm{fail}} , which we also call the failure onset, is when the policy makes an obvious mistake or its progress stalls to the point where an intervention, human or otherwise, is needed.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "81c91c6423d03345",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "Failure mode. The label f mode f_{\\mathrm{mode}} is a high-level semantic category assigned to each failure, such as grasping failure, placement failure, or no progress.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.I1.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "36d3030e8d0cdf2f",
+      "section": "3.1 Definitions",
+      "location": "3.1 Definitions",
+      "text": "These definitions are general, and their exact form varies slightly across methods. The interpretation of s t s_{t} depends on the training strategy, but a higher score usually signals failure and a lower score success. The threshold h ⋆ h^{\\star} may be fixed or vary with time, and it is often calibrated with probabilistic guarantees on a set of calibration rollouts 𝒟 cal {\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}} . If s t < h ⋆ s_{t}<h^{\\star} for all t t , the detection time t det t_{\\mathrm{det}} is undefined, and the rollout raises no alarm. The failure time definition follows Gu et al. (2025) .",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "215d0a2301586127",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "Consider a VLA policy 𝐟 VLA ​ ( ⋅ ) \\mathbf{f}_{\\text{VLA}}(\\cdot) and a rollout τ i \\tau_{i} of T T policy steps. At each policy step t ∈ { 1 , … , T } t\\in\\{1,\\dots,T\\} , 𝐟 VLA ​ ( ⋅ ) \\mathbf{f}_{\\text{VLA}}(\\cdot) takes as input RGB observations 𝐨 t \\mathbf{o}_{t} (agent and wrist cameras) and a natural language prompt 𝐩 \\mathbf{p} , and produces a chunk of m m control actions 𝐚 t ; 0 : m − 1 \\mathbf{a}_{t;0:m-1} . We denote the VLA’s internal embedding at step t t as 𝐞 t \\mathbf{e}_{t} , so that τ i = { ( 𝐩 , 𝐨 t , 𝐞 t , 𝐚 t ; 0 : m − 1 ) } t = 1 T \\tau_{i}=\\{(\\mathbf{p},\\mathbf{o}_{t},\\mathbf{e}_{t},\\mathbf{a}_{t;0:m-1})\\}_{t=1}^{T} . Each rollout has an episode-level label Y i ∈ { 0 , 1 } Y_{i}\\in\\{0,1\\} , where Y i = 1 Y_{i}=1 marks a failure and Y i = 0 Y_{i}=0 a success. If Y i = 1 Y_{i}=1 , the rollout also has a failure time t fail {\\color[rgb]{0,0,0}t_{\\mathrm{fail}}} and a failure mode f mode ∈ ℱ {\\color[rgb]{0,0,0}f_{\\mathrm{mode}}}\\in\\mathcal{F} , where ℱ \\mathcal{F} is a fixed taxonomy of failure modes.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d3b86dcf109b1af",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "Problem. Given a training set and a calibration set 𝒟 cal = { τ i } {\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}}=\\{\\tau_{i}\\} , and access to the internal embeddings 𝐞 t \\mathbf{e}_{t} of 𝐟 VLA ​ ( ⋅ ) \\mathbf{f}_{\\text{VLA}}(\\cdot) , predict an imminent task failure before it happens , i.e. t det ≤ t fail {\\color[rgb]{0,0,0}t_{\\mathrm{det}}}\\leq{\\color[rgb]{0,0,0}t_{\\mathrm{fail}}} where t det {\\color[rgb]{0,0,0}t_{\\mathrm{det}}} is the detection time, and predict the failure mode f mode {\\color[rgb]{0,0,0}f_{\\mathrm{mode}}} in a manner that holds up empirically on tasks unseen during calibration.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2857576645ccec2e",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "We propose VLA-Tug , a probe that is trained and calibrated to detect failures before they happen. It is:",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4c5600a506412dec",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "(T.) Timely. We propose a training and evaluation strategy that accounts for the failure time and improves early failure detection.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "f89308dddf83e444",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "(C.) Calibrated. We introduce a risk formulation that jointly bounds the false-positive rate and the early miss rate 1 − TPR early 1-\\mathrm{TPR}_{\\mathrm{early}} , and examine how well these targets hold on unseen tasks.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "6e89d06c06507954",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "(I.) Informative. We design VLA-Tug to predict the failure mode, giving the semantic information needed to choose a corrective action.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "38e91d5b7a4d9a23",
+      "section": "3.2 Problem Formulation",
+      "location": "3.2 Problem Formulation",
+      "text": "(E.) Efficient. VLA-Tug adds minimal latency and parameters to the VLA, and is cheap to train and calibrate.",
+      "url": "https://arxiv.org/html/2611.08425v1#S3.SS2.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "fff3c979262c141d",
+      "section": "4 Methodology",
+      "location": "4 Methodology",
+      "text": "In this section we introduce VLA-Tug . In subsection 4.1 we present the probe and how we train it, and in subsection 4.2 we show how we calibrate its alarm threshold and what guarantees this gives.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f80e93c070b92fc9",
+      "section": "4.1 Failure Detection Through Latent Space Probing",
+      "location": "4.1 Failure Detection Through Latent Space Probing",
+      "text": "Building on existing works Gu et al. (2025) , we instantiate the probe as a combination of LSTMs and MLPs, the goal being to capture a non-linear pattern in the backbone embeddings that generalizes beyond the seen episodes. We briefly introduce the model inputs, followed by a discussion of the model architecture and finally the training strategy.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "198ca092be302ee1",
+      "section": "We use VLA backbone embeddings as the inputs.",
+      "location": "We use VLA backbone embeddings as the inputs.",
+      "text": "We explore two distinct layers: backbone layer 18 (after normalization) in π 0.5 \\pi_{0.5} and layer 16 in GR00T-N1.7, focusing on the latter in particular. At every policy step t t we average the backbone tokens of each modality (agent camera, wrist camera, instructions) and concatenate the three 2048 2048 -dimensional vectors into a single embedding e t ∈ ℝ 6144 e_{t}\\in\\mathbb{R}^{6144} .",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2ff82a672c221d97",
+      "section": "We leverage a combination of LSTMs and MLPs.",
+      "location": "We leverage a combination of LSTMs and MLPs.",
+      "text": "A single-layer LSTM with 256 256 hidden units reads the sequence of embeddings and produces a latent state u t = LSTM ( e 1 : t ) u_{t}=\\text{LSTM}(e_{1:t}) at every policy step. Three MLP heads read this shared latent state (see Figure 1 ). The failure score head predicts the failure score, s t = σ ⁡ ( g s ​ ( u t ) ) s_{t}=\\sigma(g_{s}(u_{t})) . To make the probe informative, the mode head predicts a distribution over the 10 10 failure modes f mode {\\color[rgb]{0,0,0}f_{\\mathrm{mode}}} , m t = softmax ​ ( g m ​ ( u t ) ) m_{t}=\\text{softmax}(g_{m}(u_{t})) . Following Xu et al. (2024) , an auxiliary head, c t = g c ​ ( u t ) c_{t}=g_{c}(u_{t}) , aligns the latent state with a CLIP embedding of the description of the current action. Each head g g is an MLP with one hidden layer of 64 64 ReLU units. The probe has 6.6 6.6 M parameters.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "059fa5602f3a7571",
+      "section": "We train the probe to predict features that precede a failure.",
+      "location": "We train the probe to predict features that precede a failure.",
+      "text": "We hypothesize that training on post-failure embeddings teaches the probe what already failed trajectories look like, not what trajectories about to fail look like. If so, to predict failures the probe must be trained on the embeddings e t e_{t} before the failure time t fail t_{\\mathrm{fail}} ( pre-onset supervision), rather than after it Ma et al. (2026) or at all times of failed rollouts Gu et al. (2025) . To test this, we compare four ways of labeling the embeddings of failed rollouts ( Figure 2 ; the mathematical formulation is in App. A.2 ). Successful rollouts are labeled 0 0 in all four. The window w w in onset and post-onset is the time span before t fail t_{\\mathrm{fail}} that is labeled as failure. Pre-onset and onset truncate the rollout at the failure time, while post-onset and trajectory keep all steps. We exclude the steps after t fail t_{\\mathrm{fail}} in the first two strategies instead of labeling them 0 0 : these embeddings already show a failed rollout, so labeling them as successes would give the probe contradicting training signals.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1f0f2f8173df5857",
+      "section": "We train the probe to predict features that precede a failure.",
+      "location": "We train the probe to predict features that precede a failure.",
+      "text": "Figure 2: How the embeddings e t e_{t} of a failed rollout are labelled for the four supervision strategies.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "940a4af7409a0026",
+      "section": "We optimize three objectives.",
+      "location": "We optimize three objectives.",
+      "text": "With the labels above, the probe is trained with",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "693f68e84e9604fc",
+      "section": "We optimize three objectives.",
+      "location": "We optimize three objectives.",
+      "text": "ℒ = ℒ score + λ m ​ ℒ mode + λ c ​ ℒ CLIP , \\mathcal{L}=\\mathcal{L}_{\\text{score}}+\\lambda_{m}\\mathcal{L}_{\\text{mode}}+\\lambda_{c}\\mathcal{L}_{\\text{CLIP}}, (1)",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.E1",
+      "kind": "table"
+    },
+    {
+      "id": "3208a0717337b70a",
+      "section": "We optimize three objectives.",
+      "location": "We optimize three objectives.",
+      "text": "with λ m = λ c = 1 \\lambda_{m}=\\lambda_{c}=1 . ℒ score \\mathcal{L}_{\\text{score}} is a binary cross-entropy over all steps that are not excluded from the loss, weighted by the ratio of negative to positive steps in the training set. ℒ mode \\mathcal{L}_{\\text{mode}} is a cross-entropy against the true failure mode, applied to the positive steps of failed rollouts and weighted to balance the modes. ℒ CLIP \\mathcal{L}_{\\text{CLIP}} is an auxiliary contrastive loss that aligns c t c_{t} with the CLIP embedding of the step’s description. We train with Adam (learning rate 3 × 10 − 4 3\\times 10^{-4} , batch size 32 32 rollouts, at most 100 100 epochs) on standardized inputs, with early stopping on the validation ℒ score \\mathcal{L}_{\\text{score}} (patience 15 15 ).",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS1.SSS0.Px4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "c5a6df3c15cb779a",
+      "section": "4.2 Uncertainty Quantification and Guarantees",
+      "location": "4.2 Uncertainty Quantification and Guarantees",
+      "text": "Where previous works only provided guarantees of false-positive rates (i.e. the rate of successful rollouts that were flagged as failures) ( Gu et al., 2025 ; Rajaprakash et al., 2026 ) , they did not provide guarantees on the false-negative rate (i.e. the rate of unsuccessful trajectories that were not flagged). We will first formulate the risks and show how to calibrate the detection threshold h ⋆ h^{\\star} . In an effort to make these bounds interpretable to the practitioner, we compute the probability of failure given that a rollout was flagged.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5085db51041d4108",
+      "section": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "location": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "text": "In general, the FPR is an operational metric that we wish to minimize to prevent unnecessary steering, the TPR is a safety metric that we wish to maximize to prevent undetected failures. We can control these risks using the Learn-then-Test framework Angelopoulos et al. (2022) . Let h ⋆ h^{\\star} be a constant detection threshold, and s t s_{t} the failure score produced by our probe at each timestep t t for each rollout τ \\tau . Furthermore, let the detection time t det {\\color[rgb]{0,0,0}t_{\\mathrm{det}}} be the first time the failure score s t s_{t} exceeds the threshold h ⋆ h^{\\star} . Finally, the ground truth failure time t fail {\\color[rgb]{0,0,0}t_{\\mathrm{fail}}} remains the first time t t when failure becomes apparent or a human operator would choose to take over. We propose to formulate the above mentioned risks as follows:",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e050890ebaa70506",
+      "section": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "location": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "text": "FPR ⁡ ( h ) \\displaystyle\\mathrm{FPR}(h) = 𝔼 τ ∼ 𝒟 cal succ ​ [ 𝟏 ​ { ∃ t det : s t ​ ( τ ) ≥ h } ] , \\displaystyle=\\mathbb{E}_{\\tau\\sim{\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}^{\\mathrm{succ}}}}[\\mathbf{1}\\{\\exists\\,{\\color[rgb]{0,0,0}t_{\\mathrm{det}}}:s_{t}(\\tau){\\color[rgb]{0,0,0}\\geq h}\\}], (2) TPR early ​ ( h ) \\displaystyle{\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}}(h) = 𝔼 τ ∼ 𝒟 cal fail ​ [ 𝟏 ​ { ∃ t det ≤ t fail : s t ​ ( τ ) ≥ h } ] , \\displaystyle=\\mathbb{E}_{\\tau\\sim{\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}^{\\mathrm{fail}}}}[\\mathbf{1}\\{\\exists\\,{\\color[rgb]{0,0,0}t_{\\mathrm{det}}}\\leq{\\color[rgb]{0,0,0}t_{\\mathrm{fail}}}:s_{t}(\\tau){\\color[rgb]{0,0,0}\\geq h}\\}], (3)",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.EGx1",
+      "kind": "table"
+    },
+    {
+      "id": "b7e37ec0dd7042c5",
+      "section": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "location": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "text": "where 𝒟 cal succ {\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}^{\\mathrm{succ}}} and 𝒟 cal fail {\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}^{\\mathrm{fail}}} are the sets of successful and failed rollouts τ \\tau , respectively, in the calibration set 𝒟 cal {\\color[rgb]{0,0,0}\\mathcal{D}_{\\mathrm{cal}}} . We are interested in finding the set Λ ^ \\hat{\\Lambda} of values h ⋆ h^{\\star} that satisfy:",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "3511f6ef3bd974eb",
+      "section": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "location": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "text": "P ( FPR ( h ) ≤ α , TPR early ( h ) ≥ β ∀ h ∈ Λ ^ ) ≥ 1 − δ , P\\Big(\\mathrm{FPR}(h)\\leq\\alpha,\\ {\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}}(h)\\geq\\beta\\ \\ \\forall\\,h\\in\\hat{\\Lambda}\\Big)\\geq 1-\\delta, (4)",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.E4",
+      "kind": "table"
+    },
+    {
+      "id": "e6991c7ea1a04684",
+      "section": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "location": "VLA-Tug guarantees both FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} .",
+      "text": "where α ∈ [ 0 , 1 ] \\alpha\\in[0,1] and β ∈ [ 0 , 1 ] \\beta\\in[0,1] are user-selected rates. This guarantee can be understood as saying that any h ∈ Λ ^ h\\in\\hat{\\Lambda} guarantees that the false-positive rate (FPR) is at most α \\alpha and the early true-positive rate ( TPR early \\mathrm{TPR}_{\\mathrm{early}} ) is at least β \\beta , with high-probability of no less than 1 − δ 1-\\delta . We will see, in the experimental section, that this translates to guarantees that empirically behave better under distribution shift. Following ( Angelopoulos et al., 2022 ) we select a set of candidate values Λ ^ \\hat{\\Lambda} ; from this set Λ ^ \\hat{\\Lambda} of values h h we select the value h ⋆ h^{\\star} that maximizes TPR early {\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}} .",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "d3b93b72446a9a16",
+      "section": "Probability of failure given that an alarm is raised.",
+      "location": "Probability of failure given that an alarm is raised.",
+      "text": "Since our goal is a probe that can be deployed in real-world systems, we complement the formal TPR early \\mathrm{TPR}_{\\mathrm{early}} and FPR \\mathrm{FPR} guarantees with an actionable interpretation: a bound on the positive predictive value (PPV). The PPV is the probability that failure occurs given score s t s_{t} exceeds the threshold h ⋆ h^{\\star} . Existing calibration methods Gu et al. (2025) cannot give such a bound, since they lack guarantees on the TPR \\mathrm{TPR} .",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2b7fa24030d38dc3",
+      "section": "Probability of failure given that an alarm is raised.",
+      "location": "Probability of failure given that an alarm is raised.",
+      "text": "Let Failure denote rollout-level failure, and let Exceed denote the event that the score s t s_{t} exceeds the threshold h ⋆ h^{\\star} at some time t t . The PPV is P ⁡ ( Failure ∣ Exceed ) P(\\textsc{Failure}\\mid\\textsc{Exceed}) . Define the failure prevalence π = P ⁡ ( Failure ) \\pi=P(\\textsc{Failure}) , the true positive rate TPR = P ⁡ ( Exceed ∣ Failure ) \\mathrm{TPR}=P(\\textsc{Exceed}\\mid\\textsc{Failure}) , and the false positive rate FPR = P ⁡ ( Exceed ∣ not Failure ) \\mathrm{FPR}=P(\\textsc{Exceed}\\mid\\textsc{not Failure}) . By Bayes’ rule,",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "76a096c4c2349ace",
+      "section": "Probability of failure given that an alarm is raised.",
+      "location": "Probability of failure given that an alarm is raised.",
+      "text": "P ⁡ ( Failure ∣ Exceed ) = π ⋅ TPR π ⋅ TPR + ( 1 − π ) ⋅ FPR . P(\\textsc{Failure}\\mid\\textsc{Exceed})=\\frac{\\pi\\cdot\\mathrm{TPR}}{\\pi\\cdot\\mathrm{TPR}+(1-\\pi)\\cdot\\mathrm{FPR}}. (5)",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.E5",
+      "kind": "table"
+    },
+    {
+      "id": "ccabba52ace32235",
+      "section": "Probability of failure given that an alarm is raised.",
+      "location": "Probability of failure given that an alarm is raised.",
+      "text": "Detections that occur before the failure onset are a subset of all detections, so TPR ≥ TPR early \\mathrm{TPR}\\geq\\mathrm{TPR}_{\\mathrm{early}} . Our guarantees give TPR early ≥ β \\mathrm{TPR}_{\\mathrm{early}}\\geq\\beta and FPR ≤ α \\mathrm{FPR}\\leq\\alpha . Since the PPV is non-decreasing in TPR \\mathrm{TPR} and non-increasing in FPR \\mathrm{FPR} , substituting the worst-case values yields the conservative bound:",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "93cd953898357b9a",
+      "section": "Probability of failure given that an alarm is raised.",
+      "location": "Probability of failure given that an alarm is raised.",
+      "text": "P ⁡ ( Failure ∣ Exceed ) ≥ π ⋅ β π ⋅ β + ( 1 − π ) ⋅ α . P(\\textsc{Failure}\\mid\\textsc{Exceed})\\;\\geq\\;\\frac{\\pi\\cdot\\beta}{\\pi\\cdot\\beta+(1-\\pi)\\cdot\\alpha}. (6)",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.E6",
+      "kind": "table"
+    },
+    {
+      "id": "09cf1a377c1ecfbd",
+      "section": "Probability of failure given that an alarm is raised.",
+      "location": "Probability of failure given that an alarm is raised.",
+      "text": "The bound increases with π \\pi , so a lower bound on the prevalence suffices. Given an estimate of π \\pi , this gives practitioners an intuitive reading of the guarantees.",
+      "url": "https://arxiv.org/html/2611.08425v1#S4.SS2.SSS0.Px2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "45909f9fd89e1b45",
+      "section": "5 Dataset",
+      "location": "5 Dataset",
+      "text": "To evaluate VLA-Tug , we create a labeled dataset of rollouts of two VLA policies, π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) and GR00T-N1.7 ( NVIDIA et al., 2025 ) , with failure labels and semantic descriptions of the robot’s actions. We first describe the benchmarks and the splits, and then the labeling pipeline.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f22d73dffe54290d",
+      "section": "5 Dataset",
+      "location": "5 Dataset",
+      "text": "Figure 3: A successful (top) and a failed (bottom) rollout with their timeline , failure time , and failure mode labels.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "68ad95f87db7d40d",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "We use LIBERO ( Liu et al., 2023 ) , LIBERO-Occ ( Li et al., 2026a ) , and LIBERO-X ( Wang et al., 2026 ) , as well as real-robot tasks. Both policies succeed on most LIBERO episodes, so we combine it with LIBERO-Occ to obtain enough failures. We propose splits of increasing distribution shift to evaluate generalization in a principled way; Table 2 gives how the tasks are held out and their counts. In LIBERO-X, each task has a skill , the manipulation behavior (such as pushing a button or stacking objects), and a signature , the combination of its skill, target class, relation, landmark, and horizon. The splits are:",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "796d0c14deb046e3",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "new-task holds out individual tasks; their skill and signature can still occur in the training tasks, the shift is mild.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.SS0.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "45095875b76ef0e7",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "new-signature holds out all tasks with a given signature: the components are familiar, but their combination is new.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.SS0.SSS0.Px1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "318f5280e5e3b7a1",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "new-skill holds out a complete skill, so the tested behavior is absent from training: this is the largest shift of the three.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.SS0.SSS0.Px1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "868f1cb1abd50a52",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "Table 2: Task count by dataset and split.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3db0ce530169918d",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "Dataset Split Seen tasks Unseen tasks LIBERO leave-three-out 7 3 LIBERO-X new-task 175 43 new-signature 162 56 new-skill ⋆ 159–209 9–59 Real-world leave-one-out 7 1",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "48a7402b5a9f708a",
+      "section": "Benchmarks and splits.",
+      "location": "Benchmarks and splits.",
+      "text": "⋆ There are 8 skills, each with a different seen/unseen split.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.T2.3",
+      "kind": "p"
+    },
+    {
+      "id": "12e18c8797311652",
+      "section": "Efficient labeling pipeline.",
+      "location": "Efficient labeling pipeline.",
+      "text": "We label each rollout from its video with Gemini (gemini-3.5-flash), as in Figure 3 . Every rollout receives a timeline label, and failed rollouts also receive a failure mode label and a failure time label. The timeline is a short keyword phrase per 3-second window that we use for CLIP alignment. The failure mode f mode {\\color[rgb]{0,0,0}f_{\\mathrm{mode}}} comes from a 10-way taxonomy ℱ \\mathcal{F} . The failure time t fail {\\color[rgb]{0,0,0}t_{\\mathrm{fail}}} is the earliest point at which the mistake responsible for the failure becomes apparent or, following Gu et al. (2025) , the time a human operator would take over if none is apparent.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6b8a1d698bec8860",
+      "section": "Efficient labeling pipeline.",
+      "location": "Efficient labeling pipeline.",
+      "text": "We open-source this dataset including over 288,000 288{,}000 embeddings from 3,180 3{,}180 labelled rollouts at vla-tug.github.io .",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.SS0.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "172c2b15bff570c3",
+      "section": "Efficient labeling pipeline.",
+      "location": "Efficient labeling pipeline.",
+      "text": "Table 3: Early failure detection on seen and unseen tasks: area under the TPR early vs. FPR curve, averaged over splits. Seen: held-out episodes of training tasks; unseen: held-out tasks. Cal.: calibrator (MC max-conformal, FC functional conformal). Cost on LIBERO-X (lower is better): fit time, memory to score a new episode, and per-step latency on a GPU and a CPU. Dashes: not available. Best in bold, second best in italics.",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b3b1a310aaa314e7",
+      "section": "Efficient labeling pipeline.",
+      "location": "Efficient labeling pipeline.",
+      "text": "LIBERO-10 π 0.5 \\pi_{0.5} LIBERO-10 GR00T LIBERO-X task LIBERO-X signature LIBERO-X skill Real robot Cost (LIBERO-X) Method Cal. Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Fit (s) State (MB) GPU (ms) CPU (ms) SAFE-LSTM FC 75.5 34.9 74.1 51.2 64.6 40.4 64.7 41.2 62.5 30.1 44.5 25.1 43.5 26.2 0.066 0.86 SAFE-MLP FC 74.1 39.9 62.9 39.2 59.3 42.3 53.7 46.2 56.8 23.5 40.1 20.2 114.5 6.3 0.034 0.032 STAC MC 33.8 36.4 24.2 17.5 21.0 28.0 25.6 28.7 24.6 21.5 – – 0.0 0.0 21.30 – ActProbe MC 39.3 26.7 32.4 30.1 12.6 22.7 11.9 13.9 20.3 13.6 – – 7.1 0.09 0.15 0.11 FailureSpot FC 61.9 36.2 36.9 44.7 26.3 20.4 28.0 26.2 30.4 19.6 – – 9.2 6.4 0.033 0.029 Mahalanobis FC 85.7 40.2 70.7 29.2 69.6 30.6 64.4 22.3 71.2 15.9 43.0 19.6 15.2 302.0 0.41 5.37 Euclidean FC 73.1 24.2 56.0 23.1 70.5 28.5 65.4 19.7 68.5 19.0 45.1 8.3 0.4 3056 13.19 368.83 PCA-KMeans FC 35.7 12.9 44.5 20.0 31.7 25.0 35.3 32.5 37.8 20.7 24.0 19.4 39.9 1.6 0.12 0.055 VLA-Tug (Ours) MC 75.1 47.9 70.5 47.4 67.9 40.2 67.0 47.0 67.8 39.0 47.6 25.8 6.8 26.5 0.12 0.94",
+      "url": "https://arxiv.org/html/2611.08425v1#S5.T3.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "7d70acbd80b2136a",
+      "section": "6 Experimental Results",
+      "location": "6 Experimental Results",
+      "text": "In this section, we answer five questions based on our problem formulation ( section 3 ): (Q1. Timeliness ) Does training on features that precede the failure onset improve early failure detection on unseen tasks ( subsection 6.1 )? (Q2. Calibration ) Can VLA-Tug jointly bound the FPR \\mathrm{FPR} and TPR early {\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}} , with bounds that hold on seen tasks and degrade gracefully on unseen tasks ( subsection 6.2 )? (Q3. Informativeness ) Can VLA-Tug predict the failure mode based on VLA backbone embeddings ( subsection 6.3 )? (Q4. Efficiency ) Are the cost and time of labeling, training, and inference appropriate for deployment in real-world systems ( subsection 6.4 )? (Q5. Steering ) Can VLA-Tug , as a timely, informative, calibrated, and efficient probe, support VLA steering ( subsection 6.5 )? We ablate our design choices in App. D.4 .",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7a3cd3cf112abd65",
+      "section": "6.1 Failure Detection and Timeliness Evaluation",
+      "location": "6.1 Failure Detection and Timeliness Evaluation",
+      "text": "We evaluate VLA-Tug against a series of baselines using metrics that depend on the ground-truth failure time. Firstly, we describe how we split the data. Secondly, we review the baselines. Thirdly, we formally define our evaluation metrics. Lastly, we discuss the results.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f928b256edd24798",
+      "section": "Data split.",
+      "location": "Data split.",
+      "text": "For every run, we split the episodes as in Figure 4 . The training set fits the probe, the validation set selects the checkpoint, and the threshold is chosen on the calibration set. The calibration and held-out seen sets are exchangeable, and our guarantees apply to the held-out seen set. The unseen set, which the probe and the threshold never see, measures robustness to distribution shift. On LIBERO-X, the held-out tasks of the new-task and new-signature splits are the same for every seed, because they are defined by the semantic axis described in section 5 ; the seed changes only the shuffle of the seen episodes and the initialization. The new-skill folds and the LIBERO-10 seeds hold out different tasks.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "219051b03a68eef8",
+      "section": "Data split.",
+      "location": "Data split.",
+      "text": "Figure 4: Task- and episode-level data splits. Episodes from seen tasks are divided into training (65%), validation (15%), calibration (10%), and held-out seen (10%) sets. Unseen tasks form a separate evaluation set. Task-level proportions are schematic.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3cc14c9c101ff794",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "We consider the following baselines:",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "160233848deb00a3",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "Embedding distance (Mahalanobis, Euclidean, PCA-KMeans). A step is scored by how much closer its backbone embedding is to failed than to successful training steps.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "59c8a6d9d082a8ce",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "Action consistency (STAC, ActProbe, FailureSpot). Steps are scored based on the discrepancy between predicted and executed steps.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a08485c0cb5f1760",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "Latent (SAFE). A step is scored by a learned projection of its backbone embedding.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "ae25d8aa9559a752",
+      "section": "Timeliness Metrics.",
+      "location": "Timeliness Metrics.",
+      "text": "We evaluate VLA-Tug against three key metrics: TPR, TPR early {\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}} , and FPR. Existing works often evaluate their methods against AUROC ( Gu et al., 2025 ; Huang et al., 2026 ; Ma et al., 2026 ) without accounting for the true failure times, making it hard to distinguish timely detections. The TPR \\mathrm{TPR} and FPR \\mathrm{FPR} follow their standard definitions. The TPR early {\\color[rgb]{0,0,0}\\mathrm{TPR}_{\\mathrm{early}}} is the rate of failures detected before the failure time, i.e. t det ≤ t fail {\\color[rgb]{0,0,0}t_{\\mathrm{det}}}\\leq{\\color[rgb]{0,0,0}t_{\\mathrm{fail}}} . We additionally define AUROC early \\mathrm{AUROC}_{\\mathrm{early}} as the area under the TPR early \\mathrm{TPR}_{\\mathrm{early}} - FPR \\mathrm{FPR} curve. We compute it on the support FPR ∈ [ 0 , 0.4 ] \\mathrm{FPR}\\in[0,0.4] , normalized by its width 0.4 0.4 (reported in %), since a detector that raises false alarms on more than 40 % 40\\% of successful rollouts is impractical to deploy. We formally define these metrics in App. C.1 .",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "da84bb76668bec9a",
+      "section": "Results and Discussion.",
+      "location": "Results and Discussion.",
+      "text": "Figure 5: Early detection on seen (top) and unseen (bottom) tasks: the share of failures detected at or before the failure time ( TPR early \\mathrm{TPR}_{\\mathrm{early}} ) against the false-positive rate, for VLA-Tug and the learned and action-based baselines. Each curve is the mean over the splits of a setting, and the area under it up to 40 % 40\\% FPR is the metric of Table 3 . Panel titles give the benchmark, the policy, and the held-out split.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "056dfb7ccd0bf4fe",
+      "section": "Results and Discussion.",
+      "location": "Results and Discussion.",
+      "text": "We ask whether training on features that precede the failure onset improves early failure detection on unseen tasks. Our hypothesis is that it does: post-failure features only describe failures the probe has already seen, so training on them keeps it from learning a general notion of what leads to a failure, while features before the onset carry the cues that come before one. We compare VLA-Tug against the baselines in Table 3 and Figure 5 . On unseen tasks, our domain of interest, VLA-Tug is the best method in four of six settings: LIBERO-10 with π 0.5 \\pi_{0.5} , new-signature , new-skill , and the real robot. Against SAFE-LSTM, the strongest learned baseline, its margin grows from − 𝟏 % \\mathbf{-1\\%} on new-task to + 𝟏𝟒 % \\mathbf{+14\\%} on new-signature and + 𝟑𝟎 % \\mathbf{+30\\%} on new-skill . On the real robot, the lead is small, and VLA-Tug does not lead on LIBERO-10 with GR00T. On seen tasks, the results are mixed. We ablate the label in App. D.4 : replacing the pre-onset label with the other variants lowers early detection on LIBERO-X.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "355bf60dd9579f86",
+      "section": "Answer to Q1. Timeliness.",
+      "location": "Answer to Q1. Timeliness.",
+      "text": "Yes: for most unseen settings. Training on features that precede the failure onset lets VLA-Tug raise the alarm at or before the failure onset more often than the baselines, and on LIBERO-X the gap widens as the test tasks move away from the training tasks.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS1.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0e2b8434a40d9bbe",
+      "section": "6.2 Calibration Evaluation",
+      "location": "6.2 Calibration Evaluation",
+      "text": "We validate the theoretical results from section 4 on seen tasks and examine how they hold under distribution shift on unseen tasks. We calibrate our probe with Learn-then-Test (LTT, δ = 0.1 \\delta=0.1 ) at seven false-positive-rate (FPR) targets ( 10 10 to 50 % 50\\% ), each certified together with a TPR early target, on the 14 LIBERO-X runs ( 3 3 new-task seeds, 3 3 new-signature seeds, and 8 8 new-skill folds). We compare against max conformal (MC) Agia et al. (2024) and functional conformal (FC) Gu et al. (2025) calibration (the complete table is in App. D.1 ). We draw three conclusions:",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9888d1466fb7369c",
+      "section": "6.2 Calibration Evaluation",
+      "location": "6.2 Calibration Evaluation",
+      "text": "LTT bounds the TPR early \\mathrm{TPR}_{\\mathrm{early}} together with the FPR, which hold in all certified runs on seen tasks and in 40 40 – 86 % 86\\% (FPR) and 57 57 – 90 % 90\\% (TPR early) of runs on unseen tasks ; baselines give no guarantee on the TPR.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "59f7e78171457a95",
+      "section": "6.2 Calibration Evaluation",
+      "location": "6.2 Calibration Evaluation",
+      "text": "LTT states upfront whether the system can support the required guarantee whereas existing methods can give a false sense of safety. LTT abstains on 4 4 to 7 7 of the 14 14 runs, depending on the target ( FPR targets of 15 15 – 50 % 50\\% ), which tells us before deployment that the model cannot support the requested rates. MC always returns a threshold, but it meets the FPR target in only 57 57 – 71 % 71\\% of runs on seen tasks and in at most 21 % 21\\% on unseen tasks.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ae6e3542ab562df9",
+      "section": "6.2 Calibration Evaluation",
+      "location": "6.2 Calibration Evaluation",
+      "text": "Our LTT targets give a lower bound on the positive predictive value (PPV), the probability that an alarm is a true failure. It is 58 58 – 71 % 71\\% across the FPR targets of the full table and holds in every certified run on seen tasks and in 70 70 – 100 % 100\\% of runs on unseen tasks. Methods without a TPR guarantee cannot give it, and it tells the practitioner what an alarm means.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "34e17f9003cdb1b5",
+      "section": "6.2 Calibration Evaluation",
+      "location": "6.2 Calibration Evaluation",
+      "text": "On unseen tasks, the guarantees hold only empirically, since new samples are not exchangeable with the calibration set, which applies to all three methods. The shares above are trends over 14 runs, not precise rates.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "34321d380150d245",
+      "section": "Answer to Q2. Calibration.",
+      "location": "Answer to Q2. Calibration.",
+      "text": "Yes: the rates we calibrate for are the rates we get on seen tasks. Under distribution shift, they hold in far more runs than with MC and FC, and when a target cannot be supported, LTT abstains instead of silently missing it. Together with the PPV bound, this makes VLA-Tug easier to integrate into real-world systems.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a771e2dae23fae88",
+      "section": "6.3 Evaluation of Informativeness",
+      "location": "6.3 Evaluation of Informativeness",
+      "text": "Here we focus on failure mode prediction, a crucial element to enable failure prevention through steering. Failure modes are strongly imbalanced, so we report balanced accuracy, the mean over classes of the share of their failures predicted correctly. Since existing baselines do not predict failure modes, we compare against a majority baseline and focus on LIBERO-X.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d92e9f2aed3c069f",
+      "section": "6.3 Evaluation of Informativeness",
+      "location": "6.3 Evaluation of Informativeness",
+      "text": "On LIBERO-X, the probe improves top-1 accuracy over the majority baseline by up to 149 % 149\\% on seen and 79 % 79\\% on unseen tasks, and top-3 accuracy by a smaller but consistent margin on both. On the real robot, it improves top-1 by 171 % 171\\% and 8 % 8\\% on seen and unseen tasks, respectively, and stays well above the baseline in top-3 on both.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "027cdb26898e5540",
+      "section": "6.3 Evaluation of Informativeness",
+      "location": "6.3 Evaluation of Informativeness",
+      "text": "The practical consequence is that the probe narrows a failure down to three candidate classes, which are more likely than the majority baseline to include the true one. Different failure modes carry different risks, so a practitioner can use these candidates to select the level of response, for example responding to the riskiest of the three predicted classes (a stop, a retry, or a handover to a human) instead of applying the same intervention to every failure.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9de345a06bb09e00",
+      "section": "Answer to Q3. Informativeness.",
+      "location": "Answer to Q3. Informativeness.",
+      "text": "Yes: backbone embeddings carry enough information to predict the failure class above a majority baseline, which lets a practitioner match the response to the predicted risk.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aedbf60fe3952c63",
+      "section": "Answer to Q3. Informativeness.",
+      "location": "Answer to Q3. Informativeness.",
+      "text": "(a) Example steering for the simulated task “place the largest bowl inside the left compartment of the bowl drainer.” The gripper drops the bowl into the right compartment with no steering and successfully drops it in the left compartment when steered towards the target location.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.F6.sf1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "62e2930f7926d1db",
+      "section": "Answer to Q3. Informativeness.",
+      "location": "Answer to Q3. Informativeness.",
+      "text": "(b) Example steering for the real-world task “put the mushroom in the plate.” The gripper misses the mushroom without steering and successfully grasps it when steered towards the mushroom.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.F6.sf2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "92431f38625aa819",
+      "section": "Answer to Q3. Informativeness.",
+      "location": "Answer to Q3. Informativeness.",
+      "text": "Figure 6: Steering demonstrations showing failure scores and corrections for simulated and real-world tasks. When the probe’s predicted failure score rises above the threshold, the VLA policy is automatically paused. For the simulated bowl task, we find that nudging the end-effector toward the drop-off location can help lead to success. For the real-world mushroom task, we find that nudging the wrist camera towards the target grasp object can help. Future work could systematically explore steering strategies. Refer to Figure 17(a) for more steering strategies and Figure 17(b) for another real world steering example.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b2ffcad4f5c2dffd",
+      "section": "6.4 Practical Considerations",
+      "location": "6.4 Practical Considerations",
+      "text": "Any real-world system must balance performance ((T.) Timeliness, (C.) Calibration, (I.) Informativeness) with the cost of building and running it ((E.) Efficiency). We first evaluate the cost of labeling the dataset, then of training the probe, calibrating it, and running it at inference time.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "814f0d356d8520e4",
+      "section": "Dataset.",
+      "location": "Dataset.",
+      "text": "Labeling costs about one cent per failed episode (under $50 for all annotations, including queries not used in this paper). Labels are therefore cheap, and practitioners will often already have unlabeled rollouts from system deployment.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0dcebb960a15c146",
+      "section": "Training.",
+      "location": "Training.",
+      "text": "VLA-Tug trains in 6.8 6.8 s on one RTX 4090, against 43.5 43.5 s for SAFE-LSTM, and holds 6.6 6.6 M parameters ( 26.5 26.5 MB), about 0.2 % 0.2\\% of the VLA. It is therefore cheap enough to retrain whenever the policy or the task set changes, or to train online as new rollouts are produced.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "34405075365cf8c9",
+      "section": "Calibration.",
+      "location": "Calibration.",
+      "text": "Calibrating takes under 2 2 ms per target pair on a CPU, so VLA-Tug can be re-calibrated if system requirements change, or online along with the probe.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4af8b3a62dd6fdbd",
+      "section": "Inference.",
+      "location": "Inference.",
+      "text": "The VLA outputs a chunk of m m actions per call ( 8 8 at 20 20 Hz on LIBERO-X), so a policy step lasts 400 400 ms, and the probe reads the embedding of each call. It adds 0.12 0.12 ms per step on the GPU ( 0.2 % 0.2\\% of the 54 54 ms GR00T policy call) and 0.9 0.9 ms on four CPU threads, so its score is available before the chunk is executed and its latency is not observable: the step period is about 7 × 7\\times the combined VLA and probe time in simulation and about 2 × 2\\times on the real robot on our GPU.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "78451740d4953a52",
+      "section": "Inference.",
+      "location": "Inference.",
+      "text": "Faster baselines offer diminishing benefit, since the policy frequency bounds how fast a detector needs to be, while slower ones such as k-NN and STAC add noticeable latency to every step. VLA-Tug costs about the same as the cheapest learned baselines and far less than k-NN and STAC, while providing improved informativeness and timeliness on most unseen settings, which makes it a practical option for real-world deployment.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.SSS0.Px4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4ebb87f58eaec1b0",
+      "section": "Answer to Q4. Efficiency.",
+      "location": "Answer to Q4. Efficiency.",
+      "text": "Yes: labeling, training, calibrating, and running the probe introduce minimal cost, and on a GPU the probe adds under 1 % 1\\% to the policy call and fits within the step period.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS4.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e19d69bc1a0b79c0",
+      "section": "6.5 Steering Demonstration",
+      "location": "6.5 Steering Demonstration",
+      "text": "We demonstrate how the four properties of VLA-Tug : (T.) timeliness, (C.) calibration, (I.) informativeness, and (E.) efficiency, can jointly support failure prevention through VLA steering. Our goal is to illustrate how an effective failure predictor can provide the signals needed to guide interventions rather than develop a steering method itself. We consider a steering architecture in which an expert model (e.g. a VLM) can invoke failure-recovery tools in response to the probe’s predictions. For our experiments, we implement these tools using failure-mode-specific heuristics in simulation and demonstrate corresponding interventions on a real robot.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0699fc8334dcbcb6",
+      "section": "6.5 Steering Demonstration",
+      "location": "6.5 Steering Demonstration",
+      "text": "For example, in the simulated rollout shown in Figure 6(a) , the task is “place the largest bowl inside the left compartment of the bowl drainer.” The probe raises an alarm before the bowl is mistakenly placed in the compartment on the right. After steering the end-effector towards the left side, the policy is resumed and the rollout succeeds. Without intervention, the bowl would be placed on the right side and the rollout fails.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "999e4aa9354ae273",
+      "section": "6.5 Steering Demonstration",
+      "location": "6.5 Steering Demonstration",
+      "text": "Our real-world experiments similarly demonstrate that the joint properties of VLA-Tug help in steering a VLA away from failure. Figure 6(b) illustrates this with the “put the mushroom on the plate” task. Without VLA-Tug , the gripper misses the mushroom and hits the table. With it turned on, however, the probe predicts the imminent grasp failure (which would likely happen), and corrective action is taken. In the example, the corrective action is to pause the VLA, let an expert model shift trajectory to a successful one, and resume the VLA.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS5.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a87ea4fd6828d4f9",
+      "section": "6.5 Steering Demonstration",
+      "location": "6.5 Steering Demonstration",
+      "text": "Such a strategy is possible with a failure detector like VLA-Tug , which anticipates the failure before it happens, rather than after it is too late. Our approach is agnostic towards the steering architecture. We leave exploration of robust steering strategies for future work. Nevertheless, these examples demonstrate the applicability of VLA-Tug to be utilized in safe and principled robotic systems.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS5.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "1ce0b92e659ce921",
+      "section": "6.5 Steering Demonstration",
+      "location": "6.5 Steering Demonstration",
+      "text": "Answer to Q5. Steering. Yes: Our proof-of-concept demonstrations show how VLA-Tug can provide the timing and failure mode information needed for targeted interventions during VLA execution. Timeliness creates an opportunity to intervene, calibration controls when interventions are triggered, informativeness guides which intervention is applied, and efficiency allows the probe to operate alongside the VLA.",
+      "url": "https://arxiv.org/html/2611.08425v1#S6.SS5.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "b5929f185332bc3e",
+      "section": "7 Conclusion",
+      "location": "7 Conclusion",
+      "text": "We introduced VLA-Tug , a lightweight probe on the latent layers of a VLA that is timely , calibrated , informative , and efficient , making it well suited for real-world deployment. It is timely : supervising on the pre-failure part of the trajectory drives early detection, and the probe’s performance compared to the strongest learned baseline increases as the shift from the training tasks increases. It is calibrated : calibrating the FPR and the TPR early \\mathrm{TPR}_{\\mathrm{early}} jointly provides guarantees that hold in far more runs than the baselines under shift. It is informative : beyond a failure score, it names the likely failure mode. It is efficient : the probe adds under 1% to the cost of a policy call. Our steering demonstrations, in simulation and on a real robot, show that VLA-Tug can inform targeted interventions, and we release 3,180 annotated episodes to support further work on latent failure detection.",
+      "url": "https://arxiv.org/html/2611.08425v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4751211495f7ff99",
+      "section": "Limitations.",
+      "location": "Limitations.",
+      "text": "First, our calibration guarantees rely on exchangeability between the calibration and test episodes, which weakens as the distribution shift grows. Empirically, we observe that the degradation is gradual. Second, we do not analyze the choice of source backbone embedding systematically. Third, the steering component, in which an expert model intervenes on a predicted failure, is heuristic and not evaluated in the scope of this work.",
+      "url": "https://arxiv.org/html/2611.08425v1#S7.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "012c6242bb2a338a",
+      "section": "Future Work.",
+      "location": "Future Work.",
+      "text": "Looking forward, first, we will adapt the probe and its calibration guarantees online, which our preliminary experiments suggest is computationally feasible. Second, we will maintain and extend our embedding dataset with additional backbones and action-expert layers to determine which layers contain the most generalizable failure prediction signal. Third, we will explore agentic frameworks as the expert model in our setup, combining fast and local inference of a VLA with general-purpose intervention and steering from a cloud-based LLM, triggered by a principled detector such as VLA-Tug .",
+      "url": "https://arxiv.org/html/2611.08425v1#S7.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2291f12c2c1acaf6",
+      "section": "Appendix A Method Details",
+      "location": "Appendix A Method Details",
+      "text": "This section gives the details behind section 4 .",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "09554f52b36d8979",
+      "section": "Inputs.",
+      "location": "Inputs.",
+      "text": "At every policy step we average the backbone tokens of the agent camera, of the wrist camera, and of the (unpadded) language prompt, and concatenate the three means into e t ∈ ℝ 6144 e_{t}\\in\\mathbb{R}^{6144} . No other feature of the backbone is used. All models in this paper read this vector, the baselines included.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "41831ff761f45c78",
+      "section": "Probe.",
+      "location": "Probe.",
+      "text": "A single-layer LSTM with 256 hidden units reads e 1 : t e_{1:t} . Three heads read its state, each an MLP with one hidden layer of 64 ReLU units: the failure score head (one sigmoid output), the failure mode head (logits over the 10 modes), and the semantic head (a 64-dimensional vector).",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d8edb924601f31c5",
+      "section": "Semantic (CLIP) head.",
+      "location": "Semantic (CLIP) head.",
+      "text": "The target space of the semantic head is a PCA of the CLIP text embeddings of the timeline phrases ( clip-vit-base-patch32 ), reduced to 64 dimensions with a PCA fitted on the training split only. The loss is InfoNCE with temperature 0.07: the normalized output of a step must pick the target of the step’s phrase among the targets of all phrases of the training split. A step whose phrase is not among them is left out of this term. At inference the head is only a 64-dimensional MLP output; no CLIP encoder runs.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f774ac7cd3cffe3c",
+      "section": "Loss and training.",
+      "location": "Loss and training.",
+      "text": "ℒ score \\mathcal{L}_{\\text{score}} is a binary cross-entropy over the steps that are not excluded, weighted by the ratio of negative to positive steps of the training set. ℒ mode \\mathcal{L}_{\\text{mode}} is a cross-entropy with class weights that balance the modes, on the positive steps of failed rollouts. Both auxiliary terms have weight 1. Early stopping follows ℒ score \\mathcal{L}_{\\text{score}} on the validation episodes only, so the auxiliary heads never choose the checkpoint.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "470fe6dcbcf39cb8",
+      "section": "Labeling window.",
+      "location": "Labeling window.",
+      "text": "The window w w of the onset and post-onset labels, and the window of the mode read-out ( subsection C.2 ), is 2.4 s: 6 policy steps for GR00T on LIBERO, 20 on the real robot, and 10 steps (2.5 s) for π 0.5 \\pi_{0.5} .",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS1.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d11c6543ea2d4b23",
+      "section": "A.2 Supervision Strategies",
+      "location": "A.2 Supervision Strategies",
+      "text": "Let e t e_{t} be the backbone embedding at step t t and y t ∈ { 0 , 1 , ∅ } y_{t}\\in\\{0,1,\\varnothing\\} its target, where y t = ∅ y_{t}=\\varnothing excludes the step from the loss. Let Y i ∈ { 0 , 1 } Y_{i}\\in\\{0,1\\} be the episode label (success, failure) and w w the width of the window around t fail t_{\\mathrm{fail}} . For a failed rollout ( Y i = 1 Y_{i}=1 ) the four strategies of Figure 2 are",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee03c12b68e2e226",
+      "section": "A.2 Supervision Strategies",
+      "location": "A.2 Supervision Strategies",
+      "text": "Pre-onset. y t \\displaystyle\\text{\\emph{Pre-onset.}}\\quad y_{t} = { 1 t ≤ t fail , ∅ t > t fail , \\displaystyle=\\begin{cases}1&t\\leq t_{\\mathrm{fail}},\\\\ \\varnothing&t>t_{\\mathrm{fail}},\\end{cases} Onset. y t \\displaystyle\\text{\\emph{Onset.}}\\quad y_{t} = { 1 t ∈ [ t fail − w , t fail ] , 0 t < t fail − w , ∅ t > t fail , \\displaystyle=\\begin{cases}1&t\\in[t_{\\mathrm{fail}}-w,\\,t_{\\mathrm{fail}}],\\\\ 0&t<t_{\\mathrm{fail}}-w,\\\\ \\varnothing&t>t_{\\mathrm{fail}},\\end{cases} Post-onset. y t \\displaystyle\\text{\\emph{Post-onset.}}\\quad y_{t} = { 1 t ≥ t fail − w , 0 t < t fail − w , \\displaystyle=\\begin{cases}1&t\\geq t_{\\mathrm{fail}}-w,\\\\ 0&t<t_{\\mathrm{fail}}-w,\\end{cases} Trajectory. y t \\displaystyle\\text{\\emph{Trajectory.}}\\quad y_{t} = 1 for all t . \\displaystyle=1\\quad\\text{for all }t.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.EGx2",
+      "kind": "table"
+    },
+    {
+      "id": "eb4f3ce04122c59f",
+      "section": "A.2 Supervision Strategies",
+      "location": "A.2 Supervision Strategies",
+      "text": "In all four, y t = 0 y_{t}=0 for every step of a successful rollout. Excluding a step ( y t = ∅ y_{t}=\\varnothing ) is the same as giving it zero loss. Trajectory is the labeling of SAFE.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a4ffb12bb2562f95",
+      "section": "Alarm rule and risks.",
+      "location": "Alarm rule and risks.",
+      "text": "For a constant threshold h h the alarm time of an episode is t det ​ ( h ) = min ⁡ { t : s t ≥ h } t_{\\mathrm{det}}(h)=\\min\\{t:s_{t}\\geq h\\} . The FPR ⁡ ( h ) \\mathrm{FPR}(h) is the probability that a successful episode has an alarm, and TPR early ​ ( h ) \\mathrm{TPR}_{\\mathrm{early}}(h) the probability that a failed episode has its first alarm at or before t fail t_{\\mathrm{fail}} .",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "64f0c7bc747600ae",
+      "section": "Learn-then-Test.",
+      "location": "Learn-then-Test.",
+      "text": "We follow LTT ( Angelopoulos et al., 2022 ) with two risks, the FPR and the early miss rate 1 − TPR early 1-\\mathrm{TPR}_{\\mathrm{early}} (Section 2.4 there). A threshold h h is tested against the null that it violates either target, and its p-value is the larger of the two p-values (Proposition 6). Both losses are binary, so each p-value is an exact binomial tail (Section 3.2): the number of calibration failures without an alarm at or before t fail t_{\\mathrm{fail}} is compared with Bin ⁡ ( n f , 1 − β ) \\mathrm{Bin}(n_{\\mathrm{f}},1-\\beta) , and the number of calibration successes with any alarm with Bin ⁡ ( n s , α ) \\mathrm{Bin}(n_{\\mathrm{s}},\\alpha) . We combine the p-values by multi-start fixed-sequence testing (Section 2.3.1, Algorithm 1, Proposition 3) over a grid of 181 thresholds sigmoid ⁡ ( z ) \\mathrm{sigmoid}(z) , z ∈ [ − 9 , 9 ] z\\in[-9,9] , ordered from low to high, with S = 40 S=40 starts and δ = 0.1 \\delta=0.1 , i.e. a level of 0.0025 per walk. By Theorem 1 of Angelopoulos et al. (2022) , the set Λ ^ \\hat{\\Lambda} of accepted thresholds satisfies ℙ ⁡ ( sup h ∈ Λ ^ { R ⁡ ( h ) } ≤ α ) ≥ 1 − δ \\mathbb{P}\\big(\\sup_{h\\in\\hat{\\Lambda}}\\{R(h)\\}\\leq\\alpha\\big)\\geq 1-\\delta , where R R stands for each of our two risks with its target; that is, with probability at least 1 − δ 1-\\delta every accepted threshold meets both targets, for episodes exchangeable with the calibration episodes. We select the accepted threshold with the highest calibration TPR early \\mathrm{TPR}_{\\mathrm{early}} (ties: lowest calibration FPR, then lowest threshold), and abstain if none is accepted.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2a0d9502a1617f82",
+      "section": "Max-conformal (MC).",
+      "location": "Max-conformal (MC).",
+      "text": "For STAC (whose accumulated scores are non-negative, so the maximum over steps is the final score), for ActProbe (as in its paper), and for our probe in the main table, we use max-conformal prediction. It takes the maximum score M i M_{i} of each of the n n calibration successes and sets the constant threshold to the k k -th smallest of them, with k = ⌈ ( n + 1 ) ​ ( 1 − α ) ⌉ k=\\lceil(n+1)(1-\\alpha)\\rceil , and to + ∞ +\\infty if k > n k>n . For a new success exchangeable with the calibration successes, its maximum has a uniformly distributed rank, so the false-alarm probability is at most α \\alpha , and conservative by less than 1 / ( n + 1 ) 1/(n+1) . It says nothing about the TPR \\mathrm{TPR} .",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS3.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c8b3aa44511f1967",
+      "section": "Functional conformal (FC).",
+      "location": "Functional conformal (FC).",
+      "text": "For SAFE and the methods that follow its calibration (FailureSpot and the embedding-distance baselines), we use the one-sided functional conformal band of SAFE ( Gu et al., 2025 ) . The band is a time-varying threshold built from the score trajectories of the calibration successes: the mean trajectory gives its shape, the local spread its width over time, and a conformal quantile of the successes’ deviations sets its level so that a success stays below it with probability about 1 − α 1-\\alpha .",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS3.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0c2f2eb5f9d01ac7",
+      "section": "Which method gets which calibrator.",
+      "location": "Which method gets which calibrator.",
+      "text": "SAFE-MLP, SAFE-LSTM, FailureSpot, and the three embedding-distance baselines use the SAFE band, as in their own work. STAC, ActProbe, and our probe use max-conformal.",
+      "url": "https://arxiv.org/html/2611.08425v1#A1.SS3.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "124df0a604d90440",
+      "section": "LIBERO-10 with occlusions.",
+      "location": "LIBERO-10 with occlusions.",
+      "text": "We use the 10-suite of LIBERO-Occ ( Li et al., 2026a ) , an extension of LIBERO ( Liu et al., 2023 ) that occludes the agent-view camera. Both policies fail rarely on the original benchmark, so we mix occluded and unoccluded episodes in equal parts to obtain enough failures (250 of each per policy).",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "82bb1a01160bb4c7",
+      "section": "LIBERO-X.",
+      "location": "LIBERO-X.",
+      "text": "LIBERO-X ( Wang et al., 2026 ) introduces five levels of distribution shift. We use levels L1–L3 and select 218 tasks that cover diverse skills. Table 2 gives the task counts of the splits.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c6c5a35e7602aef8",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "We collected demonstrations for 8 tabletop manipulation tasks on a Kinova Gen3 arm ( Table 4 ) and fine-tuned GR00T on them. The evaluation data are 399 rollouts of the fine-tuned policy (49 to 50 per task), 254 of them failures; Table 5 gives their failure modes.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d90bcef211521c36",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "Table 4: The eight real-world tasks and the number of demonstrations used to fine-tune the policy ( 510 in total).",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "77b31dceb51a2279",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "Task instruction Third-person view Demos Close the drawer 50 Flip the basket upright 50 Push the pineapple off the stove 100 Put the mushroom on the plate 50 Put the tomato in the bin 100 Stack the yellow block on the wooden block 60 Take the eggplant off the plate 50 Take the pineapple out of the drawer 50",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.T4.4",
+      "kind": "table"
+    },
+    {
+      "id": "fa4a43e5631b2011",
+      "section": "Construction of the splits.",
+      "location": "Construction of the splits.",
+      "text": "The episodes of the held-out tasks form the unseen set. The episodes of the seen tasks are split 65/15/20% into train, validation, and test. The test part is halved, into the calibration set and the held-out seen set. The calibration sets of the LIBERO-X runs hold 158 to 209 episodes (66 to 90 successes and 92 to 120 failures). On the real robot each run holds one task out, so the calibration part has only 12 to 14 successes, a max-conformal threshold exists only for α \\alpha of about 0.07 and above, and the curves of all methods start at an FPR of about 8% . The area up to 40% FPR is still defined and treats every method the same, but it is noisy. The seed changes the shuffle of the seen episodes and the initialization of the learned models; for the new-task and new-signature splits the unseen episodes are identical in the three seeds, so their spread is not a spread over different unseen tasks.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c3fcbb62999060f5",
+      "section": "B.2 Labeling Pipeline",
+      "location": "B.2 Labeling Pipeline",
+      "text": "We label each rollout with Gemini ( gemini-3.5-flash ) from its video, in three passes. A coarse pass over the whole video of a failed rollout returns the failure mode and a failure time; a second pass on a slowed clip around that time refines the failure time to a single frame; and a third pass on the same video session gives the timeline : a short keyword phrase (2–6 words, e.g. “reaching for mug”) for each 3-second window, which provides the targets of the semantic head. The failure time t fail t_{\\mathrm{fail}} is the earliest point at which the mistake responsible for the failure becomes apparent. Following Gu et al. (2025) , if there is no single mistake but a human operator would take over (for example when the robot is stuck), we use that time, and if the robot behaves plausibly but is too slow, the failure time is the end of the rollout.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f01ee42c88b018c4",
+      "section": "B.2 Labeling Pipeline",
+      "location": "B.2 Labeling Pipeline",
+      "text": "The failure mode is one of 10 classes: wrong_object (acts on an object or control other than the one the task specifies); wrong_target (right object, wrong destination); grasp_failure (never acquires the correct object securely); object_displacement (knocks over, pushes away, or drops an object); placement_or_insertion_failure (right object and target, wrong final pose); open_close_failure (right container, but not the required open or closed state); press_failure (right button or knob, but no effect); stuck_or_no_progress (looping, oscillating, hovering, or freezing); timeout_or_insufficient_progress (purposeful but too slow, no identifiable mistake); and other . The full definitions and the prompts are on the project page, vla-tug.github.io , and on the card of each dataset.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b39e6bf55909efff",
+      "section": "B.3 Dataset Statistics and Release",
+      "location": "B.3 Dataset Statistics and Release",
+      "text": "Table 5 gives, for each policy and dataset, the share of each failure mode among the failures and the mean and standard deviation of its failure time.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "961430e6f522b013",
+      "section": "B.3 Dataset Statistics and Release",
+      "location": "B.3 Dataset Statistics and Release",
+      "text": "Table 5: Failure-mode distribution and mean ± \\pm std failure time (s) per mode, by policy and dataset.",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f50c446b87186e3f",
+      "section": "B.3 Dataset Statistics and Release",
+      "location": "B.3 Dataset Statistics and Release",
+      "text": "π 0.5 \\pi_{0.5} LIBERO-10-Occ GR00T LIBERO-10-Occ GR00T LIBERO-X GR00T real robot Mode % of failures Time (s) % of failures Time (s) % of failures Time (s) % of failures Time (s) stuck_or_no_progress 24.5 10.3 ± 3.5 10.3\\pm 3.5 30.2 8.6 ± 3.7 8.6\\pm 3.7 14.1 15.5 ± 10.7 15.5\\pm 10.7 12.2 3.8 ± 3.0 3.8\\pm 3.0 object_displacement 18.2 11.9 ± 5.3 11.9\\pm 5.3 17.8 11.8 ± 6.7 11.8\\pm 6.7 10.8 15.1 ± 10.9 15.1\\pm 10.9 9.4 4.9 ± 2.3 4.9\\pm 2.3 placement_or_insertion 13.6 15.2 ± 4.2 15.2\\pm 4.2 16.0 12.9 ± 7.0 12.9\\pm 7.0 9.9 21.9 ± 10.2 21.9\\pm 10.2 11.4 8.3 ± 4.5 8.3\\pm 4.5 grasp_failure 17.3 9.6 ± 5.4 9.6\\pm 5.4 13.0 8.6 ± 4.3 8.6\\pm 4.3 9.0 12.0 ± 9.7 12.0\\pm 9.7 56.7 4.7 ± 2.3 4.7\\pm 2.3 open_close_failure 7.3 12.6 ± 4.8 12.6\\pm 4.8 9.5 13.9 ± 3.1 13.9\\pm 3.1 4.7 18.7 ± 11.5 18.7\\pm 11.5 7.5 3.8 ± 1.7 3.8\\pm 1.7 wrong_target 13.6 6.8 ± 4.9 6.8\\pm 4.9 8.9 4.9 ± 4.4 4.9\\pm 4.4 12.3 14.3 ± 9.7 14.3\\pm 9.7 0.0 – wrong_object 0.0 – 1.8 5.3 ± 3.1 5.3\\pm 3.1 37.0 5.8 ± 7.2 5.8\\pm 7.2 1.2 2.0 ± 0.8 2.0\\pm 0.8 press_failure 2.7 4.4 ± 1.4 4.4\\pm 1.4 1.8 10.7 ± 4.8 10.7\\pm 4.8 1.5 26.8 ± 18.5 26.8\\pm 18.5 0.0 – timeout 2.7 25.9 ± 0.0 25.9\\pm 0.0 1.2 25.9 ± 0.0 25.9\\pm 0.0 0.2 60.0 ± 0.0 60.0\\pm 0.0 1.6 6.1 ± 1.1 6.1\\pm 1.1 other 0.0 – 0.0 – 0.4 8.6 ± 7.4 8.6\\pm 7.4 0.0 – n failed / total 110/500 169/500 1258/ 2180 254/399",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "61da6c36e1bd978a",
+      "section": "B.3 Dataset Statistics and Release",
+      "location": "B.3 Dataset Statistics and Release",
+      "text": "We release the embeddings, the labels, the prompts, and the splits of the simulated datasets, 3,180 3{,}180 episodes, at vla-tug.github.io .",
+      "url": "https://arxiv.org/html/2611.08425v1#A2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e9d228b169c4f81f",
+      "section": "C.1 Baselines",
+      "location": "C.1 Baselines",
+      "text": "We re-implement all baselines on the same inputs and splits as our probe. Where a baseline has a configuration grid, we run the whole grid on every split and select, for every setting, the configuration with the highest mean area on the validation episodes, never looking at the unseen tasks; ties go to the earlier configuration of the grid. LIBERO-10 and the real robot pool their runs into one choice per method. On LIBERO-X, SAFE uses one configuration for the three kinds of splits, as in its own protocol, and every other method chooses per kind of held-out set. Our probe uses one architecture in every setting.",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a2ec4d6e0bdeca4",
+      "section": "Embedding distance.",
+      "location": "Embedding distance.",
+      "text": "Mahalanobis, Euclidean, and PCA-KMeans are SAFE’s embedding baselines ( Gu et al., 2025 ) . The score of a step is D succ ​ ( x ) − D fail ​ ( x ) D_{\\mathrm{succ}}(x)-D_{\\mathrm{fail}}(x) , where D c D_{c} is the Mahalanobis distance to a Gaussian fitted to the steps of class c c , the mean Euclidean distance to the k k nearest stored steps of that class (Euclidean, also called k-NN), or the distance to the nearest of a few k k -means centroids in a PCA-reduced space (PCA-KMeans); it can be accumulated over the steps. We run a sweep of 26 configurations (Mahalanobis 2, Euclidean 6, PCA-KMeans 18).",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "569e85bfe8ec0b91",
+      "section": "Action consistency.",
+      "location": "Action consistency.",
+      "text": "STAC ( Agia et al., 2024 ) compares the unexecuted tail of the previous plan with the first actions of the new plan, using the K = 10 K=10 plans the policy samples at every call and the maximum mean discrepancy with an RBF kernel; nothing is learned. We run 8 variants (MMD over 3, 6, or 7 action dimensions, with the step score or accumulated; and STAC-Single, SAFE’s single-plan variant). ActProbe ( Huang et al., 2026 ) is a small LSTM on two action signals and an embedding of the task instruction; we train it with the recipe of its repository and select its checkpoint with its own validation criterion. FailureSpot ( Ma et al., 2026 ) has no public code, so we implemented it from the paper: a detector on the pooled features is trained on weak targets computed from action consistency and magnitude, and then fine-tuned on timestamp labels of the 15% most uncertain episodes.",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1a45a7a72ca2da81",
+      "section": "Latent.",
+      "location": "Latent.",
+      "text": "SAFE-MLP and SAFE-LSTM ( Gu et al., 2025 ) are written from SAFE’s code with its losses and its labels: every step of a failed rollout is positive, i.e. our trajectory label. We run SAFE’s learning-rate and regularization grid, 12 configurations per model. SAFE trains for a fixed number of epochs without validation; we stop early after 50 epochs without improvement of its validation loss (cap: 1,000 epochs) and keep the best epoch, so that all learned methods are treated alike.",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "76131e2c07dc7177",
+      "section": "C.2 Metrics",
+      "location": "C.2 Metrics",
+      "text": "We define three events for a rollout: detection 𝒜 = { t det ≤ t max ∣ Y = 1 } \\mathcal{A}=\\{t_{\\mathrm{det}}\\leq t_{\\max}\\mid Y=1\\} , early detection 𝒜 early = { t det ≤ t fail ∣ Y = 1 } \\mathcal{A}_{\\mathrm{early}}=\\{t_{\\mathrm{det}}\\leq t_{\\mathrm{fail}}\\mid Y=1\\} , and no alarm 𝒩 = { t det = null ∣ Y = 0 } \\mathcal{N}=\\{t_{\\mathrm{det}}=\\mathrm{null}\\mid Y=0\\} . We count 𝒜 \\mathcal{A} as a true positive (TP) and 𝒜 early \\mathcal{A}_{\\mathrm{early}} as an early true positive ( TP early \\mathrm{TP}_{\\mathrm{early}} ); the complements are the false negatives. The TPR \\mathrm{TPR} and FPR \\mathrm{FPR} follow their standard definitions, and",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c9786a3b802e4a9a",
+      "section": "C.2 Metrics",
+      "location": "C.2 Metrics",
+      "text": "TPR early = TP early TP early + FN early , \\mathrm{TPR}_{\\mathrm{early}}=\\frac{\\mathrm{TP}_{\\mathrm{early}}}{\\mathrm{TP}_{\\mathrm{early}}+\\mathrm{FN}_{\\mathrm{early}}}, (7)",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.E7",
+      "kind": "table"
+    },
+    {
+      "id": "85f958a5a99ae03d",
+      "section": "C.2 Metrics",
+      "location": "C.2 Metrics",
+      "text": "AUROC early = 1 0.4 ​ ∫ 0 0.4 TPR early ​ ( FPR ) ​ 𝑑 FPR , \\mathrm{AUROC}_{\\mathrm{early}}={\\color[rgb]{0,0,0}\\frac{1}{0.4}}\\int_{0}^{0.4}\\mathrm{TPR}_{\\mathrm{early}}(\\mathrm{FPR})\\,d\\mathrm{FPR}, (8)",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.E8",
+      "kind": "table"
+    },
+    {
+      "id": "aaeed5bb2e000a13",
+      "section": "C.2 Metrics",
+      "location": "C.2 Metrics",
+      "text": "so that AUROC early \\mathrm{AUROC}_{\\mathrm{early}} is reported in % and a detector with TPR early = 100 % \\mathrm{TPR}_{\\mathrm{early}}=100\\% everywhere scores 100.",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "c09f5ed30494f496",
+      "section": "C.3 Full Results",
+      "location": "C.3 Full Results",
+      "text": "Table 6 gives Table 3 with the standard deviation over the splits, and Figure 7 shows the curves of every setting and method. On the real robot the standard deviation is over the 40 splits (8 held-out tasks, 5 seeds).",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6e5e9dcd9472fe7c",
+      "section": "C.3 Full Results",
+      "location": "C.3 Full Results",
+      "text": "Table 6: Table 3 with the standard deviation over the splits: area under TPR early vs. FPR up to 40% (in %). Dashes: the action chunks the method needs were not saved. Best in bold, second best in italics.",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c312b8f39ff3f374",
+      "section": "C.3 Full Results",
+      "location": "C.3 Full Results",
+      "text": "LIBERO-10 π 0.5 \\pi_{0.5} LIBERO-10 GR00T LIBERO-X task LIBERO-X signature LIBERO-X skill Real robot Cost (LIBERO-X) Method Cal. Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Fit (s) State (MB) GPU (ms) CPU (ms) SAFE-LSTM FC 75.5 ± \\pm 13.4 34.9 ± \\pm 3.5 74.1 ± \\pm 13.0 51.2 ± \\pm 8.4 64.6 ± \\pm 3.5 40.4 ± \\pm 2.3 64.7 ± \\pm 7.4 41.2 ± \\pm 7.1 62.5 ± \\pm 2.4 30.1 ± \\pm 8.5 44.5 ± \\pm 13.5 25.1 ± \\pm 18.8 43.5 26.2 0.066 0.86 SAFE-MLP FC 74.1 ± \\pm 2.0 39.9 ± \\pm 15.1 62.9 ± \\pm 18.2 39.2 ± \\pm 9.4 59.3 ± \\pm 2.0 42.3 ± \\pm 2.9 53.7 ± \\pm 2.4 46.2 ± \\pm 2.3 56.8 ± \\pm 6.0 23.5 ± \\pm 12.4 40.1 ± \\pm 15.9 20.2 ± \\pm 16.6 114.5 6.3 0.034 0.032 STAC MC 33.8 ± \\pm 5.1 36.4 ± \\pm 5.3 24.2 ± \\pm 7.5 17.5 ± \\pm 9.8 21.0 ± \\pm 2.3 28.0 ± \\pm 0.1 25.6 ± \\pm 3.7 28.7 ± \\pm 0.3 24.6 ± \\pm 5.0 21.5 ± \\pm 8.0 – – 0.0 0.0 21.30 – ActProbe MC 39.3 ± \\pm 11.3 26.7 ± \\pm 2.6 32.4 ± \\pm 16.8 30.1 ± \\pm 9.3 12.6 ± \\pm 4.2 22.7 ± \\pm 4.6 11.9 ± \\pm 3.1 13.9 ± \\pm 1.5 20.3 ± \\pm 9.4 13.6 ± \\pm 7.1 – – 7.1 0.09 0.15 0.11 FailureSpot FC 61.9 ± \\pm 3.0 36.2 ± \\pm 21.0 36.9 ± \\pm 19.8 44.7 ± \\pm 18.6 26.3 ± \\pm 2.1 20.4 ± \\pm 1.2 28.0 ± \\pm 2.5 26.2 ± \\pm 5.6 30.4 ± \\pm 3.4 19.6 ± \\pm 7.9 – – 9.2 6.4 0.033 0.029 Mahalanobis FC 85.7 ± \\pm 4.1 40.2 ± \\pm 15.5 70.7 ± \\pm 6.4 29.2 ± \\pm 8.7 69.6 ± \\pm 6.2 30.6 ± \\pm 2.2 64.4 ± \\pm 3.0 22.3 ± \\pm 4.0 71.2 ± \\pm 3.1 15.9 ± \\pm 9.6 43.0 ± \\pm 16.5 19.6 ± \\pm 2.5 15.2 302.0 0.41 5.37 Euclidean FC 73.1 ± \\pm 4.4 24.2 ± \\pm 10.6 56.0 ± \\pm 6.8 23.1 ± \\pm 11.4 70.5 ± \\pm 4.2 28.5 ± \\pm 3.0 65.4 ± \\pm 2.1 19.7 ± \\pm 0.8 68.5 ± \\pm 4.8 19.0 ± \\pm 6.5 45.1 ± \\pm 14.2 8.3 ± \\pm 12.8 0.4 3056 13.19 368.83 PCA-KMeans FC 35.7 ± \\pm 12.2 12.9 ± \\pm 5.1 44.5 ± \\pm 8.7 20.0 ± \\pm 0.0 31.7 ± \\pm 3.4 25.0 ± \\pm 1.2 35.3 ± \\pm 1.8 32.5 ± \\pm 1.7 37.8 ± \\pm 7.7 20.7 ± \\pm 7.1 24.0 ± \\pm 11.4 19.4 ± \\pm 7.7 39.9 1.6 0.12 0.055 VLA-Tug (Ours) MC 75.1 ± \\pm 12.5 47.9 ± \\pm 20.9 70.5 ± \\pm 10.4 47.4 ± \\pm 13.5 67.9 ± \\pm 5.0 40.2 ± \\pm 1.2 67.0 ± \\pm 6.6 47.0 ± \\pm 0.6 67.8 ± \\pm 4.8 39.0 ± \\pm 7.0 47.6 ± \\pm 10.9 25.8 ± \\pm 11.6 6.8 26.5 0.12 0.94",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.T6.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "6af0945c9f89f158",
+      "section": "C.3 Full Results",
+      "location": "C.3 Full Results",
+      "text": "Figure 7: TPR early \\mathrm{TPR}_{\\mathrm{early}} against FPR for every setting and method, on seen (top) and unseen (bottom) tasks; mean over the splits of a setting.",
+      "url": "https://arxiv.org/html/2611.08425v1#A3.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "aeb50eac92a2f2e6",
+      "section": "D.1 Calibration and Guarantees",
+      "location": "D.1 Calibration and Guarantees",
+      "text": "This section gives the details behind subsection 6.2 .",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a2a40a71ce4f08d0",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "We run this analysis on LIBERO-X only. LIBERO-10 has only a few tens of failures per split, and the real robot has only 12 to 14 calibration successes per run, too few for LTT to certify any TPR early \\mathrm{TPR}_{\\mathrm{early}} target together with an FPR target in at least half of the runs; its LTT rows would be empty. The 14 runs are the 3 new-task , 3 new-signature , and 8 new-skill splits. We use the FPR targets 10, 15, 20, 25, 30, 40, and 50%. For each of them, we report the highest TPR early \\mathrm{TPR}_{\\mathrm{early}} target that LTT certifies together with it in at least half of the runs, searched on a grid from 10% to 95% in steps of 5%. LTT uses δ = 0.1 \\delta=0.1 and S = 40 S=40 starting points for its fixed-sequence walks ( subsection A.3 ). Table 7 gives for each FPR target the shares of runs in which the targets hold on the held-out seen and unseen episodes, the realized rates, and the PPV bound, for LTT and for the two calibrators of the baselines, max-conformal (MC) and functional conformal (FC).",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cc1ad0d3e70af284",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Table 7: Learn-then-Test (LTT), max-conformal (MC), and functional conformal (FC) at the same FPR target, over the 14 LIBERO-X runs ( δ = 0.1 \\delta=0.1 ). LTT certifies the TPR-early target of the second column together with the FPR target, and abstains otherwise; its percentages are over the certified runs. PPV bound: β ​ π / ( β ​ π + α ⁡ ( 1 − π ) ) \\beta\\pi/(\\beta\\pi+\\alpha(1-\\pi)) .",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6aa2bad4ee653b77",
+      "section": "Setup.",
+      "location": "Setup.",
+      "text": "Seen tasks Unseen tasks FPR target TPR-early target PPV bound Method Runs FPR holds TPR holds FPR TPR early PPV PPV holds PPV holds (own π \\pi ) FPR holds TPR holds FPR TPR early PPV PPV holds PPV holds (own π \\pi ) 10% – – LTT 0% (0/14) – – – – – – – – – – – – – – – – Max conformal (MC) 100% (14/14) 57% – 9.3 ± \\pm 4.4 53.4 ± \\pm 12.7 90.1 – – 50% – 15.6 ± \\pm 12.3 35.3 ± \\pm 20.5 80.7 – – – – Functional conformal (FC) 100% (14/14) 71% – 9.8 ± \\pm 5.8 33.9 ± \\pm 17.2 90.7 – – 36% – 14.9 ± \\pm 9.4 26.3 ± \\pm 16.2 84.3 – – 15% 15% 58.1 LTT 50% (7/14) 100% 100% 5.3 ± \\pm 3.1 39.2 ± \\pm 8.0 92.5 100% 100% 86% 71% 9.8 ± \\pm 11.5 27.1 ± \\pm 14.7 85.8 100% 100% – – Max conformal (MC) 100% (14/14) 57% – 14.2 ± \\pm 7.3 64.8 ± \\pm 9.0 88.1 – – 14% – 25.8 ± \\pm 12.3 50.7 ± \\pm 15.7 77.5 – – – – Functional conformal (FC) 100% (14/14) 64% – 13.2 ± \\pm 6.1 40.0 ± \\pm 13.9 88.9 – – 29% – 21.9 ± \\pm 11.9 32.8 ± \\pm 18.5 81.4 – – 20% 35% 70.7 LTT 50% (7/14) 100% 100% 10.4 ± \\pm 3.5 58.1 ± \\pm 5.4 89.7 100% 100% 71% 57% 15.5 ± \\pm 10.4 37.0 ± \\pm 16.4 81.1 100% 100% – – Max conformal (MC) 100% (14/14) 57% – 19.2 ± \\pm 7.2 72.9 ± \\pm 5.8 85.5 – – 21% – 37.2 ± \\pm 13.8 61.8 ± \\pm 13.9 73.6 – – – – Functional conformal (FC) 100% (14/14) 79% – 18.0 ± \\pm 6.1 54.4 ± \\pm 11.2 86.6 – – 21% – 30.7 ± \\pm 11.1 47.0 ± \\pm 16.7 77.9 – – 25% 35% 65.7 LTT 57% (8/14) 100% 100% 12.4 ± \\pm 3.7 64.5 ± \\pm 5.2 88.8 100% 100% 75% 75% 22.7 ± \\pm 11.6 49.2 ± \\pm 18.9 79.9 100% 100% – – Max conformal (MC) 100% (14/14) 57% – 25.1 ± \\pm 8.1 80.0 ± \\pm 5.0 83.1 – – 7% – 48.7 ± \\pm 14.3 72.1 ± \\pm 11.8 70.2 – – – – Functional conformal (FC) 100% (14/14) 79% – 22.7 ± \\pm 7.0 63.8 ± \\pm 12.0 84.7 – – 7% – 42.5 ± \\pm 12.1 57.5 ± \\pm 16.1 74.3 – – 30% 45% 67.4 LTT 50% (7/14) 100% 100% 15.2 ± \\pm 3.5 68.2 ± \\pm 4.6 87.4 100% 100% 86% 57% 24.5 ± \\pm 6.6 50.6 ± \\pm 12.6 77.9 100% 100% – – Max conformal (MC) 100% (14/14) 57% – 28.6 ± \\pm 7.9 83.1 ± \\pm 4.5 81.6 – – 0% – 56.9 ± \\pm 13.4 77.3 ± \\pm 10.2 67.9 – – – – Functional conformal (FC) 100% (14/14) 71% – 27.8 ± \\pm 7.4 71.2 ± \\pm 11.1 82.5 – – 7% – 54.1 ± \\pm 15.3 67.3 ± \\pm 15.0 70.7 – – 40% 55% 65.8 LTT 71% (10/14) 100% 100% 24.1 ± \\pm 7.3 78.4 ± \\pm 5.7 83.5 100% 100% 60% 80% 43.3 ± \\pm 14.6 66.6 ± \\pm 13.8 70.5 80% 100% – – Max conformal (MC) 100% (14/14) 64% – 37.6 ± \\pm 6.2 87.5 ± \\pm 3.1 77.7 – – 0% – 69.8 ± \\pm 14.1 84.9 ± \\pm 7.9 65.0 – – – – Functional conformal (FC) 100% (14/14) 64% – 38.7 ± \\pm 7.3 82.0 ± \\pm 8.1 77.8 – – 0% – 74.0 ± \\pm 15.0 80.2 ± \\pm 8.1 65.0 – – 50% 65% 64.3 LTT 71% (10/14) 100% 100% 31.1 ± \\pm 5.4 84.5 ± \\pm 3.3 80.2 100% 100% 40% 90% 59.2 ± \\pm 18.7 77.6 ± \\pm 10.7 67.7 70% 60% – – Max conformal (MC) 100% (14/14) 71% – 46.1 ± \\pm 6.2 92.1 ± \\pm 2.2 74.6 – – 0% – 79.2 ± \\pm 13.2 89.8 ± \\pm 6.8 63.0 – – – – Functional conformal (FC) 100% (14/14) 50% – 49.0 ± \\pm 7.2 90.6 ± \\pm 3.3 73.8 – – 0% – 83.1 ± \\pm 12.6 87.2 ± \\pm 5.9 62.4 – –",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T7.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "9f53a7b0fc1fbab1",
+      "section": "How to read Table 7 .",
+      "location": "How to read Table 7 .",
+      "text": "Runs is the share of runs for which LTT certifies the targets; the other columns of an LTT row are over these runs. Holds is the share of runs in which the target is met on the evaluated episodes. The PPV bound is β ​ π / ( β ​ π + α ⁡ ( 1 − π ) ) \\beta\\pi/(\\beta\\pi+\\alpha(1-\\pi)) with π \\pi the prevalence of the calibration set, and PPV holds is the share of runs in which the realized PPV is at least the bound (computed with the calibration set’s prevalence, or with that of the evaluated set).",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c694e194df0f2f9b",
+      "section": "PPV bound.",
+      "location": "PPV bound.",
+      "text": "The bound follows from the two LTT targets, so for VLA-Tug it comes directly from the FPR and TPR early \\mathrm{TPR}_{\\mathrm{early}} targets we calibrate for. It depends on the prevalence π \\pi , which we estimate on the calibration set. On seen tasks the estimate is stable. Under shift it can drift on individual new-skill folds, where the share of failures can differ a lot between the calibration set and the held-out tasks; this is what limits the bound on unseen tasks, and using the unseen set’s own π \\pi removes most of the misses. A moving average of π \\pi over the observations at deployment time could deal with more severe shift.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dfe227b7285e97a4",
+      "section": "Unseen tasks.",
+      "location": "Unseen tasks.",
+      "text": "On the new-task and new-signature splits, the three runs of each split share the same unseen tasks and differ only in the calibration data and the initialization. The held-out tasks define the shift each split is designed to test, so we cannot redraw them between runs. Only the eight new-skill folds hold out different tasks. The shares on unseen tasks therefore rest on fewer distinct unseen sets than runs, so they indicate trends and not precise rates.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1ede1aff5a7f20db",
+      "section": "D.2 Informativeness",
+      "location": "D.2 Informativeness",
+      "text": "This section gives the details behind subsection 6.3 .",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa7a46ce07a90165",
+      "section": "Classes.",
+      "location": "Classes.",
+      "text": "The failure modes are strongly imbalanced, so we report a balanced accuracy: the mean over classes of the share of their failures predicted correctly. We merge the two smallest classes repeatedly, once per dataset, until every class holds at least 5% of the failures. The rule uses label frequencies only. The mode head is not retrained: a merged class gets the sum of the probabilities of its modes. The accuracy is computed on the predictions pooled over the splits of a setting, since a split has few failures of a rare class. We exclude LIBERO-10: it has too few failures for a per-class accuracy, since even after merging its smallest classes hold only 6 to 16 failures, so one failure changes a class’s accuracy by several points.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6183e04de59df46c",
+      "section": "Prediction.",
+      "location": "Prediction.",
+      "text": "A failed episode is predicted at an anchor step: the class with the highest mean probability over the 2.4 s window before the anchor and the anchor itself (the top three classes for top-3). The anchor is either the probe’s first alarm (max-conformal at α = 0.2 \\alpha=0.2 ; episodes without an alarm are not scored) or the true failure time, which is an upper bound that a deployed system can reach. The baselines predict the most common training classes (always) or guess uniformly among the training classes.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "440046e65ef28781",
+      "section": "Prediction.",
+      "location": "Prediction.",
+      "text": "Table 8: Balanced top-1 and top-3 failure-mode accuracy (%), pooled over the splits of each kind. Shaded rows: our probe, by label variant; the oracle rows use the true failure time and are an upper bound. Best in bold, second best in italics, among the other rows.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "25f4af9d931fe510",
+      "section": "Prediction.",
+      "location": "Prediction.",
+      "text": "Top-1 accuracy (%) Top-3 accuracy (%) task signature skill Real robot task signature skill Real robot Method Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Most common 14.3 14.3 14.3 14.3 14.3 14.3 20.0 20.0 42.9 42.9 42.9 42.9 43.9 39.0 60.4 32.6 Random 14.3 14.3 14.3 14.3 14.3 14.3 20.0 20.0 42.9 42.9 42.9 42.9 42.9 42.9 60.0 60.0 VLA-Tug (Ours), own detection (first alarm) onset_pre 34.2 25.5 35.6 22.6 33.6 20.3 54.3 21.7 65.1 59.9 69.8 56.3 69.4 56.3 88.2 70.4 onset_traj 39.3 25.9 37.1 29.9 39.7 27.0 57.2 15.8 71.8 58.8 71.4 61.1 69.8 59.7 87.7 58.6 onset 28.0 19.3 32.8 19.5 25.0 17.2 54.9 13.2 63.8 54.6 59.3 50.4 56.0 48.1 88.0 57.8 onset_post 31.1 19.8 32.1 22.1 32.5 25.2 56.6 18.8 65.3 55.7 69.6 58.0 65.2 57.2 91.4 54.4 VLA-Tug (Ours), oracle onset (upper bound) onset_pre 41.3 31.0 41.0 30.2 42.4 30.0 68.4 12.1 73.0 65.0 78.4 66.8 72.9 64.8 92.5 57.1 onset_traj 36.1 29.3 39.8 29.9 39.1 27.4 66.1 12.4 69.5 59.3 73.3 57.1 71.5 59.4 93.8 53.1 onset 37.5 30.5 39.7 29.2 37.1 27.1 70.2 11.4 74.2 67.5 75.0 66.9 70.1 62.7 92.6 60.0 onset_post 23.0 20.0 28.0 22.2 33.0 21.4 67.8 16.3 64.8 59.2 69.6 56.2 66.0 58.8 94.5 52.9",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T8.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "6096924c9f68f488",
+      "section": "D.3 Cost and Latency",
+      "location": "D.3 Cost and Latency",
+      "text": "This section gives the details behind subsection 6.4 .",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ad9b6be8695b9786",
+      "section": "How the VLA runs.",
+      "location": "How the VLA runs.",
+      "text": "At each policy step the VLA receives the camera images and the prompt and produces a chunk of m m actions ( m = 8 m=8 on LIBERO-X, 5 5 for π 0.5 \\pi_{0.5} on LIBERO-10, 6 6 on the real robot), which the robot executes at its control rate ( 20 20 Hz in simulation, 50 50 Hz on the real robot). A policy step therefore lasts m m divided by the control rate: 400 400 ms on LIBERO-X, 250 250 ms for π 0.5 \\pi_{0.5} , and 120 120 ms on the real robot. The probe reads the embedding of each call and must return its score well within one step.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "86ad17e94fe33208",
+      "section": "Measurement.",
+      "location": "Measurement.",
+      "text": "All times are measured on one RTX 4090 and 32 CPU threads. The fit time is the training time of the probe or the SAFE models, or the time to fit the statistics of the distance baselines. The state is what a fitted method must keep to score a new episode: the weights, the stored training steps of the k-NN, or the statistics of the distance baselines. The latency is the online latency: the time to turn one new policy step into a score, one embedding at a time and with the recurrent state of the previous step, after a warm-up and with the device synchronized, as the median over up to 2,000 steps. The CPU is timed with four threads. Online latency is the one that matters for deployment.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d0c18a8f27e5b99",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "The k-NN baseline has to keep every training step and compare each new step with all of them, so its cost grows with the training set; Mahalanobis keeps two 6144 × 6144 6144\\times 6144 matrices. STAC needs the K = 10 K=10 plans of the policy at every call, which no other method needs, so its latency is its scoring time plus the time to sample them.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS3.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ef82a0dd7818e33c",
+      "section": "Probe.",
+      "location": "Probe.",
+      "text": "On the GPU the LSTM takes most of the time; the mode head and the CLIP head add little, and on the CPU they add nothing measurable. The probe is not the fastest online method (SAFE-LSTM and the MLP detectors are faster), but it is far below the duration of a policy step.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS3.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3bca6cde743e61d9",
+      "section": "Calibration.",
+      "location": "Calibration.",
+      "text": "Per target pair, max-conformal takes 0.1 0.1 ms, functional conformal 0.7 0.7 ms, and LTT 1.3 1.3 ms on a CPU. The calibration sets hold 158 158 to 209 209 labeled episodes, of which 92 92 to 120 120 are failures.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS3.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "059ae1d4e6f89084",
+      "section": "D.4 Ablations",
+      "location": "D.4 Ablations",
+      "text": "We ablate the supervision strategy, the auxiliary heads, and the failure time used for evaluation.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6dffb0257cbbdce5",
+      "section": "Supervision strategy.",
+      "location": "Supervision strategy.",
+      "text": "Table 9 compares our pre-onset label (every step before the failure time is positive) with the window before the onset only, every step of the failed rollout, and the window before the onset together with all steps after it. The pre-onset label is the best, or within the spread across splits, in nearly every setting. On LIBERO-X the alternatives lose 24 % 24\\% to 50 % 50\\% of the detection area on average, and are lower on every kind of held-out split, seen and unseen; labeling the steps after the onset as positive is worst. On LIBERO-10 the differences are smaller ( − 1 % -1\\% to − 14 % -14\\% on average), within the spread across splits for π 0.5 \\pi_{0.5} , and clear on seen tasks with GR00T.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c6aa00fc4539085d",
+      "section": "Auxiliary heads.",
+      "location": "Auxiliary heads.",
+      "text": "We include the mode and CLIP heads because their labels already exist for every failure. We find no consistent benefit from either on detection ( Table 9 ): removing the heads changes the area by less than the spread across splits in most settings. For mode prediction ( Table 10 ), the CLIP head changes top-1 accuracy by less than one point on average, while training the mode head jointly with the failure score adds three to four points over a mode-only probe. The CLIP alignment might help some subpopulations and hurt others, which we leave to future work.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3511b2d8d08c5712",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "Moving the failure time later makes the metric easier, since more alarms then count as early, so we check how much our results depend on it. We score the saved scores again with the failure time of every failed episode moved 1 1 and 2 2 s later, with the same thresholds and without retraining ( Table 11 ). Every method gains, but late detectors gain more than VLA-Tug , which already alarms early: on unseen LIBERO-X VLA-Tug gains 2.1 2.1 to 2.4 2.4 points of area over 2 2 s and SAFE-LSTM 3.5 3.5 to 4.0 4.0 . On LIBERO-X our rank among the methods does not change, and our margins hold, so these results do not depend on the exact failure time. On the real robot, where our lead is a single point, SAFE-LSTM overtakes VLA-Tug at 1 1 s for the same reason.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.SS4.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cc334750d82ca330",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "Table 9: Ablations of our probe in the simulated settings: area under TPR early vs. FPR up to 40% (in %), mean ± \\pm standard deviation over the splits, and in brackets the change relative to our probe (shaded). Best in bold, second best in italics, within each block.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4a281f6aa987c695",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "LIBERO-10 π 0.5 \\pi_{0.5} LIBERO-10 GR00T LIBERO-X task LIBERO-X signature LIBERO-X skill Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Heads (LSTM, pre-onset label) Modes + CLIP (ours) 75.1 ± \\pm 12.5 47.9 ± \\pm 20.9 70.5 ± \\pm 10.4 47.4 ± \\pm 13.5 67.9 ± \\pm 5.0 40.2 ± \\pm 1.2 67.0 ± \\pm 6.6 47.0 ± \\pm 0.6 67.8 ± \\pm 4.8 39.0 ± \\pm 7.0 No head 82.3 ± \\pm 6.4 (+10%) 51.1 ± \\pm 4.0 (+7%) 70.1 ± \\pm 11.0 ( − - 1%) 55.1 ± \\pm 5.5 (+16%) 67.1 ± \\pm 1.8 ( − - 1%) 42.7 ± \\pm 1.5 (+6%) 68.3 ± \\pm 5.7 (+2%) 45.0 ± \\pm 1.3 ( − - 4%) 69.2 ± \\pm 4.4 (+2%) 43.6 ± \\pm 11.5 (+12%) Modes only 80.4 ± \\pm 8.4 (+7%) 48.3 ± \\pm 8.8 (+1%) 70.9 ± \\pm 8.2 (+0%) 52.9 ± \\pm 8.4 (+12%) 69.4 ± \\pm 1.0 (+2%) 39.9 ± \\pm 3.8 ( − - 1%) 68.0 ± \\pm 8.8 (+2%) 46.6 ± \\pm 3.5 ( − - 1%) 68.3 ± \\pm 3.5 (+1%) 43.7 ± \\pm 10.2 (+12%) CLIP only 78.2 ± \\pm 11.4 (+4%) 58.3 ± \\pm 15.3 (+22%) 72.6 ± \\pm 4.8 (+3%) 44.4 ± \\pm 12.7 ( − - 6%) 66.1 ± \\pm 3.1 ( − - 3%) 41.4 ± \\pm 2.4 (+3%) 67.3 ± \\pm 8.3 (+1%) 46.2 ± \\pm 2.8 ( − - 2%) 67.8 ± \\pm 5.5 (+0%) 38.5 ± \\pm 9.2 ( − - 1%) Training strategy (modes + CLIP heads) onset_pre (ours) 75.1 ± \\pm 12.5 47.9 ± \\pm 20.9 70.5 ± \\pm 10.4 47.4 ± \\pm 13.5 67.9 ± \\pm 5.0 40.2 ± \\pm 1.2 67.0 ± \\pm 6.6 47.0 ± \\pm 0.6 67.8 ± \\pm 4.8 39.0 ± \\pm 7.0 onset_traj 77.6 ± \\pm 6.5 (+3%) 52.0 ± \\pm 14.9 (+9%) 64.5 ± \\pm 2.0 ( − - 9%) 43.8 ± \\pm 10.9 ( − - 8%) 49.7 ± \\pm 2.4 ( − - 27%) 38.4 ± \\pm 2.9 ( − - 5%) 48.0 ± \\pm 6.8 ( − - 28%) 31.3 ± \\pm 3.1 ( − - 33%) 52.1 ± \\pm 4.3 ( − - 23%) 21.6 ± \\pm 3.9 ( − - 45%) onset 73.3 ± \\pm 3.5 ( − - 2%) 45.4 ± \\pm 14.6 ( − - 5%) 60.3 ± \\pm 7.7 ( − - 15%) 39.5 ± \\pm 10.7 ( − - 17%) 48.8 ± \\pm 1.4 ( − - 28%) 39.9 ± \\pm 6.6 ( − - 1%) 47.6 ± \\pm 11.8 ( − - 29%) 36.6 ± \\pm 5.7 ( − - 22%) 46.4 ± \\pm 5.4 ( − - 32%) 25.5 ± \\pm 9.0 ( − - 35%) onset_post 73.5 ± \\pm 4.3 ( − - 2%) 50.2 ± \\pm 11.0 (+5%) 37.4 ± \\pm 3.0 ( − - 47%) 41.8 ± \\pm 11.8 ( − - 12%) 24.1 ± \\pm 2.4 ( − - 65%) 31.3 ± \\pm 0.9 ( − - 22%) 28.3 ± \\pm 3.6 ( − - 58%) 25.0 ± \\pm 0.3 ( − - 47%) 30.6 ± \\pm 2.5 ( − - 55%) 17.0 ± \\pm 3.4 ( − - 56%)",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T9.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "b2802eafeb633266",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "Table 10: What the CLIP head and the score term add to failure-mode prediction: top-1 and top-3 accuracy (in %), mean ± \\pm standard deviation over the splits. Our probe is shaded. Best in bold, second best in italics, per column and anchor.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c76b3172bb7d623b",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "Top-1 accuracy (%) Top-3 accuracy (%) task signature skill Real robot task signature skill Real robot Method Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen Seen Unseen At the first alarm of our probe Score + modes + CLIP (ours) 41.0 ± \\pm 1.4 27.2 ± \\pm 2.5 37.3 ± \\pm 7.2 23.7 ± \\pm 0.7 42.3 ± \\pm 5.3 32.2 ± \\pm 4.3 57.9 ± \\pm 10.6 61.5 ± \\pm 44.0 76.0 ± \\pm 2.6 65.9 ± \\pm 5.7 74.2 ± \\pm 1.0 62.8 ± \\pm 1.8 74.6 ± \\pm 3.4 63.2 ± \\pm 5.6 93.3 ± \\pm 7.3 100.0 ± \\pm 0.0 Score + modes 40.6 ± \\pm 3.7 25.8 ± \\pm 2.5 44.0 ± \\pm 4.6 25.6 ± \\pm 0.8 42.5 ± \\pm 5.3 28.0 ± \\pm 7.0 57.4 ± \\pm 11.8 64.1 ± \\pm 45.4 76.4 ± \\pm 1.5 64.0 ± \\pm 2.8 75.6 ± \\pm 2.8 63.3 ± \\pm 1.0 75.7 ± \\pm 2.9 61.9 ± \\pm 7.9 91.9 ± \\pm 7.0 100.0 ± \\pm 0.0 Modes + CLIP 37.3 ± \\pm 5.8 23.7 ± \\pm 1.4 29.3 ± \\pm 11.1 17.7 ± \\pm 9.3 44.0 ± \\pm 6.4 30.5 ± \\pm 5.3 55.0 ± \\pm 14.2 59.0 ± \\pm 42.8 72.3 ± \\pm 7.7 64.9 ± \\pm 3.3 62.6 ± \\pm 16.4 54.3 ± \\pm 13.4 75.3 ± \\pm 5.2 61.0 ± \\pm 5.6 90.4 ± \\pm 7.9 100.0 ± \\pm 0.0 Modes 36.5 ± \\pm 6.0 23.7 ± \\pm 3.2 35.7 ± \\pm 5.7 20.6 ± \\pm 4.8 40.9 ± \\pm 6.7 30.1 ± \\pm 4.7 53.8 ± \\pm 12.5 56.4 ± \\pm 41.8 71.9 ± \\pm 7.8 63.6 ± \\pm 1.4 72.2 ± \\pm 6.6 57.3 ± \\pm 7.3 71.5 ± \\pm 3.4 61.6 ± \\pm 8.7 94.7 ± \\pm 7.2 100.0 ± \\pm 0.0 At the true failure onset (upper bound) Score + modes + CLIP (ours) 49.2 ± \\pm 5.7 40.6 ± \\pm 4.5 47.7 ± \\pm 9.0 40.9 ± \\pm 3.1 48.6 ± \\pm 3.5 39.6 ± \\pm 8.0 61.9 ± \\pm 8.4 23.7 ± \\pm 22.0 80.3 ± \\pm 3.6 73.6 ± \\pm 2.6 81.7 ± \\pm 5.8 77.5 ± \\pm 1.5 77.4 ± \\pm 4.0 74.7 ± \\pm 6.7 95.9 ± \\pm 4.6 62.4 ± \\pm 35.1 Score + modes 54.7 ± \\pm 3.2 39.6 ± \\pm 5.0 49.1 ± \\pm 4.5 39.0 ± \\pm 0.4 48.4 ± \\pm 3.7 40.4 ± \\pm 8.0 59.4 ± \\pm 5.0 25.7 ± \\pm 21.1 82.5 ± \\pm 3.5 72.6 ± \\pm 0.7 79.6 ± \\pm 3.8 74.5 ± \\pm 1.7 77.9 ± \\pm 3.0 73.4 ± \\pm 8.1 96.4 ± \\pm 3.2 62.8 ± \\pm 33.3 Modes + CLIP 42.4 ± \\pm 5.3 37.0 ± \\pm 7.7 33.7 ± \\pm 15.9 31.2 ± \\pm 17.2 49.4 ± \\pm 5.8 39.8 ± \\pm 6.4 62.1 ± \\pm 8.8 19.5 ± \\pm 19.8 77.3 ± \\pm 10.2 69.1 ± \\pm 5.3 69.2 ± \\pm 15.6 61.4 ± \\pm 23.2 77.5 ± \\pm 4.7 72.2 ± \\pm 5.9 96.4 ± \\pm 3.9 59.5 ± \\pm 32.9 Modes 48.9 ± \\pm 5.6 38.1 ± \\pm 8.7 42.7 ± \\pm 7.2 35.0 ± \\pm 12.0 49.8 ± \\pm 4.9 40.8 ± \\pm 5.5 59.4 ± \\pm 7.6 32.4 ± \\pm 26.3 76.4 ± \\pm 7.4 68.8 ± \\pm 5.4 74.2 ± \\pm 5.3 67.4 ± \\pm 13.2 77.4 ± \\pm 4.0 73.2 ± \\pm 7.5 96.4 ± \\pm 3.3 66.1 ± \\pm 34.8",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T10.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "44223ff3b4b1ce17",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "Table 11: Early-detection area (in %) on the unseen episodes when the failure time is moved later by 0, 1, and 2 s; nothing is retrained. Ours is shaded. Best in bold, second best in italics.",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1ba351890ef682a6",
+      "section": "Sensitivity to the failure time.",
+      "location": "Sensitivity to the failure time.",
+      "text": "LIBERO-10 π 0.5 \\pi_{0.5} LIBERO-10 GR00T LIBERO-X task LIBERO-X signature LIBERO-X skill Real robot Method 0 s +1 s +2 s 0 s +1 s +2 s 0 s +1 s +2 s 0 s +1 s +2 s 0 s +1 s +2 s 0 s +1 s +2 s SAFE-LSTM 34.9 37.2 39.2 51.2 53.1 55.0 40.4 42.1 44.4 41.2 42.8 44.9 30.1 31.7 33.6 25.1 26.8 28.9 SAFE-MLP 39.9 42.1 43.9 39.2 40.6 43.9 42.3 43.3 44.7 46.2 47.2 47.9 23.5 24.3 25.7 20.2 21.4 22.8 STAC 36.4 43.0 53.2 17.5 22.0 27.6 28.0 29.5 32.2 28.7 30.6 34.0 21.5 22.6 25.1 – – – ActProbe 26.6 31.0 37.2 30.1 33.3 38.6 22.7 24.7 27.5 13.9 16.1 18.8 13.6 14.3 15.7 – – – FailureSpot 36.2 39.4 42.7 44.7 46.5 46.6 20.4 20.9 21.7 26.2 27.2 29.1 19.6 20.8 22.8 – – – Mahalanobis 40.2 42.1 45.9 29.2 30.4 32.6 30.6 31.7 34.0 22.3 23.1 24.4 15.9 16.6 17.4 19.6 19.7 19.8 Euclidean 24.2 28.2 31.2 23.1 25.4 30.4 28.5 29.7 31.1 19.7 20.8 22.5 19.0 20.0 21.4 8.3 9.7 12.2 PCA-KMeans 12.9 12.9 13.8 20.0 20.0 20.0 25.0 25.3 25.9 32.5 34.0 36.4 20.7 21.5 23.1 19.4 19.9 20.3 VLA-Tug (Ours) 47.9 52.5 55.4 47.4 49.1 49.3 40.2 41.3 42.3 47.0 48.2 49.1 39.0 40.5 41.4 25.8 26.3 26.5",
+      "url": "https://arxiv.org/html/2611.08425v1#A4.T11.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "09c08459fa070835",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "VLA-Tug encodes the VLA backbone embedding of each step with an LSTM into a latent state, which three MLP heads read: the failure score, the failure mode, and a CLIP embedding. The following figures show four of these spaces in two dimensions: the backbone embedding itself (the input), the LSTM state, and the hidden layers of the failure score head and of the failure mode head. Each is projected onto its first two principal components, fitted on the pre-failure steps of the training episodes only, and drawn for the training episodes and for the unseen tasks of the LIBERO-X new-task split. The points are the steps up to the failure of failed episodes and all steps of successful episodes; the ellipses are the 1 ​ σ 1\\sigma ellipses of a Gaussian fitted to each class, drawn over the points. The classes are the outcome (success in blue, failure in red) or the failure mode. The mode head is trained on failures only and has only a mode plot.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5182eac68736121e",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 8: VLA backbone embedding, by outcome.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "55d1abfee6ccf126",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 9: VLA backbone embedding, by failure mode.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "591f25952be61113",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 10: Probe LSTM state, by outcome.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0ccf70bcc7996066",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 11: Probe LSTM state, by failure mode.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4d2ff1ff79b449a1",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 12: Failure score head layer, by outcome.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6f1fb3457621e64e",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 13: Failure score head layer, by failure mode.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "643df35ae075e523",
+      "section": "E.1 Latent Space",
+      "location": "E.1 Latent Space",
+      "text": "Figure 14: Failure mode head layer, by failure mode (failures only).",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5c18232d71acbd83",
+      "section": "E.2 Latent Trajectories",
+      "location": "E.2 Latent Trajectories",
+      "text": "To see how an episode moves through these spaces, Figure 15 and Figure 16 follow one success and one failure step by step, for episodes of seen and of unseen tasks. Each panel shows one space in its first two principal components: (a) the VLA backbone embedding, (b) the probe’s LSTM state, and the hidden layers of (c) the failure score head and (d) the failure mode head. The points and ellipses are those of the episodes of the set shown (the training episodes, or the unseen tasks), grouped by outcome and failure mode, and the mode head is shown on failures only. The principal components are always those fitted on the training episodes. A trajectory starts at the ring; a failure is dashed and ends at the cross, at its failure step.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "baf941260deb06a6",
+      "section": "E.2 Latent Trajectories",
+      "location": "E.2 Latent Trajectories",
+      "text": "Figure 15: Seen tasks (training episodes). A success (green, “pick up the bowl on the plate and place it to the left of the bowl drainer”) and an object displacement failure (red, “place the striped book in the top region of the shelf”).",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F15",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a09c6e9284ef3c6d",
+      "section": "E.2 Latent Trajectories",
+      "location": "E.2 Latent Trajectories",
+      "text": "Figure 16: Unseen tasks. A success (green, “place the red bowl in the basket”) and a press failure (red, “turn on the flat stove”).",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F16",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bebce9298f6d286a",
+      "section": "E.3 Steering Demonstrations",
+      "location": "E.3 Steering Demonstrations",
+      "text": "We use steering only to show how the signal of VLA-Tug could be used; the heuristics are simple and are not evaluated. When the score crosses the calibrated threshold, the policy is paused, an intervention chosen from the predicted failure mode is applied, and the policy resumes.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e8b2ce24dfe0ae10",
+      "section": "Simulation.",
+      "location": "Simulation.",
+      "text": "We implemented three heuristics for LIBERO-X. For a wrong-target or placement/insertion failure, the end effector is displaced by a small distance towards the destination. For a grasp failure, it is displaced laterally, perpendicular to its recent motion. For every other predicted mode, the policy replans from the current state. 17(a) shows the three on the task “place the white-yellow mug on top of the shelf”: after the alarm, the probe predicts the failure mode, the matching intervention is applied, and the policy resumes and succeeds, whereas without intervention the mug is placed on the table and the task fails.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1cd9d992528b4e2e",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "In the task “put the mushroom on the plate”, the gripper misses the mushroom and hits the table without the probe; the probe predicts a grasp failure, and an expert would steer the wrist camera towards the grasp target and resume the policy. In the task “flip the basket upright”, we start with the basket standing on its tall end, outside the training demonstrations; an expert might move the gripper along the − z -z direction, so that the joint states are in the distribution of the flip motion, as the demonstrations are collected with the basket on its long side ( 17(b) ).",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c5ad834802af1f28",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "(a) Simulation: “place the white-yellow mug on top of the shelf.”",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F17.sf1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5a9155027fd1a3e7",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "(b) Real robot: “flip the basket upright.”",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F17.sf2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ba78ba764d65dcea",
+      "section": "Real robot.",
+      "location": "Real robot.",
+      "text": "Figure 17: Steering strategies, in simulation and on the real robot.",
+      "url": "https://arxiv.org/html/2611.08425v1#A5.F17",
+      "kind": "figcaption"
+    }
+  ]
+}

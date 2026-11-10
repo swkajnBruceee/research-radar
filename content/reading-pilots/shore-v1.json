@@ -1,0 +1,500 @@
+{
+  "item_id": "arxiv:2611.08364",
+  "document_id": "9f93239ca383e241459872f5bf55dfaaab1aee03e641300faf35f12f63eafef7",
+  "source_url": "https://arxiv.org/html/2611.08364v1",
+  "paper_version": "2611.08364v1",
+  "paper": {
+    "id": "arxiv:2611.08364",
+    "title": "SHORE: Stability-Hybrid On-Policy Reinforcement Learning for Online Bin Packing",
+    "url": "https://arxiv.org/abs/2611.08364v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "sim",
+      "imitation",
+      "evaluation"
+    ],
+    "summary": "arXiv:2611.08364v1 Announce Type: new Abstract: Online 3D bin packing with a processing buffer requires choosing which box to pack, its orientation, and its placement while keeping the stack stable under unknown future arrivals. A collapse ends the episode and forfeits the remaining volume. Existing methods use geometric rules or hard stability masks, limiting how risk can influence the joint choice of box, orientation, and placement. We propose Stability-Hybrid On-Policy Reinforcement Learning (SHORE), which combines a learned stability probability of a placement with an on-policy estimate of its return conditional on stability. A 3D U-Net learns stability from executed outcomes and simulated alternatives, revealing outcomes of actions underrepresented in early rollouts. A discrete on-policy actor--critic uses stability predictions in both its action values and policy prior, with gates that limit the effect of an untrained or changing model. In deployment, SHORE does not require additional search or simulation overhead. In Isaac Gym, SHORE reaches 73\\% space utilization by 0.4M environment steps, while the same learner without stability modeling reaches that level at about 1M. On the expanded 60-box set, SHORE achieves 0.734 space utilization versus 0.588 for the GOPT state-of-the-art baseline, with a higher placement-failure frequency (1.03\\% vs. 0.63\\%), trading more risk for greater packed volume. The results show faster learning and higher utilization on the more demanding realistic box arrival set. Ablations suggest that simulated alternatives provide useful early supervision, while executed outcomes alone sustain later performance. We also demonstrate the method on a real robot to verify the simplicity of integrating the method to real bin packing pipelines."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-08T02:24:29.761537+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 135,
+    "total": 135,
+    "evidence_ids": [
+      "ce4fa07068806b1e",
+      "b065dc6a9577a6f7",
+      "5e3a1f4d57606c83",
+      "dab5b596262d87e5",
+      "5cb8a67cd3fd7d8f",
+      "84068d93b4b53cbe",
+      "0d0954e0de2ea8c4",
+      "50ff748544e37c9a",
+      "c8cd1725a5756d82",
+      "9cdd61318a4c54cf",
+      "e28cad63f8ad1c46",
+      "a87821f9a0494680",
+      "124276c45157a968",
+      "58f6e4cba9b8d295",
+      "f66015eb46148d0d",
+      "0a29847d4fc646ee",
+      "0c0811c7e9fdb3fd",
+      "691f64985385f203",
+      "b46f5397e5423396",
+      "bec5d6e932675a4a",
+      "e0a3a34cd6ec9d19",
+      "c7a6d713104f649b",
+      "151c6dc9762aa577",
+      "89cdb9fa5a5f425e",
+      "4d6f1481a244aee4",
+      "abca01d533218823",
+      "e8e0572d833ccf2a",
+      "141c122604d98453",
+      "7ffa5005e4f771ff",
+      "3c364f3a3d8c8927",
+      "b41b491af59c06fe",
+      "ffe29ab73056240d",
+      "c1839ece73caf3a6",
+      "fa57b126ce3d3224",
+      "fccdf0c72582046e",
+      "3235a28030393723",
+      "9c56700479ab570c",
+      "07aa88e2a8fbc5f7",
+      "2e013014a53c3a7e",
+      "bf323b865e0b3726",
+      "fefbdccac2592c5a",
+      "1e0599cd067a48a3",
+      "9b2c8bfc92b9d929",
+      "967d2ebc1f7af57f",
+      "1fbc51f12edc2139",
+      "326a7e0c38549792",
+      "b1447b35e8f8c7e2",
+      "f547b040f1413feb",
+      "c7d237974b09c051",
+      "5b690fd7e7b7c523",
+      "a69631f1f425f820",
+      "659e160a06c2bdcb",
+      "d7e644f4e0ab4ec5",
+      "49253a2568e64932",
+      "c7e8a4938dc5c863",
+      "5ac4680559d7d4d2",
+      "1545e52088e509c6",
+      "85a0f038a2132d80",
+      "26c1a21f13b0f0e9",
+      "d2a444ae72976142",
+      "c76c0f3fedc5ce81",
+      "78ec760c840e742f",
+      "8916ced49af8b0d1",
+      "ee4cee11e7272995",
+      "0a3cd5da14935fc7",
+      "b3047e72ecce3c05",
+      "9905157c68fd6ae3",
+      "dd935fb6838d5d9b",
+      "85c56b82ea0c0238",
+      "a7ffc7ae297b4146",
+      "13f43187d177a341",
+      "0bece4a6dc3e1be8",
+      "6727c04ed85a1396",
+      "a6abb87e974ce01d",
+      "799915c9f980dea6",
+      "e93600aa02411308",
+      "c42e695d08a7ba85",
+      "e404e25c1b104fcf",
+      "b873b50426cd798f",
+      "94093f7bf49a9cd5",
+      "e3342ff5f271cc55",
+      "1abb2d9a3bdf4376",
+      "98573fd4519f6a0b",
+      "f3adb3281f498351",
+      "68db20f8002f5fb5",
+      "95e49b9e6843a50b",
+      "ba59fbc183fd4c42",
+      "010eb943cd8c8e14",
+      "51af84c79a67e913",
+      "d3ed1cdae6301a59",
+      "94f46e341266a883",
+      "959291139d027448",
+      "0f4efa10d0bf9a50",
+      "8ab2b52e51af3a70",
+      "2da8dcb79d7ff067",
+      "e5445cda49642a5a",
+      "24fdee35f375a41e",
+      "da7dcea87afdb98c",
+      "a8121027a3698b82",
+      "fa5cebaf61e1ba39",
+      "7f1835a3a774b7cb",
+      "81853e5689dc47e4",
+      "a79930a4c093ea43",
+      "27406f1ca29d5744",
+      "69a538ea88c45391",
+      "524980f4eb6bd657",
+      "1f4b866ac5cbf159",
+      "62555a74214eefdc",
+      "c95ab7243fb8cb7b",
+      "929fab2f04eb2957",
+      "721dac2061fd1ef0",
+      "7159d67b43056455",
+      "597c9b6e6820e0b8",
+      "903681653023bea9",
+      "30ff7b5a6a18ac91",
+      "29f852ad838d34f9",
+      "86a1707f33de9ade",
+      "72d01b87c8d53364",
+      "c6dd4a849f86a44e",
+      "1668ddcc905486fc",
+      "a0ca38b3b4287de3",
+      "3996e02eb2b75a08",
+      "97b3e3be5450be3a",
+      "8480b1bce4006595",
+      "43a5153d1a75e5ba",
+      "d8b488e5dcb789cc",
+      "f3440758dcd29a8a",
+      "1905463ac8eae841",
+      "5953707e872b86df",
+      "c642218baf64029e",
+      "505244c7d125a4e0",
+      "c25d0e201a0dc0e3",
+      "ab60bf3410c3473d",
+      "9b9e8f8c1bc6ff0e",
+      "3c0afeecf87043cf"
+    ],
+    "pdf_pages_visually_checked": [
+      6,
+      7,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15
+    ],
+    "pdf_sha256": "d6d0122421d887a9e03fff2ff51e767a2464a74da0dfff737d2c69e643f3afe9"
+  },
+  "overview": "SHORE把放置后即时稳定概率同时放入动作价值的乘法分解与联合装箱策略的软先验，并用单独监督网络补充actor/critic看不到的内部密度信息。值得跟进的是稳定标签如何进入决策、以及早期环境步数效率；全文不支持更高最终性能上限或已经降低总算力成本的结论。同学习器去掉两项稳定机制后最终装箱率追上；额外模拟标签在后期也未显示确定优势。扩展集的0.734利用率伴随53%的回合稳定性失败，真实机器人仅为示例序列。",
+  "notice": "当前会话代理完整阅读135个HTML提取片段，含正文、附录仿真校准及超参数；另读固定PDF算法1并目视核对物理页6/7/9/10/11/12/13/15的公式、训练流程、表III–VII、曲线与真机图。作者实验均未复现，未运行代码；未独立审计原始轨迹、模拟副本偏差或硬件计时。阅读覆盖与目视页码分别记录，不把所有PDF页宣称为目视检查。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "目标仍是稳定装入体积：失败通过终止损失未来机会",
+      "text": "任务只见接下来5个箱子，选择其中一个后才补入新到货。稳定放置得到箱体积/箱容积，失败当前奖励为0且回合结束，gamma=1；既往成功体积不因本次失败而清零。因此学习目标不是显式约束失败概率，也没有单独的坍塌惩罚；风险经未来装箱机会损失进入回报。方法要解决的是几何可放与物理可稳不同，以及单个回报同时混合即时失败和后续空间价值的问题。",
+      "evidence_ids": [
+        "58f6e4cba9b8d295",
+        "b46f5397e5423396",
+        "bec5d6e932675a4a",
+        "e0a3a34cd6ec9d19",
+        "4d6f1481a244aee4",
+        "141c122604d98453",
+        "7ffa5005e4f771ff"
+      ],
+      "quote": "online 3D single-bin"
+    },
+    {
+      "kind": "method",
+      "title": "联合箱子、朝向与EMS位置，同时保留几何硬掩码",
+      "text": "每步联合选可见箱子、6种朝向和最多80个EMS角点，最多2400对候选；只在EMS角点放置，不搜索所有网格格点。尺寸合适、可选token与支撑条件仍是硬掩码，SHORE取消的是学习稳定性硬拒绝，并非所有掩码。actor和逐动作critic各用Packing Transformer，输入箱子与EMS token；只有表面支撑/重物比例，不能直接读取整个密度体素。GOPT只放队首固定朝向，故两者总差距不能归因于稳定机制。",
+      "evidence_ids": [
+        "f66015eb46148d0d",
+        "0a29847d4fc646ee",
+        "0c0811c7e9fdb3fd",
+        "691f64985385f203",
+        "abca01d533218823",
+        "3c364f3a3d8c8927",
+        "ffe29ab73056240d",
+        "e404e25c1b104fcf",
+        "b873b50426cd798f",
+        "94093f7bf49a9cd5",
+        "0f4efa10d0bf9a50"
+      ],
+      "quote": "chosen jointly"
+    },
+    {
+      "kind": "method",
+      "title": "额外体素模型与标签副本带来信息，也带来成本",
+      "text": "稳定网络读取占据、密度体素和当前朝向箱子的尺寸/密度，3D U-Net共享主干接5个bootstrap头；均值给稳定概率，BALD分歧只用于选标签，不等于5个独立网络。相同尺寸与密度token共享前向，每次前向覆盖该token的所有EMS，每状态最多30次稳定网络前向。默认每环境步最多另试8个动作：6个按策略概率平方根乘分歧选择，2个随机；每8步再复制已执行动作诊断偏差。执行标签权重2、模拟标签权重1，40k状态缓冲，每rollout后64次监督更新。执行副本出现偏向失败的标签差异，不能把更多标签等同于更准。额外模型还获得actor/critic缺失的信息，纯学习算法归因需保留此差别。",
+      "evidence_ids": [
+        "3235a28030393723",
+        "9c56700479ab570c",
+        "07aa88e2a8fbc5f7",
+        "2e013014a53c3a7e",
+        "bf323b865e0b3726",
+        "fefbdccac2592c5a",
+        "1e0599cd067a48a3",
+        "9b2c8bfc92b9d929",
+        "967d2ebc1f7af57f",
+        "1fbc51f12edc2139",
+        "326a7e0c38549792",
+        "3c0afeecf87043cf"
+      ],
+      "quote": "bootstrap mask"
+    },
+    {
+      "kind": "method",
+      "title": "条件价值乘稳定概率：等式有明确假设",
+      "text": "对固定策略和回报目标，立即失败时G为0，所以Q_G=S_true×E[G|本步稳定]。SHORE用Q=U×(1−w_Q+w_Q S)，对成功样本赋权1、失败样本赋权1−w_Q；w_Q=1时U只用本步成功样本训练，但仍包含以后失败的风险。S不接critic梯度。论文式8表明，精确拟合加权均值时仍有(1−w+wS)/(1−w+wS_true)偏差因子；仅S逐点等于真实概率或w=0时恢复原Q。低总体ECE不能证明此逐点条件，有限数据、分布值编码、辅助损失也会引入误差；S_true=0且w=1时条件目标未定义。",
+      "evidence_ids": [
+        "ffe29ab73056240d",
+        "c1839ece73caf3a6",
+        "fa57b126ce3d3224",
+        "fccdf0c72582046e",
+        "b1447b35e8f8c7e2",
+        "f547b040f1413feb",
+        "c7d237974b09c051",
+        "5b690fd7e7b7c523",
+        "a69631f1f425f820",
+        "659e160a06c2bdcb",
+        "d7e644f4e0ab4ec5",
+        "49253a2568e64932"
+      ],
+      "quote": "approximation"
+    },
+    {
+      "kind": "method",
+      "title": "策略用稳定性软先验，熵正则也须同步修改",
+      "text": "联合策略概率正比于几何mask×exp(actor logit)×max(S,1e−6)^w_pi。预测不稳的几何合法动作仍有非零概率，可从真实执行结果纠偏；这是一种风险偏置，不是安全约束。熵项改为相对于稳定性先验的log(pi/S^w)，软价值使用同一正则，避免普通熵目标在理想解中抵消先验；目标熵取先验熵的一半。部署为几何掩码、一次actor和各可见item的稳定网络前向，按logit+w log S取argmax，不用critic、搜索或放置仿真；未报告端到端推理延迟。",
+      "evidence_ids": [
+        "c7e8a4938dc5c863",
+        "5ac4680559d7d4d2",
+        "1545e52088e509c6",
+        "85a0f038a2132d80",
+        "26c1a21f13b0f0e9",
+        "d2a444ae72976142",
+        "c76c0f3fedc5ce81",
+        "78ec760c840e742f",
+        "8916ced49af8b0d1",
+        "ee4cee11e7272995",
+        "0a3cd5da14935fc7",
+        "6727c04ed85a1396"
+      ],
+      "quote": "entropy-regularized"
+    },
+    {
+      "kind": "method",
+      "title": "启用门槛与双重KL控制限制策略漂移，不保证物理安全",
+      "text": "学习副本在留出执行标签上AUROC至少0.8且至少观察50个失败，才打开一次性门槛，随后10万环境步把两个强度从0拉到1。执行副本在rollout和actor/critic更新期间冻结；actor沿用逐状态KL≤0.1的REPPO-D门控，模型副本另在256个近期状态上用参数插值二分限制平均策略KL≤0.02。后者只限制模型插值造成的漂移，不覆盖强度爬坡单独造成的改变。AUROC门槛检查排序而非概率校准；消融未独立检验这些保护机制的必要性。",
+      "evidence_ids": [
+        "b3047e72ecce3c05",
+        "9905157c68fd6ae3",
+        "dd935fb6838d5d9b",
+        "85c56b82ea0c0238",
+        "a7ffc7ae297b4146",
+        "13f43187d177a341",
+        "0bece4a6dc3e1be8",
+        "43a5153d1a75e5ba",
+        "3c0afeecf87043cf"
+      ],
+      "quote": "discrimination"
+    },
+    {
+      "kind": "evidence",
+      "title": "扩展集有更好的装箱–风险点，但同学习器后期能追上",
+      "text": "表IV固定1M训练checkpoint、12种几何60箱、每法50个相同随机到货seed的argmax评测，报告3个训练seed均值±标准差。SHORE利用率0.734±0.006，GOPT+为0.715±0.007，增加0.019；每次尝试失败1.03±0.10%对1.20±0.17%，回合失败0.53±0.05对0.61±0.08。GOPT为0.588±0.017且尝试失败更低0.63±0.15%。GOPT+虽共享联合动作与actor骨干，仍用不同PPO更新；真正隔离稳定机制的控制是两强度设0的REPPO-D，其最终利用率在seed波动内追上SHORE。图4支持更早获得高回报与风险权衡改善，不证明更高最终上限；摘要0.4M对1M只计rollout环境步。基准4类40箱反例：SHORE单seed利用率0.657、完成率0.84，低于GOPT+的0.683、0.95。两套箱集各自训练，不是对新几何零样本泛化。",
+      "evidence_ids": [
+        "fccdf0c72582046e",
+        "e404e25c1b104fcf",
+        "b873b50426cd798f",
+        "94093f7bf49a9cd5",
+        "e3342ff5f271cc55",
+        "1abb2d9a3bdf4376",
+        "98573fd4519f6a0b",
+        "f3adb3281f498351",
+        "68db20f8002f5fb5",
+        "95e49b9e6843a50b",
+        "ba59fbc183fd4c42",
+        "010eb943cd8c8e14",
+        "51af84c79a67e913",
+        "fa5cebaf61e1ba39",
+        "81853e5689dc47e4",
+        "a79930a4c093ea43",
+        "27406f1ca29d5744",
+        "69a538ea88c45391",
+        "929fab2f04eb2957",
+        "5953707e872b86df"
+      ],
+      "quote": "diagnostic baseline"
+    },
+    {
+      "kind": "evidence",
+      "title": "双通路消融有方向性，分类排序更好并不自动装得更好",
+      "text": "表V在901120环境步比较：SHORE利用率0.734、回合失败0.53；仅critic weighting为0.708/0.60，仅actor prior为0.699/0.58，两者都关的REPPO-D为0.699/0.62。仅critic的AUROC0.86还高于完整方法0.85，说明如何接入策略与价值比分类排序单一指标更能解释该checkpoint差异。组件变体是探索性单seed，SHORE和无两组件控制跨seed平均；不能把单点差值当显著性或独立验证门控/信任域。所有训练稳定模型的run均在该checkpoint恢复且清空标签缓冲，作者以同一恢复点避免不同重置距离混淆。",
+      "evidence_ids": [
+        "72d01b87c8d53364",
+        "c6dd4a849f86a44e",
+        "1668ddcc905486fc",
+        "97b3e3be5450be3a",
+        "8480b1bce4006595",
+        "43a5153d1a75e5ba"
+      ],
+      "quote": "Complementary roles"
+    },
+    {
+      "kind": "evidence",
+      "title": "后期额外标签的增益未成立，总成本仍需公平对照",
+      "text": "同一901120步的表VI：默认6+2模拟标签利用率0.734、回合失败0.54；只用执行标签为0.731/0.52，8个随机标签为0.732/0.52；1模拟标签为0.716/0.52。默认AUROC0.85/ECE0.040，只执行为0.77/0.009，排序与校准出现相反变化。作者把额外标签主要解释为早期获知稳定性的帮助；这里没有证明不确定性采样优于等数量随机，也没有证明后期必须增加仿真。只执行且关闭周期复制时，无rollout之外模拟调用。环境步预算未覆盖每步额外查询、3D网络训练与最多30次前向，288环境池/64次监督更新也不是实测算力；论文无匹配总模拟步、GPU时间和墙钟的端到端成本结论。相关小差异多为单seed，只能形成待验证成本假设。",
+      "evidence_ids": [
+        "2e013014a53c3a7e",
+        "9b2c8bfc92b9d929",
+        "967d2ebc1f7af57f",
+        "326a7e0c38549792",
+        "69a538ea88c45391",
+        "72d01b87c8d53364",
+        "a0ca38b3b4287de3",
+        "3996e02eb2b75a08",
+        "97b3e3be5450be3a",
+        "d8b488e5dcb789cc",
+        "f3440758dcd29a8a",
+        "3c0afeecf87043cf"
+      ],
+      "quote": "Executed only"
+    },
+    {
+      "kind": "limitation",
+      "title": "1.03%按次失败率并非长序列可靠性，稳定判定也很短",
+      "text": "扩展集SHORE每次尝试失败约1.03%同时有53%回合以失败结束，全部方法60箱完成率为0；其余回合无可行放置。按次失败率由回合失败比例/(成功箱数均值+失败比例)汇总得来，不是与回合失败独立的第二份统计证据，也未在共同候选堆叠上比较条件风险。仿真从目标上方2mm释放、只等待80ms，判定整堆所有箱子的三维位置位移不超过2cm，没有单独角度或长时稳定阈值；不模拟完整机械臂轨迹，也不加高斯位置/旋转噪声。图5的SHORE例子未整堆倒塌仍触发稳定失败，故不能把所有失败都理解为肉眼可见坍塌。",
+      "evidence_ids": [
+        "151c6dc9762aa577",
+        "89cdb9fa5a5f425e",
+        "4d6f1481a244aee4",
+        "abca01d533218823",
+        "010eb943cd8c8e14",
+        "51af84c79a67e913",
+        "d3ed1cdae6301a59",
+        "e5445cda49642a5a",
+        "24fdee35f375a41e",
+        "929fab2f04eb2957",
+        "721dac2061fd1ef0",
+        "7159d67b43056455",
+        "597c9b6e6820e0b8",
+        "903681653023bea9",
+        "30ff7b5a6a18ac91",
+        "29f852ad838d34f9",
+        "3c0afeecf87043cf"
+      ],
+      "quote": "placement noise"
+    },
+    {
+      "kind": "limitation",
+      "title": "留出执行结果不等于未见状态动作泛化",
+      "text": "10%执行结果不参与监督训练，但同一(s,a)可能通过模拟副本进入训练，尤其每8步执行动作复制；因此留出评价不是完全隔离状态动作的泛化测试。AUROC与10等宽箱ECE评的是学习副本，不是决策实际用的插值执行副本，约4000个近期点仅含37–66次失败。各变体还在自身策略访问的分布上测，不能据此断言共同候选动作上的风险更低。低ECE可由多数成功样本主导；排序好不能证明式8所需逐点概率准确。",
+      "evidence_ids": [
+        "1e0599cd067a48a3",
+        "9b2c8bfc92b9d929",
+        "85c56b82ea0c0238",
+        "da7dcea87afdb98c",
+        "a8121027a3698b82",
+        "97b3e3be5450be3a",
+        "f3440758dcd29a8a"
+      ],
+      "quote": "generalization"
+    },
+    {
+      "kind": "limitation",
+      "title": "真机四次放置与模拟器对齐，尚不构成真实部署成功率",
+      "text": "图6只给Lite6真空夹爪、ZED2i和手端相机的一段示例，空箱后连续4次放置；没有跨场景试验数、成功率、吞吐或误差统计。附录将PhysX与MuJoCo配对回放一致率从67.0%调至94.8%，是sim-to-sim接触参数校准，不是真实机器人验证；文中未给该校准的样本数及独立留出拆分。正文承认接触失配、箱壁碰撞和可达性尚未纳入；actor缺失原始体素、EMS候选限制和早期动作只经回报承担后续失败，也限制外推。",
+      "evidence_ids": [
+        "86a1707f33de9ade",
+        "1905463ac8eae841",
+        "c642218baf64029e",
+        "505244c7d125a4e0",
+        "c25d0e201a0dc0e3"
+      ],
+      "quote": "hand-mounted"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：门槛启用后停止额外仿真，能否保留学习优势并减少总成本？",
+      "text": "待验证假设：额外模拟标签主要帮助稳定模型的早期启用，达到启用门槛后停止副本查询，可保留默认SHORE的学习与装箱–风险水平，同时减少总模拟和墙钟成本。先仅在同一公开装箱仿真任务做预算对照：始终6+2查询、启用门槛后切换执行标签、从头只执行、始终8随机；同一REPPO-D、联合动作、体素网络、训练更新规则及至少5个训练seed，使用相同50个以上固定评测到货序列。分别按rollout环境步、含副本的总模拟步与相同墙钟预算比较达目标利用率所需成本、回报曲线面积、完整回合成功率、每次尝试失败与不可行终止；另测GPU时间、峰值显存、稳定网络前向及端到端推理延迟。建立状态动作严格隔离的共同重放评价集，分别评学习和执行副本的稀有失败排序及校准，记录复制偏差，避免执行留出与模拟训练重叠。若停查询使多seed早期优势或回合可靠性持续下降、相同总成本下不优于只执行/随机，或省下查询却不减少墙钟，则推翻假设。实验未执行；匹配模拟预算亦为作者提出的未来方向，未全面查新，不宣称新研究空白。",
+      "evidence_ids": [
+        "2e013014a53c3a7e",
+        "9b2c8bfc92b9d929",
+        "967d2ebc1f7af57f",
+        "326a7e0c38549792",
+        "dd935fb6838d5d9b",
+        "da7dcea87afdb98c",
+        "a8121027a3698b82",
+        "72d01b87c8d53364",
+        "a0ca38b3b4287de3",
+        "3996e02eb2b75a08",
+        "97b3e3be5450be3a",
+        "d8b488e5dcb789cc",
+        "f3440758dcd29a8a",
+        "3c0afeecf87043cf"
+      ],
+      "quote": "simulation budgets"
+    }
+  ],
+  "attention": {
+    "level": "notable",
+    "reason": "稳定概率同时进入条件价值与策略先验，值得用于装箱风险建模决策；但同学习器后期追上、额外标签缺乏总成本优势且真机仅示例，全文后将摘要优先核查降为值得跟进。",
+    "basis": [
+      "training_change",
+      "controlled_comparison",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "f547b040f1413feb",
+      "d7e644f4e0ab4ec5",
+      "5ac4680559d7d4d2",
+      "85a0f038a2132d80",
+      "27406f1ca29d5744",
+      "1668ddcc905486fc",
+      "3996e02eb2b75a08",
+      "d8b488e5dcb789cc"
+    ]
+  },
+  "frontier_brief": {
+    "title": "SHORE：稳定概率乘入条件价值，并作为联合装箱策略的软先验",
+    "change_type": "训练方法 · 物理风险建模",
+    "delta": "在联合箱子–朝向–EMS策略之外训练体素稳定网络：Q用条件回报乘稳定概率，actor概率再乘稳定性先验，并修改相对熵正则；用执行/副本标签监督而非学习稳定性硬拒绝。",
+    "before": "无稳定模型的同款REPPO-D需从回报共同学习即时失败与后续空间价值；原GOPT另受队首、固定朝向限制，不能把其全部差距归给稳定机制。",
+    "after": "扩展集1M步SHORE利用率0.734，GOPT+为0.715；同学习器最终能追上，主要证据是更早获得高回报及较好的装箱–风险点。部署免搜索/仿真，但仍需额外稳定网络前向。",
+    "relevance": "为逐步物理操作选择失败模型的接入位置：可比较价值分解与策略先验的组合；先核查概率校准、模型额外观测与总模拟成本，再决定是否引入副本查询。",
+    "caveat": "扩展集每次尝试失败1.03%仍对应53%回合失败，60箱全部未完成；同学习器无更高最终上限。组件/标签小消融多为单seed，未报告总算力收益，真机仅一段四次放置。",
+    "question": "稳定模型启用后停止额外副本查询，能否以更少总模拟与墙钟保留早期优势和回合可靠性？",
+    "evidence": [
+      {
+        "label": "同动作空间对照",
+        "value": "利用率0.715→0.734；按次失败1.20%→1.03%",
+        "context": "GOPT+→SHORE，12几何/60箱，1M步，50回合，3训练seed；学习器仍不同，非稳定机制纯隔离。"
+      },
+      {
+        "label": "更能区分解释的控制",
+        "value": "去掉两项稳定机制的同款REPPO-D，后期利用率追上",
+        "context": "图4及正文：优势在早期获取和风险权衡，不能声称更高最终上限；基础集SHORE0.657还低于GOPT+0.683。"
+      },
+      {
+        "label": "标签成本反例",
+        "value": "默认/只执行/8随机：利用率0.734/0.731/0.732",
+        "context": "表VI，901120步，标签变体探索性单seed；不确定性采样无确定后期优势，未匹配总模拟或墙钟预算。"
+      },
+      {
+        "label": "可靠性边界",
+        "value": "53%回合稳定失败；60箱完成率0",
+        "context": "表IV，稳定检查仅释放后80ms、全堆位置位移≤2cm；1.03%按次失败不能替代长序列完成率。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "按本步存活分解动作价值",
+        "text": "Q=U(1−w_Q+w_QS)，失败样本权重随w_Q下降；w_Q=1时U学条件回报，仍含未来失败风险，准确恢复Q依赖逐点稳定概率与精确均值拟合。"
+      },
+      {
+        "title": "软先验与相对熵同步",
+        "text": "pi∝几何mask×exp(logit)×S^w，保留合法动作探索概率；熵正则相对于稳定先验，避免理想更新抵消该先验。"
+      },
+      {
+        "title": "监督概率模型受控更新",
+        "text": "密度体素3D U-Net五头，默认每步6个定向+2个随机副本；AUROC门槛后渐进启用，执行副本冻结并限制诱发策略KL，非物理安全保证。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08364v1",
+      "checked": "固定PDF共15页、3822494字节；目视物理页6/7/9/10/11/12/13/15，核公式6–13、算法1、表III–VII、图3–6。核对两类失败分母、1M主比较与901120步消融、seed口径、额外标签及部署前向次数；真机仅四次放置示例。未独立复现。"
+    }
+  ]
+}

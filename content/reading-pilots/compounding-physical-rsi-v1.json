@@ -1,0 +1,225 @@
+{
+  "item_id": "arxiv:2611.06654",
+  "document_id": "68d25a31dafd58853d92ca8903a61305002c267342790033898b6024fa01b363",
+  "source_url": "https://arxiv.org/html/2611.06654v1",
+  "paper_version": "2611.06654v1",
+  "paper": {
+    "id": "arxiv:2611.06654",
+    "title": "Compounding Physical RSI: Turning Execution Failure into Inherited Capability",
+    "url": "https://arxiv.org/abs/2611.06654v1",
+    "published": "2026-11-04",
+    "updated": "2026-11-04",
+    "topics": [
+      "evaluation",
+      "imitation",
+      "data"
+    ],
+    "summary": "Generalist robot policies are trained on static offline datasets, yet physical manipulation unfolds sequentially across stages. Because a weakness in a downstream stage remains unobservable until the policy passes earlier ones, each resolved bottleneck exposes the next hidden failure mode. This staged structure calls for Recursive Self-Improvement (RSI), in which a policy iteratively executes, diagnoses failures, and updates itself. Moreover, because task completion behaves like a product of stage-level pass rates, recursive gains can multiply across generations. In physical environments, three bottlenecks obstruct compounding: terminal execution feedback rarely localizes the stage that caused a failure, failed trajectories do not supply the corrective action, and updating shared parameters can degrade previously mastered skills. We propose Compounding Physical RSI, a self-evolving policy framework that turns execution failures into heritable capability. First, automated capability-gap assessment traces failed rollouts to the task stage where progression breaks down and formulates a structured improvement objective. Second, conditioned on this objective, our remedy stage curates validated, stage-relevant experience and refines the policy via behavior-regularized offline reinforcement learning, without requiring costly online rollouts at each optimization step. Third, to safeguard existing skills, our retention stage constructs weight-space candidates between the inherited reference policy and the refined policy, evaluates them across the task suite, and promotes the best candidate as the reference state for the next generation. Evaluated across all 42 tasks of the RoboDojo-Sim benchmark, CSU-AI-07 ranks first on the leaderboard with a three-seed mean Overall Score of 26.15 and Success Rate of 20.70%, outperforming the next-best entry by 5.92 points and 5.82 percentage points."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-05T20:53:07.951217+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "值得验证的是更新后的继承规则：定位失败阶段、定向离线更新，再在新旧权重间筛候选。本文只报告完整系统成绩，尚未用消融证明插值能保住旧技能。",
+  "coverage": {
+    "read": 57,
+    "total": 57,
+    "evidence_ids": [
+      "10c95676f630595c",
+      "f8a06e0b670a924e",
+      "2b4ea158f324f943",
+      "acfbceca5aabf1d3",
+      "14258c9eb21946bd",
+      "8d09703a8eeca103",
+      "8aa1e1250e1b1656",
+      "ff48c47bc4761149",
+      "7664a0d040f2c863",
+      "211acdbebb1ccb9b",
+      "b80b27dfd56a569e",
+      "24f3c2d53fdf633a",
+      "6e7c8266cfd865e7",
+      "f08e436bf6404add",
+      "d8d2ef0e6b29bb9b",
+      "9b656dce1f44bed9",
+      "b7b3c11d0d0bd7d7",
+      "6895efee6b90a249",
+      "b746d7c4265eb864",
+      "ac6751282c7978bc",
+      "df65dc82b0071eaf",
+      "84a6eac98751ac87",
+      "930cfb4eb969dcde",
+      "6689f1004bac184f",
+      "7e54e8f3a2c68c54",
+      "8047635090bf7b0a",
+      "06b0e99b79b3ff3b",
+      "1abf45fc725eb536",
+      "a616251ad1b39307",
+      "eb12b7b454ce3489",
+      "284b96be713cdf39",
+      "2399339d125e2ee5",
+      "e45f5e0a3074fd66",
+      "3c6428937dd42dc3",
+      "0da51fd4e1157344",
+      "91613bef34ebf822",
+      "9a8ce1a2b00f051b",
+      "d04e626f5e97e392",
+      "8977ac96f58afd49",
+      "6cd60cff9c635269",
+      "82d339aff9a84f54",
+      "fd471940f5999513",
+      "3bf0692fd70dc066",
+      "41a93c44ff7a1eb6",
+      "91af42c09749e4eb",
+      "fe0f570dd032ceae",
+      "76cef3f650d88dcd",
+      "9f777c2dee8a822e",
+      "092a2b506dbe775e",
+      "cf1840fe49f8cf17",
+      "303645cafa6d32ff",
+      "7b8503629d9b6f8e",
+      "526c2092898d4f8b",
+      "5b6e2d9c58c180d0",
+      "42eb89f64bb4ccb5",
+      "a9a8564fbcf90ef1",
+      "e86bc34d9e5eeeae"
+    ],
+    "pdf_pages_visually_checked": [
+      3,
+      8,
+      9
+    ],
+    "pdf_sha256": "f6cdcd76f6f495305d435afddfccf9e0d75c1323daafd049a20bc399cf957298"
+  },
+  "notice": "已阅读57个提取片段，覆盖主文方法、实验和讨论。PDF共10页、无附录；另读第1页摘要和第3页未进入段落索引的框内定义，并目视核对第3、8、9页公式、表1/2及限制。缓存HTML未发现额外listing块。未逐图检查其他图片、逐篇核查参考文献或执行代码；作者实验未复现。",
+  "findings": [
+    {
+      "title": "诊断：按失败阶段取数据",
+      "kind": "method",
+      "text": "将执行断点变成任务、阶段和能力目标，检索通过验证的相关轨迹；失败记录用于诊断，不能直接作为正确动作标签。",
+      "evidence_ids": [
+        "a616251ad1b39307",
+        "eb12b7b454ce3489",
+        "3c6428937dd42dc3",
+        "91613bef34ebf822",
+        "9a8ce1a2b00f051b"
+      ],
+      "quote": "capability frontier"
+    },
+    {
+      "title": "更新：离线学习仍锚定旧策略",
+      "kind": "method",
+      "text": "以目标条件价值提升为方向，加旧策略偏离惩罚。训练步不要求新交互，但诊断与候选验收仍需rollout；并非零交互学习。",
+      "evidence_ids": [
+        "7e54e8f3a2c68c54",
+        "d04e626f5e97e392",
+        "8977ac96f58afd49",
+        "6cd60cff9c635269"
+      ],
+      "quote": "behavior-regularized"
+    },
+    {
+      "title": "继承：插值候选逐个验收",
+      "kind": "method",
+      "text": "候选权重为(1−α)旧权重+α更新权重。需架构、参数与接口兼容，再用闭环任务评估选择继承者；参数接近不保证旧技能保留。",
+      "evidence_ids": [
+        "fd471940f5999513",
+        "3bf0692fd70dc066",
+        "41a93c44ff7a1eb6",
+        "91af42c09749e4eb",
+        "fe0f570dd032ceae"
+      ],
+      "quote": "interpolation"
+    },
+    {
+      "title": "结果：三种子评估含一个选型种子",
+      "kind": "evidence",
+      "text": "42个仿真任务：SR为21.05/20.31/20.75%，均值20.70%；得分均值26.15。Seed0用于候选选择，Seed1/2留出；这不是三次独立训练复现。",
+      "evidence_ids": [
+        "9f777c2dee8a822e",
+        "092a2b506dbe775e",
+        "cf1840fe49f8cf17",
+        "303645cafa6d32ff"
+      ],
+      "quote": "three independent evaluation seeds"
+    },
+    {
+      "title": "边界：整体成绩不能证明单模块有效",
+      "kind": "limitation",
+      "text": "未给诊断、取样或插值的独立消融，也未展示逐代旧任务保留曲线。Physical在这里指仿真物理闭环，不能读成已真机验证；更新算子本身保持固定。",
+      "evidence_ids": [
+        "ac6751282c7978bc",
+        "42eb89f64bb4ccb5",
+        "a9a8564fbcf90ef1"
+      ],
+      "quote": "fine-grained ablations"
+    },
+    {
+      "title": "复现缺口：公式不等于完整训练配方",
+      "kind": "limitation",
+      "text": "正文未充分列出初始检查点、数据量、价值学习实现、λ、α网格和训练成本。榜单差距属于完整系统比较，不能归因于权重插值。",
+      "evidence_ids": [
+        "8977ac96f58afd49",
+        "6cd60cff9c635269",
+        "fd471940f5999513",
+        "41a93c44ff7a1eb6",
+        "092a2b506dbe775e",
+        "526c2092898d4f8b",
+        "5b6e2d9c58c180d0",
+        "a9a8564fbcf90ef1"
+      ],
+      "quote": "anchor strength"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "验证：插值真能兼顾新阶段与旧任务吗？",
+      "text": "待验证假设：在同一个离线更新终点上筛选权重插值候选，能比直接继承终点更好地兼顾新阶段通过率与旧任务保持。先选一个可运行的仿真抓放任务和已掌握的放置任务，固定同一祖先策略、离线轨迹、模型结构、价值学习器、行为约束和训练预算。对照A不更新，B直接采用更新终点，C在A/B之间取α=0、0.25、0.5、0.75、1；只用独立验证布局筛选，事先约定旧任务最大允许退化，再在完全留出的布局和随机种子上测试，不能用测试集挑α。报告新阶段的条件通过率、整体成功率、每个旧任务的成功变化、最差退化和全部候选rollout成本。先检查一轮，再跨至少3个训练种子及多轮更新比较。若C不能稳定优于B的保留—改进权衡，或旧技能仍持续退化，则反对该继承机制能保住旧技能的解释；另用较小更新范数的训练控制检查是否只是减弱更新。实验尚未运行，未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "82d339aff9a84f54",
+        "3bf0692fd70dc066",
+        "41a93c44ff7a1eb6",
+        "fe0f570dd032ceae",
+        "092a2b506dbe775e",
+        "a9a8564fbcf90ef1"
+      ],
+      "quote": "cross-task regression"
+    }
+  ],
+  "frontier_brief": {
+    "title": "Physical RSI：更新策略后，用权重插值筛选继承版本",
+    "change_type": "策略更新 · 技能保留",
+    "delta": "修好当前失败阶段后，不直接替换旧策略：在新旧权重间生成候选，用闭环评测选择下一代。方法值得验证，但本文没有插值保留旧技能的独立消融。",
+    "before": "只看当前阶段的改进，直接继承更新终点。",
+    "after": "定位阶段、定向离线更新，再检查候选对整套任务的影响。",
+    "relevance": "做持续策略更新时，把新阶段通过率和旧任务退化一起测；选择候选的数据与最终测试种子分开。",
+    "caveat": "仅有仿真整体成绩，缺少逐代保留消融和完整训练配方；不能据此认定复利增长或真机可靠性。未复现。",
+    "question": "插值是否真能保住旧技能，而不只是减弱更新？",
+    "evidence": [
+      {
+        "label": "最终策略的跨评估种子表现",
+        "value": "20.70% SR",
+        "context": "42个仿真任务，三种子21.05/20.31/20.75%。Seed0参与选型；另两种子留出。不是插值消融。"
+      },
+      {
+        "label": "任务进度与整段完成分开看",
+        "value": "26.15 得分",
+        "context": "三种子均值。得分衡量阶段进展，SR衡量整段成功；两者不能互换。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "定位",
+        "text": "把失败关联到阶段，选取通过验证的相关经验。"
+      },
+      {
+        "title": "更新",
+        "text": "离线学习目标能力，同时约束偏离旧策略。"
+      },
+      {
+        "title": "继承",
+        "text": "在兼容权重之间插值，以闭环表现筛选候选。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,343 @@
+{
+  "id": "de0258d9de6dbd81301051df2c98e944a95a120467ddfa024799c1505622efaa",
+  "url": "https://arxiv.org/html/2611.07712v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "79bd0e171e34ad7d",
+      "section": "AffectiveVLA: Safe and Intent-Aware VLA Control for Human–Humanoid Social Interaction",
+      "location": "AffectiveVLA: Safe and Intent-Aware VLA Control for Human–Humanoid Social Interaction",
+      "text": "Figure 1. AffectiveVLA enables intent-aware and contact-safe execution of three social interactions: (a) handshake, (b) fist bump, and (c) hug. Arrows indicate the direction of interaction motion, and red regions highlight physical contact. A sequence of photographs showing a humanoid robot interacting with people through a handshake, a fist bump, and a hug. Red highlights mark contact regions and arrows indicate motion.",
+      "url": "https://arxiv.org/html/2611.07712v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "66b53a64b1460616",
+      "section": "AffectiveVLA: Safe and Intent-Aware VLA Control for Human–Humanoid Social Interaction",
+      "location": "AffectiveVLA: Safe and Intent-Aware VLA Control for Human–Humanoid Social Interaction",
+      "text": "Social touch interactions, such as handshakes, fist bumps, and hugs, require humanoid robots to infer human intent, generate contact-rich motions, and maintain safe physical contact. We present AffectiveVLA, an intent-gated Vision-Language-Action (VLA) pipeline deployed on a Unitree G1 humanoid with dexterous hands. A lightweight RGB-based model recognizes interaction intent from two onboard cameras and converts it into a language prompt for the VLA policy. Low-confidence predictions suppress motion execution, reducing unintended activations. During physical contact, interaction-specific compliance profiles adjust arm impedance, while an independent voice-triggered mechanism initiates a latched safe-stop procedure. Using VR teleoperation, we collected approximately 1,300 multimodal interaction episodes and fine-tuned four VLA models: GR00T, RLDX-1, Being-H0.5, and UnifoLM-VLA-0. On-robot evaluation identifies GR00T as the best-performing standalone model. Integrating intent recognition increases its macro-F1 score from 0.75 to 0.90, while the intent model achieves a p95 inference latency of 6.27 ms. These results demonstrate that explicit intent gating improves the reliability of VLA-based social interaction without compromising real-time operation.",
+      "url": "https://arxiv.org/html/2611.07712v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c6d688924bf980aa",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "As humanoid robots enter human environments, they must participate in social rituals like handshakes, hugs, and fist bumps (Fig. 1 ). Unlike object manipulation, these interactions involve an active human partner whose intent must be inferred, requiring the robot to meet a moving target while ensuring safe, comfortable contact ( Block et al., 2021 ; Block et al., 2023 ) .",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5abff60032b447e1",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "Existing approaches address this only partially: learned whole-body policies rely on explicit operator commands ( Huang et al., 2026 ) , compliance controllers typically use fixed settings ( Lu et al., 2025 ) , and vision-language pipelines infer intent with high latency, lacking physical execution ( Bao et al., 2025 ) . While end-to-end Vision-Language-Action (VLA) models can generate contact-rich motions, they risk unsafe false activations when human intent is uncertain.",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b296b2a0caa0867d",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "To address this, we propose a four-component pipeline: (1) RGB-based intent recognition to gate and prompt the VLA, (2) VLA-based whole-body motion generation, (3) task-specific compliance adaptation, and (4) an independent voice-triggered safe stop.",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "916aa89f7ed88334",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "This work investigates the following research questions:",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "eacc9822b9bb5b08",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "RQ1: Which VLA model best performs contact-rich HRI actions after fine-tuning on the same dataset?",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ca014b59039fb271",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "RQ2: Does the preferred arm compliance depend on the type of social interaction?",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1fbfaed18856373a",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "RQ3: Does intent gating improve the selection of the correct interaction, and can ongoing contact be safely interrupted?",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "652f6d3a9ba19fcc",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "A comparative evaluation of four fine-tuned VLA models (Being-H0.5, GR00T, RLDX-1, UnifoLM-VLA-0) on social touch tasks .",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.I2.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4e39a543a40a44c3",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "An intent-gated VLA pipeline with task-conditioned compliance and voice-triggered safe stopping, validated via ablation and user studies.",
+      "url": "https://arxiv.org/html/2611.07712v1#S1.I2.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f9fa3dc7a97c50e1",
+      "section": "Social touch and learning-based interaction.",
+      "location": "Social touch and learning-based interaction.",
+      "text": "Social touch in HRI has focused on single, pre-selected interactions: HuggieBot established design guidelines for hugging robots ( Block et al., 2021 ; Block et al., 2023 ) , and tactile sensing has been used to time handshake phases ( Pequeno-Zurro et al., 2024 ) . Reinforcement learning now scales to general-purpose whole-body controllers ( Luo et al., 2025 ) , with systems like ECHO ( Mascaro et al., 2024 ) , RHINO ( Chen et al., 2025 ) , and D-STAR ( Huang et al., 2026 ) learning hug and handshake policies. However, these systems rely on fixed skill sets and operator-selected interaction types rather than inferring intent from the partner. For safe contact, impedance control allows the robot to yield ( Lu et al., 2025 ) , but most systems use fixed compliance settings. For intent inference, foundation models can reason about social cues ( Kim et al., 2024 ) , but VLM-based approaches like HIAER ( Bao et al., 2025 ) suffer from multi-second latency and cannot execute contact-rich gestures.",
+      "url": "https://arxiv.org/html/2611.07712v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "82be73e0d2f17fb9",
+      "section": "Vision-language-action models.",
+      "location": "Vision-language-action models.",
+      "text": "VLA models map images and language to robot actions ( Bjorck et al., 2025 ) , extending to humanoid control ( Xue et al., 2025 ) , cross-embodiment learning ( Luo et al., 2026 ) , and dexterous manipulation ( Kim et al., 2026 ; Unitree, 2026 ) . These models target manipulation rather than social contact, though GIVE ( Liu et al., 2026 ) shows that textual gesture descriptions improve intent grounding. We use GR00T N1.6 ( Bjorck et al., 2025 ) , RLDX-1 ( Kim et al., 2026 ) , Being-H0.5 ( Luo et al., 2026 ) , and UnifoLM-VLA-0 ( Unitree, 2026 ) as interchangeable action backbones.",
+      "url": "https://arxiv.org/html/2611.07712v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "76862866d5179f24",
+      "section": "Positioning.",
+      "location": "Positioning.",
+      "text": "Unlike skill-specific policies ( Huang et al., 2026 ) , we infer interaction from dual RGB views and verbalize it as a VLA prompt, enabling new gestures through data rather than reward design. Unlike HIAER ( Bao et al., 2025 ) , intent is recognized in ∼ \\sim 6 ms by a lightweight video model, and the robot performs physical contact. Unlike fixed-compliance controllers ( Lu et al., 2025 ) , impedance adapts to each interaction. To our knowledge, this is the first system combining RGB-based intent recognition with VLA execution and interaction-specific impedance for social touch on a humanoid.",
+      "url": "https://arxiv.org/html/2611.07712v1#S2.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b263145dbf7c9dc3",
+      "section": "3.1. Robot and Teleoperation Setup",
+      "location": "3.1. Robot and Teleoperation Setup",
+      "text": "The platform used is a Unitree G1 humanoid with BrainCo dexterous hands, controlled by the SONIC whole-body controller, which retargets operator motion into joint commands with per-joint impe-dance gains ( k p k_{p} , k d k_{d} ) for 17 upper-body motors. Teleoperation uses a PICO 4 Ultra headset running XRoboToolkit ( Zhao et al., 2026 ) , streaming head/controller poses and 26-joint hand tracking at 90 Hz with stereoscopic passthrough feedback. Upper-body commands are forwarded to SONIC and finger trajectories to the BrainCo hands at 50 Hz, with grip presses serving as the episode-control interface. Each episode records three synchronized RGB views — ego-centric ( 1280 × 720 1280{\\times}720 ) and head-mounted ( 1600 × 896 1600{\\times}896 ) on the robot at 15 FPS, plus an external scene view ( 1280 × 960 1280{\\times}960 ) on the host — and upper-body telemetry (joint states, velocities, torques, commands) at 50 Hz.",
+      "url": "https://arxiv.org/html/2611.07712v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9cc3b698a1253d60",
+      "section": "3.2. Dataset Collection and Cleaning",
+      "location": "3.2. Dataset Collection and Cleaning",
+      "text": "Demonstrations were collected by teleoperating the robot with a human partner in four interaction classes: handshake , fist bump , hug , and no interaction . Each episode stores participant profile, multimodal observations, robot states, action commands, and interaction labels in LeRobot format. Retained episodes were annotated with four temporal markers — approach start , contact start , release start , and idle start — used to train the interaction-intent model (Sec. 4.1 ). Episodes with tracking loss, safety stops, unintended contacts, or anomalous duration were discarded. The final dataset contains 1,270 episodes from 19 participants (13 male, 6 female; age 24.4 ± 3.7 24.4\\pm 3.7 years; height 175.4 ± 8.6 175.4\\pm 8.6 cm), with no participant overlap between the extended set (982 episodes, 15 participants) and test set (288 episodes, 4 unseen participants).",
+      "url": "https://arxiv.org/html/2611.07712v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "14171855886b1388",
+      "section": "3.3. VLA Models",
+      "location": "3.3. VLA Models",
+      "text": "We evaluate four VLA models: Being-H0.5 ( Luo et al., 2026 ) , GR00T N1.6 ( Bjorck et al., 2025 ) , RLDX-1 ( Kim et al., 2026 ) , and UnifoLM-VLA-0 ( Unitree, 2026 ) . All follow the same architecture — a ViT-based VLM backbone, a projector aligning visual and language features, and an action expert predicting chunked actions — operating in a unified 76-dimensional action space: 64-dimensional SONIC motion tokens for the upper body plus 6-DoF finger commands for each BrainCo hand, chunked over 40 steps. All models are fine-tuned using model-specific recipes. For Being-H0.5, RLDX-1, and UnifoLM-VLA-0, the language backbone is frozen while the ViT encoder, projector, and action expert are trained. For GR00T N1.6, only the action expert and projector are updated. Fine-tuning runs on a single A100 80GB GPU for 30k steps; UnifoLM additionally requires converting the dataset to HDF5/RLDS format.",
+      "url": "https://arxiv.org/html/2611.07712v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ed30920c2c4e040e",
+      "section": "4. Human-Aware VLA Pipeline",
+      "location": "4. Human-Aware VLA Pipeline",
+      "text": "Figure 2 presents the proposed pipeline. Camera observations are used to recognize interaction intent. A confirmed intent is converted into a task prompt for the VLA model, while task-specific compliance and an independent voice-triggered safe-stop mechanism supervise physical execution.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "da9ed423aa1a57f0",
+      "section": "4. Human-Aware VLA Pipeline",
+      "location": "4. Human-Aware VLA Pipeline",
+      "text": "Figure 2. Overview of the proposed human-aware VLA pipeline. (a) The perception module estimates the human partner’s interaction intent from two RGB camera views, filters uncertain predictions, and independently detects voice commands for safe stopping. (b) The on-robot VLA bridge converts a confirmed intent into a task prompt, predicts whole-body action chunks, and applies playback smoothing and finger-contact safeguards. (c) During deployment, task-conditioned arm-compliance profiles and the latched safe-stop mechanism supervise the SONIC whole-body controller, enabling safe and compliant handshakes, fist bumps, and hugs. A three-part system diagram. Human intent is estimated from two robot camera views, while a separate voice module detects stop commands. Confirmed intent is converted into a prompt for the VLA policy, which generates smoothed whole-body and finger actions. During deployment, interaction-specific arm compliance and a latched safe stop supervise execution of handshakes, fist bumps, and hugs.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e5b52f1072b057ec",
+      "section": "4.1. Human Intent Recognition",
+      "location": "4.1. Human Intent Recognition",
+      "text": "The human-intent module recognizes the interaction initiated by the human from two synchronized onboard RGB views: one for full-body motion and one for the hand-contact area. At each inference step, it processes the 16 most recent frame pairs sampled at 15 Hz, corresponding to about one second of motion history. Frames are resized to 224 × 224 224\\times 224 using letterboxing.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "228f1d8ad39d9d11",
+      "section": "4.1. Human Intent Recognition",
+      "location": "4.1. Human Intent Recognition",
+      "text": "A shared TinyViT encoder extracts frame-level features from both views. Separate causal VideoLightFormer modules aggregate temporal information, and attention-based fusion combines the two representations. The model classifies each observation window as handshake , hug , fist_bump , or no_interaction .",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "58fd36f2063af373",
+      "section": "4.1. Human Intent Recognition",
+      "location": "4.1. Human Intent Recognition",
+      "text": "The recognized interaction is converted into the task prompt for the VLA policy. An intent is committed only when its probability exceeds 0.6 for three consecutive inference steps. Until then, motion execution remains disabled, reducing unintended activations from uncertain predictions.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9da13cede5f6ccdd",
+      "section": "4.2. VLA Whole-Body Execution",
+      "location": "4.2. VLA Whole-Body Execution",
+      "text": "Once an intent is accepted, it is mapped to a task prompt such as hug , handshake , or fist bump . The corresponding compliance profile is activated, and the prompt is passed to the VLA together with two camera views, the robot state, and measured BrainCo hand states.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9cec1cc3168cf67d",
+      "section": "4.2. VLA Whole-Body Execution",
+      "location": "4.2. VLA Whole-Body Execution",
+      "text": "The VLA runs at 5 ​ Hz 5\\,\\mathrm{Hz} and outputs action chunks with 64-dimensional motion tokens and normalized commands for the six actuators of each BrainCo hand. Actions are executed at 50 ​ Hz 50\\,\\mathrm{Hz} . Motion tokens are passed to GEAR-SONIC for whole-body joint targets and balance control, while finger commands are sent directly to the BrainCo controllers.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b7d167e5bc941647",
+      "section": "4.2. VLA Whole-Body Execution",
+      "location": "4.2. VLA Whole-Body Execution",
+      "text": "Per-actuator rate limiting prevents abrupt changes between chunks. Contact is detected from the difference between commanded and measured finger positions; after contact, further closing is blocked while opening remains enabled. If the prompt changes, queued actions are discarded and execution is held until a matching chunk is received. The compliance profile is maintained by a 10 ​ Hz 10\\,\\mathrm{Hz} heartbeat; if it stops, the last gains are held.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "81537359fd450925",
+      "section": "4.3. Task-Conditioned Compliance",
+      "location": "4.3. Task-Conditioned Compliance",
+      "text": "The compliance layer scales the impedance gains of the 14 arm joints, leaving torso and leg gains unchanged:",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "53d68b87dccd33d3",
+      "section": "4.3. Task-Conditioned Compliance",
+      "location": "4.3. Task-Conditioned Compliance",
+      "text": "(1) K p , i = α i ​ K p , i 0 , K d , i = β i ​ K d , i 0 , K_{p,i}=\\alpha_{i}K^{0}_{p,i},\\qquad K_{d,i}=\\beta_{i}K^{0}_{d,i},",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.E1",
+      "kind": "table"
+    },
+    {
+      "id": "e685d9b1cd32a72a",
+      "section": "4.3. Task-Conditioned Compliance",
+      "location": "4.3. Task-Conditioned Compliance",
+      "text": "with β i ≥ α i \\beta_{i}\\geq\\sqrt{\\alpha_{i}} . The recognized intent selects the profile; see Table 1 . Profiles change along minimum-jerk ramps (0.3 s softening, 1.0 s stiffening) that keep damping high during each transition.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "7fcbfa17cc7e8613",
+      "section": "4.3. Task-Conditioned Compliance",
+      "location": "4.3. Task-Conditioned Compliance",
+      "text": "Table 1. Implemented compliance profiles, shown as ( K p K_{p} scale, K d K_{d} scale). Interaction profiles are provisional, chosen from pilot sessions; final values will be set by the user study (Sec. 5.4 ).",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "52e0f1006d08db7c",
+      "section": "4.3. Task-Conditioned Compliance",
+      "location": "4.3. Task-Conditioned Compliance",
+      "text": "Profile Shoulder Elbow Wrist Handshake ( 1.00 , 1.00 ) (1.00,1.00) ( 0.60 , 0.83 ) (0.60,0.83) ( 1.00 , 1.00 ) (1.00,1.00) Hug ( 0.60 , 0.83 ) (0.60,0.83) ( 0.60 , 0.83 ) (0.60,0.83) ( 0.60 , 0.83 ) (0.60,0.83) FistBump ( 0.60 , 0.83 ) (0.60,0.83) ( 0.60 , 0.83 ) (0.60,0.83) ( 1.00 , 1.00 ) (1.00,1.00) Soft ( 0.25 , 0.50 ) (0.25,0.50) ( 0.25 , 0.50 ) (0.25,0.50) ( 0.25 , 0.50 ) (0.25,0.50)",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.T1.2",
+      "kind": "table"
+    },
+    {
+      "id": "5ade2b0cf25d82c7",
+      "section": "4.4. Voice-Triggered Safe Stop",
+      "location": "4.4. Voice-Triggered Safe Stop",
+      "text": "An offline Vosk recognizer ( Alpha Cephei, 2026 ) with a restricted vocabulary (“stop”, “hold on”) triggers a deterministic, latched stop: operator and VLA commands are ignored, locomotion is set to idle, the arms soften to SOFT and are then lowered to the rest pose (first outward if a hug is detected), and the BrainCo fingers open. Only a manual release resumes control.",
+      "url": "https://arxiv.org/html/2611.07712v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5413520318ed9ba2",
+      "section": "5.1. Offline VLA Comparison",
+      "location": "5.1. Offline VLA Comparison",
+      "text": "Each model (30k fine-tuning steps) predicts 40-step action chunks along the 288 held-out test episodes, and the predictions are compared with the teleoperated ground truth (Table 2 ). Being-H0.5, GR00T, and RLDX-1 are within 2% of each other in overall RMSE, while UnifoLM-VLA-0 is worse on all metrics. GR00T is the most accurate at the first and last chunk steps. Since the VLA is queried at 5 Hz and executed at 50 Hz, mainly the beginning of each chunk is executed, so first-step accuracy matters most on the robot.",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f1e66c9c98f5a31d",
+      "section": "5.1. Offline VLA Comparison",
+      "location": "5.1. Offline VLA Comparison",
+      "text": "Table 2. Offline open-loop action error (RMSE, lower is better) on 288 test episodes with 40-step action chunks. Body : 64-D SONIC motion token; Hand : BrainCo finger commands; First / Last : error at the first and last step of the chunk. Best in bold.",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "8673a79efc66c120",
+      "section": "5.1. Offline VLA Comparison",
+      "location": "5.1. Offline VLA Comparison",
+      "text": "Action part Chunk step Model Overall Body Hand First Last Being-H0.5 0.135 0.100 0.353 0.093 0.161 GR00T 0.135 0.103 0.341 0.085 0.156 RLDX-1 0.133 0.100 0.341 0.096 0.158 UnifoLM-VLA-0 0.148 0.114 0.373 0.110 0.177",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.T2.10",
+      "kind": "table"
+    },
+    {
+      "id": "e55990ee5a1d8091",
+      "section": "5.2. Online Evaluation on the Robot",
+      "location": "5.2. Online Evaluation on the Robot",
+      "text": "Five participants performed each interaction ten times ( 5 × 3 × 10 = 150 5{\\times}3{\\times}10=150 trials per policy) with each VLA alone and with our system (GR00T + intent recognition). Without the intent module, the VLA must infer the interaction from its visual observations alone. A trial is counted as correct if the robot performs the interaction the partner initiated (Table 3 ). All participants were informed about the experimental procedure and the laboratory’s internal regulations, which they acknowledged in writing prior to participation. Participation was voluntary, and participants were informed that they could withdraw from the experiment at any time.",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c974c9a36119fb7b",
+      "section": "5.2. Online Evaluation on the Robot",
+      "location": "5.2. Online Evaluation on the Robot",
+      "text": "GR00T is the best stand-alone VLA (macro-F1 0.75), but it often confuses the fist bump. Adding intent recognition raises macro-F1 to 0.90, improves every interaction (first bump: 0.50 → \\rightarrow 0.78), and eliminates errors on hugs (RQ3). The online ranking differs from the offline one: Being-H0.5 is competitive offline but almost never performs the requested interaction, while UnifoLM ranks second online. Open-loop error is thus a poor proxy for interaction performance, and on-robot testing is needed to select a VLA (RQ1). Both stop phrases were detected in 10/10 trials through the robot’s onboard microphone at close range, with no false triggers during conversation (RQ3).",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0678c005e7dd4c08",
+      "section": "5.2. Online Evaluation on the Robot",
+      "location": "5.2. Online Evaluation on the Robot",
+      "text": "Table 3. Online evaluation on the robot: F1 score per interaction (higher is better), 150 trials per policy. Mean : macro-F1 over the three interactions. Best in bold.",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5ad986ff6df316f1",
+      "section": "5.2. Online Evaluation on the Robot",
+      "location": "5.2. Online Evaluation on the Robot",
+      "text": "Interaction Model Handshake Fist bump Hug Mean Being-H0.5 0.09 0.00 0.26 0.12 UnifoLM-VLA-0 0.57 0.38 0.94 0.63 RLDX-1 0.68 0.38 0.54 0.53 GR00T 0.86 0.50 0.89 0.75 GR00T + intent (ours) 0.92 0.78 1.00 0.90",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.T3.4",
+      "kind": "table"
+    },
+    {
+      "id": "db7b25867422ee28",
+      "section": "5.3. Interaction-Intent Model Comparison",
+      "location": "5.3. Interaction-Intent Model Comparison",
+      "text": "We evaluated six causal video classifiers formed by combining three lightweight visual encoders—TinyViT, MobileViT, and EfficientFormer — with two temporal architectures, VTN and VideoLightFormer. All configurations used the same dual-view input, image resolution, and 16-frame history. The visual encoders were frozen during training, while the temporal modules, view-fusion layer, and classification head were optimized. The development data were derived from an approximately 1,000-episode dataset. This dataset was cleaned specifically for the interaction-phase prediction task by excluding episodes that were unsuitable for reliable phase prediction. After cleaning, 790 episodes remained, of which 632 were used for training and 158 for validation. A separate test dataset containing 288 episodes was used for the final model comparison. Because the test dataset contained no no_interaction episodes, its macro-F1 was computed over the three available interaction classes: handshake , hug , and fist_bump . Across the six configurations, test macro-F1 ranged from 0.51 to 0.76, with p95 inference latency ranging from 5.31 to 6.73 ms. TinyViT with VideoLightFormer achieved the highest test macro-F1 of 0.76 and an accuracy of 0.736, while maintaining a p95 latency of 6.27 ms. This configuration was therefore selected for integration with the VLA policy. On the validation set, the temporal commit rule produced no false activations across 54 no_interaction episodes. Moreover, 77% of interaction intents were committed before physical contact, with a median lead time of 2.1 s. Full per-model results are provided in the supplementary material.",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e951ad9756b9c7d2",
+      "section": "5.4. Compliance User Study",
+      "location": "5.4. Compliance User Study",
+      "text": "To answer RQ2, a within-subject study varies shoulder, elbow, and wrist stiffness between rigid and soft ( 2 × 2 × 2 2\\times 2\\times 2 ; soft: K p × 0.6 K_{p}\\times 0.6 , K d × 0.83 K_{d}\\times 0.83 ), ordered by a balanced Latin square after an unrated rigid practice round. After each handshake, fist bump, and hug, participants rate safety, comfort, and naturalness on a 7-point scale. Two pilot sessions refined the protocol; data collection is ongoing.",
+      "url": "https://arxiv.org/html/2611.07712v1#S5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fae50ed9cb365d11",
+      "section": "6. Results and Discussion",
+      "location": "6. Results and Discussion",
+      "text": "The offline results were similar for Being-H0.5, GR00T, and RLDX-1, with an overall RMSE between 0.133 and 0.135. However, their online performance was very different. GR00T achieved the highest stand-alone macro-F1 of 0.75, whereas Being-H0.5 reached only 0.12 despite its competitive offline error. Thus, offline RMSE is not a reliable measure of real-robot interaction performance, and VLA models should also be evaluated online. For intent recognition, TinyViT with VideoLightFormer achieved the best results, with a test macro-F1 of 0.76 and a p95 latency of 6.27 ms. It was therefore selected for integration with GR00T. The combined system improved GR00T’s macro-F1 from 0.75 to 0.90. The largest gain was observed for fist bumps, where F1 increased from 0.50 to 0.78. The scores for handshakes and hugs also increased to 0.92 and 1.00, respectively. These results show that the intent module helps GR00T distinguish between similar interactions while maintaining real-time performance.",
+      "url": "https://arxiv.org/html/2611.07712v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "750859c62d1a93de",
+      "section": "6.1. Limitations and Future Work",
+      "location": "6.1. Limitations and Future Work",
+      "text": "This study is limited by the number of participants, the use of only three predefined interaction types, limited environmental and user diversity, and evaluation on a single robot platform and whole-body controller. Although the intent dataset includes a no-interaction class, evaluation on labeled episodes does not fully represent continuous robot operation. Therefore, false activations during long periods without interaction require further study. The intent model may generalize poorly to unseen participants, especially for fist bumps. Speech recognition may also fail in noisy environments. Lowering K p K_{p} gives no formal bound on contact forces and, without gravity compensation, lets the arms sag slightly; this was acceptable for these gestures but would limit precise low-stiffness tasks. Future work will expand the dataset, evaluate false activations during continuous operation, include more diverse users and environments, improve contact-aware perception, and investigate stronger physical safety guarantees.",
+      "url": "https://arxiv.org/html/2611.07712v1#S6.SS1.p1.1",
+      "kind": "p"
+    }
+  ]
+}

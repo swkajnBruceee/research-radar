@@ -1,0 +1,631 @@
+{
+  "id": "d69410cfa54dc9da6b7dbf6a5d0fcef9c843ea68ace3375c146314de2ab6f20d",
+  "url": "https://arxiv.org/html/2611.07663v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "1f246842ff91839c",
+      "section": "Energy-Aware Open-Vocabulary Detection Scheduling for Low-Power Robotic Autonomy",
+      "location": "Energy-Aware Open-Vocabulary Detection Scheduling for Low-Power Robotic Autonomy",
+      "text": "Open-vocabulary object detection (OVD) lets robots search for run-time object queries, but fixed-rate inference spends embedded compute on low-value frames during idle motion, map revisits, or stable viewpoints. This paper presents an energy-aware OVD scheduler for low-power mobile robots. The scheduler uses odometry, map change, and detector confidence to switch among low-, mid-, and high-power YOLO-World-S modes on a Jetson Orin Nano. We evaluate the energy-quality trade-off on an AgileX LIMO using 40 real navigation trials: two target objects, five placements per target-policy pair, and four perception policies. Across bottle and cup trials, the scheduler records 8/10 mission success compared with 7/10 for each fixed-rate baseline, while reducing mean Jetson input power (a Jetson-side power-draw metric) by 5.2% relative to an 8 Hz high-rate baseline and lowering achieved OVD call rate by 34.0%. It does not minimize mission-window Jetson input energy because longer missions can erase instantaneous power savings. A separate 60 s stationary microbenchmark isolates the perception workload: the scheduler lowers mean power from 8.045 W to 7.301 W and energy from 484.7 J to 438.1 J relative to the 8 Hz baseline. These results support robot-state-aware OVD scheduling as a promising power-management mechanism with competitive task reliability, while showing that mission-window Jetson input energy must be read together with task progress and runtime.",
+      "url": "https://arxiv.org/html/2611.07663v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8cf80d9230124dd3",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Open-vocabulary object detection (OVD) lets mobile robots ground run-time object queries, such as “find the bottle near the doorway,” in their camera stream instead of searching only fixed trained labels. This capability is enabled by vision-language models and open-vocabulary detection/grounding systems, including CLIP [ 1 ] , OWL-ViT [ 2 ] , GLIP [ 3 ] , Grounding DINO [ 4 ] , Detic [ 5 ] , and YOLO-World [ 6 ] . In robotics, similar representations support language-grounded maps, open-vocabulary scene graphs, and object-centric navigation [ 7 , 8 , 9 , 10 ] .",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ef9f3f5a2218f9cf",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "The deployment problem is that OVD is expensive on embedded robots. A low-power robot must share a small battery across the embedded GPU, RGB-D camera, LiDAR, wireless stack, controller, and drive base. Mean Jetson input power is therefore a practical Jetson-side power-draw metric, especially for robots that keep monitoring or waiting after a target event. A fixed high detector rate gives fast response but wastes power during idle motion, map revisits, or low-information views. A fixed low-rate or quantized detector saves power but can delay target acceptance or miss short visual opportunities. The right operating point changes during the mission.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d2db8afd1fc9fc3",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "This motivates mission-level perception scheduling: each inference should be worth its energy at the current robot state. We ask whether an embedded robot can reduce Jetson input power for OVD while maintaining mission completion by scheduling detector rate from robot state. Our hypothesis is that low-value frames can be sampled sparsely, while candidate-target phases need high-rate response. A stationary frame in a stable map has lower marginal value than a frame near a plausible target; once a target appears, aggressive throttling is risky.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "519c305f90c347ed",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Existing work covers pieces of the problem but not the full intersection. OVD papers emphasize zero-shot recognition, language-grounded navigation emphasizes semantic goal reaching, and adaptive video analytics emphasizes throughput or resource budgets for passive streams. Our focus is more targeted: deciding when an embedded robot should spend OVD compute during search. As summarized in Table I , prior works generally do not combine OVD, robot-state-aware adaptation, Jetson input-power/energy accounting, and task-level metrics such as success rate and time-to-detect (TTD).",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "50f1c1819556575f",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We present an energy-aware OVD scheduler that treats detector invocations as mission-level computational resources. The scheduler uses odometry, map changes, and detector confidence to adaptively switch among low-, mid-, and high-power operating modes. We evaluate YOLO-World-S on a Jetson Orin Nano mobile robot against fixed-rate 8 Hz, 5 Hz, and 2 Hz baselines across bottle and cup search tasks. Fig. 1 illustrates the overall runtime flow.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "5b297e5839eb2417",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We formulate energy-aware OVD as a mission-level scheduling problem that trades Jetson input power and detector invocation rate against search success and TTD, rather than only reducing per-frame inference cost.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "50cb4b69ee5fba0c",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We design a finite-state runtime that switches OVD rate from robot-native signals with explicit thresholds and hysteresis, including a low-power configuration for low-value frames.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cb68348922a695c0",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We implement the scheduler with YOLO-World-S on an AgileX LIMO equipped with a Jetson Orin Nano and compare it against fixed-rate high-, medium-, and low-rate baselines.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1b4d87d0113f3d35",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We report a real-robot evaluation with 40 navigation trials across two queried objects and a separate stationary microbenchmark that isolates perception power.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "412fa0db98dd1f37",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We show empirically that lower mean power does not necessarily imply lower mission-window Jetson input energy, because slower or less reliable perception can increase navigation time.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.I1.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b2a14721dd7893cc",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "The main finding is that lower instantaneous detector power is only one part of the robot objective. The scheduler reduces mean Jetson input power relative to the high-rate baseline and shows slightly higher aggregate success in the evaluation logs, but mission-window Jetson input energy still depends strongly on runtime. We therefore report power, energy, success, TTD, and time-domain traces rather than optimizing energy in isolation.",
+      "url": "https://arxiv.org/html/2611.07663v1#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "5e39b745e02989f1",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Table I positions representative prior work by this paper’s evaluation axes. The comparison is qualitative: the proposed scheduler builds on OVD models but studies their coupling with robot-state-aware scheduling, Jetson input-power/energy accounting, and task-quality metrics.",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aaa380821686d949",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "TABLE I: Qualitative coverage of representative related work.",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "35f287c9df2fefb2",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Work OVD Robot Adapt. R / E R/E Task OWL-ViT/GLIP/GDINO [ 2 , 3 , 4 ] ✓ × \\times × \\times × \\times × \\times Detic/YOLO-World [ 5 , 6 ] ✓ × \\times × \\times ▲ \\blacktriangle × \\times VLMaps/LM-Nav/ROVER [ 7 , 10 , 11 ] ▲ \\blacktriangle ✓ × \\times × \\times ▲ \\blacktriangle OV scene graphs [ 8 , 9 ] ✓ ▲ \\blacktriangle × \\times × \\times ▲ \\blacktriangle Active/NBV perception [ 12 , 13 ] × \\times ✓ ✓ ▲ \\blacktriangle ✓ NoScope/Chameleon [ 14 , 15 ] × \\times × \\times ✓ ▲ \\blacktriangle × \\times ApproxDet [ 16 ] × \\times × \\times ✓ ▲ \\blacktriangle × \\times Proposed scheduler ✓ ✓ ✓ ✓ ✓",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.T1.3.1",
+      "kind": "table"
+    },
+    {
+      "id": "869ef0cfdcc89f79",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Note: Robot = robot task evaluation; Adapt. = runtime adaptation; R / E R/E = resource/energy metric; Task = success/TTD. ✓ = covered, ▲ \\blacktriangle = partial/indirect, × \\times = not a primary focus.",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.T1.4",
+      "kind": "p"
+    },
+    {
+      "id": "32054458b25936c6",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Modern OVD systems inherit generalization from image-text pretraining. CLIP [ 1 ] introduced transferable vision-language representations, and OWL-ViT [ 2 ] , GLIP [ 3 ] , RegionCLIP [ 17 ] , Detic [ 5 ] , Grounding DINO [ 4 ] , and YOLO-World [ 6 ] adapt them to region-level localization. These works emphasize recognition accuracy, vocabulary generalization, and frame latency, but rarely ask how often an embedded robot should invoke OVD during a mission.",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "094d758ada18ad4d",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Open-vocabulary perception also supports semantic robot behavior. VLMaps [ 7 ] , LM-Nav [ 10 ] , open-vocabulary scene graphs [ 8 ] , ConceptGraphs [ 9 ] , ROVER [ 11 ] , and RoboAuditor [ 18 ] use language-grounded perception for navigation, mapping, planning, object search, or inspection. These systems show the utility of open vocabularies for robots, but not the scheduling and energy cost of the detector.",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "77910e1921503675",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Efficient inference and adaptive perception provide the closest systems context. Approximate video analytics adapts resolution, model size, or sampling rate for passive camera workloads [ 14 , 15 , 16 ] ; edge systems partition or accelerate neural computation [ 19 , 20 , 21 ] ; continual-learning surveys highlight deployment adaptation challenges in autonomous systems [ 22 ] ; and active/NBV perception decides where or when to sense using task state or information gain [ 12 , 13 ] . In contrast, a mobile OVD robot has mission-native signals such as odometry, map change, and target confidence, and a missed target can change task outcome. These systems are complementary but optimize frame-level or edge-cloud decisions, whereas our evaluation couples OVD scheduling to closed-loop success, TTD, and mission-window power. This paper targets that intersection by treating OVD calls as mission resources and evaluating robot-state-aware scheduling with Jetson input energy, success, and TTD.",
+      "url": "https://arxiv.org/html/2611.07663v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "84b1371021a02a82",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "We consider a differential-drive mobile robot performing language-guided object search using an embedded open-vocabulary detector (OVD). For each mission, the robot is provided with a target query q q and autonomously searches the environment until either the task is completed or a mission duration 𝒯 max \\mathcal{T}_{\\max} is reached. Perception and navigation operate continuously throughout the mission, while detector execution is governed by the proposed energy-aware scheduling policy. We define TTD as the elapsed time from mission start to the first detection of the queried object; this event is used as an evaluation metric and does not terminate the mission. At time t t , the perception runtime selects a ⁡ ( t ) = ( f ⁡ ( t ) , c req ​ ( t ) ) a(t)=\\left(f(t),c_{\\mathrm{req}}(t)\\right) , where f ⁡ ( t ) f(t) is the requested OVD rate and c req ​ ( t ) ∈ { FP16 , INT8 } c_{\\mathrm{req}}(t)\\in\\{\\mathrm{FP16},\\mathrm{INT8}\\} is the requested inference mode. The mission-window Jetson input energy is",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f9c10c5189de1c5e",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "E m = ∫ 0 𝒯 P jetson ​ ( t ) ​ 𝑑 t , E_{\\mathrm{m}}=\\int_{0}^{\\mathcal{T}}P_{\\mathrm{jetson}}(t)\\,dt, (1)",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "3f210b084e9ed5cf",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "where 𝒯 ≤ 𝒯 max \\mathcal{T}\\leq\\mathcal{T}_{\\max} is the realized duration. Because energy alone can be minimized by never running the detector, we measure search quality using success rate and time-to-detect,",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d4be32aced4b2a51",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "TTD = t first ​ conf − t start . \\mathrm{TTD}=t_{\\mathrm{first\\;conf}}-t_{\\mathrm{start}}. (2)",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "2d24d516f7f124bc",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "where t first ​ conf t_{\\mathrm{first\\;conf}} is the first target detection above τ conf \\tau_{\\mathrm{conf}} . TTD is a perception-timing metric, not the success label. Aggregate TTD is reported over successful runs only; failures remain in success counts, runtime, and mission-window Jetson input energy.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "57262bda7e4f46b6",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "The design objective is to reduce Jetson input power and detector workload while maintaining success and acceptable TTD relative to a high-rate detector baseline. We also report E m E_{\\mathrm{m}} to capture the effect of mission duration. Unlike offline detector compression, the scheduler is conditioned on robot state and spends computation unevenly across the mission.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ff920de5abb6ec2a",
+      "section": "III-A Problem Formulation",
+      "location": "III-A Problem Formulation",
+      "text": "Fig. 1: Proposed energy-aware OVD runtime. Robot sensing and mapping produce motion, map-change, confidence, and target-distance signals. The tri-state scheduler maps these signals to LOW/MID/HIGH detector modes, while the logging pipeline records Jetson input power, mission-window energy, inference count, success, TTD, and mode occupancy.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "98177d763ad31e81",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "Fig. 1 shows the runtime. The robot runs ROS Noetic with GMapping and move_base . The OVD node receives RGB frames from an Astra/Dabai U3 RGB-D camera and evaluates YOLO-World-S for the queried class. Requested rates are upper bounds: the camera continues streaming, but frames reach the detector only when the scheduler permits a new OVD call. A state monitor subscribes to odometry, the occupancy grid, and detector outputs. A logger records scheduler events, poses, detector calls, mission outcomes, and Jetson power from tegrastats .",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "295175120d741344",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "The scheduler uses three robot-state signals:",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c960584a276102c4",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "Motion : linear speed v ⁡ ( t ) v(t) from odometry, used to identify idle or nearly idle intervals.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5155d38ae847795a",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "Map change : normalized occupancy-grid entropy change Δ ​ H ​ ( t ) \\Delta H(t) , used as a proxy for whether new space is being observed.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "406dd8cc914ce221",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "Detection confidence and target proximity : best target confidence p ⁡ ( t ) p(t) from the OVD node and proximity to a recent target estimate, used to enter a high-rate candidate-response mode.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f27875ec8c10f511",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "For an occupancy grid window Ω t \\Omega_{t} , normalized map entropy is computed as",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "32e3c6286d6665fb",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "H ⁡ ( t ) \\displaystyle H(t) = 1 | Ω t | ​ log ⁡ 2 ​ ∑ i ∈ Ω t h i ​ ( t ) , \\displaystyle=\\frac{1}{|\\Omega_{t}|\\log 2}\\sum_{i\\in\\Omega_{t}}h_{i}(t), (3) h i ​ ( t ) \\displaystyle h_{i}(t) = − p i ​ ( t ) ​ log ⁡ p i ​ ( t ) − ( 1 − p i ​ ( t ) ) ​ log ⁡ ( 1 − p i ​ ( t ) ) . \\displaystyle=-p_{i}(t)\\log p_{i}(t)-(1-p_{i}(t))\\log(1-p_{i}(t)).",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "0362f62ac3a718e2",
+      "section": "III-B System Overview",
+      "location": "III-B System Overview",
+      "text": "Unknown cells use p i = 0.5 p_{i}=0.5 , and known cells use normalized occupancy probability clipped to [ ϵ , 1 − ϵ ] [\\epsilon,1-\\epsilon] . We use a 4.0 ​ m × 4.0 ​ m 4.0\\,\\mathrm{m}\\times 4.0\\,\\mathrm{m} robot-centered window; if successive GMapping maps differ in extent, Δ ​ H \\Delta H uses overlapping indexed cells. The scheduler updates at r s = 20 r_{s}=20 Hz, so Δ ​ H ​ ( t ) = | H ⁡ ( t ) − H ⁡ ( t − Δ ​ t s ) | \\Delta H(t)=|H(t)-H(t-\\Delta t_{s})| with Δ ​ t s = 1 / r s \\Delta t_{s}=1/r_{s} . Detector confidence p ⁡ ( t ) p(t) updates after each OVD call. Only fresh detector output can satisfy the confidence branch of M → H M\\rightarrow H ; the distance branch uses an unexpired target estimate. The estimate comes from RGB-D box-center back-projection to the map frame, LiDAR snapping within 0.3 0.3 m, and exponential filtering with α = 0.3 \\alpha=0.3 ; after 30 s without update, d target = ∞ d_{\\mathrm{target}}=\\infty .",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS2.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "a6eaccbcc6ff457d",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "The proposed scheduler uses a finite-state policy with hysteresis. Each state has a fixed target rate and preferred inference mode:",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d050f72ff3701fab",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "LOW : requested INT8. Used after sustained evidence that the robot is nearly idle and the local map is stable. This state samples frames sparsely to retain target awareness without continuous high-rate detection.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.I2.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "23ca1626294fd18d",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "MID : FP16. Used during normal navigation and mapping, where new viewpoints arrive but there is no confident target.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.I2.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1609c53c5ce45d05",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "HIGH : FP16. Used when a target candidate is detected or the robot is near a recent target estimate, prioritizing high-rate response over energy.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.I2.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "38d6c35edfef846a",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "HIGH denotes a high-power candidate-response state rather than a distinct long-term tracking mode. The scheduler operates deterministically: transitions to HIGH are triggered by moderate evidence of the target, whereas entry into LOW is permitted only after sustained inactivity and persistent evidence of map stability.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "d2f145aa571cd87b",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "For compactness, let L L , M M , and H H denote LOW, MID, and HIGH. The transition rules are:",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "60de3a8bf498cf6f",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "L → M \\displaystyle L\\rightarrow M : v > v idle ∨ Δ ​ H > τ H , \\displaystyle:v>v_{\\mathrm{idle}}\\;\\vee\\;\\Delta H>\\tau_{H}, (4) M → H \\displaystyle M\\rightarrow H : p ≥ τ high ∨ d target ≤ d near , \\displaystyle:p\\geq\\tau_{\\mathrm{high}}\\;\\vee\\;d_{\\mathrm{target}}\\leq d_{\\mathrm{near}}, (5) H → M \\displaystyle H\\rightarrow M : p < τ hyst ​ for ​ K lost ​ evals. , \\displaystyle:p<\\tau_{\\mathrm{hyst}}\\;\\text{for}\\;K_{\\mathrm{lost}}\\;\\text{evals.}, (6) M → L \\displaystyle M\\rightarrow L : v < v idle ∧ Δ ​ H < τ H ​ for ​ T low . \\displaystyle:v<v_{\\mathrm{idle}}\\;\\wedge\\;\\Delta H<\\tau_{H}\\;\\text{for}\\;T_{\\mathrm{low}}. (7)",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.EGx1",
+      "kind": "table"
+    },
+    {
+      "id": "6965ae37f6af5a15",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "Table II lists parameters used for all reported runs. They are fixed rather than tuned per trajectory: the system enters HIGH at moderate confidence but requires persistent low confidence before leaving.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "1cea6afdf10a45e1",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "TABLE II: Scheduler parameters used in the reported experiments.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "613c6e34eee4d25e",
+      "section": "III-C Tri-State Scheduling Policy",
+      "location": "III-C Tri-State Scheduling Policy",
+      "text": "Parameter Value Purpose r s r_{s} 20 Hz Scheduler update rate f L / f M / f H f_{L}/f_{M}/f_{H} 1.5/4/8 Hz Requested OVD rates ℓ Ω \\ell_{\\Omega} 4.0 m Local grid-window side v idle v_{\\mathrm{idle}} 0.03 m/s Idle-motion threshold τ H \\tau_{H} 0.02 Map-change threshold T low T_{\\mathrm{low}} 2.0 s Stable interval before LOW τ high \\tau_{\\mathrm{high}} 0.25 Confidence to enter HIGH τ conf \\tau_{\\mathrm{conf}} 0.25 Detection acceptance threshold τ int8 \\tau_{\\mathrm{int8}} 0.20 INT8 detector threshold τ hyst \\tau_{\\mathrm{hyst}} 0.20 Confidence to leave HIGH d near d_{\\mathrm{near}} 2.0 m Near-target HIGH trigger K lost K_{\\mathrm{lost}} 5 evals. HIGH hysteresis window",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.T2.3",
+      "kind": "table"
+    },
+    {
+      "id": "eff5c98c55f298eb",
+      "section": "III-D Low-Cost Inference Mode",
+      "location": "III-D Low-Cost Inference Mode",
+      "text": "The perception runtime maintains both the high-rate YOLO-World-S inference path and the INT8 TensorRT engine in memory, selecting the appropriate execution mode according to the scheduler state. INT8 inference is used exclusively in LOW mode, where frames are processed at reduced precision to support coarse target awareness with lower computational cost. MID and HIGH modes use the FP16 inference path to provide higher-fidelity localization and response. The INT8 decision threshold, τ int8 \\tau_{\\mathrm{int8}} , is applied only within the LOW-mode detector, whereas mission-level detection decisions and time-to-detection (TTD) are evaluated using the common confidence threshold τ conf \\tau_{\\mathrm{conf}} . All reported experiments were conducted with the INT8 engine available and without precision fallback.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cbd6bb9105521ff9",
+      "section": "III-E Metrics",
+      "location": "III-E Metrics",
+      "text": "For mission runs we log success, TTD, runtime, path length, OVD invocations N inf N_{\\mathrm{inf}} , average OVD rate N inf / 𝒯 N_{\\mathrm{inf}}/\\mathcal{T} , state occupancy, mean Jetson input power, and mission-window energy. State occupancy is the realized time fraction in LOW/MID/HIGH using the corresponding raw labels. Power is scoped to the Jetson module, not the full robot battery: the analysis uses tegrastats VDD_IN total_W at a 50 ms requested sampling interval, with GPU and SoC rails used only as diagnostics. For every reported trial, the power trace is aligned to mission start/end wall time and energy is integrated by a trapezoidal sum over valid in-window samples. Failed missions remain in all-run averages because they consume real time and power.",
+      "url": "https://arxiv.org/html/2611.07663v1#S3.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "938aaab2c47fc5e0",
+      "section": "IV-A Robot Platform",
+      "location": "IV-A Robot Platform",
+      "text": "Fig. 2: Real-robot arena with fixed LIMO start pose and bottle/cup target placements reused across policies.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9b538d9e7aa38b34",
+      "section": "IV-A Robot Platform",
+      "location": "IV-A Robot Platform",
+      "text": "Experiments use an AgileX LIMO differential-drive robot with an Astra/Dabai U3 RGB-D camera, 2D LiDAR, and NVIDIA Jetson Orin Nano 8 GB. The robot runs ROS Noetic, GMapping, and move_base . The OVD node runs YOLO-World-S with one queried target class. Final navigation trials use “bottle” and “cup” queries to test scheduling across two targets.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b4344066f8cd6fdf",
+      "section": "IV-B Policies Compared",
+      "location": "IV-B Policies Compared",
+      "text": "We compare four perception policies:",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "560bcd8a45dad1d9",
+      "section": "IV-B Policies Compared",
+      "location": "IV-B Policies Compared",
+      "text": "Base-8Hz : fixed 8 Hz high-power mode (TRACK).",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f32d730318440e03",
+      "section": "IV-B Policies Compared",
+      "location": "IV-B Policies Compared",
+      "text": "Base-5Hz : fixed 5 Hz mid-power mode (EXPLORE).",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e0758e1a401e62f9",
+      "section": "IV-B Policies Compared",
+      "location": "IV-B Policies Compared",
+      "text": "Base-2Hz : fixed 2 Hz low-power INT8 mode (SLEEP).",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c67d80f07cb4252c",
+      "section": "IV-B Policies Compared",
+      "location": "IV-B Policies Compared",
+      "text": "Proposed : tri-state low-/mid-/high-power scheduling.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "608c400d0c5e3a62",
+      "section": "IV-B Policies Compared",
+      "location": "IV-B Policies Compared",
+      "text": "The paper reports LOW/MID/HIGH as conceptual modes and keeps SLEEP/EXPLORE/TRACK as labels where needed. Achieved rates can be below requested values because detector latency and gating limit calls, so results report measured invocation rates.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "93527cc595f325d3",
+      "section": "IV-C Mission Protocol",
+      "location": "IV-C Mission Protocol",
+      "text": "The real-robot evaluation comprises 40 trials spanning two target objects, four perception policies, and five repetitions for each object–policy combination. As shown in Fig. 2 , all trials begin from a fixed robot pose, with each target placed at one of five predefined locations. The same placements are reused across policies to support controlled comparison. Bottle and cup trials are conducted in separate batches; between trials, the target is moved to the next location and the navigation stack is reinitialized.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3910c79a6a7ada46",
+      "section": "IV-C Mission Protocol",
+      "location": "IV-C Mission Protocol",
+      "text": "Each trial has a maximum duration of 180 s. Experiments are executed in policy-specific blocks rather than randomized order, so gradual changes in battery state, illumination, or system temperature may introduce temporal drift. Each policy is therefore evaluated across all five placements, and aggregate statistics are reported to reduce sensitivity to individual trial conditions. For every trial, the navigation stack is restarted, system power is monitored externally using tegrastats , and mission outcomes are recorded by the energy-aware navigation framework. The mission-level success field in the corresponding mission_summary record is used for evaluation.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "61a0a1b7ff9b0d14",
+      "section": "IV-C Mission Protocol",
+      "location": "IV-C Mission Protocol",
+      "text": "In addition to the navigation trials, we perform a 60 s stationary microbenchmark for each policy to characterize perception-related power consumption independently of robot motion and navigation workload. During this benchmark, the camera, detector or scheduler, and power logger remain active, while navigation, SLAM, move_base , and velocity-command execution are disabled. For the proposed policy, scripted inputs exercise the scheduler across low-, mid-, and high-response phases, whereas each fixed-rate baseline remains in its assigned operating mode. This benchmark isolates the contribution of detector execution rate and scheduler state composition from variability introduced by the navigation stack.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "b15c076cee6d9461",
+      "section": "IV-D Metrics and Statistics",
+      "location": "IV-D Metrics and Statistics",
+      "text": "We use the metrics in Section III-E . Navigation results cover all 40 trials, with aggregate summaries over bottle and cup. TTD is averaged over successful runs only, while Jetson energy and runtime are averaged over all runs because failures consume real time and power. The stationary benchmark is reported separately as a mechanism check. With five placements per object-policy pair, we report descriptive rather than inferential statistics.",
+      "url": "https://arxiv.org/html/2611.07663v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "684cc5ccd9f81508",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "TABLE III: Real-robot navigation summary over bottle and cup trials (ten trials per policy). low-, mid-, and high-power modes.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c453d31084236f06",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "Policy Succ. P ¯ J \\bar{P}_{J} E m E_{\\mathrm{m}} Run TTD succ Hz L/M/H (W) (J) (s) (s) (%) Base-8Hz 7/10 9.35 866.9 92.8 25.9 4.74 0/0/100 Base-5Hz 7/10 8.92 1019.8 114.2 53.6 3.39 0/100/0 Base-2Hz 7/10 8.38 1155.0 140.4 0.9 1.48 100/0/0 Proposed 8/10 8.86 1114.0 125.9 10.9 3.12 25/60/15",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.T3.3",
+      "kind": "table"
+    },
+    {
+      "id": "23e569e3061a2c7b",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "Note: E m E_{\\mathrm{m}} is mission-window Jetson input energy; TTD is conditional on success. L/M/H maps raw log labels to low-/mid-/high-power modes.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.T3.4",
+      "kind": "p"
+    },
+    {
+      "id": "84f129af89312d7c",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "Fig. 3: Policy dashboard over the 40 navigation trials. The proposed scheduler has the highest aggregate success count and lower mean Jetson input power than Base-8Hz, while Jetson input energy is dominated by runtime.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f3e3126875c847d7",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "Fig. 4: Mission runtime versus Jetson input energy for all 40 trials. Circles are successes, crosses failures, and open diamonds condition means; dashed lines show constant-power contours.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a178576a31a508e5",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "Table III summarizes the 40 real-robot navigation trials. The proposed scheduler has the highest aggregate success count, 8/10, while each fixed-rate baseline succeeds in 7/10 trials. It reduces mean Jetson input power from 9.35 W for Base-8Hz to 8.86 W, a 5.2% reduction, and lowers achieved OVD rate from 4.74 Hz to 3.12 Hz. Runtime is the mission-window duration over all runs; TTD succ measures only first accepted detection on successful runs. Base-2Hz has the lowest mean power, 8.38 W, but the longest mean runtime and largest mean Jetson input energy. Accordingly, the navigation result is best read as power/workload reduction at competitive task reliability, not as a statistically large reliability improvement.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5d437c25d9084675",
+      "section": "V-A Navigation Results",
+      "location": "V-A Navigation Results",
+      "text": "Fig. 3 visualizes the same summary. The main claim is a power-management trade-off, not guaranteed E m E_{\\mathrm{m}} minimization. Relative to Base-8Hz, the scheduler reduces mean power and detector calls, yet mean E m E_{\\mathrm{m}} is higher because missions last 35.8% longer on average. Base-2Hz is clearer: it cuts mean power by 10.3%, but runtime rises by 51.4%, producing the largest mean E m E_{\\mathrm{m}} . Its low TTD succ reflects successful easy cases, not generally faster search. Fig. 4 shows why energy-aware OVD must be evaluated as a closed-loop workload.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0133f702b13f0743",
+      "section": "V-B Time-Domain Scheduler Behavior",
+      "location": "V-B Time-Domain Scheduler Behavior",
+      "text": "Fig. 5: Compact proposed-scheduler trace from the 60 s scripted stationary run. Colored regions show state, orange ticks show detector calls, the blue curve is Jetson input power, and the red dashed line is mean power.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2043dfdcf97f2027",
+      "section": "V-B Time-Domain Scheduler Behavior",
+      "location": "V-B Time-Domain Scheduler Behavior",
+      "text": "Fig. 6: Representative adaptive navigation trace showing Jetson input power/energy, scheduler state and detector calls, detector confidence with the 0.25 threshold, and path length.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "67f5944cc0b4b959",
+      "section": "V-B Time-Domain Scheduler Behavior",
+      "location": "V-B Time-Domain Scheduler Behavior",
+      "text": "Fig. 7: Qualitative video-frame progression for representative bottle and cup searches. Blue R marks the robot and red T marks the target; LOW/MID/HIGH labels are qualitative stage estimates, not synchronized scheduler labels.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "cdc6f6a4a95a47e4",
+      "section": "V-B Time-Domain Scheduler Behavior",
+      "location": "V-B Time-Domain Scheduler Behavior",
+      "text": "Fig. 5 shows the proposed scheduler in the 60 s scripted stationary run. This is not a navigation trial: it isolates detector/scheduler power from path length, obstacle avoidance, and mission duration. The run has 7.30 W mean Jetson input power, consumes 438.1 J, executes 202 detector calls, and spends 50/38/13% of the horizon in LOW/MID/HIGH modes. The power step between LOW and MID/HIGH makes the mechanism behind Table IV visible in time.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4b732af4ae88f5ff",
+      "section": "V-B Time-Domain Scheduler Behavior",
+      "location": "V-B Time-Domain Scheduler Behavior",
+      "text": "Fig. 6 complements the stationary trace with a closed-loop run. It shows the same scheduler while the robot moves, accumulates path length, and receives intermittent target-confidence events. The run is illustrative, exposing timing relationships among power, state, confidence, and path progress. Fig. 7 adds visual context from two run videos. Early frames show stable or low-value viewpoints where LOW is appropriate, middle frames show obstacle-aware navigation where MID maintains periodic OVD, and late frames show target-adjacent candidate response where HIGH is appropriate. The figure is qualitative; quantitative occupancy and timing come from synchronized logs in Tables III and IV and Fig. 6 .",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c08c13281553a0ca",
+      "section": "V-C Stationary Power Mechanism",
+      "location": "V-C Stationary Power Mechanism",
+      "text": "TABLE IV: Stationary microbenchmark over the power-integration window.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "dde33d8a7f5b0e19",
+      "section": "V-C Stationary Power Mechanism",
+      "location": "V-C Stationary Power Mechanism",
+      "text": "Policy P ¯ J \\bar{P}_{J} E E Hz #Inf. L/M/H (W) (J) (%) Base-8Hz 8.045 484.7 6.67 402 0/0/100 Base-5Hz 7.578 456.6 4.40 265 0/100/0 Base-2Hz 6.847 410.8 1.90 114 100/0/0 Proposed 7.301 438.1 3.37 202 50/38/13",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.T4.3",
+      "kind": "table"
+    },
+    {
+      "id": "e0c97158256ff824",
+      "section": "V-C Stationary Power Mechanism",
+      "location": "V-C Stationary Power Mechanism",
+      "text": "Note: OVD Hz is computed as #Inf./mission-window duration.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.T4.4",
+      "kind": "p"
+    },
+    {
+      "id": "ae76db4dca620320",
+      "section": "V-C Stationary Power Mechanism",
+      "location": "V-C Stationary Power Mechanism",
+      "text": "The stationary microbenchmark isolates detector and scheduler power from navigation-related variability. OVD frequency is computed from detector invocations within the same time window used for power and energy integration. The fixed-rate baselines exhibit the expected monotonic reduction in power as the detector rate decreases from Base-8Hz to Base-5Hz and Base-2Hz.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e2b6d442f460518a",
+      "section": "V-C Stationary Power Mechanism",
+      "location": "V-C Stationary Power Mechanism",
+      "text": "The proposed scheduler operates between the Base-5Hz and Base-2Hz baselines, reflecting its mixed operating profile: approximately 50% of the benchmark is spent in LOW, 37.6% in MID, and 12.5% in HIGH. Relative to Base-8Hz, the proposed policy reduces mean power by 9.2% and energy consumption over the 60 s benchmark by 9.6%.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "447508d21548cf60",
+      "section": "V-D Object-Level Observations",
+      "location": "V-D Object-Level Observations",
+      "text": "Fig. 8: Object-level success and state occupancy, mapped to LOW/MID/HIGH power modes. In the top plot, solid bars denote bottle and hatched bars denote cup.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "04a1ace8135406e0",
+      "section": "V-D Object-Level Observations",
+      "location": "V-D Object-Level Observations",
+      "text": "The combined result hides object-level variation. On bottle trials, Base-8Hz succeeds in 5/5 runs, the proposed scheduler in 4/5, and the 5 Hz and 2 Hz baselines in 3/5 each. On cup trials, the proposed scheduler, Base-5Hz, and Base-2Hz each succeed in 4/5, while Base-8Hz succeeds in 2/5. Fig. 8 shows this split and state mix. Thus, the adaptive policy has the highest aggregate success count here, but the sample is too small to claim universal dominance.",
+      "url": "https://arxiv.org/html/2611.07663v1#S5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "33ce87ed69fbc555",
+      "section": "VI Conclusion",
+      "location": "VI Conclusion",
+      "text": "This paper presented an energy-aware OVD scheduler for low-power mobile robots. It treats detector frames as mission resources: low-value frames can be sampled slowly, while candidate-target phases benefit from high-rate response. In 40 real AgileX LIMO navigation trials across bottle and cup searches, the scheduler shows 8/10 success compared with 7/10 for each fixed-rate baseline and reduces mean Jetson input power by 5.2% relative to Base-8Hz. The same trials show the key caution: lower mean power does not guarantee lower mission-window Jetson energy, because longer runtime can dominate the integral. A stationary microbenchmark confirms the mechanism, with 9.6% lower 60 s energy than Base-8Hz. Future work will broaden objects and environments, add external labels, randomize trials, measure whole-robot energy, and study motion-predictive scheduling.",
+      "url": "https://arxiv.org/html/2611.07663v1#S6.p1.1",
+      "kind": "p"
+    }
+  ]
+}

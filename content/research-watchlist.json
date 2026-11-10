@@ -1,0 +1,9 @@
+{
+  "papers": [
+    {
+      "arxiv_id": "2610.28480",
+      "reason": "SuperMimic：共享可微动力学改变全身控制的训练预算；用户指出漏收，需持续跟踪版本。",
+      "source_url": "https://arxiv.org/abs/2610.28480"
+    }
+  ]
+}

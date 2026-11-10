@@ -1,0 +1,1031 @@
+{
+  "id": "f8cc56fad6809154d01e8e36d71c91ee70ae1356ea9a0bd744a44495b72edc24",
+  "url": "https://arxiv.org/html/2611.08111v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "6b117827ddf193f0",
+      "section": "Reinforcing End-to-End Autonomous Driving Safety via Negative-Aware Planning in a Unified World-Action Model Thanks: ‡ Correspondence Author.",
+      "location": "Reinforcing End-to-End Autonomous Driving Safety via Negative-Aware Planning in a Unified World-Action Model Thanks: ‡ Correspondence Author.",
+      "text": "World-action models (WAMs) jointly model future traffic states and driving actions for end-to-end autonomous driving in intelligent transportation systems. However, their action learning remains dominated by expert-trajectory imitation, leaving unsafe alternatives close to expert trajectories insufficiently constrained. To improve WAM robustness in safety-critical scenarios, we propose NegWAM , a safety post-training framework for unified WAMs that learns explicit safety boundaries from near-expert failure trajectories. NegWAM constructs negative trajectories that are geometrically close to the expert trajectory yet carry safety risks, uses them as repulsive anchors to steer predictions away from dangerous behavior, and encodes them as scene-conditioned rider tokens to learn scene–trajectory compatibility. During training, NegWAM jointly optimizes the flow-matching and near-expert negative objectives, while the auxiliary rider branch is discarded at inference, incurring no additional overhead. On NAVSIM v2, NegWAM achieves 40.4 EPDMS on navhard , a 4.1 % relative improvement over the strongest compared scorer-free WAM baseline, and achieves 93.3 EPDMS on navtest . These results demonstrate that NegWAM achieves strong performance in safety-critical scenarios while preserving routine-driving performance. Zero-shot closed-loop evaluation on HUGSIM further demonstrates cross-benchmark generalization. The code is available at https://github.com/Zizizi-hao/NegWAM .",
+      "url": "https://arxiv.org/html/2611.08111v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c328cae8aed433a9",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "End-to-end autonomous driving systems typically learn driving policies from large-scale expert demonstrations and perform well in routine scenarios [ 1 , 2 ] . However, hazardous behaviors and failure cases are scarce in real-world driving data, making it difficult for imitation learning to acquire explicit safety boundaries [ 3 , 4 ] . World-action models (WAMs) introduce stronger priors over scene dynamics into end-to-end autonomous driving by predicting future world states and leveraging future representations to guide planning [ 5 , 6 , 7 ] . Yet their action branches are still trained primarily through flow matching on expert trajectories. This supervision tells the model what to imitate, but not which near-expert alternatives should be rejected as unsafe. Consequently, stronger world modeling alone does not establish explicit safety boundaries, motivating safety-oriented post-training for WAMs.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7b90bc1d060556df",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Fig. 1: Sources of supervision for post-training in end-to-end autonomous driving. (a) Environment-derived rewards from closed-loop interaction with a simulator or world model. (b) Trajectory scores from an external rule-based or learned scorer. (c) NegWAM uses offline-mined negative trajectories as repulsive anchors and scene-conditioned rider tokens to introduce negative-aware losses into a unified world–action model.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "eeab2db6c33f3535",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Post-training offers a natural avenue beyond these limitations, but a central challenge is constructing learning signals that faithfully encode desired driving behavior [ 8 , 4 ] . Existing methods primarily rely on two sources of supervision. One line of work (Figure 1 a) explores policies in closed-loop environments built with a simulator [ 9 , 10 ] or a world model [ 11 , 12 ] , but is constrained by the sim-to-real gap, environment construction costs, and reconstruction artifacts [ 13 , 12 ] . Another line (Figure 1 b) scores candidate trajectories using rule-based evaluators or learned reward models, but the quality of its supervision is limited by handcrafted rules, privileged information, and evaluator bias [ 14 , 15 , 16 ] . These limitations underscore the need for additional sources of effective supervision for autonomous driving post-training.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6efa72e76aa8a1a8",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Unsafe driving behaviors provide critical cues for delineating safety boundaries and are often easier to characterize than the full range of desirable driving behavior [ 17 , 18 ] . Building on this insight, we propose NegWAM , a negative-aware safety post-training method that incorporates offline negative supervision into a unified WAM (Figure 1 c). Specifically, near-expert negatives serve as repulsive anchors that mark locally unsafe regions in trajectory space and as scene-conditioned rider tokens that enable shared attention layers to learn scene–trajectory compatibility. Together with the original imitation objective, these mechanisms enable the WAM to learn not only how experts drive but also which behaviors should be avoided in the current scene.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "7717055b85be29c5",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Unlike prior hard-negative learning that primarily regularizes planner outputs [ 17 ] , NegWAM post-trains both the single-rollout action flow and the shared world–action representation of a unified WAM. It mines near-expert trajectories that fail offline safety evaluation and jointly optimizes the original flow-matching objective with two hard-negative objectives. The evaluator is used only for offline mining, while the rider branch and compatibility head are removed at inference, adding no inference-time modules. On NAVSIM v2 [ 19 , 20 ] , NegWAM achieves 40.4 EPDMS on navhard , a 4.1 % relative improvement over the strongest compared scorer-free WAM baseline, and achieves 93.3 EPDMS on navtest , surpassing the strongest baseline score of 92.9 by 0.4 points and demonstrating stronger challenging-scenario performance without compromising routine driving. Zero-shot closed-loop evaluation on HUGSIM [ 21 ] further supports cross-benchmark transfer, with NegWAM achieving a higher HD-Score than DriveWAM (30.6 vs. 27.2).",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "b93c20590a6a8de2",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "In summary, our key contributions are as follows:",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "bfc838c6c75ca3ed",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We revisit unified world–action models through safety post-training, showing that augmenting flow-matching imitation with near-expert negative supervision improves challenging-scenario performance without compromising routine driving.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b3407cd5894aa871",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We propose NegWAM, a near-expert negative safety post-training method for WAMs that jointly optimizes the original flow-matching objective and two complementary near-expert negative objectives without introducing additional inference-time overhead.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ef21e41251156694",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We introduce two complementary near-expert negative mechanisms. Repulsive anchors push predictions away from locally unsafe trajectories, while scene-conditioned rider tokens enable the unified WAM to determine whether a trajectory is compatible with the current scene.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa8f288c01a0d4dd",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "The remainder of this paper is organized as follows. Section II reviews related work on end-to-end autonomous driving, world–action models, and policy post-training. Section III introduces NegWAM, including its core components and training objective. Section IV evaluates its planning performance and zero-shot closed-loop generalization, with ablation studies and supporting analyses. Section V summarizes the main findings and discusses limitations and future directions.",
+      "url": "https://arxiv.org/html/2611.08111v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "81db2f54107d786d",
+      "section": "II Literature Review",
+      "location": "II Literature Review",
+      "text": "Fig. 2: Architecture of our NegWAM. In Stage 1, we adapt a pretrained world-action DiT into a unified world–action model through flow matching. In Stage 2, scene-specific hard-negative trajectories are used as both repulsive anchors and trajectory riders for compatibility learning. The auxiliary rider branch is removed at inference, introducing no additional deployment cost.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e538dc886d7bb512",
+      "section": "II-A End-to-End Autonomous Driving",
+      "location": "II-A End-to-End Autonomous Driving",
+      "text": "End-to-end autonomous driving maps sensory observations to planned trajectories through a learned policy [ 2 , 22 ] . Joint optimization connects scene understanding with planning and reduces information loss across separately designed modules [ 1 ] . Scaling driving data further improves the coverage of learned behavior [ 23 ] , while generative future prediction introduces temporal structure and motion priors into policy learning [ 24 , 25 ] . These developments strengthen the policy’s ability to represent traffic scenes and reproduce expert decisions across diverse driving conditions.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "da424707a0436bb3",
+      "section": "II-A End-to-End Autonomous Driving",
+      "location": "II-A End-to-End Autonomous Driving",
+      "text": "Expert demonstrations nevertheless provide an uneven account of driving behavior: successful maneuvers are abundant, whereas safety-critical failures and recovery interactions are comparatively scarce [ 3 , 12 , 4 ] . Expert-trajectory supervision identifies a desirable action for the observed scene, but supplies few explicit comparisons with nearby unsafe alternatives. Such alternatives are informative because geometric similarity to an expert trajectory does not establish that an action is safe in the same traffic context [ 17 , 26 ] . Learning to distinguish these alternatives introduces a specific supervision requirement beyond reproducing the demonstrated trajectory.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5ef44e9f94aed6da",
+      "section": "II-B World-Action Models for Driving",
+      "location": "II-B World-Action Models for Driving",
+      "text": "Pretrained video generative models provide temporal and motion priors that can be transferred to action learning [ 27 , 5 , 7 ] . Their role in driving has expanded from supporting scene synthesis and simulation [ 11 , 28 ] to providing future representations for trajectory prediction [ 29 , 30 , 31 ] . Recent approaches further couple future visual modeling with action generation, bringing anticipated scene evolution into the policy’s prediction process [ 5 , 32 , 6 ] . This progression makes world modeling increasingly relevant to how driving actions are represented and generated.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5ece792c372b7d6a",
+      "section": "II-B World-Action Models for Driving",
+      "location": "II-B World-Action Models for Driving",
+      "text": "Recent work [ 7 , 33 ] realizes this coupling through shared video–action transformers trained using flow matching. Such architectures allow action supervision to shape the shared world–action representations. Their training objectives, however, focus on fitting demonstrated video–action sequences without explicitly contrasting expert trajectories with undesirable alternatives. This raises the question of how negative trajectories can provide supervision for both action generation and scene–trajectory compatibility during safety post-training.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa5e68e5107f303d",
+      "section": "II-C Post-Training for Driving",
+      "location": "II-C Post-Training for Driving",
+      "text": "Driving policy post-training introduces feedback beyond expert matching through simulated rollouts, reward-based optimization, and trajectory preferences [ 3 , 4 ] . Closed-loop learning uses synthetic simulators such as CARLA [ 9 , 34 ] , reconstructed scenes, or learned environments to expose policies to the consequences of their actions [ 13 , 12 ] . These mechanisms often overlap: DreamerAD [ 14 ] combines latent-world rollouts with learned reward feedback, while WorldRFT [ 15 ] uses collision-aware rewards for reinforcement fine-tuning. Complementary to policy post-training, TOAD [ 16 ] uses a learned trajectory scorer to guide test-time search without retraining the policy.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "275b451ec9391068",
+      "section": "II-C Post-Training for Driving",
+      "location": "II-C Post-Training for Driving",
+      "text": "Preference-based methods express the additional supervision through comparisons between trajectories. TakeAD [ 35 ] derives preferences from expert takeover data. DriveDPO [ 26 ] combines imitation similarity with rule-based safety scores for policy learning, then applies Safety DPO using human-like but unsafe rejected trajectories. Its preference construction thus retains explicit safety evaluation without requiring a separately trained reward model. BeyondDrive [ 17 ] develops this failure-based perspective through a flow-matching generator, expert-proximity and safety filtering, and a repulsive distance loss defined on predicted trajectories. These studies establish the value of near-expert failures as supervision, with distinct choices of policy objective and negative construction.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "90b9f2f04a04de1b",
+      "section": "II-C Post-Training for Driving",
+      "location": "II-C Post-Training for Driving",
+      "text": "For a unified WAM, an unsafe alternative is both a trajectory to avoid and an example of incompatibility between the scene and an action. NegWAM learns these two aspects from the same offline-mined failures: repulsive anchors supervise the generated action trajectory, while rider tokens expose the expert and negative trajectories to the observed scene through shared attention for compatibility learning. The original flow-matching objective remains active throughout post-training. Safety evaluation supplies the offline negative labels; subsequent optimization internalizes this supervision in the WAM, and the auxiliary rider branch is removed at inference.",
+      "url": "https://arxiv.org/html/2611.08111v1#S2.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ba1468d1fc3d4f38",
+      "section": "III Methods",
+      "location": "III Methods",
+      "text": "NegWAM post-trains a unified world–action model using scene-specific failures close to expert trajectories. Each retained failure supplies two related learning signals: a motion to avoid during action generation and a scene–trajectory pair to distinguish from the expert. Figure 2 illustrates how repulsive anchors and scene-conditioned rider tokens introduce these signals into the same backbone while retaining its flow-matching objective.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dfed78e767493cf8",
+      "section": "III-A 1 Unified World–Action Model",
+      "location": "III-A 1 Unified World–Action Model",
+      "text": "To couple future scene modeling with action generation in one backbone, we adopt a unified world–action architecture [ 27 , 7 ] built on a pretrained video backbone [ 36 ] as the base model. A training sample comprises a current camera image ℐ obs \\mathcal{I}^{\\mathrm{obs}} , future visual targets ℐ fut \\mathcal{I}^{\\mathrm{fut}} , an expert trajectory τ + \\tau^{+} , and navigation and ego-state conditions including four historical ego poses. A frozen causal video VAE encodes the observed and future frames into the clean visual stream 𝐱 0 v \\mathbf{x}_{0}^{v} . The action tokenizer forms 𝐱 0 a = E a ​ ( τ + ) \\mathbf{x}_{0}^{a}=E_{a}(\\tau^{+}) by normalizing the expert’s eight future Δ \\Delta -pose steps and prepending a zero conditioning chunk. Prediction masks exclude the observed visual prefix and the conditioning action chunk from the losses. We use m ∈ { v , a } m\\in\\{v,a\\} for the two modalities.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aeb9598e822b012a",
+      "section": "III-A 1 Unified World–Action Model",
+      "location": "III-A 1 Unified World–Action Model",
+      "text": "For each future chunk and modality, we independently sample Gaussian noise ϵ m \\boldsymbol{\\epsilon}^{m} and a scheduler index, whose shifted noise scale defines t m ∈ [ 0 , 1 ] t^{m}\\in[0,1] . We suppress chunk indices below. On prediction elements, flow matching constructs",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5d69bcd51c735da0",
+      "section": "III-A 1 Unified World–Action Model",
+      "location": "III-A 1 Unified World–Action Model",
+      "text": "𝐱 t m = ( 1 − t m ) ​ 𝐱 0 m + t m ​ ϵ m , 𝐯 m := ∂ 𝐱 t m ∂ t m = ϵ m − 𝐱 0 m . \\mathbf{x}_{t}^{m}=(1-t^{m})\\mathbf{x}_{0}^{m}+t^{m}\\boldsymbol{\\epsilon}^{m},\\qquad\\mathbf{v}^{m}:=\\frac{\\partial\\mathbf{x}_{t}^{m}}{\\partial t^{m}}=\\boldsymbol{\\epsilon}^{m}-\\mathbf{x}_{0}^{m}. (1)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "83c3d6eb991d6901",
+      "section": "III-A 1 Unified World–Action Model",
+      "location": "III-A 1 Unified World–Action Model",
+      "text": "Let 𝐭 = ( t v , t a ) \\mathbf{t}=(t^{v},t^{a}) , the shared DiT receives a four-segment sequence",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0f4d5de16c0a083e",
+      "section": "III-A 1 Unified World–Action Model",
+      "location": "III-A 1 Unified World–Action Model",
+      "text": "𝒮 𝐭 = [ 𝐱 t v ∥ 𝐱 c v ∥ 𝐱 t a ∥ 𝐱 c a ] , \\mathcal{S}_{\\mathbf{t}}=[\\,\\mathbf{x}_{t}^{v}\\,\\|\\,\\mathbf{x}_{c}^{v}\\,\\|\\,\\mathbf{x}_{t}^{a}\\,\\|\\,\\mathbf{x}_{c}^{a}\\,], (2)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "8a67f9cbb76b54cb",
+      "section": "III-A 1 Unified World–Action Model",
+      "location": "III-A 1 Unified World–Action Model",
+      "text": "where 𝐱 c m \\mathbf{x}_{c}^{m} is the corresponding teacher-forcing conditioning stream. During training, conditioning chunks are exposed only according to their causal temporal positions; future targets are not available as observations at inference. The video conditioning stream may receive noise augmentation, while its observed prefix remains clean. The action conditioning stream uses the zero initial chunk and preceding expert-action chunks. All streams share DiT blocks, with separate modality input and output projections. Under the original block-causal mask 𝒜 base \\mathcal{A}_{\\mathrm{base}} , noisy tokens can use preceding conditioning chunks and other noisy tokens in the same temporal block; conditioning tokens retain causal visibility. A finite temporal window limits their history. NegWAM preserves this mask for all original tokens.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS1.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "95a73367634820e6",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "Flow matching [ 37 , 38 , 39 ] learns a velocity field along a continuous interpolation between the data distribution and Gaussian noise. The shared DiT jointly predicts the video and action velocity fields:",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d0c69bab3894b6b8",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "( 𝐯 ^ θ v , 𝐯 ^ θ a ) = F θ ​ ( 𝒮 𝐭 , 𝐜 ) , (\\hat{\\mathbf{v}}_{\\theta}^{v},\\hat{\\mathbf{v}}_{\\theta}^{a})=F_{\\theta}(\\mathcal{S}_{\\mathbf{t}};\\mathbf{c}), (3)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "8757da054068aad6",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "where 𝐜 \\mathbf{c} contains command guidance and ego-state conditions. The original training objective is",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "1c263bc116c3a481",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "ℒ FM = ∑ m ∈ { v , a } 𝔼 ⁡ [ w m ​ ( t m ) ​ ‖ 𝐌 m ⊙ ( 𝐯 ^ θ m − 𝐯 m ) ‖ 2 2 ‖ 𝐌 m ‖ 1 ] , \\mathcal{L}_{\\mathrm{FM}}=\\sum_{m\\in\\{v,a\\}}\\mathbb{E}\\!\\left[w_{m}(t^{m})\\frac{\\left\\|\\mathbf{M}^{m}\\odot(\\hat{\\mathbf{v}}_{\\theta}^{m}-\\mathbf{v}^{m})\\right\\|_{2}^{2}}{\\|\\mathbf{M}^{m}\\|_{1}}\\right], (4)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "6a223c14ee9112fe",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "where 𝐌 m \\mathbf{M}^{m} selects valid future prediction elements and w m ​ ( t m ) w_{m}(t^{m}) is the scheduler’s normalized flow-matching weight. The scheduler grid, sampling rule, and weight function are specified in the supplementary implementation details. Under this parameterization, the clean action estimate and its decoded trajectory are",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS2.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "d0dd9646ef1a84ef",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "𝐱 ^ 0 a = 𝐱 t a − t a ​ 𝐯 ^ θ a , τ ^ = D a ​ ( 𝐱 ^ 0 a ) , \\hat{\\mathbf{x}}_{0}^{a}=\\mathbf{x}_{t}^{a}-t^{a}\\hat{\\mathbf{v}}_{\\theta}^{a},\\qquad\\hat{\\tau}=D_{a}(\\hat{\\mathbf{x}}_{0}^{a}), (5)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "6c293bf5c9174c99",
+      "section": "III-A 2 Flow Matching",
+      "location": "III-A 2 Flow Matching",
+      "text": "where D a D_{a} selects the future action chunk, denormalizes its Δ \\Delta -pose channels, and cumulatively integrates them into ego-frame poses. Our method preserves this flow-matching pathway and appends trajectory riders as additional action-token groups processed by the shared DiT.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS1.SSS2.p1.4",
+      "kind": "p"
+    },
+    {
+      "id": "3a72c4add09d2da6",
+      "section": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "location": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "text": "Directly sampling failure trajectories from the current policy can be ineffective under strong scene conditioning, consistent with prior observations of limited sampling diversity [ 4 ] . In a diagnostic probe using the same sampling configuration as the main experiments, the average pairwise ADE among eight trajectories generated for the same scene is only 0.02 ​ m 0.02\\,\\mathrm{m} , indicating limited diversity in this probe. We therefore mine negative trajectories from the 16K dense trajectory vocabulary of GTRS [ 40 ] . Each vocabulary trajectory τ ¯ j \\bar{\\tau}_{j} contains 40 ego-frame poses over a 4 ​ s 4\\,\\mathrm{s} horizon. The subsampling operator S S takes every fifth pose, corresponding to 0.5 ​ s 0.5\\,\\mathrm{s} intervals, to obtain the eight-step trajectory τ i , j = S ⁡ ( τ ¯ j ) \\tau_{i,j}=S(\\bar{\\tau}_{j}) aligned with the expert τ i + \\tau_{i}^{+} . We measure their distance using the Average Displacement Error (ADE) over their planar positions 𝐩 t = ( x t , y t ) \\mathbf{p}^{t}=(x^{t},y^{t}) :",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a6a4f9ca6b7f5434",
+      "section": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "location": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "text": "a i , j = ADE ⁡ ( τ i , j , τ i + ) = 1 T ​ ∑ t = 1 T ‖ 𝐩 i , j t − 𝐩 i + , t ‖ 2 . a_{i,j}=\\operatorname{ADE}(\\tau_{i,j},\\tau_{i}^{+})=\\frac{1}{T}\\sum_{t=1}^{T}\\left\\|\\mathbf{p}_{i,j}^{t}-\\mathbf{p}_{i}^{+,t}\\right\\|_{2}. (6)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "fdd5b89705f2bcaa",
+      "section": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "location": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "text": "Algorithm 1 separates offline failure mining from the preparation of training negatives. For each training scene, we first retain vocabulary candidates with a i , j < 1.0 ​ m a_{i,j}<1.0\\,\\mathrm{m} . We evaluate their original 40-step trajectories using the scene’s NAVSIM v2 metric cache and log-replay traffic. All candidates with zero EPDMS [ 20 ] are cached as evaluator-defined failures, forming a scene-specific pool ℋ i \\mathcal{H}_{i} .",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "e0fc7cec7de6486a",
+      "section": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "location": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "text": "At each training iteration, the cached pool ℋ i \\mathcal{H}_{i} of the corresponding scene is subsampled to eight steps per trajectory, and the expert-relative ADEs are recomputed on the subsampled poses. We retain candidates with ADE at least 0.3 ​ m 0.3\\,\\mathrm{m} , giving the final range [ 0.3 , 1.0 ) ​ m [0.3,1.0)\\,\\mathrm{m} . From these candidates, we randomly select at most K = 16 K=16 without replacement and zero-pad the trajectory and ADE tensors. A validity mask M i , k − M_{i,k}^{-} distinguishes selected negatives from padding. The same selected subset supplies both hard-negative objectives for that update; different reads may select different subsets from the cached pool. Samples without valid negatives contribute only the flow-matching loss. EPDMS is queried only during offline mining.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7812306e9106114e",
+      "section": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "location": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "text": "Algorithm 1 Near-Expert Negative Trajectory Construction",
+      "url": "https://arxiv.org/html/2611.08111v1#alg1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7333de15f89cb6a9",
+      "section": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "location": "III-B 1 Near-Expert Negative Trajectory Construction",
+      "text": "This procedure yields at least one valid hard negative for 85.8 % 85.8\\,\\% of the training samples. Across all valid, unpadded negatives, the median ADE to the expert trajectory is 0.80 ​ m 0.80\\,\\mathrm{m} , and approximately 9 % 9\\,\\% fall within [ 0.3 , 0.5 ] ​ m [0.3,0.5]\\,\\mathrm{m} .",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "55d8d69fc30542f9",
+      "section": "III-B 2 Noise-Aware Anchor Repulsion",
+      "location": "III-B 2 Noise-Aware Anchor Repulsion",
+      "text": "We treat the selected negative trajectories as fixed repulsive anchors in trajectory space. Let d i , k d_{i,k} denote the ADE between the one-step decoded trajectory τ ^ i \\hat{\\tau}_{i} from Eq. ( 5 ) and the k k -th negative τ i , k − \\tau_{i,k}^{-} , and let a i , k a_{i,k} denote the ADE between this negative and the expert trajectory. A fixed margin cannot accommodate negatives at different distances: a small margin leaves many negatives inactive, whereas a large one may conflict with the imitation objective. We therefore define the repulsion loss using a distance-adaptive margin:",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1da86e42b4593c74",
+      "section": "III-B 2 Noise-Aware Anchor Repulsion",
+      "location": "III-B 2 Noise-Aware Anchor Repulsion",
+      "text": "ℓ i , k rep = [ α ​ a i , k − d i , k ] + , 0 < α ≤ 1 . \\ell_{i,k}^{\\mathrm{rep}}=\\left[\\alpha a_{i,k}-d_{i,k}\\right]_{+},\\qquad 0<\\alpha\\leq 1. (7)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E7",
+      "kind": "table"
+    },
+    {
+      "id": "ead4ab0475b582bc",
+      "section": "III-B 2 Noise-Aware Anchor Repulsion",
+      "location": "III-B 2 Noise-Aware Anchor Repulsion",
+      "text": "We use α = 0.9 \\alpha=0.9 . The loss is active within the distance-dependent neighborhood of a negative anchor. At the exact expert trajectory, d i , k = a i , k d_{i,k}=a_{i,k} , so this repulsion term is zero for α ≤ 1 \\alpha\\leq 1 .",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "7ce5931f46efe4d3",
+      "section": "III-B 2 Noise-Aware Anchor Repulsion",
+      "location": "III-B 2 Noise-Aware Anchor Repulsion",
+      "text": "Since one-step trajectory estimates are less reliable at high noise levels, we weight the repulsion term by 1 − t i a 1-t_{i}^{a} and average it over valid negatives:",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4a8ef4809052039b",
+      "section": "III-B 2 Noise-Aware Anchor Repulsion",
+      "location": "III-B 2 Noise-Aware Anchor Repulsion",
+      "text": "ℒ rep = 𝔼 i ∼ ℬ ​ [ ( 1 − t i a ) ​ ∑ k M i , k − ​ [ α ​ a i , k − d i , k ] + max ⁡ ( 1 , ∑ k M i , k − ) ] , \\mathcal{L}_{\\mathrm{rep}}=\\mathbb{E}_{i\\sim\\mathcal{B}}\\left[(1-t_{i}^{a})\\frac{\\sum_{k}M_{i,k}^{-}\\left[\\alpha a_{i,k}-d_{i,k}\\right]_{+}}{\\max(1,\\sum_{k}M_{i,k}^{-})}\\right], (8)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E8",
+      "kind": "table"
+    },
+    {
+      "id": "14fee8e8168a5666",
+      "section": "III-B 2 Noise-Aware Anchor Repulsion",
+      "location": "III-B 2 Noise-Aware Anchor Repulsion",
+      "text": "where ℬ \\mathcal{B} is the training minibatch. A sample without valid negatives contributes zero. Differentiating the reconstruction in Eq. ( 5 ) introduces a factor t i a t_{i}^{a} ; together with the loss weight, this gives a t i a ​ ( 1 − t i a ) t_{i}^{a}(1-t_{i}^{a}) prefactor that vanishes at the noise endpoints. The actual gradient also depends on the trajectory decoder and active hinge terms. Repulsion reuses the original action output without another backbone forward pass and defines its supervision through trajectory distances.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "77508b3cc5fea59b",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "The same failures also define scene–trajectory comparisons. We encode the expert and each negative as a separate auxiliary rider group ℛ g \\mathcal{R}_{g} , using the shared action embedding and the same rotary positional encoding grid. Each group contains a zero conditioning chunk and an eight-step trajectory chunk, giving 16 action tokens. Riders are clean, with no diffusion noise and a flow-time input t = 0 t=0 . The expert occupies group zero; the remaining groups represent the negatives. Figure 3 illustrates the shared attention and scoring pathway.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ddbffd0ac9654ba7",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "The riders access the scene through shared attention while remaining invisible to the original streams. Let 𝐱 c v , obs \\mathbf{x}_{c}^{v,\\mathrm{obs}} contain the clean visual conditioning tokens of the current observed frame. At every DiT block, the attention visibility is",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5f7ae0debc39f3bc",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "𝒜 ⁡ ( p , q ) = { 𝒜 base ​ ( p , q ) , p , q ∈ 𝒮 𝐭 , 1 , p ∈ ℛ g , q ∈ 𝐱 c v , obs ∪ ℛ g , 0 , otherwise . \\mathcal{A}(p,q)=\\begin{cases}\\mathcal{A}_{\\mathrm{base}}(p,q),&p,q\\in\\mathcal{S}_{\\mathbf{t}},\\\\ 1,&p\\in\\mathcal{R}_{g},\\;q\\in\\mathbf{x}_{c}^{v,\\mathrm{obs}}\\cup\\mathcal{R}_{g},\\\\ 0,&\\text{otherwise}.\\end{cases} (9)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E9",
+      "kind": "table"
+    },
+    {
+      "id": "7eb790306c08a9a2",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "Thus, each rider sees only the current observed visual tokens and its own trajectory group. Future target tokens are excluded from these keys, and the observed tokens retain their original causal visibility. The original sequence cannot attend to riders, so appending them preserves its forward attention path at fixed backbone weights. Matching the expert and negative groups’ tokenization, positions, and visibility reduces structural differences in their scoring inputs.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "587e2d5f7e33c18d",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "Fig. 3: Scene-conditioned rider tokens for scene–trajectory compatibility learning. Expert and negative riders attend to observed scene tokens through shared DiT attention, and their compatibility scores define a ranking loss that updates the shared backbone.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9525d5e6bbf3cd11",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "We average the output features over all 16 tokens in each group and apply a shared compatibility head h ϕ h_{\\phi} : a linear projection to 256 dimensions, SiLU, and a scalar linear output. Zero-initializing the final layer’s weights and bias gives identical initial scores and zero initial compatibility gradient to the backbone; this gradient path becomes active as the head’s output weights are updated. Let s i + s_{i}^{+} and s i , k − s_{i,k}^{-} be the expert and negative scores. For ℬ + = { i ∈ ℬ : ∑ k M i , k − > 0 } \\mathcal{B}_{+}=\\{i\\in\\mathcal{B}:\\sum_{k}M_{i,k}^{-}>0\\} , we optimize",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS3.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "d4cb53ac92fad71f",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "ℒ compat \\displaystyle\\mathcal{L}_{\\mathrm{compat}} = − 𝔼 ℬ + ​ log ⁡ exp ⁡ ( s i + / τ s ) Z i , \\displaystyle=-\\mathbb{E}_{\\mathcal{B}_{+}}\\log\\frac{\\exp(s_{i}^{+}/\\tau_{s})}{Z_{i}}, (10) Z i \\displaystyle Z_{i} = exp ⁡ ( s i + / τ s ) + ∑ k M i , k − ​ exp ⁡ ( s i , k − / τ s ) . \\displaystyle=\\exp(s_{i}^{+}/\\tau_{s})+\\sum_{k}M_{i,k}^{-}\\exp(s_{i,k}^{-}/\\tau_{s}).",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E10",
+      "kind": "table"
+    },
+    {
+      "id": "76cdf27df0012cb5",
+      "section": "III-B 3 Scene-Conditioned Rider Tokens",
+      "location": "III-B 3 Scene-Conditioned Rider Tokens",
+      "text": "where τ s = 0.1 \\tau_{s}=0.1 . The expectation denotes the mean over samples with valid negatives; we set ℒ compat = 0 \\mathcal{L}_{\\mathrm{compat}}=0 when ℬ + \\mathcal{B}_{+} is empty. This objective ranks the expert above valid scene-specific negatives. Its gradients propagate through the shared attention projections, adding an explicit scene–trajectory ranking objective to the backbone. Rider groups and the compatibility head are used only during post-training.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS2.SSS3.p3.3",
+      "kind": "p"
+    },
+    {
+      "id": "c08712125974cbff",
+      "section": "III-C Training Objective",
+      "location": "III-C Training Objective",
+      "text": "Our training procedure consists of two consecutive stages. In the first stage, we initialize the model from the pretrained video generative model Wan2.2-TI2V-5B [ 36 ] and adapt it to autonomous driving by following the unified world–action flow-matching paradigm of DriveWAM [ 7 ] . This stage optimizes only the flow-matching objective defined in Section III-A , enabling the model to jointly learn future visual dynamics and expert trajectory prediction. The resulting model serves as the base WAM checkpoint shared by all subsequent experiments.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2662b3add5bbd81a",
+      "section": "III-C Training Objective",
+      "location": "III-C Training Objective",
+      "text": "In the second stage, we initialize from this shared checkpoint and perform hard-negative safety post-training. We retain the original flow-matching objective as supervision for visual dynamics and expert actions, while introducing repulsive trajectory supervision and scene-conditioned compatibility learning. The overall post-training objective is",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c4c2d61f121e38de",
+      "section": "III-C Training Objective",
+      "location": "III-C Training Objective",
+      "text": "ℒ post = ℒ FM + λ rep ​ ℒ rep + λ compat ​ ℒ compat , \\mathcal{L}_{\\mathrm{post}}=\\mathcal{L}_{\\mathrm{FM}}+\\lambda_{\\mathrm{rep}}\\mathcal{L}_{\\mathrm{rep}}+\\lambda_{\\mathrm{compat}}\\mathcal{L}_{\\mathrm{compat}}, (11)",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.E11",
+      "kind": "table"
+    },
+    {
+      "id": "f09ac978e3ba6c16",
+      "section": "III-C Training Objective",
+      "location": "III-C Training Objective",
+      "text": "where ℒ rep \\mathcal{L}_{\\mathrm{rep}} pushes predictions away from unsafe neighbors in trajectory space, and ℒ compat \\mathcal{L}_{\\mathrm{compat}} learns scene–trajectory compatibility through rider tokens. λ rep \\lambda_{\\mathrm{rep}} and λ compat \\lambda_{\\mathrm{compat}} control the contributions of the two hard-negative objectives. All post-training variants start from the same first-stage checkpoint, controlling for differences in base-model initialization.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "50b2ac1d186b09fd",
+      "section": "III-C Training Objective",
+      "location": "III-C Training Objective",
+      "text": "At inference, we discard the rider groups and compatibility head and use the original world–action generation pathway with the updated backbone. The model encodes the available observations, generates future visual latents with three Euler updates, and then generates the eight-step action chunk with ten Euler updates. These are integration-step counts rather than total backbone forward-call counts. The action decoder converts the generated tokens to the final trajectory; no hard-negative candidates or evaluator are used at this stage.",
+      "url": "https://arxiv.org/html/2611.08111v1#S3.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "588b1b2f510f19c9",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "TABLE I: Performance comparison on the NAVSIM v2 navhard benchmark. S1 denotes evaluation on the initial real-world scenes, while S2 denotes evaluation on the pre-generated reactive follow-up scenes. All results are reported using the corrected official NAVSIM v2.2 evaluation protocol. MV and SV denote multi-view and single-view camera inputs, respectively. DriveFuture † \\dagger denotes its variant without the GTRS-Dense scorer; the full system reports 55.5 with the GTRS-Dense scorer [ 40 ] .",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "fde04f8fa292c539",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "Methods Sensor Stage NC ↑ \\uparrow DAC ↑ \\uparrow DDC ↑ \\uparrow TLC ↑ \\uparrow EP ↑ \\uparrow TTC ↑ \\uparrow LK ↑ \\uparrow HC ↑ \\uparrow EC ↑ \\uparrow EPDMS ↑ \\uparrow S1 94.4 98.8 100 99.5 100 93.5 99.3 87.7 36.0 PDM-Closed - S2 90.5 90.6 95.4 98.4 100 86.6 74.2 91.9 29.7 56.6 E2E-based Methods S1 96.0 79.7 97.4 99.5 81.3 93.1 90.8 96.8 73.8 DiffusionDrive [ 41 ] MV S2 82.1 72.2 88.5 98.7 85.1 78.8 49.2 89.3 71.2 24.2 S1 96.6 80.5 96.3 99.3 82.3 94.9 91.5 97.7 67.8 GuideFlow [ 42 ] MV S2 87.3 76.7 88.8 99.2 84.3 85.1 49.7 93.1 44.2 27.1 VLA-based Methods S1 96.8 83.3 99.0 99.6 84.6 95.3 96.4 97.6 78.2 DriveVLA-W0 [ 43 ] SV S2 76.8 64.3 79.9 98.3 89.2 75.0 46.8 95.8 53.1 24.4 S1 98.4 94.3 97.8 99.9 85.7 97.2 94.2 97.6 72.1 SpanVLA [ 44 ] MV S2 86.9 84.3 87.1 98.2 85.5 82.7 62.3 96.8 67.4 40.1 World-Model-based Methods S1 97.1 88.7 99.2 99.6 84.2 97.1 96.2 97.8 69.8 DriveLAW [ 5 ] SV S2 82.3 67.9 83.7 98.1 84.7 78.5 46.7 96.3 60.6 30.4 S1 96.3 87.8 98.2 99.6 83.1 96.9 94.9 97.6 76.9 DriveFuture † \\dagger [ 45 ] MV S2 82.3 78.8 88.1 98.4 83.6 79.6 47.6 97.0 75.9 34.6 S1 97.3 90.7 99.4 100 83.3 97.3 97.3 97.6 60.9 EponaV2 [ 6 ] SV S2 83.6 78.0 88.0 98.9 86.0 80.3 50.1 96.1 52.0 36.1 S1 96.8 88.7 99.1 99.6 95.9 95.6 95.6 97.8 80.4 DriveWAM [ 7 ] SV S2 79.5 75.8 87.8 98.1 96.5 75.7 48.7 95.8 73.7 37.7 S1 96.6 93.1 98.8 99.6 96.9 95.8 96.9 97.8 78.7 BeyondDrive [ 17 ] SV S2 81.2 77.7 85.6 98.2 97.0 77.7 47.8 95.4 72.2 38.8 S1 96.6 94.4 98.8 99.6 95.8 96.0 96.4 97.8 79.6 Ours SV S2 79.2 78.0 86.4 98.1 96.3 75.3 48.4 95.7 73.7 40.4",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T1.6.1",
+      "kind": "table"
+    },
+    {
+      "id": "1989c6214481f92e",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "In this section, we investigate the following questions:",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "eb26005fe2ca54c3",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "Does NegWAM improve planning performance on both challenging and routine benchmarks, and do these gains transfer to zero-shot closed-loop evaluation? (Section IV-B )",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e24705150a0686cb",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "What are the individual and combined contributions of repulsive anchors and scene-conditioned rider tokens, and how sensitive is performance to the post-training budget and hyperparameters? (Section IV-C )",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "314c281c18376e5d",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "What qualitative driving behaviors are observed in trajectory comparisons and closed-loop rollouts? (Section IV-D )",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e14362fcb424d534",
+      "section": "IV Experiments and Results",
+      "location": "IV Experiments and Results",
+      "text": "What inference cost accompanies the planning improvements? (Section IV-E )",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "25e78eef79efa799",
+      "section": "IV-A 1 Datasets and Benchmarks",
+      "location": "IV-A 1 Datasets and Benchmarks",
+      "text": "NAVSIM [ 19 ] is a real-world autonomous driving dataset built upon OpenScene [ 46 ] and nuPlan [ 47 ] , comprising 103K training samples. We train all models on navtrain and evaluate them on navtest and navhard . To further assess zero-shot closed-loop generalization, we directly evaluate the same checkpoints on HUGSIM [ 21 ] .",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "81e7211030a37d4e",
+      "section": "IV-A 2 Evaluation Metrics",
+      "location": "IV-A 2 Evaluation Metrics",
+      "text": "NAVSIM v2. Both navtest and navhard report the Extended Predictive Driver Model Score (EPDMS) [ 48 ] , which combines multiplicative penalties with a weighted average of sub-metric scores:",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e2d79bc4689a6e77",
+      "section": "IV-A 2 Evaluation Metrics",
+      "location": "IV-A 2 Evaluation Metrics",
+      "text": "EPDMS = ( ∏ m ∈ ℳ pen S m ) ​ ∑ m ∈ ℳ avg w m ​ S m ∑ m ∈ ℳ avg w m , \\mathrm{EPDMS}=\\left(\\prod_{m\\in\\mathcal{M}_{\\mathrm{pen}}}S_{m}\\right)\\frac{\\sum_{m\\in\\mathcal{M}_{\\mathrm{avg}}}w_{m}S_{m}}{\\sum_{m\\in\\mathcal{M}_{\\mathrm{avg}}}w_{m}}, (12)",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.E12",
+      "kind": "table"
+    },
+    {
+      "id": "ec09621d490c7345",
+      "section": "IV-A 2 Evaluation Metrics",
+      "location": "IV-A 2 Evaluation Metrics",
+      "text": "where S m S_{m} and w m w_{m} denote the score and weight of sub-metric m m , respectively. The multiplicative penalty set ℳ pen \\mathcal{M}_{\\mathrm{pen}} comprises No At-Fault Collisions (NC), Drivable Area Compliance (DAC), Driving Direction Compliance (DDC), and Traffic Light Compliance (TLC). The weighted-average set ℳ avg \\mathcal{M}_{\\mathrm{avg}} includes Time-to-Collision (TTC), Ego Progress (EP), Lane Keeping (LK), History Comfort (HC), and Extended Comfort (EC). For navhard , scoring is further adapted to the two-stage setting through cross-stage aggregation, reactive traffic simulation, and the exemption of penalties when the corresponding expert rollout exhibits the same failure. All results use the corrected official NAVSIM v2.2 evaluation protocol, which fixes an inconsistency in the human-penalty filtering of the aggregated score [ 20 ] . All compared methods follow the same corrected evaluation protocol.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "486aa812b43e69bd",
+      "section": "IV-A 2 Evaluation Metrics",
+      "location": "IV-A 2 Evaluation Metrics",
+      "text": "HUGSIM. We report per-level and overall Route Completion (RC) and HD-Score. For an episode of length T T , HD-Score combines RC with No Collision (NC), Drivable Area Compliance (DAC), Time to Collision (TTC), and Comfort (COM):",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "b5a8c681a69bfc1a",
+      "section": "IV-A 2 Evaluation Metrics",
+      "location": "IV-A 2 Evaluation Metrics",
+      "text": "HD ​ - ​ Score \\displaystyle\\mathrm{HD\\text{-}Score} = RC T ∑ t = 1 T [ NC t DAC t \\displaystyle=\\frac{\\mathrm{RC}}{T}\\sum_{t=1}^{T}\\Biggl[\\mathrm{NC}_{t}\\,\\mathrm{DAC}_{t} (13) × 5 ​ TTC t + 2 ​ COM t 7 ] , \\displaystyle\\times\\frac{5\\,\\mathrm{TTC}_{t}+2\\,\\mathrm{COM}_{t}}{7}\\Biggr],",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.E13",
+      "kind": "table"
+    },
+    {
+      "id": "5bb85d97b38e4fa8",
+      "section": "IV-A 2 Evaluation Metrics",
+      "location": "IV-A 2 Evaluation Metrics",
+      "text": "where t t indexes the simulation time steps. Higher EPDMS, RC, and HD-Score indicate better planning performance.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "13e96cfb34dc8edc",
+      "section": "IV-A 3 Implementation Details",
+      "location": "IV-A 3 Implementation Details",
+      "text": "Our model uses one current camera image at a resolution of 256 × 448 256\\times 448 , together with four historical ego poses, while the action branch predicts a 4 ​ s 4\\,\\mathrm{s} future trajectory. We train the model on navtrain in two stages. Following the unified world–action flow-matching paradigm of DriveWAM [ 7 ] , we initialize the video backbone from Wan2.2-TI2V-5B [ 36 ] and perform 100K steps of WAM pretraining to jointly learn future visual dynamics and expert trajectory prediction. Starting from this checkpoint, we conduct 10K steps of hard-negative safety post-training. We retain the original flow-matching objective to preserve the learned world dynamics and expert-driving prior, while introducing the proposed repulsive-anchor and scene-conditioned rider-token objectives. The auxiliary rider branch is removed at inference, and measured inference efficiency is reported in Section IV-E . Complete model configurations, optimization settings, and training costs are provided in the supplementary material.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5a8e0c22a4afac68",
+      "section": "IV-A 3 Implementation Details",
+      "location": "IV-A 3 Implementation Details",
+      "text": "For the BeyondDrive [ 17 ] baseline in Tables I and II , we port the complete method, rather than only its repulsive loss, to our WAM architecture, strictly following the authors’ original source code and using BeyondDrive’s original negative samples. The reported results are obtained from our own experiments with this implementation and are not taken from the original paper.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS1.SSS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8e4eab667eb3ac12",
+      "section": "IV-B 1 NAVSIM v2",
+      "location": "IV-B 1 NAVSIM v2",
+      "text": "On navhard , NegWAM achieves 40.4 EPDMS, surpassing the BeyondDrive [ 17 ] baseline by 1.6 points, corresponding to a 4.1 % relative improvement, and establishing state-of-the-art performance among WAM without an external trajectory scorer (Table I ). On navtest , NegWAM further achieves 93.3 EPDMS, outperforming DriveWAM [ 7 ] by 1.1 points and establishing a new state of the art among the compared learning-based methods (Table II ). The consistent improvements across both benchmarks show that the proposed negative-aware post-training strategy enhances robustness in challenging scenarios while preserving, and even improving, the general driving capability acquired by the pretrained WAM.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS2.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "98244f93844d0ab1",
+      "section": "IV-B 1 NAVSIM v2",
+      "location": "IV-B 1 NAVSIM v2",
+      "text": "TABLE II: Performance comparison on the NAVSIM v2 navtest benchmark. All results are reported using the corrected official NAVSIM v2.2 evaluation protocol. MV and SV denote multi-view and single-view camera inputs, respectively.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a08deceed8fe0e31",
+      "section": "IV-B 1 NAVSIM v2",
+      "location": "IV-B 1 NAVSIM v2",
+      "text": "Methods Sensor NC ↑ \\uparrow DAC ↑ \\uparrow EPDMS ↑ \\uparrow Human agent - 100.0 100.0 97.9 E2E-based Methods DiffusionDrive [ 41 ] MV 98.2 95.9 84.5 DiffusionDriveV2 [ 49 ] MV 97.7 96.6 87.5 VLA-based Methods Recogdrive [ 50 ] MV 98.3 95.2 83.6 DriveVLA-W0 [ 43 ] SV 98.5 99.1 86.1 DriveWorld-VLA [ 51 ] MV 98.6 99.1 86.8 World-Model-based Methods Latent-WAM [ 31 ] MV 98.1 97.3 89.3 DriveFuture [ 45 ] MV 98.8 99.1 89.9 DriveLAW [ 5 ] SV 98.8 96.9 88.9 Discrete-WAM [ 52 ] SV 98.5 98.2 90.4 DriveWAM [ 7 ] SV 98.4 96.7 92.2 BeyondDrive [ 17 ] SV 98.2 97.7 92.9 Ours SV 98.1 98.4 93.3",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T2.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "262dc5a321eee072",
+      "section": "IV-B 2 Zero-shot Generalization to HUGSIM",
+      "location": "IV-B 2 Zero-shot Generalization to HUGSIM",
+      "text": "Under zero-shot evaluation on HUGSIM [ 21 ] , NegWAM improves RC and HD-Score by 3.4 % and 12.5 % relative to DriveWAM [ 7 ] , reaching 45.1 and 30.6, respectively (Table III ). The gains are concentrated in the Easy settings, while performance on Hard remains nearly unchanged and both metrics decrease on Extreme. These results show improved aggregate closed-loop performance without HUGSIM-specific fine-tuning, with transfer varying across scenario difficulty.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS2.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1ca6f47211d37d9d",
+      "section": "IV-B 2 Zero-shot Generalization to HUGSIM",
+      "location": "IV-B 2 Zero-shot Generalization to HUGSIM",
+      "text": "TABLE III: Zero-shot performance on the HUGSIM benchmark. E/M/H/X denote easy, medium, hard, and extreme scenarios. Higher is better for both route completion (RC) and HD-Score.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c446f26e3ad153bf",
+      "section": "IV-B 2 Zero-shot Generalization to HUGSIM",
+      "location": "IV-B 2 Zero-shot Generalization to HUGSIM",
+      "text": "RC ↑ \\uparrow HD-Score ↑ \\uparrow Method E M H X Overall E M H X Overall VAD [ 53 ] 38.7 27.0 25.5 23.0 27.9 24.3 9.9 10.4 8.2 12.3 LTF [ 19 ] 68.4 40.7 36.9 25.5 41.4 52.8 24.6 19.8 8.1 24.8 DriveWAM [ 7 ] 76.6 33.8 33.9 30.2 43.6 64.0 16.1 16.1 12.6 27.2 UniAD [ 1 ] 58.6 41.2 40.4 26.0 40.6 48.7 29.5 27.3 14.3 28.9 NegWAM (Ours) 90.3 32.8 31.2 26.1 45.1 81.7 15.8 14.2 10.8 30.6",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T3.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "a8add857ebe06f03",
+      "section": "IV-C 1 Effect of Repulsive Anchors",
+      "location": "IV-C 1 Effect of Repulsive Anchors",
+      "text": "As shown in Table IV , continuing post-training without either proposed component yields 38.2 EPDMS, only 0.5 points above the pretrained baseline. Introducing repulsive anchors increases EPDMS to 39.1, outperforming the matched post-training control and pretrained baseline by 0.9 and 1.4 points, respectively. This result demonstrates that explicitly separating predictions from hard-negative trajectories provides effective safety supervision beyond additional training alone.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3504fa027c6dfd28",
+      "section": "IV-C 1 Effect of Repulsive Anchors",
+      "location": "IV-C 1 Effect of Repulsive Anchors",
+      "text": "TABLE IV: Ablation study of the proposed post-training components. A checkmark indicates that the corresponding component is enabled.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "19a26a5b9e765b60",
+      "section": "IV-C 1 Effect of Repulsive Anchors",
+      "location": "IV-C 1 Effect of Repulsive Anchors",
+      "text": "Post-training Repulsive anchors Scene-conditioned rider tokens EPDMS Pretrained Baseline 37.7 ✓ \\checkmark 38.2 ✓ \\checkmark ✓ \\checkmark 39.1 ✓ \\checkmark ✓ \\checkmark 38.8 ✓ \\checkmark ✓ \\checkmark ✓ \\checkmark 40.4",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T4.2",
+      "kind": "table"
+    },
+    {
+      "id": "1abd4362ee187b9e",
+      "section": "IV-C 2 Effect of Scene-Conditioned Rider Tokens",
+      "location": "IV-C 2 Effect of Scene-Conditioned Rider Tokens",
+      "text": "Using scene-conditioned rider tokens alone achieves 38.8 EPDMS, outperforming the post-training control and pretrained baseline by 0.6 and 1.1 points, respectively. Combining rider tokens with repulsive anchors further increases EPDMS to 40.4, exceeding the anchor-only and rider-only variants by 1.3 and 1.6 points, respectively. The additional 1.3 EPDMS gain over the anchor-only variant further shows that NegWAM’s improvement cannot be explained by trajectory-space repulsion alone.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS3.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b95ca1804a3d78bf",
+      "section": "IV-C 2 Effect of Scene-Conditioned Rider Tokens",
+      "location": "IV-C 2 Effect of Scene-Conditioned Rider Tokens",
+      "text": "Figure 4 further illustrates the scene–trajectory compatibility learned by the rider branch. Pairing three trajectories with scenes from Boston, Pittsburgh, and one-north yields the highest score for each trajectory in its corresponding scene: the diagonal scores are 1.11, 0.32, and 1.58, respectively, and all mismatched pairs receive negative scores. This example complements the component ablation by illustrating the scene dependence of the learned compatibility scores.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS3.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3d0a90530af29889",
+      "section": "IV-C 2 Effect of Scene-Conditioned Rider Tokens",
+      "location": "IV-C 2 Effect of Scene-Conditioned Rider Tokens",
+      "text": "Fig. 4: Scene–trajectory compatibility scores for three example scenes. Rows correspond to the trajectories shown on the left, and columns correspond to the observed scenes shown above. Each cell reports the compatibility score of the corresponding scene–trajectory pair.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d4245a912c5f302f",
+      "section": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "location": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "text": "Following the public NAVSIM v2 protocol, which does not define a separate validation split, we report the complete checkpoint and one-factor-at-a-time sensitivity results on navhard for transparency. As shown in Figure 5 , NegWAM consistently outperforms the matched standard post-training baseline from 10K to 30K steps, confirming that the improvement holds across the post-training budget rather than at a single checkpoint. The corresponding navtest results in Figure 6 also show consistent gains over the baseline from 5K to 30K steps. Table V varies the learning rate, λ rep \\lambda_{\\mathrm{rep}} , and λ compat \\lambda_{\\mathrm{compat}} around the default configuration used in the main experiments. All tested settings yield 39.0–40.4 EPDMS, showing robustness to moderate hyperparameter changes.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS3.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4532f3f1998116cf",
+      "section": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "location": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "text": "Fig. 5: Effect of Post-Training Steps for NAVSIM v2 navhard . NegWAM results are reported as mean ± \\pm one standard deviation over three random seeds, while the baseline is a single run.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a2c0ca36a56b4bc1",
+      "section": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "location": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "text": "Fig. 6: Effect of Post-Training Steps for NAVSIMv2 navtest . NegWAM results are reported as mean ± \\pm one standard deviation over three random seeds, while the baseline is a single run.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c68837ab9c7e4640",
+      "section": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "location": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "text": "TABLE V: Sensitivity to the learning rate, repulsion weight, and compatibility weight.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b6c75a9e59c6c6bf",
+      "section": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "location": "IV-C 3 Sensitivity to Post-Training Budget and Hyperparameters",
+      "text": "Learning rate Repulsion Compatibility Learning rate EPDMS λ rep \\lambda_{\\mathrm{rep}} EPDMS λ compat \\lambda_{\\mathrm{compat}} EPDMS 5 × 10 − 7 5{\\times}10^{-7} 39.5 50 39.0 0.05 39.3 1 × 10 − 6 1{\\times}10^{-6} 40.4 100 40.4 0.1 40.4 2 × 10 − 6 2{\\times}10^{-6} 39.1 150 39.8 0.2 39.1",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "0ddee26da385cb51",
+      "section": "IV-D Qualitative Analysis",
+      "location": "IV-D Qualitative Analysis",
+      "text": "We examine NegWAM’s behavior through trajectory comparisons and a representative closed-loop rollout.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7dea1f19d291f684",
+      "section": "IV-D 1 Trajectory Comparison",
+      "location": "IV-D 1 Trajectory Comparison",
+      "text": "As shown in Figure 7 , NegWAM maintains safer clearance than DriveWAM [ 7 ] and avoids potential collision regions. In the second scenario, an occupant of a roadside parked vehicle opens the door and begins to exit. DriveWAM [ 7 ] still produces a nominal close-passing trajectory, leaving insufficient clearance for this emerging hazard. After post-training, NegWAM instead shifts outward and maintains a safe distance from the parked vehicle. Although the baseline trajectory may be safe without the door-opening interaction, it entails substantial risk in this safety-critical context. This comparison suggests that NegWAM internalizes scene-dependent safety boundaries that are difficult to capture through expert imitation alone, enabling it to avoid trajectories that are geometrically close to expert behavior yet potentially unsafe.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS4.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "46194216638e51dd",
+      "section": "IV-D 1 Trajectory Comparison",
+      "location": "IV-D 1 Trajectory Comparison",
+      "text": "Fig. 7: Qualitative comparison between DriveWAM [ 7 ] and our NegWAM in safety-critical scenarios. DriveWAM (top) predicts trajectories that approach nearby traffic participants, whereas NegWAM (bottom) maintains safer clearance while better following the human-expert trajectory.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6be05b1a13839997",
+      "section": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "location": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "text": "Figure 8 shows a representative closed-loop rollout in HUGSIM. Across the displayed time points, an oncoming vehicle approaches and passes on the left while the ego vehicle continues along the road. The rendered observations and trajectory overlays illustrate how the driving scene evolves during closed-loop execution.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS4.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "40f89ff081492df1",
+      "section": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "location": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "text": "Fig. 8: Representative closed-loop rollout in HUGSIM. Rows are ordered chronologically from top to bottom, with three rendered camera views at each time point. Yellow dots mark the overlaid trajectory in the center view. An oncoming vehicle approaches and passes on the left as the ego vehicle proceeds along the road.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5c8876871f4ee1e6",
+      "section": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "location": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "text": "TABLE VI: Planning score on navhard and inference efficiency. Higher EPDMS and FPS and lower latency, model size, and peak GPU memory are preferred.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9549a93c9e78eabe",
+      "section": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "location": "IV-D 2 Closed-Loop Rollout in HUGSIM",
+      "text": "Method Latency (ms) ↓ \\downarrow FPS ↑ \\uparrow Model size (MB) ↓ \\downarrow Peak GPU memory (MB) ↓ \\downarrow EPDMS ↑ \\uparrow DriveWAM [ 7 ] 871.35 1.15 6241.81 14029.08 37.7 NegWAM 877.86 1.14 6241.81 14029.08 40.4",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.T6.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "797d936a3f7b0cd7",
+      "section": "IV-E Inference Efficiency",
+      "location": "IV-E Inference Efficiency",
+      "text": "Table VI compares planning performance on navhard and inference efficiency. NegWAM improves EPDMS from 37.7 to 40.4 while retaining the same model storage size and peak inference GPU memory usage. Measured latency increases from 871.35 to 877.86 ms, a difference of 6.51 ms ( 0.75 % 0.75\\,\\% ), while throughput changes from 1.15 to 1.14 FPS. The auxiliary rider groups and compatibility head are removed at inference, allowing the planning gains to be obtained with nearly unchanged deployment cost.",
+      "url": "https://arxiv.org/html/2611.08111v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2bc4323c305dc7ad",
+      "section": "V Conclusion",
+      "location": "V Conclusion",
+      "text": "We revisit unified world–action models from the perspective of safety post-training and introduce NegWAM to address their reliance on expert imitation and lack of explicit safety boundaries. NegWAM leverages offline-constructed, near-expert hard-negative trajectories as repulsive anchors and scene-conditioned rider tokens, internalizing scene-dependent safety boundaries at both the trajectory and representation levels. Experiments demonstrate that NegWAM improves robustness in challenging scenarios while preserving routine driving performance, without requiring online simulation during post-training or introducing additional inference overhead. Zero-shot closed-loop evaluation further validates the transferability of these learned safety boundaries to unseen interactive environments.",
+      "url": "https://arxiv.org/html/2611.08111v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c9601114b494153b",
+      "section": "V Conclusion",
+      "location": "V Conclusion",
+      "text": "The generalization of NegWAM to the diversity and unpredictability of real-world driving remains to be established. Learning safety boundaries that remain effective across evolving environments and complex traffic interactions is a broader challenge for world–action models. Future work will investigate more generalizable and adaptive safety learning paradigms, toward integrating predictive world understanding with reliable long-horizon decision-making for autonomous driving.",
+      "url": "https://arxiv.org/html/2611.08111v1#S5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bf4b630efdaa63a1",
+      "section": "Appendix A",
+      "location": "Appendix A",
+      "text": "This appendix provides temporal indexing and optimization details, additional NAVSIM component scores, and qualitative cases from both trajectory prediction and closed-loop simulation. It also documents the scope of the negative supervision and the resources used in our implementation.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5d58eae24079a94b",
+      "section": "A-A 1 Data Layout and Optimization",
+      "location": "A-A 1 Data Layout and Optimization",
+      "text": "Table VII summarizes the model configuration, optimization settings, and resource requirements of the two training stages. The four future visual targets use zero-based indices { 1 , 3 , 5 , 7 } \\{1,3,5,7\\} within the future-frame sequence, corresponding to cache indices { 2 , 4 , 6 , 8 } \\{2,4,6,8\\} when the current image occupies index zero. Each action channel ( Δ ​ x , Δ ​ y , Δ ​ θ ) (\\Delta x,\\Delta y,\\Delta\\theta) is normalized using its 1st and 99th percentiles.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS1.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "12495768f46e0c2d",
+      "section": "A-A 1 Data Layout and Optimization",
+      "location": "A-A 1 Data Layout and Optimization",
+      "text": "TABLE VII: Model and training configurations.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "28edbf877c58b64b",
+      "section": "A-A 1 Data Layout and Optimization",
+      "location": "A-A 1 Data Layout and Optimization",
+      "text": "Model Configuration Sensors Observed Input Future Indices Action Target SNR Shift (V/A) Denoising Steps (V/A) Model Size Peak GPU Memory 1 × \\times Cam. (SV) 1 × 256 × 448 1\\times 256\\times 448 4 historical ego poses { 1 , 3 , 5 , 7 } \\{1,3,5,7\\} 8-step Δ \\Delta -pose 5.0 / 1.0 5.0\\,/\\,1.0 3 / 10 3\\,/\\,10 6,241.81 MB 14,029.08 MB",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.T7.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "6d278501dd565569",
+      "section": "A-A 1 Data Layout and Optimization",
+      "location": "A-A 1 Data Layout and Optimization",
+      "text": "Training Configuration Stage Initialization Steps Initial LR LR Schedule Loss Weights GPUs Wall Time GPU Hours WAM Pretraining Wan2.2-TI2V-5B 100K 1 × 10 − 5 1\\times 10^{-5} × 0.5 \\times 0.5 at 30K, 70K, 90K – 4 × 4\\times H100 22 h 88 Safety Post-training Pretrained WAM 10K 1 × 10 − 6 1\\times 10^{-6} × 0.5 \\times 0.5 at 5K λ rep = 100 , λ compat = 0.1 \\lambda_{\\mathrm{rep}}=100,\\;\\lambda_{\\mathrm{compat}}=0.1 4 × 4\\times H100 2 h 8",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.T7.3.1",
+      "kind": "table"
+    },
+    {
+      "id": "f76d537be6f2be90",
+      "section": "A-A 1 Data Layout and Optimization",
+      "location": "A-A 1 Data Layout and Optimization",
+      "text": "Both stages are trained on navtrain using AdamW with ( β 1 , β 2 ) = ( 0.9 , 0.95 ) (\\beta_{1},\\beta_{2})=(0.9,0.95) and a weight decay of 0.1. The per-GPU and global batch sizes are 1 and 4, respectively. Hard-negative defaults are α = 0.9 \\alpha=0.9 and τ s = 0.1 \\tau_{s}=0.1 ; the compatibility head has a hidden width of 256.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.T7.4",
+      "kind": "p"
+    },
+    {
+      "id": "2e657277ef0e85c7",
+      "section": "A-A 2 Scheduler and Conditioning",
+      "location": "A-A 2 Scheduler and Conditioning",
+      "text": "For each predicted temporal chunk, we uniformly sample an index j ∈ { 0 , … , S − 1 } j\\in\\{0,\\ldots,S-1\\} with S = 1000 S=1000 and use the shifted noise scale",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS1.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d4180490bf1c5b11",
+      "section": "A-A 2 Scheduler and Conditioning",
+      "location": "A-A 2 Scheduler and Conditioning",
+      "text": "u j = 1 − j S , t j m = γ m ​ u j 1 + ( γ m − 1 ) ​ u j , u_{j}=1-\\frac{j}{S},\\qquad t_{j}^{m}=\\frac{\\gamma_{m}u_{j}}{1+(\\gamma_{m}-1)u_{j}}, (14)",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.E14",
+      "kind": "table"
+    },
+    {
+      "id": "8e04d94c5d3fe9f1",
+      "section": "A-A 2 Scheduler and Conditioning",
+      "location": "A-A 2 Scheduler and Conditioning",
+      "text": "where γ v = 5.0 \\gamma_{v}=5.0 and γ a = 1.0 \\gamma_{a}=1.0 . Uniform index sampling therefore does not imply a uniform distribution over the shifted video noise scale. Let g ⁡ ( t ) = exp ⁡ [ − 2 ​ ( t − 0.5 ) 2 ] g(t)=\\exp[-2(t-0.5)^{2}] and g m , min = min 0 ≤ l < S ⁡ g ⁡ ( t l m ) g_{m,\\min}=\\min_{0\\leq l<S}g(t_{l}^{m}) . The flow-matching weight is",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS1.SSS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "8118f51840a5c3c3",
+      "section": "A-A 2 Scheduler and Conditioning",
+      "location": "A-A 2 Scheduler and Conditioning",
+      "text": "w m ​ ( t j m ) = g ⁡ ( t j m ) − g m , min S − 1 ​ ∑ l = 0 S − 1 [ g ⁡ ( t l m ) − g m , min ] , w_{m}(t_{j}^{m})=\\frac{g(t_{j}^{m})-g_{m,\\min}}{S^{-1}\\sum_{l=0}^{S-1}[g(t_{l}^{m})-g_{m,\\min}]}, (15)",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.E15",
+      "kind": "table"
+    },
+    {
+      "id": "41ca20d909285d09",
+      "section": "A-A 2 Scheduler and Conditioning",
+      "location": "A-A 2 Scheduler and Conditioning",
+      "text": "which has mean one over the scheduler grid. The video conditioning stream receives noise augmentation with probability 0.5 0.5 , while its observed prefix remains clean. The action conditioning stream is not augmented.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS1.SSS2.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "ace0d7d89401f0cd",
+      "section": "A-A 3 Negative-Cache Indexing",
+      "location": "A-A 3 Negative-Cache Indexing",
+      "text": "The offline negative pools preserve the original 40 ego-frame poses of each GTRS candidate [ 40 ] , at 0.1 ​ s 0.1\\,\\mathrm{s} intervals. Let 𝐩 ¯ q \\bar{\\mathbf{p}}_{q} denote the pose at zero-based cache index q q . The eight-step training trajectory uses",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS1.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "54fcb6721af1b251",
+      "section": "A-A 3 Negative-Cache Indexing",
+      "location": "A-A 3 Negative-Cache Indexing",
+      "text": "𝐩 j = 𝐩 ¯ 5 ​ j + 4 , j = 0 , … , 7 , \\mathbf{p}_{j}=\\bar{\\mathbf{p}}_{5j+4},\\qquad j=0,\\ldots,7, (16)",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.E16",
+      "kind": "table"
+    },
+    {
+      "id": "c9f4f89a16771072",
+      "section": "A-A 3 Negative-Cache Indexing",
+      "location": "A-A 3 Negative-Cache Indexing",
+      "text": "corresponding to indices 4 , 9 , … , 39 4,9,\\ldots,39 . This aligns negative trajectories with the expert’s 0.5 ​ s 0.5\\,\\mathrm{s} prediction grid while retaining the denser representation for offline evaluation. Fixed-size sampling and padding are applied by the training loader rather than stored in the offline pools; the filtering and validity-mask rules are specified in the main algorithm.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS1.SSS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "79fd65de68b8bca7",
+      "section": "A-B Additional Quantitative Results",
+      "location": "A-B Additional Quantitative Results",
+      "text": "Table VIII provides the full component-wise navtest comparison, complementing the condensed comparison in the main paper.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c638187434829d0d",
+      "section": "A-B Additional Quantitative Results",
+      "location": "A-B Additional Quantitative Results",
+      "text": "TABLE VIII: Performance comparison on the NAVSIM v2 navtest benchmark. All results are reported using the corrected official NAVSIM v2.2 evaluation protocol. MV and SV denote multi-view and single-view camera inputs, respectively. All evaluated methods use camera-only inputs without LiDAR.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "dfebffc776d2bd40",
+      "section": "A-B Additional Quantitative Results",
+      "location": "A-B Additional Quantitative Results",
+      "text": "Methods Sensor NC ↑ \\uparrow DAC ↑ \\uparrow DDC ↑ \\uparrow TLC ↑ \\uparrow EP ↑ \\uparrow TTC ↑ \\uparrow LK ↑ \\uparrow HC ↑ \\uparrow EC ↑ \\uparrow EPDMS ↑ \\uparrow Human agent - 100.0 100.0 99.8 100.0 97.8 100.0 100.0 98.1 90.1 97.9 E2E-based Methods DiffusionDrive [ 41 ] MV 98.2 95.9 99.4 99.8 87.5 97.3 96.8 98.3 87.7 84.5 DiffusionDriveV2 [ 49 ] MV 97.7 96.6 99.2 99.8 88.9 97.2 96.0 97.8 91.0 87.5 VLA-based Methods Recogdrive [ 50 ] MV 98.3 95.2 98.3 99.8 87.1 97.5 96.6 99.5 86.5 83.6 DriveVLA-W0 [ 43 ] SV 98.5 99.1 98.0 99.7 86.4 98.1 93.2 97.9 58.9 86.1 DriveWorld-VLA [ 51 ] MV 98.6 99.1 99.6 99.8 87.4 97.9 97.0 97.8 78.6 86.8 World-Model-based Methods Latent-WAM [ 31 ] MV 98.1 97.3 99.6 99.8 87.7 97.3 97.6 98.1 87.3 89.3 DriveFuture [ 45 ] MV 98.8 99.1 99.6 99.9 86.6 98.4 96.4 98.3 74.8 89.9 Drivelaw [ 5 ] SV 98.8 96.9 99.6 99.8 87.4 98.3 97.7 98.4 80.1 88.9 Discrete-WAM [ 52 ] SV 98.5 98.2 99.7 99.8 90.5 97.9 97.2 98.3 78.1 90.4 DriveWAM [ 7 ] SV 98.4 96.7 99.7 99.8 97.7 97.7 97.7 98.3 87.9 92.2 ByondDrive [ 17 ] SV 98.2 97.7 99.4 99.8 97.9 97.8 97.7 98.3 87.6 92.9 Ours SV 98.1 98.4 99.5 99.8 97.8 97.5 97.3 98.3 87.6 93.3",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.T8.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "b8d6d4159576f332",
+      "section": "A-C 1 Junction Interaction in HUGSIM",
+      "location": "A-C 1 Junction Interaction in HUGSIM",
+      "text": "Figure 9 shows an additional closed-loop interaction in HUGSIM [ 21 ] . A white vehicle appears near the junction in the first two snapshots and moves out of the displayed views as the ego vehicle advances along the road. The three rendered views at each time point show the surrounding traffic and road geometry, while the yellow trajectory overlay changes with the observations. This sequence complements the oncoming-vehicle example in the main paper by showing another traffic interaction during closed-loop execution.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "149f00d4783659c0",
+      "section": "A-C 1 Junction Interaction in HUGSIM",
+      "location": "A-C 1 Junction Interaction in HUGSIM",
+      "text": "Fig. 9: Additional closed-loop rollout near a junction in HUGSIM. The four rows are ordered chronologically from top to bottom; each row contains three rendered camera views. Yellow dots show the overlaid trajectory in the center view. A nearby white vehicle is visible in the early snapshots, followed by the ego vehicle’s continued motion along the road.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1f7585a31632e62e",
+      "section": "A-C 2 Additional Trajectory Comparisons",
+      "location": "A-C 2 Additional Trajectory Comparisons",
+      "text": "Figure 10 compares DriveWAM with NegWAM in two scenarios beyond those shown in the main paper. In the intersection-straight case, NegWAM’s trajectory bypasses a stopped roadside vehicle, while DriveWAM predicts a path close to the obstacle. In the left-turn case, NegWAM’s trajectory remains within the drivable surface, whereas the baseline trajectory leaves it. The two examples illustrate differences in obstacle clearance and adherence to road geometry.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS3.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d89c42469f18e77f",
+      "section": "A-C 2 Additional Trajectory Comparisons",
+      "location": "A-C 2 Additional Trajectory Comparisons",
+      "text": "Fig. 10: Additional successful cases. Comparison between DriveWAM [ 7 ] (top) and NegWAM (bottom) in an intersection-straight scenario with a stopped roadside vehicle and an intersection left-turn scenario. NegWAM safely avoids the stopped vehicle and maintains its trajectory within the drivable area, while the baseline produces collision-prone or off-road trajectories.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.F10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "31ee76c80deac29c",
+      "section": "A-C 3 Failure Cases",
+      "location": "A-C 3 Failure Cases",
+      "text": "Figure 11 documents two cases in which NegWAM performs worse than DriveWAM. In the first, the expert overtakes a stopped leading vehicle on the left, but NegWAM continues straight and collides with it. DriveWAM slows behind the vehicle and avoids the collision. In the second, NegWAM turns with insufficient clearance from a vehicle in the target lane, while DriveWAM maintains a wider margin. These failures identify limitations in maneuver selection and interaction clearance that remain after post-training.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS3.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "666eb9dfbf96adff",
+      "section": "A-C 3 Failure Cases",
+      "location": "A-C 3 Failure Cases",
+      "text": "Fig. 11: Representative failure cases. Comparison between DriveWAM (top) and NegWAM (bottom). In the first case, NegWAM fails to follow the expert’s leftward overtaking maneuver and collides with the stopped leading vehicle, whereas DriveWAM avoids the collision through conservative deceleration. In the second case, NegWAM maintains insufficient clearance from a vehicle in the target lane while turning, resulting in a collision.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.F11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "84b5bf4496b0445f",
+      "section": "A-D Scope of the Negative Supervision",
+      "location": "A-D Scope of the Negative Supervision",
+      "text": "The learned safety boundary depends on the near-expert failures covered by the fixed trajectory vocabulary. Rare maneuvers and interactions outside that candidate space receive no direct negative supervision. Vocabulary-based retrieval provides broad trajectory coverage but limited adaptation to individual scenes [ 40 ] ; diversity-aware failure generation is a complementary direction [ 17 ] .",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "748230c2eb3296ba",
+      "section": "A-D Scope of the Negative Supervision",
+      "location": "A-D Scope of the Negative Supervision",
+      "text": "The zero-EPDMS criterion assigns a common failure label to different violation types and severities. Both hard-negative objectives therefore inherit the offline evaluator’s assumptions. ADE additionally measures geometric proximity rather than interaction risk: similar paths can have different outcomes depending on timing, relative velocity, and road geometry [ 19 ] . The rider branch uses scene context, but its negative labels still come from this same construction process.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "be43966f67435081",
+      "section": "A-D Scope of the Negative Supervision",
+      "location": "A-D Scope of the Negative Supervision",
+      "text": "The additional failure cases show that benchmark gains can coexist with unsafe individual decisions. The evidence remains benchmark-based and provides no formal safety guarantee. Deployment requires independent closed-loop validation, evaluation across traffic conditions and road-user categories, and safeguards for hazardous or unfamiliar situations.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS4.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1c5ae783098ea9c5",
+      "section": "A-E License of Assets",
+      "location": "A-E License of Assets",
+      "text": "All training and evaluation data are obtained from publicly released datasets, including nuPlan [ 54 ] , OpenScene [ 46 ] , and NAVSIM v2 [ 20 ] , and are used in accordance with their respective licenses and terms of use. Our implementation further builds upon publicly available model assets from LingBot-VA [ 27 ] , Wan2.2-TI2V-5B [ 36 ] , and DriveWAM [ 7 ] . All third-party assets are used solely for non-commercial academic research and in compliance with the licenses accompanying their original releases.",
+      "url": "https://arxiv.org/html/2611.08111v1#A1.SS5.p1.1",
+      "kind": "p"
+    }
+  ]
+}

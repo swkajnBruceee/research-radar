@@ -1,0 +1,378 @@
+{
+  "item_id": "arxiv:2611.06564",
+  "document_id": "d6ea47ffad57c21e15159dc318f734bf4c38c590f05c42f9366ffb6597aa73ee",
+  "source_url": "https://arxiv.org/html/2611.06564v1",
+  "paper_version": "2611.06564v1",
+  "paper": {
+    "id": "arxiv:2611.06564",
+    "title": "Playing Soccer Like Humans Do: Learning Versatile and Agile Humanoid Soccer via Latent Motion Priors",
+    "url": "https://arxiv.org/abs/2611.06564v1",
+    "published": "2026-11-04",
+    "updated": "2026-11-04",
+    "topics": [
+      "control",
+      "imitation",
+      "sim"
+    ],
+    "summary": "Humanoid soccer requires a robot to seamlessly combine agile locomotion, ball manipulation, and impact-rich contact dynamics across a continuous, dynamic behavioral spectrum. Yet existing approaches either cover only a limited set of skills, or forego motion priors entirely and produce unnatural behaviors, leaving the combination of a unified skill set and human-like motion quality unaddressed. We present soccerbot, a hierarchical reinforcement learning framework that resolves both limitations through a structured latent motion prior distilled from large-scale human soccer motion capture data. By constraining policy learning within this dynamically plausible motion manifold, a single skill-conditioned policy naturally learns to perform moving, dribbling, trapping, and kicking in a unified formulation, while inherently producing human-like motion and fluid transitions during commanded skill switching. Augmented by robustness-oriented simulation design, soccerbot transfers zero-shot to the Unitree G1 humanoid robot, demonstrating agile, natural, and robust execution of the full soccer skill repertoire under real-world conditions."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-06T03:04:24.074721+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "值得借鉴的是训练起点：冻结人体动作先验后，让下一技能从前一技能留下的姿态、动量与球状态开始练习。运球接踢球的仿真SR提高9.5个百分点，但接球变弱；真机踢球速度控制仍有明显差距。",
+  "coverage": {
+    "read": 88,
+    "total": 88,
+    "evidence_ids": [
+      "86cd1340fbd76a44",
+      "9c8e0264998d2023",
+      "af0015ecbfe3d193",
+      "387ed0e528b58fdd",
+      "226bc70dff86d38c",
+      "6d33951b47e62870",
+      "6afaa3fcd0868694",
+      "770043b7001ec7bb",
+      "91bd2ca1ca65a174",
+      "55301966397133ed",
+      "409ce5c9e71393d9",
+      "5a3dc76c55b71775",
+      "e7350b3d5ba2ae5a",
+      "9d519e45ccde6280",
+      "3255bc13a7c6461a",
+      "f1274674d387bca9",
+      "0f4c813b506e5069",
+      "e90a281ecc016c94",
+      "6f3bfd68b14d1ef0",
+      "7926e71d7715e387",
+      "49d819d6993d93ed",
+      "73a520d7956b60bb",
+      "8ad85c679306c5bb",
+      "666cb960719d7c79",
+      "b230c9abeaa44e52",
+      "e2cc8a39e55f8af0",
+      "c4560a887b67593d",
+      "016d8ada2bd0a5a0",
+      "f3fd79cad4526c92",
+      "d5edd28777a03d5c",
+      "d1eccef90e36f720",
+      "fc3415d03ef08c12",
+      "4b144ce352aa03c9",
+      "fe957a783bf089f6",
+      "1b56dd54886d16e9",
+      "9f4fbfdb39d1b1d2",
+      "49d8d987861a0922",
+      "9061ec0a1bb7c195",
+      "ec83e82b3a678f77",
+      "b6ce2748aa998a57",
+      "ccc4eaee34a64ed1",
+      "c2e4d60f224582b6",
+      "057d70e96d6f8750",
+      "b4c634d0c58409c2",
+      "149c05d1946b3e95",
+      "758ce359eb351ec0",
+      "0fdf7c04cc4ccc21",
+      "0c2f66a04f15ad14",
+      "c4f90caddad75ca0",
+      "493b3a42e2a49eee",
+      "b50ea4934dfcfdb3",
+      "d774eea355aee890",
+      "d34b5e8f897975b6",
+      "1f049b01e31cd898",
+      "406d4055c01bf0f4",
+      "a39c67490f1f31c9",
+      "c57d7de779f920e7",
+      "7c6cdec4bdd8041c",
+      "3b08eb99b493e99b",
+      "ea8e1ff8065d6250",
+      "d97823cee5033ba5",
+      "e7766bb2bb7aba0c",
+      "424ff4fe6629026b",
+      "dea1f0fb7ddafe17",
+      "90bec30f21b1348c",
+      "35a316ef33c1ef4b",
+      "a87078de734693c6",
+      "539beb1e3c6c29e9",
+      "dc94491bd4ac74b6",
+      "72e312b50b33b092",
+      "3ad1c6f9420ca0d7",
+      "d5671dd1cd55eced",
+      "3dded5f212e8a2f2",
+      "aeca35844d5afe98",
+      "9e07964ad259516b",
+      "031078534fa50b3b",
+      "dda6f2de4d1b8092",
+      "3cbf4a01f7e4de3e",
+      "4e6570e93ccd2e90",
+      "526bb133d8a2d862",
+      "79caa3562cf1f3a8",
+      "f40c0a36e7fe8b5d",
+      "34003169ec3300cc",
+      "19624b090c6e5750",
+      "c7caf9a5d4a5214c",
+      "73db613297940a1c",
+      "e8e033db2a2cc075",
+      "2041d2093f7a9050"
+    ],
+    "pdf_pages_visually_checked": [
+      5,
+      7,
+      8,
+      9,
+      12,
+      13,
+      14
+    ],
+    "pdf_sha256": "9931a0403f3279990e10f341a27b6bc5c623fd80c7c97e3f8053183e345d4ca4"
+  },
+  "notice": "已完整阅读88个提取片段，覆盖正文、方法公式、实验、限制与附录A–C。PDF共14页；目视核对第5、7、8、9、12、13、14页的残差/正则/TSI公式、表1–4及A.1–A.3，并查看图3的共同t-SNE投影。HTML未发现额外编码listing块。未逐图检查第1/4页照片与框图、逐篇核查参考文献或观看项目视频；项目网站本轮未能访问，未验证代码和检查点。作者实验未复现。",
+  "findings": [
+    {
+      "title": "问题：单项学会，衔接时仍可能失败",
+      "text": "瞄准的是同一个人形策略的移动、运球、接球和踢球及其衔接。可复用的选择是共享冻结的动作表示，再扩大下一技能遇到的初始状态；潜空间先验承接PULSE等既有路线，不把整个架构说成全新发明。",
+      "evidence_ids": [
+        "226bc70dff86d38c",
+        "6d33951b47e62870",
+        "91bd2ca1ca65a174",
+        "5a3dc76c55b71775",
+        "e7350b3d5ba2ae5a",
+        "3255bc13a7c6461a"
+      ],
+      "quote": "state-conditioned prior",
+      "kind": "problem"
+    },
+    {
+      "title": "动作底座：先过滤，再蒸馏跟踪教师",
+      "text": "Soccer-X动作经GMR重定向，用预训练跟踪器剔除超出硬件力矩限制等无法跟踪的片段，保留约2.5小时。教师经RL学习跟踪，随后用学生访问状态上的DAgger式教师动作监督，联合动作重建、KL与潜变量时间平滑损失。",
+      "evidence_ids": [
+        "f1274674d387bca9",
+        "0f4c813b506e5069",
+        "e90a281ecc016c94",
+        "49d819d6993d93ed",
+        "73a520d7956b60bb",
+        "8ad85c679306c5bb"
+      ],
+      "quote": "online DAgger-style distillation buffer",
+      "kind": "method"
+    },
+    {
+      "title": "控制：只在冻结先验旁学潜空间残差",
+      "text": "蒸馏后丢弃后验编码器，冻结状态条件先验与解码器。技能策略输出残差z_s，与先验均值z_p组合为z=z_p+αz_s，再解码为29维关节位置目标；PPO的似然比、熵与KL在残差潜空间计算。残差均值越界惩罚是软正则，不是物理可行性的硬保证。",
+      "evidence_ids": [
+        "8ad85c679306c5bb",
+        "666cb960719d7c79",
+        "b230c9abeaa44e52",
+        "e2cc8a39e55f8af0",
+        "c4560a887b67593d",
+        "f3fd79cad4526c92",
+        "d5edd28777a03d5c"
+      ],
+      "quote": "computed only in latent space",
+      "kind": "method"
+    },
+    {
+      "title": "TSI：把上一技能的无失败末态用作下一次起点",
+      "text": "每技能保存256个末态，含根状态、关节位置/速度与球状态；30%重置从预设前驱技能池采样，其余用标准初始化。比如接球/运球后练踢球，运球/踢球后练移动。保存条件是未以失败结束，不等于每条记录都已完成任务，也不向真机注入这些状态。",
+      "evidence_ids": [
+        "fc3415d03ef08c12",
+        "526bb133d8a2d862",
+        "79caa3562cf1f3a8",
+        "f40c0a36e7fe8b5d"
+      ],
+      "quote": "episodes that end without failure",
+      "kind": "method"
+    },
+    {
+      "title": "共享接口：按当前技能启用奖励",
+      "text": "同一actor接收106维观测，包括命令、球状态、技能one-hot与本体信息；移动时屏蔽球状态。每步仅启用当前技能奖励并共享姿态/平滑项，避免同时奖励加速和停球；critic另有干净观测与基座线速度，共109维。球状态仍需外部估计。",
+      "evidence_ids": [
+        "666cb960719d7c79",
+        "d1eccef90e36f720",
+        "3ad1c6f9420ca0d7",
+        "d5671dd1cd55eced",
+        "3dded5f212e8a2f2",
+        "aeca35844d5afe98",
+        "9e07964ad259516b",
+        "031078534fa50b3b",
+        "3cbf4a01f7e4de3e"
+      ],
+      "quote": "Rewards are routed by skill",
+      "kind": "method"
+    },
+    {
+      "title": "整体：踢球与运球更强，接球有损失",
+      "text": "每方法每技能2500次随机仿真评估，完整系统踢球/运球SR为97.04/89.88%，LATENT为91.00/85.24%；移动均为100%。接球则83.08%，低于LATENT的85.92%及PPO的94.64%。这是整体系统比较，不能把差距全部归因于TSI。",
+      "evidence_ids": [
+        "49d8d987861a0922",
+        "9061ec0a1bb7c195",
+        "ec83e82b3a678f77",
+        "b6ce2748aa998a57",
+        "b4c634d0c58409c2"
+      ],
+      "quote": "Each method is evaluated on",
+      "kind": "evidence"
+    },
+    {
+      "title": "先验消融：拟人动作与任务成功并非同一目标",
+      "text": "去掉状态条件先验但保留相同解码器后，训练/留出人体参考的MMD²从0.226/0.554变为0.234/0.582，踢球SR从97.04降至94.40%，运球仅从89.88降至89.48%，接球反而从83.08升至94.00%。AMP的MMD²更低，不能宣称本文在全部方法中最像人。",
+      "evidence_ids": [
+        "ec83e82b3a678f77",
+        "ccc4eaee34a64ed1",
+        "c2e4d60f224582b6",
+        "b4c634d0c58409c2"
+      ],
+      "quote": "keeps the same decoder",
+      "kind": "evidence"
+    },
+    {
+      "title": "TSI证据：运球接踢球87.5%，对照78.0%",
+      "text": "从来源技能末态启动目标技能，完整模型/无TSI的运球→踢球SR为87.5/78.0%，移动→运球78.5/71.5%，接球→踢球96.5/92.0%。非接球目标9个有效格中8格提高，但含同技能命令重采样；球相关目标仅纳入球距机器人0.8m内的来源状态。表2不是完整长链连续比赛测试。",
+      "evidence_ids": [
+        "149c05d1946b3e95",
+        "758ce359eb351ec0",
+        "0fdf7c04cc4ccc21",
+        "0c2f66a04f15ad14",
+        "c4f90caddad75ca0"
+      ],
+      "quote": "only source states with the ball within",
+      "kind": "evidence"
+    },
+    {
+      "title": "TSI反例：所有接球目标格都更弱",
+      "text": "表2中，运球→接球为53.0/71.0%，踢球→接球86.5/96.5%，移动→接球58.5/68.5%，接球→接球79.5/95.5%（完整/无TSI）。标准起点接球SR也为83.08/98.12%。作者观察到伸腿挡快球后反弹超位移门槛，不能将TSI说成无代价地改善全部衔接。",
+      "evidence_ids": [
+        "c2e4d60f224582b6",
+        "b4c634d0c58409c2",
+        "0fdf7c04cc4ccc21",
+        "0c2f66a04f15ad14"
+      ],
+      "quote": "Both ablations trap more reliably",
+      "kind": "limitation"
+    },
+    {
+      "title": "重置分布：中距离踢球受益，先验并非处处占优",
+      "text": "固定8m/s命令，每条件1000次确定性仿真，中距离静球完整/无TSI的SR为87.0/34.3%，差52.7个百分点；近球98.6/95.3%。迎面来球完整模型72.9%，无先验却为92.4%；更丰富重置有帮助，不能推出状态条件先验对每种来球都最优。",
+      "evidence_ids": [
+        "493b3a42e2a49eee",
+        "b50ea4934dfcfdb3",
+        "d34b5e8f897975b6",
+        "1f049b01e31cd898"
+      ],
+      "quote": "deterministic simulation episodes",
+      "kind": "evidence"
+    },
+    {
+      "title": "迁移边界：真机成功率与仿真口径不同",
+      "text": "表3真机踢球SR只按方向准确性计，仿真还要求有效接触、速度门槛和保持平衡，约3.1个百分点均值差不可当作等口径迁移损失。表4每技能20次真机试验：踢球速度误差从8.12%增至47.38%，接球停球位移从0.31增至1.07m。不能据高方向SR认定速度控制也可靠。",
+      "evidence_ids": [
+        "493b3a42e2a49eee",
+        "d34b5e8f897975b6",
+        "406d4055c01bf0f4",
+        "7c6cdec4bdd8041c",
+        "3b08eb99b493e99b",
+        "e7766bb2bb7aba0c"
+      ],
+      "quote": "solely based on directional accuracy",
+      "kind": "limitation"
+    },
+    {
+      "title": "部署与接触：外部动捕，仍有明显误差",
+      "text": "G1的球和机器人状态来自外部光学动捕，尚无机载视觉、多人对抗或比赛决策验证。落球恢复系数与自由滚动减速度落在随机化覆盖内，但不能证明足球冲击模型准确；充气球形变是作者提出的速度偏差解释，未用顺应接触消融验证。",
+      "evidence_ids": [
+        "9d519e45ccde6280",
+        "9f4fbfdb39d1b1d2",
+        "7c6cdec4bdd8041c",
+        "3b08eb99b493e99b",
+        "ea8e1ff8065d6250",
+        "dea1f0fb7ddafe17",
+        "19624b090c6e5750",
+        "c7caf9a5d4a5214c",
+        "2041d2093f7a9050"
+      ],
+      "quote": "external optical motion capture system",
+      "kind": "limitation"
+    },
+    {
+      "title": "复现缺口：评估次数不是训练复现次数",
+      "text": "论文给出8192并行环境、TSI比例/池大小、观测扰动及奖励表，但未完整列出潜变量维数、α、蒸馏系数、网络/PPO配置、总训练步数、GPU型号和耗时。主表未报多训练种子区间，表2样本数与跨方法末态池是否相同未充分说明；大规模评估episode不等于独立训练复现。",
+      "evidence_ids": [
+        "73a520d7956b60bb",
+        "e2cc8a39e55f8af0",
+        "c4560a887b67593d",
+        "49d8d987861a0922",
+        "ec83e82b3a678f77",
+        "b4c634d0c58409c2",
+        "149c05d1946b3e95",
+        "0c2f66a04f15ad14",
+        "031078534fa50b3b",
+        "3cbf4a01f7e4de3e",
+        "4e6570e93ccd2e90",
+        "f40c0a36e7fe8b5d",
+        "2041d2093f7a9050"
+      ],
+      "quote": "8192 parallel environments",
+      "kind": "limitation"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "验证：按目标技能分配TSI，能否保住接球？",
+      "text": "待验证假设：按目标技能设置TSI比例，能保留运球接踢球的收益，同时减轻统一30%重置带来的接球退化。先在同一G1仿真、相同冻结先验和解码器上做实验，固定数据、奖励、命令分布、PPO预算及技能采样率。以“接球目标TSI为0或0.3”和“其余目标TSI为0或0.3”做2×2对照，四组包含全无TSI、论文统一0.3、仅非接球启用、仅接球启用。训练总交互步数保持一致；记录每技能实际继承样本数和池分布，不把混合比例差异隐去。最终评估使用独立来源策略和未用于训练的rollout生成共同末态测试池，各模型从完全相同的有效状态与命令开始，禁止用结果挑末态。球距0.8m筛选要对所有组一致，并报告合格数、剔除数；另报不筛选的覆盖率及失败情况。每组至少3个独立训练种子，报告逐技能标准起点SR、完整切换矩阵、运球→踢球与所有接球目标SR、跌倒率、速度/方向误差及MMD²，按训练种子报告不确定性。再用运球→踢球→移动等未重置连续链检验，区分一跳末态测试与真正组合执行。可预先把运球→踢球相对统一TSI退化不超过2个百分点设为候选门槛；若关闭接球TSI不能稳定改善接球，或使该衔接下降超过门槛，则反对这项技能分配假设。此为可编辑的仿真实验草案，未执行、未创建个人选题，也未宣称发现研究空白。",
+      "evidence_ids": [
+        "fc3415d03ef08c12",
+        "c2e4d60f224582b6",
+        "b4c634d0c58409c2",
+        "149c05d1946b3e95",
+        "758ce359eb351ec0",
+        "0fdf7c04cc4ccc21",
+        "0c2f66a04f15ad14",
+        "526bb133d8a2d862",
+        "79caa3562cf1f3a8",
+        "f40c0a36e7fe8b5d"
+      ],
+      "quote": "target skill can be initialized from the terminal state"
+    }
+  ],
+  "frontier_brief": {
+    "title": "SoccerBot：让下一技能从上一技能的末态开始练",
+    "change_type": "多技能控制 · 重置分布",
+    "delta": "在冻结动作先验＋潜空间残差策略上，把30%训练重置换成前驱技能的无失败末态，继承身体动量和球状态。它改善部分衔接，但接球存在明确退化。",
+    "before": "下一技能总从标准初始化开始，训练时少见上一动作留下的姿态与动量。",
+    "after": "每技能缓存256个有效末态，按前驱关系混入起点；同一策略在冻结动作空间内学习接续。",
+    "relevance": "如果单项技能已学会、拼接时却失稳，值得先检查训练重置与真实切换状态是否一致；保留逐技能测试，尤其别让平均收益掩盖接球退化。",
+    "caveat": "切换证据来自一跳末态测试，球相关目标限0.8m内；接球更弱，缺少训练种子区间。真机依赖外部动捕，踢球速度误差47.38%。未复现。",
+    "question": "把TSI比例按目标技能拆开，能否保留踢球衔接，同时恢复接球？",
+    "evidence": [
+      {
+        "label": "TSI改善一跳衔接",
+        "value": "87.5% vs 78.0%",
+        "context": "运球末态→踢球，完整模型/无TSI，+9.5个百分点；表2仿真，球距机器人须≤0.8m。未提供该表样本数和多训练种子区间。"
+      },
+      {
+        "label": "同一消融的反例",
+        "value": "53.0% vs 71.0%",
+        "context": "运球末态→接球，完整模型/无TSI，−18.0个百分点。所有接球目标格均下降；不能把TSI概括成所有切换更好。"
+      },
+      {
+        "label": "真机连续控制边界",
+        "value": "47.38% 速度误差",
+        "context": "G1踢球，外部动捕；表4每技能20次真机试验，对应仿真8.12%。表3真机方向SR与仿真多条件SR口径不同，不能直接当迁移差。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "冻结动作底座",
+        "text": "约2.5小时过滤后人体动作训练跟踪教师，蒸馏并冻结状态条件先验与解码器。"
+      },
+      {
+        "title": "只学技能残差",
+        "text": "共享技能条件策略用PPO学习潜空间残差，解码为29维关节目标；奖励按当前技能启用。"
+      },
+      {
+        "title": "改变重置分布",
+        "text": "30%起点继承前驱技能的无失败末态，练习从非标准姿态和动量接续。"
+      }
+    ]
+  }
+}

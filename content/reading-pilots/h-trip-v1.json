@@ -1,0 +1,456 @@
+{
+  "item_id": "arxiv:2611.08139",
+  "document_id": "fe9cdfd05be7db5693e081f9f2a8d5e58ced0c0e065160cbd1baea90b22a4cf3",
+  "source_url": "https://arxiv.org/html/2611.08139v1",
+  "paper_version": "2611.08139v1",
+  "paper": {
+    "id": "arxiv:2611.08139",
+    "title": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration",
+    "url": "https://arxiv.org/abs/2611.08139v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "planning",
+      "evaluation"
+    ],
+    "summary": "arXiv:2611.08139v1 Announce Type: new Abstract: Frontier-based exploration systems repeatedly evaluate geodesic travel costs between robot poses and candidate viewpoints, and tour-based planners consume the full pairwise distance matrix built from them. Recomputing these matrices with one graph search per source scales with the explored map size, whereas distance caches that refresh only locally affected or newly created frontiers can retain stale costs between surviving pairs when newly discovered free space creates a global shortcut. We present H-TRIP (Hierarchical Tropical Rank-one Incremental Propagation), an exact distance index grounded in Kleene algebra over the min-plus semiring for monotonically growing occupancy grids. H-TRIP partitions the known map into a spatial hierarchy with fixed boundary ports. Each unknown-to-free revelation is decomposed into efficient rank-one min-plus edge insertions at the affected leaf, and only decreased port-to-port summaries are propagated along its ancestor chain. A shared hierarchical lift evaluates the dense many-to-many matrix of shortest distances for all active query points on the occupancy map. We prove that sequential insertions preserve exact shortest-path distances on the grid. Benchmark experiments confirm exact agreement with reference searches on fully built maps and show that dense many-to-many queries at a few dozen viewpoints are up to two orders of magnitude faster than sequential k x BFS. On exploration runs with sixteen robots, in-loop queries on the growing occupancy graph are 2.21x-8.59x faster than co-scheduled k x BFS on maps with side 256, 512, and 1024 cells."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-08T11:22:51.689615+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 106,
+    "total": 106,
+    "evidence_ids": [
+      "2ed05370950bd2fc",
+      "a75cc0884a3065a1",
+      "0953ce9990c6e2b6",
+      "60b247e9702053b6",
+      "076850736105d564",
+      "2c3c893821f38771",
+      "4d2034362eb89188",
+      "f76e471931c7ba54",
+      "a83fd3c5794e14e9",
+      "a4923764aa0ac187",
+      "9c2569c4f7d3c1fd",
+      "da05fcb1e25f1987",
+      "4a4dbd3de7825ce6",
+      "8c97bc7f606160be",
+      "7ec8cc004b667171",
+      "e13cf2dc42121dee",
+      "8432928faae8408d",
+      "68bb60f0231d7ad3",
+      "675733c14fb6b0de",
+      "884623e022645b8d",
+      "6e6057e45b52d6e2",
+      "f84e6ec6695a1bda",
+      "a3a6442b6d22e740",
+      "132d418079249e62",
+      "d8c0814765cbb4e4",
+      "cbc680c5864db633",
+      "f36cb0e14825699a",
+      "cf27a2447991824a",
+      "41356da5ffaa442a",
+      "69d37ce524ce5a52",
+      "cc317632cba744ee",
+      "d854b9f8c495a45d",
+      "03b0bcbc481108d5",
+      "4f85d9594fb90edb",
+      "483b8bfa08897506",
+      "ead7a6ac810cfd99",
+      "67dd38f2bc7315df",
+      "e12c16f2d22f2f8c",
+      "b500d748b2fec250",
+      "f29af1966e148426",
+      "cd18d48f5d0c0e0f",
+      "d408ceda4b4099e6",
+      "a291da2fe9410dcb",
+      "de478658c9abc7c5",
+      "d04248dbc93c4a7a",
+      "ee9b23daabd1e79c",
+      "03ee65e6fbe7fbad",
+      "f67fbd7e1c9db781",
+      "41400bb9f716a1a3",
+      "405b98333028caa4",
+      "5e83dbed8cb058fc",
+      "df4ffe0311e9ea41",
+      "9b42b97ce05752fb",
+      "804c0b53aa7918d3",
+      "5a71b5684b92db6f",
+      "cd95bb985a87370b",
+      "f7787fa2291c1dc4",
+      "dedff6b75e88295c",
+      "3a4957bc8ecf0c5f",
+      "d140f58c7ca1a761",
+      "6abc90cb44a85a4a",
+      "70e704a9033f1e18",
+      "c9697a47847ca27a",
+      "dab06c01afdb65f5",
+      "fc4646e9c707fc4d",
+      "4c16f32013256d38",
+      "f6b4285fc52c7ab4",
+      "41d6f68da557677d",
+      "cd78b37e231c75ad",
+      "065e204b5fb4f578",
+      "e5a3517528589a05",
+      "62865d676fdb8ed4",
+      "e31006bddcb89351",
+      "097e7654fb6470cf",
+      "2eec70469789cee9",
+      "a9ddc773896bb3e8",
+      "1d6a52cda1f98ecc",
+      "e0c1849b3c3702e2",
+      "b77ebd78bc4fd3d7",
+      "f1772cf4e6014816",
+      "b4ef72c55c3efaa2",
+      "d3cb899f951dad6c",
+      "b2526ff17651d09f",
+      "ae5dac1c2d2dfc76",
+      "4efbc4c3a4c61b9e",
+      "9d7013cc84589f64",
+      "b3e11fe61d1f721a",
+      "796da7bca9eb701e",
+      "27baceb130bbc948",
+      "83f97f8ba16f0b99",
+      "fdf150723d092cb8",
+      "98c1a27b98db710f",
+      "2e83b89b6fc4610f",
+      "d6bbec6f0693fcc7",
+      "d893b19113d8ff36",
+      "6e8d74e12e534bfe",
+      "f2731e5424370d3a",
+      "04a671756d2b66cb",
+      "941bcdc4da5ce004",
+      "4e77f49d8306bfc2",
+      "68da8aa162385d9a",
+      "5d8ebf8ed6105769",
+      "7544914204257c23",
+      "eaefaf3e15f10dbd",
+      "730b7ffe1c4457e0",
+      "17426a3afd394e9c"
+    ],
+    "pdf_pages_visually_checked": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "pdf_sha256": "97d5ac0fc44606eeba1bc852c61dcf271c60ebf16637e0ddef01a52d78464cc8"
+  },
+  "overview": "H-TRIP把多机器人规划的距离后端改为固定边界层次索引：地图只增添可通行格/边时，局部min-plus闭包更新向祖先传播距离下降，查询点共享边界提升，一次输出全对精确距离。可复用之处在精确增量维护与批量共享，而非新控制器或学习模型。作者在MovingAI地图与16机器人仿真中测得查询收益，但更新、全建与GB级索引不可忽略；部分开图批次的更新加查询比BFS更贵，小批查询也可明显更慢。限定为二维单调地图，不证明整任务提速或真机效果。",
+  "notice": "当前会话代理完整读取106/106个固定HTML证据片段，覆盖正文、数学定义/证明及全部实验；该版本无附录。固定PDF8页、1761429字节，目视物理页3/4/5/6/7/8，核公式、算法1/2、Lemma1与Theorem1/2、图2–5及表I–V。补读PDF算法伪代码，区分全揭示图与探索中部分图、查询与更新、预处理/索引内存口径。未执行作者代码、重放地图更新或复现实验，未独立审计数值溢出、双缓冲版本同步和原始计时日志。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "新开通道可缩短未移动端点间距离，局部缓存失效是研究动机",
+      "text": "输入是二维静态场景逐步揭示的可通行图，默认无向四邻接单位边，未知格未揭示前 incident edge 为无穷；只允许unknown→free增加顶点/边，距离不增。新门洞可让两个坐标未变的机器人/前沿点之间出现远处捷径，只对新前沿刷新距离的缓存可能保留旧长距离。每轮把机器人吸附自由格及前沿medoid合为k个点，输出机器人–机器人、机器人–前沿、前沿–前沿完整对称k×k距离矩阵。它服务分配/巡游成本，不直接输出连续机器人可执行路径。",
+      "evidence_ids": [
+        "60b247e9702053b6",
+        "076850736105d564",
+        "9c2569c4f7d3c1fd",
+        "da05fcb1e25f1987",
+        "675733c14fb6b0de",
+        "884623e022645b8d",
+        "6e6057e45b52d6e2",
+        "a3a6442b6d22e740",
+        "d8c0814765cbb4e4",
+        "cbc680c5864db633",
+        "f36cb0e14825699a",
+        "cf27a2447991824a",
+        "41356da5ffaa442a",
+        "69d37ce524ce5a52",
+        "cc317632cba744ee",
+        "d854b9f8c495a45d"
+      ],
+      "quote": "surviving-pair"
+    },
+    {
+      "kind": "method",
+      "title": "固定几何边界作为接口，保存局部闭包而非全图APSP",
+      "text": "把n×n图分为边长b的叶块，g×g子块递归聚合。每块周界4b_l−4个格作为固定端口，不因当前是否可通行改变，矩阵维度与子父映射不变。叶子在所有b²几何格上存闭包C，对外只暴露周界限制S；父节点仅在所有子边界拼接成的接口上存闭包，并加入可通行接缝边，再暴露自身外周界。局部C只回答块内路径，可能大于离块再进入的全图路径，所以不能把叶内表当最终全局距离。此结构借用闭半环与层次距离索引思想，不是发明min-plus本身。",
+      "evidence_ids": [
+        "4a4dbd3de7825ce6",
+        "8c97bc7f606160be",
+        "7ec8cc004b667171",
+        "e13cf2dc42121dee",
+        "68bb60f0231d7ad3",
+        "03b0bcbc481108d5",
+        "4f85d9594fb90edb",
+        "483b8bfa08897506",
+        "ead7a6ac810cfd99",
+        "67dd38f2bc7315df",
+        "e12c16f2d22f2f8c",
+        "b500d748b2fec250",
+        "f29af1966e148426",
+        "d408ceda4b4099e6",
+        "a291da2fe9410dcb",
+        "d04248dbc93c4a7a",
+        "ee9b23daabd1e79c",
+        "f67fbd7e1c9db781",
+        "41400bb9f716a1a3",
+        "405b98333028caa4",
+        "5e83dbed8cb058fc",
+        "df4ffe0311e9ea41"
+      ],
+      "quote": "boundary geometry"
+    },
+    {
+      "kind": "method",
+      "title": "只修复下降边及受影响祖先，精确性有插入限定",
+      "text": "一条无向边(a,b)降至w后，C_new(i,j)=min(C(i,j),C(i,a)+w+C(b,j),C(i,b)+w+C(a,j))。非负权最短路可选简单路径，因此新边至多用一次，前后段由旧精确闭包给出；顺序应用可处理所有降边。实现先播种所有下降边，再仅以端点集合Π做Floyd式min-plus pivot；新最短路可分解为旧最短子路加这些端点，恢复局部闭包。叶边界条目若下降才上推，父节点合并所有孩子变化后修复一次，含首次跨子块接缝。局部更新O(|Π_T|b⁴)，不是每次重跑O(b⁶)闭包；祖先O(|Π_U||V_U|²)，仍可能很贵。Lemma1与Theorem1只支持降权/插入；free→obstacle需重建叶和祖先，不在当前增量算法范围。",
+      "evidence_ids": [
+        "9b42b97ce05752fb",
+        "804c0b53aa7918d3",
+        "5a71b5684b92db6f",
+        "cd95bb985a87370b",
+        "f7787fa2291c1dc4",
+        "dedff6b75e88295c",
+        "3a4957bc8ecf0c5f",
+        "d140f58c7ca1a761",
+        "6abc90cb44a85a4a",
+        "70e704a9033f1e18",
+        "c9697a47847ca27a",
+        "dab06c01afdb65f5",
+        "b77ebd78bc4fd3d7",
+        "f1772cf4e6014816",
+        "b4ef72c55c3efaa2",
+        "d3cb899f951dad6c"
+      ],
+      "quote": "endpoint-pivot"
+    },
+    {
+      "kind": "method",
+      "title": "批量共享边界提升，同叶点也必须检查更高祖先",
+      "text": "查询先取点到叶边界的距离行，按min-plus乘法升到父外边界；两点通过共同祖先接口的闭包连接。在最低共同祖先首次能相遇，但路径可绕出再进入，算法仍需把所有相关更高祖先候选取最小；同叶点也不能只读叶内C。Theorem2的依据是每条网格路径可压缩成接口walk、每条接口walk也能展开为可行原路径。k个点共享每层提升，层级工作写为O(k|B_Q|²+k²|B_Q|)，避免每对单独付提升成本；它仍需输出k²项，非O(1)全局点对查询或无穷可扩展索引。",
+      "evidence_ids": [
+        "fc4646e9c707fc4d",
+        "4c16f32013256d38",
+        "f6b4285fc52c7ab4",
+        "41d6f68da557677d",
+        "cd78b37e231c75ad",
+        "065e204b5fb4f578",
+        "e5a3517528589a05",
+        "62865d676fdb8ed4",
+        "e31006bddcb89351",
+        "097e7654fb6470cf",
+        "2eec70469789cee9",
+        "a9ddc773896bb3e8",
+        "1d6a52cda1f98ecc",
+        "e0c1849b3c3702e2",
+        "b2526ff17651d09f",
+        "ae5dac1c2d2dfc76"
+      ],
+      "quote": "lowest common ancestor"
+    },
+    {
+      "kind": "evidence",
+      "title": "全揭示图查询变快，但基线含实现层差异",
+      "text": "MovingAI六图全可通行格均已揭示，查询点均匀分布；k=25，三次warm-up后十次计时中位，i7-8650U上H-TRIP用AVX2，BFS为标量单线程。表II非单格迷宫的五图查询7.28–11.5倍快，例如M1 32.7→3.3ms、M2 554.2→49.8ms；M3单格走廊迷宫149.4→1.81ms、82.6倍，结构特殊。M1/M2/M3上每点对A*填表比k次BFS慢7.3–9.9倍，故作者以BFS作表格基线。此证据是该实现/机器上的索引对顺序搜索收益，未隔离SIMD贡献，也未比较优化并行BFS、D*Lite/LPA*多源或其他现代层次索引。",
+      "evidence_ids": [
+        "9d7013cc84589f64",
+        "b3e11fe61d1f721a",
+        "796da7bca9eb701e",
+        "83f97f8ba16f0b99",
+        "fdf150723d092cb8",
+        "98c1a27b98db710f",
+        "2e83b89b6fc4610f",
+        "5d8ebf8ed6105769"
+      ],
+      "quote": "cache warm-ups"
+    },
+    {
+      "kind": "evidence",
+      "title": "收益随查询点数和拓扑变化，小批可能大幅亏损",
+      "text": "表III在k=2时M1/M2比值0.67/0.51，M5/M6仅0.12/0.10，即后两者查询分别约比BFS慢8.3/10倍；k=4时M5/M6仍0.70/0.66。数十点共享提升后有利，但k=256时M1/M2优势缩到1.79/2.00倍，二次meet成本增加。M3单格走廊在k=16达235倍，是长唯一通路使BFS昂贵的特殊情形，不能当一般地图结论。不同地图和b,g配置不完全相同，不能从跨图比值独立归因叶大小。",
+      "evidence_ids": [
+        "a9ddc773896bb3e8",
+        "83f97f8ba16f0b99",
+        "d6bbec6f0693fcc7",
+        "d893b19113d8ff36",
+        "5d8ebf8ed6105769",
+        "7544914204257c23"
+      ],
+      "quote": "workload dependent"
+    },
+    {
+      "kind": "evidence",
+      "title": "更新加查询可比整表BFS重算更慢",
+      "text": "表IV的M1单格同叶更新0.042ms、加查询3.34ms，对BFS34.6ms有利；同叶一次16格却更新74.8ms、合计78.1ms，对BFS33.3ms更慢；64格跨叶更新242ms、合计245ms，BFS36.2ms，约慢6.8倍。M3跨叶64格合计156ms对174ms仍略优，M4同叶16格合计21.4ms对258ms显著有利，说明传播层数与地图拓扑重要，不能仅按新开格数宣称常数低成本。图5按原地图边长汇总的更新散点与bin中位也出现秒级批次；未给查询加更新加版本切换的统一deadline保证。",
+      "evidence_ids": [
+        "c9697a47847ca27a",
+        "6e8d74e12e534bfe",
+        "f2731e5424370d3a",
+        "68da8aa162385d9a",
+        "eaefaf3e15f10dbd",
+        "730b7ffe1c4457e0",
+        "17426a3afd394e9c"
+      ],
+      "quote": "multi-leaf batch"
+    },
+    {
+      "kind": "evidence",
+      "title": "16机器人探索内查询有配对加速，未测整体探索提速",
+      "text": "表V在16台unicycle、50个frontier、最多500仿真步或95%覆盖提前停止的设置中，同一步两算法对已揭示图填同一个距离矩阵；5cm栅格，LiDAR范围/扇角/射线数随run变化。M1 122→14.2ms为8.59倍，M4两设置16.7→6.08ms及23.0→6.37ms为2.75/3.61倍，M6 478→216ms为2.21倍。终态覆盖从27.1%到93.3%不等，不能把不同时刻部分图查询与全揭示地图混用；这也不是所有run都完成95%探索。表格只报查询阶段，没有与BFS控制完整探索任务的总墙钟、路径长度或到同覆盖时间对照，不能写成整任务2.21–8.59倍提速。",
+      "evidence_ids": [
+        "0953ce9990c6e2b6",
+        "6e6057e45b52d6e2",
+        "b3e11fe61d1f721a",
+        "fdf150723d092cb8",
+        "04a671756d2b66cb",
+        "941bcdc4da5ce004",
+        "4e77f49d8306bfc2",
+        "730b7ffe1c4457e0",
+        "17426a3afd394e9c"
+      ],
+      "quote": "sixteen robots"
+    },
+    {
+      "kind": "evidence",
+      "title": "预处理与存储是采用决策的一部分",
+      "text": "表II索引87–3175MB，M2全建79.9s、3175MB，要158次k=25批查询才按表中口径抵偿全建成本；M6为63.0s、1629MB、98批，M1 0.71s、87MB、24批，M3 1.07s、404MB、7批。该break-even只用全建和查询差，不包含探索中全部增量维护。结构上叶闭包b⁴项，父闭包|V_U|²项，固定边界接口压缩也仍可很大。双缓冲用于更新不阻塞查询，但表中index大小不是已证实的进程峰值内存，也未报告双缓冲拷贝/切换额外成本。",
+      "evidence_ids": [
+        "df4ffe0311e9ea41",
+        "4efbc4c3a4c61b9e",
+        "b3e11fe61d1f721a",
+        "98c1a27b98db710f",
+        "2e83b89b6fc4610f",
+        "5d8ebf8ed6105769"
+      ],
+      "quote": "full-build cost"
+    },
+    {
+      "kind": "limitation",
+      "title": "正确的是已吸收更新的图，不是任意动态或物理路径",
+      "text": "精确性证明针对无向非负权、二维、单调揭示且更新已被索引吸收的图；动态图障碍出现/删除、代价增加、SLAM回环引起栅格重排不由现有降权机制处理。距离在自由格图上精确，不包含车体大小、动力学、避碰、通信或实际行走误差。论文仅仿真，未量化过时缓存的shortcuts发生率或造成的分配/巡游损失；证明修复所有相关距离不等于已测探索质量增益。双缓冲存在时还需确认查询图版本与规划输入一致，本轮未审计该实现。物理多机器人和非单调维护被列为未来工作。",
+      "evidence_ids": [
+        "9c2569c4f7d3c1fd",
+        "da05fcb1e25f1987",
+        "675733c14fb6b0de",
+        "884623e022645b8d",
+        "6e6057e45b52d6e2",
+        "d854b9f8c495a45d",
+        "dab06c01afdb65f5",
+        "b77ebd78bc4fd3d7",
+        "b4ef72c55c3efaa2",
+        "b2526ff17651d09f",
+        "ae5dac1c2d2dfc76",
+        "b3e11fe61d1f721a",
+        "eaefaf3e15f10dbd",
+        "730b7ffe1c4457e0",
+        "17426a3afd394e9c"
+      ],
+      "quote": "physical multi-robot"
+    },
+    {
+      "kind": "limitation",
+      "title": "数学精确性与有限数值实现的测试覆盖应分开",
+      "text": "作者在178708条已记录矩阵项与BFS或Dijkstra比较中零不匹配，这支持已测图/查询/更新的实现一致性，不是穷尽所有格点组合或所有权值。实现用uint16且INF=60000，作者称足够本次地图；将系统用于更长路径、非整数成本或更大地图时需另外验证数值范围与加法，不可直接沿用无穷/任意非负实权的数学表述。十次热缓存计时重复不是多seed独立探索或尾延迟分布，论文未给这些不确定性统计；本轮也未执行代码或核原始日志。",
+      "evidence_ids": [
+        "675733c14fb6b0de",
+        "4f85d9594fb90edb",
+        "ead7a6ac810cfd99",
+        "e12c16f2d22f2f8c",
+        "b77ebd78bc4fd3d7",
+        "fdf150723d092cb8",
+        "17426a3afd394e9c"
+      ],
+      "quote": "sentinel INF"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：把更新算入后，批量索引在什么负载下仍值得使用？",
+      "text": "待验证假设：H-TRIP的实际优势集中在查询多、增量小且很少传播到高层的阶段，使用按负载选择的BFS查询后端能减少总规划延迟，但必须把索引维护欠账和图版本一致性计入。只在公开MovingAI地图及记录的仿真更新序列离线回放，同一图快照和同一观点列表，比较始终H-TRIP、始终优化BFS、预注册负载门槛切换；同时将BFS保持标量与可用SIMD/多线程两种配置分开报告，避免把实现资源差异归算法。对k=2/4/16/25/64/256、同叶/跨叶开图批次及b参数分层，固定CPU核/线程、内存预算和缓存预热规则；至少10条不同种子轨迹。统计全建摊销、所有更新/复制/切换/查询总墙钟、p95/p99规划可用延迟、峰值内存和逐项距离一致性；若某轮用BFS就对当前图完整重算，之后仍把延后维护成本全部记账，不能将陈旧索引输出当最新精确图。若匹配资源并计入全部成本后切换没有降低延迟，或版本切换产生任何距离错误/无界维护积压，或大部分规划周期都不达预算，则推翻该负载切换方案可用的假设。实验未执行、未创建选题，未全面查新，不宣称新研究空白；不能推广到free→obstacle等未实现维护。",
+      "evidence_ids": [
+        "dab06c01afdb65f5",
+        "a9ddc773896bb3e8",
+        "4efbc4c3a4c61b9e",
+        "b3e11fe61d1f721a",
+        "fdf150723d092cb8",
+        "2e83b89b6fc4610f",
+        "d893b19113d8ff36",
+        "f2731e5424370d3a",
+        "941bcdc4da5ce004",
+        "eaefaf3e15f10dbd",
+        "17426a3afd394e9c"
+      ],
+      "quote": "broad multi-leaf"
+    }
+  ],
+  "attention": {
+    "level": "notable",
+    "reason": "固定边界与批量共享可作为精确探索距离后端，但GB级索引、重更新和小查询反例直接影响采用成本，应先匹配实际查询/开图负载而非只看查询倍数。",
+    "basis": [
+      "compute_shift",
+      "controlled_comparison",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "9b42b97ce05752fb",
+      "70e704a9033f1e18",
+      "cd78b37e231c75ad",
+      "097e7654fb6470cf",
+      "a9ddc773896bb3e8",
+      "2e83b89b6fc4610f",
+      "d893b19113d8ff36",
+      "f2731e5424370d3a",
+      "941bcdc4da5ce004"
+    ]
+  },
+  "frontier_brief": {
+    "title": "H-TRIP：固定边界闭包增量维护，批量返回精确探索距离矩阵",
+    "change_type": "规划后端 · 精确增量距离",
+    "delta": "在单调开图时用降边端点做局部min-plus修复，仅将边界距离下降传到祖先；一次共享查询点的层次提升，填完整k×k距离矩阵，避免每源全图重搜与旧缓存遗漏捷径。",
+    "before": "每点BFS填表随地图变大；只刷新新前沿的缓存可能错过存活点对经新通道变短的路径。",
+    "after": "178708个已测矩阵项与参考搜索零差异；16机器人仿真中查询2.21–8.59倍快。更新、全建和内存仍需付费，小查询或大开图批次可能不如BFS。",
+    "relevance": "多个机器人与数十frontier每轮都需全对距离、且地图主要增添free格时，值得考虑共享精确索引；先用真实k、更新批次、内存和规划延迟预算决定。",
+    "caveat": "M1跨叶64格更新加查询245ms，BFS36.2ms；最大索引3175MB。加速针对查询，不是完整探索；仅二维单调图，AVX2对标量单线程BFS，未做真机或动态障碍维护。",
+    "question": "计入全建、增量维护和内存后，哪些k与开图负载适合索引，哪些应选BFS？",
+    "evidence": [
+      {
+        "label": "探索中的配对查询",
+        "value": "M1 122→14.2ms；M6 478→216ms",
+        "context": "16机器人、50frontier、≤500仿真步；同当前已揭示图，8.59/2.21倍仅查询收益，非任务墙钟。"
+      },
+      {
+        "label": "更新成本反例",
+        "value": "M1跨叶64格：245ms对BFS36.2ms",
+        "context": "表IV前者为更新+查询；同叶1格仅3.34ms对34.6ms，成本由传播范围和地图决定。"
+      },
+      {
+        "label": "小查询反例",
+        "value": "k=2时M5/M6比BFS慢约8.3/10倍",
+        "context": "表III比值0.12/0.10；k到数十点能共享提升，极大k又受二次meet成本影响。"
+      },
+      {
+        "label": "预处理与存储",
+        "value": "M2：79.9s全建、3175MB、158批回本",
+        "context": "全揭示图k=25，回本按全建及查询差计算，不含探索增量维护；非峰值进程内存。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "以固定周界作层次接口",
+        "text": "叶保存全格局部闭包，对外只给周界距离；父级拼子边界加接缝，矩阵维度不随揭示变化。"
+      },
+      {
+        "title": "按下降端点修复并传播",
+        "text": "局部闭包已有全部旧最短子路，降边后只遍历其端点作为pivot；边界摘要变短才继续上推，非全图重新闭包。"
+      },
+      {
+        "title": "共享提升并检查更高绕路",
+        "text": "查询点一起升到边界，通过共同祖先接口meet；同叶点也重查更高祖先，保留离块再进入的全局更短路径。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08139v1",
+      "checked": "固定PDF8页、1761429字节；目视物理页3–8，核公式1–13、算法1/2、两条定理与引理、图2–5、表I–V。核M2内存/全建、M1开图反例、k变化、探索覆盖口径和图5秒级更新；实验未复现。"
+    }
+  ]
+}

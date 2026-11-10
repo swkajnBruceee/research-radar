@@ -1,0 +1,791 @@
+{
+  "id": "a90dcf18c2924c9d5dac6fb465a69ee9646efa84e1774f7d7d1f9d40cfd169ae",
+  "url": "https://arxiv.org/html/2611.09684v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "9cad12b1fc21b642",
+      "section": "SURE: Spatiotemporal Uncertainty Representation for Efficient Vision-Language-Action Learning",
+      "location": "SURE: Spatiotemporal Uncertainty Representation for Efficient Vision-Language-Action Learning",
+      "text": "Vision-language-action (VLA) policies have become a promising paradigm for end-to-end robot control, but their effectiveness still depends heavily on large volumes of demonstration data. In manipulation tasks, this dependence is compounded by structured spatiotemporal uncertainty in the action space: multiple nearby actions or trajectories may successfully solve the same task, while semantically equivalent demonstrations often unfold at different speeds. Standard pointwise supervision treats each demonstrated action as an exact target, imposing an unnecessary learning burden under such uncertainty. We present SURE, a data-efficient VLA training framework that explicitly models both spatial and temporal uncertainty. SURE augments a VLA backbone with a lightweight transposed-convolutional probabilistic action decoder that captures spatial uncertainty through local correlations among neighboring action bins. It further introduces Soft-DTW alignment supervision to accommodate local timing variations between predicted and demonstrated action chunks. Together, these two components reduce sensitivity to demonstrator-specific poses and execution timing, enabling more data-efficient action learning. We evaluate SURE on LIBERO, RoboTwin 2.0, and real-world manipulation tasks. Even with only 10% of the demonstration data or 20% of the training steps, SURE achieves manipulation success rates that match or surpass baseline VLAs.",
+      "url": "https://arxiv.org/html/2611.09684v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f4d80b29c837ed9c",
+      "section": "SURE: Spatiotemporal Uncertainty Representation for Efficient Vision-Language-Action Learning",
+      "location": "SURE: Spatiotemporal Uncertainty Representation for Efficient Vision-Language-Action Learning",
+      "text": "Figure 1: Overview of SURE. (a) Given observations and a language instruction, an OpenVLA-7B backbone produces action tokens that are decoded into action chunks. (b) Our probabilistic action decoder models translation and rotation as discretized distributions and recovers continuous controls with expectation-based decoding, capturing spatial uncertainty and multimodality. (c) During training, Soft-DTW alignment supervision aligns predicted and demonstrated action chunks that progress at different speeds, addressing temporal uncertainty in robot demonstrations.",
+      "url": "https://arxiv.org/html/2611.09684v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9eba6ea20a17b13d",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Embodied AI and robot foundation models have advanced rapidly in recent years, driven by the emergence of large-scale vision-language-action (VLA) policies that directly map visual observations and language instructions to low-level control ( Brohan et al., 2023 ; Ghosh et al., 2024 ; Kim et al., 2025b ; Black et al., 2025 ) . As a result, a central question in robot learning is no longer whether such end-to-end policies can work, but which action-learning paradigm can most efficiently turn expensive robot demonstrations into robust manipulation behaviors. This question is important in practical settings, where collecting real-world robot data remains slow, costly, and inherently noisy.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5471934ec5827b99",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "One source of difficulty is the inherent uncertainty in robot action data. Many manipulation tasks admit multiple valid solutions which the end effector can approach from slightly different poses, move at different speeds, or follow different but equally successful trajectories. Importantly, this uncertainty is structured rather than arbitrary. It typically exhibits strong local spatiotemporal correlations, actions that are close to a successful action in action space, or adjacent in time to a successful motion pattern, are often still correct. Treating supervision as a single exact target therefore introduces an unnecessary learning burden. A policy can be semantically correct yet still incur a large penalty simply because its prediction does not match the demonstrator’s exact pose or timing.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "26cf3c3f040d988e",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Existing action representations only partially address this issue. Early and widely used VLA decoders often rely on tokenized or autoregressive action prediction ( Brohan et al., 2023 ; Kim et al., 2025b ) , while recent systems increasingly adopt diffusion- and flow-based action heads to better model multimodal futures ( Chi et al., 2023 ; Black et al., 2025 ; NVIDIA et al., 2025 ) . These generative action heads are expressive and have become a popular choice for modern VLAs. However, their flexibility does not automatically yield data efficiency. When supervision still treats each action label as an isolated point, the model must discover from scratch that neighboring actions and slightly shifted trajectories should receive similar credit. In practice, this often means that the policy needs more data before it can internalize the local structure of valid robot behavior.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa6bddaab67fb3aa",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Recent work suggests that structured probabilistic action representations can be more sample-efficient and interpretable than unstructured point prediction. Instead of regressing a single action target, these methods model uncertainty with discretized action spaces, heatmap-like predictions, or voxel-space probability distributions, thereby injecting locality and multimodality into the output space ( James et al., 2022 ; Shridhar et al., 2023 ; Goyal et al., 2023 ; Yang et al., 2026 ) . However, most of this literature focuses primarily on spatial uncertainty, while temporal uncertainty is still typically handled with exact per-step supervision.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "7268e3473e27f8a0",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Temporal uncertainty creates a second challenge. Even for the same task and intent, demonstrations can unfold at different speeds because of operator preferences, hesitation, embodiment dynamics, or minor contact events. Standard framewise regression losses such as L1 or L2 fail to account for this uncertainty and instead penalize timing differences directly. As a result, the model may overfit to demonstrator-specific execution speeds rather than the underlying behavior. This problem is closely related to the alignment problem long studied in speech recognition, where dynamic time warping (DTW) was introduced to compare signals that differ in local speaking rate ( Sakoe and Chiba, 1978 ) . Its differentiable variant, Soft-DTW ( Cuturi and Blondel, 2017 ) , offers a natural way to bring this idea into gradient-based policy learning, yet it remains underexplored as a supervision mechanism for action prediction in VLA-style robot policies.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "87acd2610ac7c832",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "In this paper, we tackle both spatial and temporal uncertainty with a simple, data-efficient VLA design, as shown in Figure 1 . We introduce a lightweight probabilistic action decoder built with transposed convolutions that models spatial uncertainty through local correlations among neighboring action bins and can be supervised directly with standard pointwise losses. We further couple this head with Soft-DTW alignment supervision, which aligns action sequences executed at different speeds and accounts for temporal uncertainty across demonstrations. Together, these design choices encourage the policy to learn a distribution over valid behaviors rather than memorize a one-to-one mapping from observations to exact action labels. Empirically, SURE outperforms strong baselines with matched or fewer optimization steps. On LIBERO ( Liu et al., 2023 ) , our method reaches 97.0% average success after 10k steps, surpassing OpenVLA-OFT trained for 50k steps. With only 25% of the LIBERO-Spatial data, our method also exceeds the full-data baseline. These gains extend to RoboTwin 2.0 ( Chen et al., 2026 ) and our real-world benchmark.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "d5f9b6b86c6b6215",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Our contributions are threefold. First, we introduce a lightweight transposed-convolutional probabilistic action decoder that models spatial uncertainty with locally correlated action bins while enabling fast, parallel expectation-based decoding without iterative denoising. Second, we incorporate Soft-DTW alignment supervision to improve robustness to demonstrations with similar task intent but different execution speeds. Third, extensive experiments on LIBERO, RoboTwin 2.0, and our real-world benchmark show that our method achieves stronger training and data efficiency than competitive baselines, requiring fewer optimization steps or less training data.",
+      "url": "https://arxiv.org/html/2611.09684v1#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "df8de5bb98ace73b",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Embodied AI Large-scale embodied AI is currently pursued through two complementary paradigms. Vision-language-action (VLA) policies directly map observations and language instructions to executable actions, typically benefiting from large, heterogeneous robot datasets and pretrained multimodal backbones ( Brohan et al., 2023 ; Open X-Embodiment Collaboration et al., 2024 ; Ghosh et al., 2024 ; Kim et al., 2025b ; Black et al., 2025 ; NVIDIA et al., 2025 ) . In parallel, world-model and world-action-model approaches augment policy learning with future prediction, imagination, or simulation, enabling planning, policy evaluation, or synthetic data generation in learned latent or pixel spaces ( Hafner et al., 2020 ; Liao et al., 2026 ; Guo et al., 2026 ; Zhou et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.09684v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "54484f834c72d258",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Action Representation Action representation is a central design choice in robot policy learning. Early VLA and imitation-learning systems commonly relied on discretized or autoregressive action prediction, where continuous control is converted into token sequences or predicted one step at a time ( Brohan et al., 2023 ; Kim et al., 2025b ; Pertsch et al., 2025 ) . More recent work has explored continuous parallel decoding and improved fine-tuning recipes to reduce inference cost and increase adaptation performance ( Kim et al., 2025a ; Wen et al., 2025 ) . Another major direction models actions as distributions rather than single point estimates. This includes diffusion- and flow-based action heads for multimodal action generation ( Chi et al., 2023 ; Black et al., 2025 ; NVIDIA et al., 2025 ) , as well as structured probabilistic outputs such as discretized spatial bins, heatmaps, and voxel-space distributions ( James et al., 2022 ; Shridhar et al., 2023 ; Goyal et al., 2023 ; Yang et al., 2026 ) . Our method is most closely related to the latter line of work. Specifically, we use a transposed-convolutional head to explicitly model the action probability distribution and its decoding process. We optimize the decoder primarily with L1 action supervision and use only a lightly weighted auxiliary distribution loss, rather than relying on dense distributional supervision as the primary learning signal.",
+      "url": "https://arxiv.org/html/2611.09684v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "50c0b427a26408af",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "DTW-Based Temporal Alignment Dynamic time warping (DTW) has long been a standard tool for aligning sequences with non-uniform temporal progress ( Sakoe and Chiba, 1978 ) . Soft-DTW extends this idea to a differentiable objective, making it suitable for gradient-based learning ( Cuturi and Blondel, 2017 ) . In robotics, DTW-style alignment has been used for demonstration comparison, weak supervision, and imitation under temporal or action mismatches ( Yeh et al., 2025 ) . These works highlight the practical importance of alignment under variable execution speeds when different trajectories express the same underlying intent. Rather than using DTW only for retrieval, comparison, or offline alignment, we use Soft-DTW alignment supervision for VLA action learning, allowing the policy to learn end-to-end from temporally misaligned but semantically consistent demonstrations.",
+      "url": "https://arxiv.org/html/2611.09684v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "fb9f7fa602fcc2ad",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Data-Efficient Robot Learning. Improving data efficiency remains a core challenge in robot learning because large-scale demonstrations are expensive to collect, especially on real hardware. Existing efforts improve efficiency from several angles: scaling diverse cross-embodiment datasets for transfer ( Open X-Embodiment Collaboration et al., 2024 ; Ghosh et al., 2024 ; Kim et al., 2025b ) , designing better adaptation and fine-tuning recipes ( Kim et al., 2025a ) , building smaller or faster VLA architectures ( Wen et al., 2025 ) , and injecting stronger geometric structure into the action output space ( James et al., 2022 ; Shridhar et al., 2023 ; Goyal et al., 2023 ; Yang et al., 2026 ) . Our approach is complementary to these directions. Rather than relying on more pretraining data, larger-scale models, or strongly weighted target-distribution supervision, we improve data efficiency through a joint design of structured action representation and temporally tolerant supervision.",
+      "url": "https://arxiv.org/html/2611.09684v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "e675980630af07cb",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Figure 2: Architecture of the probabilistic action decoder. Action tokens ℋ t ∈ ℝ k × d a × d V ​ L ​ M \\mathcal{H}_{t}\\in\\mathbb{R}^{k\\times d_{a}\\times d_{VLM}} are first fused by a grouped 1 × 1 1\\times 1 convolution and then split into translation, rotation, and gripper branches. Translation and rotation use two Deconv Blocks to upsample an ordered bin axis from 1 → R / 4 → R 1\\rightarrow R/4\\rightarrow R . The resulting per-axis logits over R R bins are normalized by softmax and decoded into continuous actions by expectation. Each Deconv Block combines depthwise transposed convolution with pointwise residual layers to encode local correlations among neighboring bins. The gripper action is decoded by a lightweight MLP.",
+      "url": "https://arxiv.org/html/2611.09684v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0a36913be14b8b31",
+      "section": "3 Methods",
+      "location": "3 Methods",
+      "text": "Our method builds on an OpenVLA-7B backbone and introduces two uncertainty-aware components for data-efficient action learning. The probabilistic action decoder represents spatial uncertainty in translation and rotation, while Soft-DTW alignment supervision accounts for temporal uncertainty among semantically consistent action sequences. At time step t t , the policy takes a visual observation ℐ t \\mathcal{I}_{t} , proprioceptive state p t p_{t} , and language instruction 𝒯 \\mathcal{T} as input. The VLA backbone produces a chunk of action tokens",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "600a4aa835d840a9",
+      "section": "3 Methods",
+      "location": "3 Methods",
+      "text": "ℋ t = VLM ⁡ ( ℐ t , p t , 𝒯 ) ∈ ℝ k × d a × d V ​ L ​ M , \\mathcal{H}_{t}=\\mathrm{VLM}(\\mathcal{I}_{t},p_{t},\\mathcal{T})\\in\\mathbb{R}^{k\\times d_{a}\\times d_{VLM}}, (1)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "74d898db1b08c311",
+      "section": "3 Methods",
+      "location": "3 Methods",
+      "text": "where k k is the action chunk length, d a d_{a} is the action dimension, and d V ​ L ​ M d_{VLM} is the hidden size of the backbone. The probabilistic action decoder maps these tokens to an action chunk 𝒜 t ∈ ℝ k × d a \\mathcal{A}_{t}\\in\\mathbb{R}^{k\\times d_{a}} . Soft-DTW alignment supervision then aligns predicted and demonstrated action chunks whose trajectories are semantically consistent but differ in local execution rate.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "22d9018003a37b47",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "Robot manipulation rarely admits a unique action target. Even under the same observation and instruction, multiple nearby end-effector poses, orientations, or contact timings can all lead to success. This makes the action space both locally correlated and potentially multimodal. Direct scalar regression ignores this structure and forces the model to match one exact demonstrator trajectory.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5dc35dae818b4b0c",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "For each continuous translation and rotation dimension, we discretize the normalized action range [ − 1 , 1 ] [-1,1] into R = 256 R=256 ordered bins with centers { c r } r = 1 R \\{c_{r}\\}_{r=1}^{R} . As illustrated in Figure 2 , the decoder first compresses ℋ t \\mathcal{H}_{t} with a grouped convolution and then sends the resulting features to translation, rotation, and gripper branches. The translation and rotation branches use lightweight transposed-convolutional upsampling to produce logits",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0b395a2bb1a36555",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "𝐙 tr , 𝐙 rot ∈ ℝ k × 3 × R . \\mathbf{Z}_{\\mathrm{tr}},\\mathbf{Z}_{\\mathrm{rot}}\\in\\mathbb{R}^{k\\times 3\\times R}. (2)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "410738783d8c41f0",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "The transposed-convolutional structure provides the key inductive bias. Because adjacent bins correspond to nearby continuous actions, convolutional weight sharing encourages neighboring bins to receive correlated evidence rather than be treated as unrelated classes. This gives the decoder a native mechanism for modeling spatial uncertainty characterized by local correlations among neighboring action bins.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "8c49058b9a326eb3",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "The logits are normalized into categorical action probabilities",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "25cc9bd662659b98",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "𝐏 tr = softmax ⁡ ( 𝐙 tr ) , 𝐏 rot = softmax ⁡ ( 𝐙 rot ) , \\mathbf{P}_{\\mathrm{tr}}=\\mathrm{softmax}(\\mathbf{Z}_{\\mathrm{tr}}),\\quad\\mathbf{P}_{\\mathrm{rot}}=\\mathrm{softmax}(\\mathbf{Z}_{\\mathrm{rot}}), (3)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "4d933211b06d0a84",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "where the softmax is applied along the bin dimension. A continuous action value is obtained as the expectation over bin centers,",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS1.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "59300808b875e23e",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "a n , j = ∑ r = 1 R 𝐏 n , j , r ​ c r , a_{n,j}=\\sum_{r=1}^{R}\\mathbf{P}_{n,j,r}c_{r}, (4)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "b95648cedf605e2d",
+      "section": "3.1 Probabilistic Action Decoder",
+      "location": "3.1 Probabilistic Action Decoder",
+      "text": "for chunk index n n and action axis j j , where 𝐏 \\mathbf{P} denotes the corresponding translation or rotation probability tensor. Because this expectation is differentiable, L1 action supervision can optimize the decoder end to end. A lightly weighted auxiliary distribution loss further regularizes the predicted probabilities. For the gripper dimension, we use a small MLP rather than a transposed-convolutional distribution head, since binary or near-binary gripper commands have much weaker spatial uncertainty than translation and rotation.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS1.p3.3",
+      "kind": "p"
+    },
+    {
+      "id": "2ad0ca703d1fa811",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "Robot demonstrations can be semantically consistent while differing in local execution speed. For example, one demonstration may approach an object slowly and then close the gripper quickly, while another may execute the same behavior at a more uniform speed. Framewise L1 supervision penalizes such local timing shifts even when the action chunks describe the same underlying behavior. Inspired by dynamic time warping in speech recognition ( Sakoe and Chiba, 1978 ) , we use Soft-DTW ( Cuturi and Blondel, 2017 ) as a differentiable alignment loss between predicted and demonstrated action chunks.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "88ed0370014553ae",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "Let 𝒜 t = { a i } i = 1 k \\mathcal{A}_{t}=\\{a_{i}\\}_{i=1}^{k} and 𝒜 t ∗ = { a j ∗ } j = 1 k \\mathcal{A}^{\\ast}_{t}=\\{a^{\\ast}_{j}\\}_{j=1}^{k} denote the predicted and demonstrated action chunks. Excluding the final gripper dimension, we form cumulative trajectories 𝒳 t = { x i } i = 1 k \\mathcal{X}_{t}=\\{x_{i}\\}_{i=1}^{k} and 𝒳 t ∗ = { x j ∗ } j = 1 k \\mathcal{X}^{\\ast}_{t}=\\{x^{\\ast}_{j}\\}_{j=1}^{k} , where x i = ∑ ℓ = 1 i a ℓ , 1 : d a − 1 x_{i}=\\sum_{\\ell=1}^{i}a_{\\ell,1:d_{a}-1} and x ∗ j = ∑ ℓ = 1 j a ∗ ℓ , 1 : d a − 1 x^{\\ast}_{j}=\\sum_{\\ell=1}^{j}a^{\\ast}_{\\ell,1:d_{a}-1} . We define the pairwise trajectory cost as",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "5c51ae4db44e26fd",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "C i ​ j = 1 d a − 1 ​ ∥ x i − x j ∗ ∥ 2 2 , C_{ij}=\\frac{1}{d_{a}-1}\\lVert x_{i}-x^{\\ast}_{j}\\rVert_{2}^{2}, (5)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "3645af9e9111cbdb",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "which measures the mean squared discrepancy between two candidate aligned steps. Soft-DTW replaces the hard minimum in DTW with a differentiable soft minimum. With D 0 , 0 = 0 D_{0,0}=0 and D i , 0 = D 0 , j = + ∞ D_{i,0}=D_{0,j}=+\\infty , we compute",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "676407978534d711",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "D i , j = C i ​ j + softmin γ ⁡ ( D i − 1 , j − 1 , D i − 1 , j , D i , j − 1 ) , \\displaystyle D_{i,j}=C_{ij}+\\operatorname{softmin}_{\\gamma}(D_{i-1,j-1},D_{i-1,j},D_{i,j-1}), (6) softmin γ ( z 1 , z 2 , z 3 ) = − γ log ∑ m = 1 3 exp ( − z m / γ ) . \\displaystyle\\operatorname{softmin}_{\\gamma}(z_{1},z_{2},z_{3})=-\\gamma\\log\\sum_{m=1}^{3}\\exp(-z_{m}/\\gamma).",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "09a11383abe7dbb5",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "The temperature γ \\gamma controls the alignment smoothness, with smaller values approaching standard DTW. We denote the resulting cost by D γ ​ ( 𝒳 t , 𝒳 t ∗ ) = D k , k D_{\\gamma}(\\mathcal{X}_{t},\\mathcal{X}^{\\ast}_{t})=D_{k,k} .",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS2.p2.4",
+      "kind": "p"
+    },
+    {
+      "id": "0647946133041dfa",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "To remove the self-similarity bias of the raw alignment score, we use the Soft-DTW divergence",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "c0fe55520d4471f6",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "ℒ div = D γ ​ ( 𝒳 t , 𝒳 t ∗ ) − 1 2 ​ D γ ​ ( 𝒳 t , 𝒳 t ) − 1 2 ​ D γ ​ ( 𝒳 t ∗ , 𝒳 t ∗ ) . \\mathcal{L}_{\\mathrm{div}}=D_{\\gamma}(\\mathcal{X}_{t},\\mathcal{X}^{\\ast}_{t})-\\frac{1}{2}D_{\\gamma}(\\mathcal{X}_{t},\\mathcal{X}_{t})-\\frac{1}{2}D_{\\gamma}(\\mathcal{X}^{\\ast}_{t},\\mathcal{X}^{\\ast}_{t}). (7)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E7",
+      "kind": "table"
+    },
+    {
+      "id": "db7c639a5c4cfe3d",
+      "section": "3.2 Soft-DTW Alignment",
+      "location": "3.2 Soft-DTW Alignment",
+      "text": "This objective encourages the predicted cumulative trajectory to follow a temporally flexible monotonic alignment path to the demonstration. As a result, the policy can learn from semantically consistent action chunks even when their local timing differs.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS2.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "9379ea25e6e45893",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "For spatial uncertainty, we primarily supervise the continuously decoded actions with",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5bcd81a9a1e4f907",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "ℒ L1 = 1 k ​ d a ​ ∑ n = 1 k ∑ j = 1 d a | a n , j − a n , j ∗ | , \\mathcal{L}_{\\mathrm{L1}}=\\frac{1}{kd_{a}}\\sum_{n=1}^{k}\\sum_{j=1}^{d_{a}}\\left|a_{n,j}-a^{\\ast}_{n,j}\\right|, (8)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E8",
+      "kind": "table"
+    },
+    {
+      "id": "a5317f6b622e2ab0",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "where a a and a ∗ a^{\\ast} are the predicted and demonstrated actions. Differentiable expectation-based decoding allows this loss to optimize the probabilistic decoder end to end. Assuming the gripper is the last action dimension, we further impose a weak KL constraint on the remaining d a − 1 d_{a}-1 translation and rotation dimensions:",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "9739e3f6b09759b4",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "ℒ KL = 1 k ⁡ ( d a − 1 ) ∑ n = 1 k ∑ j = 1 d a − 1 D KL ( 𝐪 n , j ∥ 𝐏 n , j ) . \\mathcal{L}_{\\mathrm{KL}}=\\frac{1}{k(d_{a}-1)}\\sum_{n=1}^{k}\\sum_{j=1}^{d_{a}-1}D_{\\mathrm{KL}}\\!\\left(\\mathbf{q}_{n,j}\\,\\|\\,\\mathbf{P}_{n,j}\\right). (9)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E9",
+      "kind": "table"
+    },
+    {
+      "id": "c8fc292a30080aaf",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "Here, 𝐏 \\mathbf{P} is the predicted distribution and 𝐪 \\mathbf{q} is a discretized Gaussian centered at the demonstrated action, with standard deviation σ \\sigma as a bandwidth hyperparameter. The divergence is",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "080e325ded931a17",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "D KL ( 𝐪 ∥ 𝐏 ) = ∑ r = 1 R q r log q r P r . D_{\\mathrm{KL}}(\\mathbf{q}\\,\\|\\,\\mathbf{P})=\\sum_{r=1}^{R}q_{r}\\log\\frac{q_{r}}{P_{r}}. (10)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E10",
+      "kind": "table"
+    },
+    {
+      "id": "ac1557d9e1dd130a",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "We set λ KL = 0.05 \\lambda_{\\mathrm{KL}}=0.05 empirically, so KL serves only as a stabilizing regularizer while L1 remains the primary spatial supervision.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "4b32e1312910736e",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "For temporal uncertainty, we combine the Soft-DTW divergence ℒ div \\mathcal{L}_{\\mathrm{div}} with an endpoint loss",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "93a3790b0b77c967",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "ℒ end = ‖ x k − x k ∗ ‖ 1 , \\mathcal{L}_{\\mathrm{end}}=\\left\\|x_{k}-x^{\\ast}_{k}\\right\\|_{1}, (11)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E11",
+      "kind": "table"
+    },
+    {
+      "id": "7cc5bcceb636d36c",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "where x k x_{k} and x k ∗ x^{\\ast}_{k} are the final cumulative trajectory points of the predicted and demonstrated chunks. Soft-DTW tolerates local timing uncertainty, while the endpoint term preserves final task progress.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "2420cee2e65718da",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "ℒ = ℒ L1 + λ KL ​ ℒ KL + λ DTW ​ ( ℒ div + ℒ end ) . \\mathcal{L}=\\mathcal{L}_{\\mathrm{L1}}+\\lambda_{\\mathrm{KL}}\\mathcal{L}_{\\mathrm{KL}}+\\lambda_{\\mathrm{DTW}}\\left(\\mathcal{L}_{\\mathrm{div}}+\\mathcal{L}_{\\mathrm{end}}\\right). (12)",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.E12",
+      "kind": "table"
+    },
+    {
+      "id": "711b62067ed6d091",
+      "section": "3.3 Supervision",
+      "location": "3.3 Supervision",
+      "text": "We set λ DTW = 0.5 \\lambda_{\\mathrm{DTW}}=0.5 empirically. We optimize all loss terms jointly throughout training and anneal the Soft-DTW smoothing coefficient γ \\gamma in Eq. 6 from a larger initial value to its target value, transitioning from smooth alignment to more precise temporal matching.",
+      "url": "https://arxiv.org/html/2611.09684v1#S3.SS3.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "d29b88868d0b69f0",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "We evaluate SURE on the LIBERO and RoboTwin 2.0 simulation benchmarks and on six real-world manipulation tasks using demonstrations collected for this study. Implementation details for these evaluations are provided in Appendix A .",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "51298b6b46374e62",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Evaluation protocol. We evaluate SURE on the four standard LIBERO task suites, namely LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-Long. These suites collectively assess spatial reasoning, object-centric generalization, goal understanding, and long-horizon manipulation ( Liu et al., 2023 ) . The baseline results are collected from sources that use different statistical protocols. All results marked with † \\dagger in Table 1 are averaged over three random seeds, with 500 evaluation trials per task suite (50 trials for each of the 10 tasks). Specifically, the results for Diffusion Policy, Octo, and OpenVLA are taken from the OpenVLA evaluation ( Kim et al., 2025b ) . The GR00T-N1 and π 0 \\pi_{0} baselines are trained and reported by the authors of Hume ( Song et al., 2025 ) . OpenVLA-OFT and SURE are evaluated using a single seed.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS1.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e39416746bb6a395",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Baseline methods. We compare SURE with a diverse set of representative policies spanning diffusion-based control, generalist robot policies, and VLA fine-tuning methods. For OpenVLA-OFT, we fine-tune the model using its publicly released implementation ( Kim et al., 2025a ) and report results after both 10k and 50k optimization steps. SURE uses the same OpenVLA-7B backbone and is trained for only 10k optimization steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS1.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3982c3e2ffac9d1c",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Results. As shown in Table 1 , SURE achieves the highest average success rate of 97.0% after only 10k optimization steps, surpassing OpenVLA-OFT by 9.9% under the same training budget and achieving gains across all four task suites. SURE also surpasses the 50k-step OpenVLA-OFT model by 2.7% in average success rate despite using only 20% optimization steps. Across individual suites, SURE obtains the best performance on all four task suites, surpassing the baselines on LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-Long. These results indicate that explicitly modeling spatiotemporal uncertainty improves both final manipulation performance and training efficiency.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS1.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "36501255b7ee17d9",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Table 1: Success rates (%) on the four LIBERO task suites. Training steps and batch sizes (BS) are reported when available. SURE is trained for 10k optimization steps and achieves the highest average success rate. Bold values indicate the best result in each column. † \\dagger denotes results averaged over three random seeds, all other results are obtained using a single evaluation seed.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c1d7da96ee92c043",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Methods Steps(BS) Spatial Object Goal Long Avg. Diffusion Policy † ( Chi et al., 2023 ) 100-250k(64) 78.3 92.5 68.3 50.5 72.4 Octo † ( Ghosh et al., 2024 ) 100-250k(64) 78.9 85.7 84.6 51.1 75.1 OpenVLA † ( Kim et al., 2025b ) 50-150k(64) 84.7 88.4 79.2 53.7 76.5 GR00T-N1 † ( NVIDIA et al., 2025 ) / (128) 94.4 97.6 93.0 90.6 93.9 π 0 \\pi_{0} † ( Black et al., 2025 ) / (128) 96.8 98.8 95.8 85.2 94.2 OpenVLA-OFT ( Kim et al., 2025a ) 10k(48) 94.4 92.6 92.6 68.8 87.1 OpenVLA-OFT 50k(48) 96.8 97.4 98.0 85.0 94.3 SURE 10k(48) 99.0 99.2 98.8 91.0 97.0",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T1.2",
+      "kind": "table"
+    },
+    {
+      "id": "3852eef93a687d9b",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Table 2: Success rates (%) on five RoboTwin 2.0 tasks under the Easy evaluation setting. All methods are trained on the clean subset with a separate checkpoint for each task. Training steps and batch sizes (BS) are reported for each method. Bold values indicate the best result in each column.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e9dde73c81854385",
+      "section": "4.1.1 LIBERO",
+      "location": "4.1.1 LIBERO",
+      "text": "Methods Training steps(BS) Beat Block Hammer Click Alarm Clock Lift Pot Place Fan Stack Bowls Two Avg. Diffusion Policy 20-75k(128) 42.0 61.0 39.0 3.0 61.0 41.2 OpenVLA-OFT 100k(8) 18.0 85.0 93.0 25.0 75.0 59.2 RDT ( Liu et al., 2025 ) 10k(64) 77.0 61.0 72.0 12.0 76.0 59.6 π 0 \\pi_{0} 30k(32) 43.0 63.0 84.0 20.0 91.0 60.2 SURE 20k(16) 55.0 100.0 98.0 26.0 82.0 72.2",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T2.2",
+      "kind": "table"
+    },
+    {
+      "id": "5a29f28f384a928a",
+      "section": "4.1.2 RoboTwin 2.0",
+      "location": "4.1.2 RoboTwin 2.0",
+      "text": "Evaluation protocol. RoboTwin 2.0 is a large-scale bimanual manipulation benchmark containing 50 tasks and supporting multiple dual-arm embodiments ( Chen et al., 2026 ) . We evaluate on the five tasks listed in Table 2 : Beat Block Hammer, Click Alarm Clock, Lift Pot, Place Fan, and Stack Bowls Two. All methods are trained on the clean subset, which contains 50 clean expert demonstrations for each task. Following the single-task setting, we fine-tune or train a separate checkpoint for every task. We report the success rate over 100 evaluation rollouts per task under the Easy setting, which uses clean, non-randomized environments.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS1.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "93bb8c6d4f39d3db",
+      "section": "4.1.2 RoboTwin 2.0",
+      "location": "4.1.2 RoboTwin 2.0",
+      "text": "Baseline methods. We compare SURE with Diffusion Policy, RDT ( Liu et al., 2025 ) , π 0 \\pi_{0} , and OpenVLA-OFT. The results for Diffusion Policy, RDT, and π 0 \\pi_{0} are taken from the RoboTwin 2.0 paper ( Chen et al., 2026 ) . The OpenVLA-OFT results are taken from JEPA-VLA ( Miao et al., 2026 ) . These baselines cover diffusion-based visuomotor control, pretrained vision-language-action policies, and efficient fine-tuning of an OpenVLA backbone.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS1.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a7addaccb3b938f7",
+      "section": "4.1.2 RoboTwin 2.0",
+      "location": "4.1.2 RoboTwin 2.0",
+      "text": "Results. As shown in Table 2 , SURE achieves the highest average success rate of 72.2%, outperforming the strongest baseline, π 0 \\pi_{0} , by 12.0%. SURE obtains the best performance on three of the five tasks, reaching 100.0% on Click Alarm Clock, 98.0% on Lift Pot, and 26.0% on Place Fan. It also achieves the second-best result on Beat Block Hammer and Stack Bowls Two. Compared with OpenVLA-OFT, SURE improves the average success rate by 13.0% while using only 20k rather than 100k optimization steps. These results demonstrate that SURE improves both manipulation performance and training efficiency on bimanual tasks.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS1.SSS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "28809181eb728b98",
+      "section": "4.2 Real-World Evaluation",
+      "location": "4.2 Real-World Evaluation",
+      "text": "Evaluation protocol. We evaluate SURE on six real-world manipulation tasks: Water Bottle, AAA Battery, Screwdriver, Toy Duck, Stack Bowls Two, and Pour Water. For each task, we collect 50 demonstration episodes through multiple authors acting as operators. Differences in operator motion and execution speed introduce natural spatial and temporal uncertainty into the demonstrations. Each policy is evaluated over 20 trials per task, and we report the corresponding success rate. Detailed descriptions of the task setups and execution procedures are provided in the Appendix C .",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b36932930f152e40",
+      "section": "4.2 Real-World Evaluation",
+      "location": "4.2 Real-World Evaluation",
+      "text": "Baseline method. We compare SURE with OpenVLA-OFT using the same mixed-task real-world demonstrations. Both methods are jointly trained on demonstrations from all six tasks, and a single checkpoint is evaluated across all tasks. OpenVLA-OFT is trained for 50k optimization steps, whereas SURE is trained for only 20k steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e0254a1be7da3e9f",
+      "section": "4.2 Real-World Evaluation",
+      "location": "4.2 Real-World Evaluation",
+      "text": "Results. As shown in Table 3 , SURE achieves an average success rate of 57.5%, outperforming OpenVLA-OFT by 15.8% while using 40% optimization steps. SURE performs better on five of the six tasks, with the largest improvement on Toy Duck, where the success rate increases from 45% to 95%. These results demonstrate that SURE learns effectively from real-world demonstrations with substantial spatial and temporal uncertainty.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "42c879d61c4b6058",
+      "section": "4.2 Real-World Evaluation",
+      "location": "4.2 Real-World Evaluation",
+      "text": "Table 3: Success rates (%) on six real-world manipulation tasks. Each method is evaluated over 20 trials per task. OpenVLA-OFT and SURE are trained for 50k and 20k optimization steps, respectively. Bold values indicate the best result in each column.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "fd6c49f00e4cf3fd",
+      "section": "4.2 Real-World Evaluation",
+      "location": "4.2 Real-World Evaluation",
+      "text": "Methods Water Bottle AAA Battery Screwdriver Toy Duck Stack Bowls Two Pour Water Avg. OpenVLA-OFT 40 35 55 45 20 55 41.7 SURE 55 60 70 95 25 40 57.5",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T3.2",
+      "kind": "table"
+    },
+    {
+      "id": "a4333d8d27780b92",
+      "section": "4.3 Inference Efficiency Evaluation",
+      "location": "4.3 Inference Efficiency Evaluation",
+      "text": "Evaluation protocol. We evaluate the inference efficiency of the action head using models trained on LIBERO-Spatial, with the action chunk length fixed to k = 8 k=8 . To isolate the computational cost of action decoding, we measure only the action head or decoder and exclude the VLA backbone. Because π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) is implemented in JAX, we additionally implement our action head in JAX to provide a framework-matched latency comparison. For each method, we report the number of action-head parameters, FLOPs, and mean chunk latency. Latency is averaged over 100 action-decoding runs following 20 warm-up runs.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7ea7b2c13db47cbe",
+      "section": "4.3 Inference Efficiency Evaluation",
+      "location": "4.3 Inference Efficiency Evaluation",
+      "text": "Results. As shown in Table 4 , SURE contains only 16.93M action-head parameters and requires 10.96G FLOPs, corresponding to 3.9% of the parameters and 13.8% of the FLOPs of π 0.5 \\pi_{0.5} . The standard SURE implementation generates an action chunk in 1.57 ms, providing a 12.7 × 12.7\\times speedup over π 0.5 \\pi_{0.5} . Under the framework-matched JAX comparison, SURE reduces the latency to 0.69 ms, corresponding to a 28.8 × 28.8\\times speedup over π 0.5 \\pi_{0.5} . Although the deterministic OFT head remains faster and requires fewer FLOPs, SURE uses only 11.2% as many parameters while retaining an uncertainty-aware action representation. These results show that SURE provides efficient uncertainty-aware action decoding without the high inference cost of iterative generative action heads.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b25e6004df2aecf1",
+      "section": "4.3 Inference Efficiency Evaluation",
+      "location": "4.3 Inference Efficiency Evaluation",
+      "text": "Table 4: Comparison of action head complexity and inference efficiency. Stochastic indicates whether the action head explicitly models the action distribution. Params denotes the number of parameters in the action head. Latency denotes the mean time required by the action head to decode one action chunk, excluding the VLA backbone. SURE ∗ denotes our JAX variant used for a framework-matched comparison with π 0.5 \\pi_{0.5} .",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "05f30d6dc4671f3d",
+      "section": "4.3 Inference Efficiency Evaluation",
+      "location": "4.3 Inference Efficiency Evaluation",
+      "text": "Stochastic Methods Params FLOPs Latency No OFT 151.12M 2.42G 0.37ms Yes π 0.5 \\pi_{0.5} (JAX) 430.10M 79.13G 19.88ms SURE 16.93M 10.96G 1.57ms SURE ∗ (JAX) 16.93M 10.96G 0.69ms",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T4.4",
+      "kind": "table"
+    },
+    {
+      "id": "b258350c5fe90d6d",
+      "section": "4.4 Data Efficiency Evaluation",
+      "location": "4.4 Data Efficiency Evaluation",
+      "text": "Evaluation protocol. To evaluate data efficiency independently of the optimization budget, we train SURE and OpenVLA-OFT on LIBERO-Spatial using 10%, 25%, 50%, and 100% of the available training demonstrations. We fix the training budget at 10k optimization steps for all data ratios and keep the remaining training settings unchanged. OpenVLA-OFT serves as the baseline because it uses the same OpenVLA-7B backbone and provides a strong fine-tuning recipe for continuous action prediction ( Kim et al., 2025a ) . All results in this evaluation are obtained using a single seed.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c42dcc82f11c873f",
+      "section": "4.4 Data Efficiency Evaluation",
+      "location": "4.4 Data Efficiency Evaluation",
+      "text": "Results. As shown in Figure 3 , SURE consistently outperforms OpenVLA-OFT across all training data ratios. With 10%, 25%, 50%, and 100% of the demonstrations, SURE improves the success rate by 21.4, 4.2, 4.2, and 4.6%, respectively. Notably, SURE reaches 95.0% success using only 25% of the training data, exceeding the 94.4% achieved by OpenVLA-OFT with the full dataset. Even with only 10% of the demonstrations, SURE achieves 93.8%, remaining within 0.6% of the full-data OpenVLA-OFT result. These results show that explicitly modeling spatial and temporal uncertainty allows SURE to learn effective manipulation policies from substantially fewer demonstrations.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b4451e1e480df7a2",
+      "section": "4.4 Data Efficiency Evaluation",
+      "location": "4.4 Data Efficiency Evaluation",
+      "text": "Figure 3: Success rates (%) on LIBERO-Spatial using different fractions of the available training demonstrations. Both methods are trained for 10k optimization steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "98983c067d8b41be",
+      "section": "4.5 Ablations",
+      "location": "4.5 Ablations",
+      "text": "We conduct subtractive ablations on LIBERO-Spatial to evaluate the probabilistic action decoder and Soft-DTW alignment supervision. All variants are trained on LIBERO-Spatial for 10k optimization steps using the same settings.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0e9a3d1a2e04a4aa",
+      "section": "4.5 Ablations",
+      "location": "4.5 Ablations",
+      "text": "As shown in Table 5 , removing either component reduces the success rate. Removing Soft-DTW decreases performance from 99.0% to 97.4%, while removing the probabilistic action decoder yields 96.8%. Removing both components further reduces the success rate to 94.4%, confirming that spatial and temporal uncertainty modeling are complementary.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "62bbcf7c0fbe86b4",
+      "section": "4.5 Ablations",
+      "location": "4.5 Ablations",
+      "text": "Table 5: Subtractive ablation on LIBERO-Spatial. Prob denotes the probabilistic action decoder, and DTW denotes Soft-DTW alignment supervision. All variants are trained for 10k steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "303ca29b17116d57",
+      "section": "4.5 Ablations",
+      "location": "4.5 Ablations",
+      "text": "Variant Steps Prob DTW Success Rate SURE 10k ✓ ✓ 99.0 w/o DTW 10k ✓ – 97.4 w/o Prob 10k – ✓ 96.8 w/o Both 10k – – 94.4",
+      "url": "https://arxiv.org/html/2611.09684v1#S4.T5.2",
+      "kind": "table"
+    },
+    {
+      "id": "41cfbbecfd31d65f",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "We presented SURE, a training- and data-efficient VLA framework that explicitly models the spatial and temporal uncertainty inherent in robot demonstrations. SURE combines a lightweight probabilistic action decoder for spatial uncertainty with Soft-DTW alignment supervision that accommodates differences in execution timing. The decoder further supports fast parallel action prediction without iterative denoising. Experiments on LIBERO, RoboTwin 2.0, and six real-world tasks demonstrate improved task performance and data efficiency under reduced training budgets, together with efficient action decoding. Future work may extend SURE to larger cross-embodiment datasets and more diverse manipulation settings.",
+      "url": "https://arxiv.org/html/2611.09684v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "92e123d284fe6750",
+      "section": "AI Use Statement",
+      "location": "AI Use Statement",
+      "text": "In this work, we used generative AI tools for language editing, manuscript organization, L a T e X formatting, and summarizing experiment records provided by the authors for presentation in the manuscript. We did not use generative AI tools to design the methodology, write or modify experimental code, run experiments, or generate experimental data or results. Other disclosure tasks are not applicable to this work. We reviewed all work produced with AI assistance. The authors checked text produced with AI assistance against the manuscript plan and original experiment records, verified citation metadata against primary sources, and compiled and visually inspected the affected pages. We take responsibility for the final content of this work, including text, claims, or artifacts produced with the aid of generative AI.",
+      "url": "https://arxiv.org/html/2611.09684v1#S5.SSx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "139d83ffcee56f3b",
+      "section": "Ethics statement",
+      "location": "Ethics statement",
+      "text": "This work evaluates robot manipulation policies on the LIBERO and RoboTwin 2.0 simulation benchmarks and on six tabletop tasks using LeRobot SO-101 arms. The real-world demonstrations were collected by the authors as operators. The tasks involve robot interaction with objects rather than interaction with people. Physical deployment nevertheless carries risks from unintended arm motion, collisions, and spills during the pouring task. The reported task success rates do not measure operational safety or justify unsupervised use around people. Deployment beyond the evaluated settings would require task-specific safety assessment, appropriate physical safeguards, and human oversight.",
+      "url": "https://arxiv.org/html/2611.09684v1#S5.SSx2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2675fd4d18ffe8bb",
+      "section": "Reproducibility statement",
+      "location": "Reproducibility statement",
+      "text": "The Methods section defines the probabilistic action decoder, Soft-DTW alignment, and training objective. Section 4 specifies the LIBERO, RoboTwin 2.0, and real-world evaluation protocols, including task selection, training budgets, evaluation trials, and the provenance of baseline results. It also describes the data-efficiency, ablation, and action-head latency evaluations. Appendix A reports the backbone adaptation, optimizer and loss settings, action chunk lengths, training schedules, hardware, and the RoboTwin-specific decoder. Appendix C describes the robot setup, demonstration collection, six task instructions, and representative rollouts.",
+      "url": "https://arxiv.org/html/2611.09684v1#S5.SSx3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a29231e379963457",
+      "section": "Appendix A Implementation Details",
+      "location": "Appendix A Implementation Details",
+      "text": "Across all experiments, we adapt OpenVLA-7B using LoRA with rank 32 and α = 16 \\alpha=16 , and optimize the model with AdamW using a weight decay of 0.01. We use an action chunk length of k = 8 k=8 for LIBERO and the real-world experiments while k = 25 k=25 for RoboTwin 2.0. The loss weights are λ KL = 0.05 \\lambda_{\\mathrm{KL}}=0.05 and λ DTW = 0.5 \\lambda_{\\mathrm{DTW}}=0.5 , and the Gaussian target distribution uses σ = 1.5 \\sigma=1.5 bins.",
+      "url": "https://arxiv.org/html/2611.09684v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8efba3de65279b9c",
+      "section": "Appendix A Implementation Details",
+      "location": "Appendix A Implementation Details",
+      "text": "LIBERO. We train one checkpoint for each task suite for 10k optimization steps on 4 NVIDIA H20 GPUs. We use a per-device batch size of 12, a learning rate of 5 × 10 − 4 5\\times 10^{-4} , and an action chunk length of k = 8 k=8 . The Soft-DTW smoothing coefficient γ \\gamma is initialized to 0.1 and annealed to 0.005 over the first 5k optimization steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#A1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1f784d325cd7b4ca",
+      "section": "Appendix A Implementation Details",
+      "location": "Appendix A Implementation Details",
+      "text": "RoboTwin 2.0. Consistent with the baseline protocols, we train a separate checkpoint for each task. Each model is trained for 20k optimization steps on a single NVIDIA B300 GPU with a batch size of 16 and an action chunk length of k = 25 k=25 . The learning rate is initialized to 5 × 10 − 4 5\\times 10^{-4} and annealed to 5 × 10 − 5 5\\times 10^{-5} starting at step 10k. We initialize γ \\gamma to 0.1 and anneal it to 0.001 over the first 10k optimization steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#A1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "531bed3504b709e3",
+      "section": "Appendix A Implementation Details",
+      "location": "Appendix A Implementation Details",
+      "text": "LIBERO represents an action using end-effector translation, rotation, and a gripper command, whereas RoboTwin controls two arms using absolute joint angles. We therefore replace the translation–rotation decomposition in the probabilistic action decoder with a single 12-axis joint decoder, which predicts all 12 joint commands (six per arm) at each action step. Each joint is represented by a 256-bin distribution and decoded by expectation. A separate MLP branch predicts the two gripper commands, after which the output is rearranged to match RoboTwin’s action convention, [ 𝐪 1 : 6 L , g L , 𝐪 1 : 6 R , g R ] [\\mathbf{q}^{L}_{1:6},g^{L},\\mathbf{q}^{R}_{1:6},g^{R}] . The stabilizing KL constraint is correspondingly applied to all 12 joint distributions. For the temporal objective, we first regroup each action as [ 𝐪 1 : 6 L , 𝐪 1 : 6 R , g L , g R ] [\\mathbf{q}^{L}_{1:6},\\mathbf{q}^{R}_{1:6},g^{L},g^{R}] and apply Soft-DTW divergence to the predicted and ground-truth joint-action chunks.",
+      "url": "https://arxiv.org/html/2611.09684v1#A1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "cdc07ce0484c8551",
+      "section": "Appendix A Implementation Details",
+      "location": "Appendix A Implementation Details",
+      "text": "Real-world experiments. We conduct real-world experiments using LeRobot SO-101 robotic arms. We train for 20k optimization steps on 2 NVIDIA A100 GPUs with a per-device batch size of 8, a learning rate of 5 × 10 − 4 5\\times 10^{-4} , and an action chunk length of k = 8 k=8 . Following the same Soft-DTW schedule as RoboTwin 2.0, we anneal γ \\gamma from 0.1 to 0.001 over the first 10k optimization steps.",
+      "url": "https://arxiv.org/html/2611.09684v1#A1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "c52ab01dafbe60fe",
+      "section": "B.1 LIBERO",
+      "location": "B.1 LIBERO",
+      "text": "Figure 4 visualizes representative SURE action distributions on the four LIBERO task suites. In each column, the top image shows the robot observation and the bottom heatmaps show the predicted distributions for translation, rotation, and gripper actions. Diamonds mark the actions obtained by expectation-based decoding.",
+      "url": "https://arxiv.org/html/2611.09684v1#A2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7e20fa6221f73fb8",
+      "section": "B.1 LIBERO",
+      "location": "B.1 LIBERO",
+      "text": "Figure 4: Representative SURE action-distribution visualizations on LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-Long, from top to bottom.",
+      "url": "https://arxiv.org/html/2611.09684v1#A2.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b152eb405152c0aa",
+      "section": "B.2 RoboTwin 2.0",
+      "location": "B.2 RoboTwin 2.0",
+      "text": "Figure 5 visualizes representative SURE joint-action distributions on four RoboTwin 2.0 tasks. In each column, the top image shows the bimanual robot observation, and the heatmaps below show the predicted action distributions for the left and right arm joints and grippers.",
+      "url": "https://arxiv.org/html/2611.09684v1#A2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c32f1ce427e89aa",
+      "section": "B.2 RoboTwin 2.0",
+      "location": "B.2 RoboTwin 2.0",
+      "text": "Figure 5: Representative SURE joint-action distribution visualizations on RoboTwin 2.0: Beat Block Hammer, Click Alarm Clock, Place Fan, and Stack Bowls Two, from top to bottom.",
+      "url": "https://arxiv.org/html/2611.09684v1#A2.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f1d84bc3e9595c67",
+      "section": "C.1 Setup Overview",
+      "location": "C.1 Setup Overview",
+      "text": "We conduct real-world experiments with LeRobot SO-101 robotic arms. As shown in Figure 6 , the setup provides a front camera and a wrist-mounted camera, which together capture the workspace and fine-grained manipulation details. We collect 50 demonstration episodes for each of the six tasks with multiple operators. The resulting variation in motion trajectories and execution speed provides natural spatial and temporal uncertainty. Both SURE and OpenVLA-OFT are jointly trained on the mixed-task demonstrations and evaluated using a single checkpoint. Each policy is evaluated over 20 trials per task, and we report the corresponding success rate.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e70b014f95f81ba9",
+      "section": "C.1 Setup Overview",
+      "location": "C.1 Setup Overview",
+      "text": "Figure 6: Real-world experimental setup with LeRobot SO-101 robotic arms. A front camera observes the workspace, while a wrist-mounted camera captures fine-grained manipulation details.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a970c4f065d8aa80",
+      "section": "C.2 Instructions",
+      "location": "C.2 Instructions",
+      "text": "Water Bottle: Pick up the bottle and place it on the black plate.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "83e1bd76a3becbf8",
+      "section": "C.2 Instructions",
+      "location": "C.2 Instructions",
+      "text": "AAA Battery: Pick up the AAA battery and place it in the white basket.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ba90ad9e39fea0e3",
+      "section": "C.2 Instructions",
+      "location": "C.2 Instructions",
+      "text": "Screwdriver: Pick up the screwdriver and place it in the white basket.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b007a30251460aa0",
+      "section": "C.2 Instructions",
+      "location": "C.2 Instructions",
+      "text": "Toy Duck: Pick up the toy duck and place it in the white basket.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "42977288b2b04f6c",
+      "section": "C.2 Instructions",
+      "location": "C.2 Instructions",
+      "text": "Stack Bowls Two: Stack the red bowl onto the black bowl.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.I1.i5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6685fdaff1e5df2a",
+      "section": "C.2 Instructions",
+      "location": "C.2 Instructions",
+      "text": "Pour Water: Pour the water from the water bottle into the cup.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.I1.i6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9ec5149338c816c8",
+      "section": "C.3 Visualizations",
+      "location": "C.3 Visualizations",
+      "text": "Figure 7 presents representative SURE rollouts for all six real-world manipulation tasks, illustrating the temporal progression of each task from the initial scene to the final state.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3033fadec537a06f",
+      "section": "C.3 Visualizations",
+      "location": "C.3 Visualizations",
+      "text": "t 0 t_{0} t 1 t_{1} t 2 t_{2} t 3 t_{3} t 4 t_{4} Water Bottle AAA Battery Screwdriver Toy Duck Stack Bowls Two Pour Water",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.F7.2",
+      "kind": "table"
+    },
+    {
+      "id": "b369c56868924f78",
+      "section": "C.3 Visualizations",
+      "location": "C.3 Visualizations",
+      "text": "Figure 7: Real-world manipulation rollouts. Columns show the temporal progression from t 0 t_{0} to t 4 t_{4} , while rows correspond to the six tasks. To provide clearer visualizations than the low-resolution front camera used by the policy, these frames are captured by an auxiliary camera placed alongside the front camera. Consequently, the robot arms are not centered in the images.",
+      "url": "https://arxiv.org/html/2611.09684v1#A3.F7",
+      "kind": "figcaption"
+    }
+  ]
+}

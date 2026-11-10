@@ -1,0 +1,687 @@
+{
+  "id": "c0bd497272b9eacd7e7a7a34e16f22c2ad2894f79f19b13bec22e8bc2c823993",
+  "url": "https://arxiv.org/html/2611.08361v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "469fbc9b243794ea",
+      "section": "Radio-to-Pose Information for Gauge-Drift Correction in Cooperative Localization",
+      "location": "Radio-to-Pose Information for Gauge-Drift Correction in Cooperative Localization",
+      "text": "Cooperative localization uses odometry and inter-robot measurements to estimate the motion of a robot team. These measurements describe only relative geometry, but the team’s estimated position and orientation can drift together over time, i.e. , gauge drift . In this work, we study correction of this gauge drift using a radio attenuation map registered in the same world coordinate frame used for robot poses. Specifically, we propose Radio-to-Pose Information (RPI), an interface that converts power residuals and their pose derivatives into a Gaussian information matrix and vector pair. RPI builds on the insight that received power is sensitive to shared displacement in the world map. The pose estimator uses the interface together with odometry and inter-robot measurements to update poses and minimize uncertainty. We characterize the shared motions detectable from the map and observed links. For an uncertain shared map, RPI keeps correlations across robots and time and reproduces joint Gaussian pose estimates and covariances. Across 1000 1000 simulated Gaussian trials, RPI matches the results of joint estimation. Across 32 paired trials with a registered map, RPI reduces common-position RMSE from 0.542 0.542 m to 0.140 0.140 m in a 50 × 50 50\\times 50 m arena compared with a baseline that uses radio only to weight relative measurements.",
+      "url": "https://arxiv.org/html/2611.08361v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "31746d6f31504d48",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "To carry out tasks such as exploration, mapping, and environmental monitoring, robot teams rely on coordinated motion and shared observations. When global positioning is unavailable, they can estimate motion through odometry and inter-robot measurements. These observations constrain relative geometry, but the estimated team can move away from its true location as a group. For example, translating every robot estimate by one meter leaves all pairwise distances unchanged. This shared error matters when robots must reach mapped destinations or report observations in world coordinates.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "db680a7b0aded5ba",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "It is also important to precisely estimate uncertainty because the team can know its relative geometry while remaining uncertain about its position in the world. This ambiguity is called gauge freedom . Gauge freedom describes indistinguishable coordinate frames, which in the presence of motion or noise leads to gauge drift . Gauge drift describes the temporal growth of error or uncertainty in these shared-motion directions. Teams construct a reference frame from a prior over their initial poses, but subsequent noisy observations determine how well the team remains localized. For trajectories without a fixed point of reference, common translations and rotations maintain relative observations, but they do not provide useful information about global state.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6f35c175ac5b325f",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "A radio attenuation map aligned to the world frame can provide a reference because received power depends on both link length and the attenuation field. For example, in Fig. 1 , a common translation preserves separation and distance loss but changes link attenuation. Using a global attenuation map which captures knowledge of obstacles in the environment can help distinguish the team’s positions by using differences in the received power they observe.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4e7b842df6a528e3",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Fig. 1: In the left map, when there is no registered attenuation map, equal-length links have identical distance-only predictions. In the right map, when a registered map is present, equal-length links have different power predictions. Colors indicate attenuation in dB/m.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "8319ca7701ca24ae",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We propose the Radio-to-Pose Information (RPI) interface which leverages this behavior. The RPI is an interface between two components: First, a radio module predicts received power from the current poses and attenuation map, then determines the power mismatch and pose sensitivity as an information matrix and vector. Second, a pose estimator uses this message to compute a correction and its uncertainty.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "013f1a37499f98e8",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "This paper describes three contributions:",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "8e0d3f378a08b4c7",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We show that fixed weights on relative measurements add zero direct information about common motion. We characterize which shared motions the attenuation map and observed links can detect.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa4725d4606c6484",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We propose the Radio-to-Pose Information (RPI) interface, which converts power residuals and pose sensitivity into an information matrix and vector for pose estimation.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "057a6fb0e9dbc092",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We derive centroid covariance growth and a lower bound on mean-squared common-position error under stated motion and measurement assumptions. We evaluate agreement with joint estimation, drift correction, and sensitivity to map error.",
+      "url": "https://arxiv.org/html/2611.08361v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "719c01f2b8522bc7",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Cooperative Localization. Relative measurements help robots estimate their positions with respect to one another, but they do not determine the position and orientation of the entire team in the world frame [ 1 , 2 ] . Gauge fixing chooses a coordinate frame for estimation [ 3 ] . Simultaneous localization and mapping (SLAM) adds persistent environmental features and loop closures, which can reduce trajectory drift [ 4 ] . However, a map built only from the robot’s own measurements defines position relative to the robot’s chosen coordinate frame rather than an externally registered world frame. Our comparison concerns a cooperative localizer that uses radio to set fixed weights on relative factors.",
+      "url": "https://arxiv.org/html/2611.08361v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "64b00e5beaa0d2d2",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Radio and Field Maps. Radio tomography estimates spatial attenuation from power measurements and known link positions [ 5 ] . Radio SLAM jointly estimates motion and propagation structure using radio observations, including multipath information [ 6 , 7 ] . Its reference frame depends on the available anchors and priors. Known physical anchors can provide a reference [ 7 ] , but may not be available. Instead, this paper focuses on studying inter-robot links against a registered attenuation field. This follows the principle of localization against surveyed terrain or magnetic maps [ 8 , 9 ] .",
+      "url": "https://arxiv.org/html/2611.08361v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "da646687437f9318",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Gaussian Fusion. Factor-graph smoothers combine measurement models and priors through local linearization [ 4 ] . Gaussian elimination provides a way to summarize part of this model for another estimator. Distributed smoothing must account for previously shared information when summaries are replaced [ 10 ] . Fusion with shared variables must also preserve the induced correlations or use an appropriate conservative approximation [ 11 , 12 ] . RPI applies these requirements to a radio module whose uncertain map is shared across robots and time. Equivalent radio factors in a factor-graph smoother give the same local Gaussian result when the models and linearizations agree.",
+      "url": "https://arxiv.org/html/2611.08361v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a227ab7407f94c60",
+      "section": "III-A Shared Motion",
+      "location": "III-A Shared Motion",
+      "text": "In the cooperative localization problem, a robot team seeks to estimate each robot’s trajectory in a fixed world frame over an estimation window. Consider N N robots over a finite set of time steps 𝒯 = { t 0 , … , t w } \\mathcal{T}=\\{t_{0},\\ldots,t_{w}\\} , called the estimation window, where t 0 t_{0} and t w t_{w} are its first and last time steps. Let x i , t = ( p i , t , θ i , t ) ∈ SE ⁡ ( 2 ) x_{i,t}=(p_{i,t},\\theta_{i,t})\\in\\mathrm{SE}(2) denote the true pose of robot i i at time t ∈ 𝒯 t\\in\\mathcal{T} , where p i , t ∈ ℝ 2 p_{i,t}\\in\\mathbb{R}^{2} is its position and θ i , t \\theta_{i,t} is its heading. Let X X collect the poses of all robots across the estimation window, representing their trajectories. Each robot estimates its pose x ^ i , t \\hat{x}_{i,t} using odometry and inter-robot measurements. A centralized server collects these estimates into X ^ \\hat{X} and solves for the team’s trajectories. Both X X and X ^ \\hat{X} contain N ⁡ ( w + 1 ) N(w+1) poses.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "896695136fee8d4d",
+      "section": "III-A Shared Motion",
+      "location": "III-A Shared Motion",
+      "text": "In order to represent a gauge drift, a shared rigid transformation g = ( R ψ , t g ) ∈ SE ⁡ ( 2 ) g=(R_{\\psi},t_{g})\\in\\mathrm{SE}(2) rotates every pose by ψ \\psi and translates every position by the translation vector t g ∈ ℝ 2 t_{g}\\in\\mathbb{R}^{2} , where R ψ = [ cos ⁡ ψ − sin ⁡ ψ sin ⁡ ψ cos ⁡ ψ ] . R_{\\psi}=\\begin{bmatrix}\\cos\\psi&-\\sin\\psi\\\\ \\sin\\psi&\\cos\\psi\\end{bmatrix}.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "084997078c685b8d",
+      "section": "III-A Shared Motion",
+      "location": "III-A Shared Motion",
+      "text": "Fig. 2: This graph represents the robot team at each time step. Solid links represent measurements between robots at the same time, while dashed arrows represent odometry of the same robot across consecutive time steps. Each residual r k ​ ( X ) r_{k}(X) compares a recorded measurement with the measurement predicted by the poses.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9dc0f66696a480f1",
+      "section": "III-A Shared Motion",
+      "location": "III-A Shared Motion",
+      "text": "Thus, g g is applied to every pose in X X , giving p i , t ↦ R ψ ​ p i , t + t g p_{i,t}\\mapsto R_{\\psi}p_{i,t}+t_{g} and θ i , t ↦ θ i , t + ψ \\theta_{i,t}\\mapsto\\theta_{i,t}+\\psi . This shared transformation preserves inter-robot distances, relative poses, and motion expressed in each robot’s own frame. Let 𝒦 \\mathcal{K} denote the set of available relative measurements over the estimation window, including relative-position measurements between robots and odometry between consecutive time steps, as shown in Figure 2 . Each index k ∈ 𝒦 k\\in\\mathcal{K} identifies one measurement and the number of available measurements is bounded by | 𝒦 | ≤ ( w + 1 ) ​ N ⁡ ( N − 1 ) 2 + N ​ w |\\mathcal{K}|\\leq(w+1)\\frac{N(N-1)}{2}+Nw . For each k k , let r k ​ ( X ) r_{k}(X) denote the difference between the recorded sensor measurement and the corresponding value predicted using the robot poses in X X . Since the transformation preserves these predicted values, r k ​ ( g ​ X ) = r k ​ ( X ) r_{k}(gX)=r_{k}(X) . A shared translation changes the team’s position in the fixed world frame, while a shared rotation changes its orientation. To determine which shared motions the measurements can detect, we express small translations and rotations as pose perturbations. About an origin o o , with 90 ∘ rotation matrix S = [ 0 − 1 1 0 ] S=\\left[\\begin{smallmatrix}0&-1\\\\ 1&0\\end{smallmatrix}\\right] , a small common translation a a and rotation ω \\omega produce",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "f96681624a850566",
+      "section": "III-A Shared Motion",
+      "location": "III-A Shared Motion",
+      "text": "δ ​ p i , t = a + ω ​ S ​ ( p i , t − o ) , δ ​ θ i , t = ω , δ ​ X = G ​ ξ . \\delta p_{i,t}=a+\\omega S(p_{i,t}-o),\\quad\\delta\\theta_{i,t}=\\omega,\\quad\\delta X=G\\xi. (1)",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "2fcc551ee0af4190",
+      "section": "III-A Shared Motion",
+      "location": "III-A Shared Motion",
+      "text": "where ξ = ( a x , a y , ω ) ⊤ \\xi=(a_{x},a_{y},\\omega)^{\\top} describes the shared translation and rotation applied to all robots and time steps. The columns of G ∈ ℝ 3 ​ N ​ ( w + 1 ) × 3 G\\in\\mathbb{R}^{3N(w+1)\\times 3} correspond to the two translation directions and rotation.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS1.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "f87fc25487ad4e01",
+      "section": "III-B Radio Power and Reference",
+      "location": "III-B Radio Power and Reference",
+      "text": "For a radio link ℓ = ( i , j , t ) \\ell=(i,j,t) between robots i i and j j at time t t , let d i ​ j , t = ‖ p j , t − p i , t ‖ 2 > 0 d_{ij,t}=\\|p_{j,t}-p_{i,t}\\|_{2}>0 . The field F ⁡ ( v ) F(v) provides attenuation in dB/m at world location v ∈ ℝ 2 v\\in\\mathbb{R}^{2} . We predict received power by integrating the field over the spatial domain, weighted by each location’s contribution to the link.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "23a6c334402ca88e",
+      "section": "III-B Radio Power and Reference",
+      "location": "III-B Radio Power and Reference",
+      "text": "μ ℓ ​ ( X , F ) = P ref − 10 ​ γ ​ log 10 ⁡ ( d i ​ j , t / d 0 ) − ∫ w ℓ ​ ( v , X ) ​ F ​ ( v ) ​ 𝑑 v . \\mu_{\\ell}(X,F)=P_{\\rm ref}-10\\gamma\\log_{10}(d_{ij,t}/d_{0})-\\int w_{\\ell}(v,X)F(v)\\,dv.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "6e29d6e9ed143874",
+      "section": "III-B Radio Power and Reference",
+      "location": "III-B Radio Power and Reference",
+      "text": "P ref P_{\\mathrm{ref}} is the reference received power in dBm at distance d 0 = 1 ​ m d_{0}=1\\,\\mathrm{m} without mapped attenuation, and γ \\gamma is the path loss exponent governing the propagation decrease in received power with distance. The weighting function w ℓ ​ ( v , X ) w_{\\ell}(v,X) describes each location v v ’s contribution to link attenuation, given its position with respect to robot poses. We assume known propagation parameters and Gaussian power noise ϵ ∼ 𝒩 ⁡ ( 0 , R r ) \\epsilon\\sim\\mathcal{N}(0,R_{\\mathrm{r}}) , where R r ≻ 0 R_{\\mathrm{r}}\\succ 0 , the radio measurement noise covariance matrix, is independent of the robot poses. The measured power vector y y , pose Jacobian J r J_{\\mathrm{r}} , and radio information matrix M r M_{\\mathrm{r}} satisfy",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "1842a407904cd2c6",
+      "section": "III-B Radio Power and Reference",
+      "location": "III-B Radio Power and Reference",
+      "text": "y = μ ⁡ ( X , F ) + ϵ , J r = ∂ μ ∂ X , M r = J r ⊤ ​ R r − 1 ​ J r , y=\\mu(X,F)+\\epsilon,\\quad J_{\\mathrm{r}}=\\frac{\\partial\\mu}{\\partial X},\\quad M_{\\mathrm{r}}=J_{\\mathrm{r}}^{\\top}R_{\\mathrm{r}}^{-1}J_{\\mathrm{r}},",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.Ex2",
+      "kind": "table"
+    },
+    {
+      "id": "8357da210b7133d6",
+      "section": "III-B Radio Power and Reference",
+      "location": "III-B Radio Power and Reference",
+      "text": "where ϵ ∼ 𝒩 ⁡ ( 0 , R r ) \\epsilon\\sim\\mathcal{N}(0,R_{\\mathrm{r}}) . For a known field, the radio information along a pose perturbation u u is u ⊤ M r u = ∥ R r − 1 / 2 J r u ∥ 2 . u^{\\top}M_{\\mathrm{r}}u=\\|R_{\\mathrm{r}}^{-1/2}J_{\\mathrm{r}}u\\|^{2}. By registering the field F F , we provide a reference in the world frame. If the weights satisfy w ℓ ​ ( g ​ v , g ​ X ) = w ℓ ​ ( v , X ) w_{\\ell}(gv,gX)=w_{\\ell}(v,X) , transforming the poses to X ′ = g ​ X X^{\\prime}=gX and the map to F ′ ​ ( v ) = F ⁡ ( g − 1 ​ v ) F^{\\prime}(v)=F(g^{-1}v) leaves the predicted powers unchanged. Therefore, estimating the poses and map together cannot determine their absolute position and orientation unless the prior provides a world-frame reference. We provide this reference by setting the map’s position and orientation to the world frame.",
+      "url": "https://arxiv.org/html/2611.08361v1#S3.SS2.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "4db3e39590e89c62",
+      "section": "IV Error and Map Information",
+      "location": "IV Error and Map Information",
+      "text": "If gauge drift occurs, the robot team’s collective position (i.e., the centroid) relative to the world map becomes uncertain (§ IV-A ). We show that while existing techniques based on relative measurements alone cannot solve the gauge drift problem for robot teams (§ IV-B ), it is possible to use radio field attenuation information from the world map to reduce this source of error (§ IV-C ).",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f033308c4e693847",
+      "section": "IV-A Team Centroid Error Growth",
+      "location": "IV-A Team Centroid Error Growth",
+      "text": "Relative observations do not measure the motion noise with respect to the centroid; as a result, the team cannot correct common-position drift using this kind of observation. To see why, assume each robot’s heading is known and its position evolves in world coordinates. Then, the position of robot i i at time step t t evolves to t + 1 t+1 by p i , t + 1 = p i , t + d i , t + n i , t p_{i,t+1}=p_{i,t}+d_{i,t}+n_{i,t} , where the process noise n i , t ∼ 𝒩 ⁡ ( 0 , σ p 2 ​ I 2 ) n_{i,t}\\sim\\mathcal{N}(0,\\sigma_{p}^{2}I_{2}) , d i , t d_{i,t} is the displacement given by odometry per time step, and σ p 2 \\sigma_{p}^{2} is the motion-noise variance per position coordinate per time step. In this equation, the process noises are independent across robots and time and are independent of the initial state.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "15305d00d65d9ee8",
+      "section": "IV-A Team Centroid Error Growth",
+      "location": "IV-A Team Centroid Error Growth",
+      "text": "Define the team centroid as c t = N − 1 ​ ∑ i = 1 N p i , t c_{t}=N^{-1}\\sum_{i=1}^{N}p_{i,t} , where N N is the number of robots. Assume that c 0 c_{0} is the initial centroid and has covariance P c ​ 0 P_{c0} . The measurement noise is independent of initial robot positions and process noise.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bde095a1be8ce76e",
+      "section": "IV-A Team Centroid Error Growth",
+      "location": "IV-A Team Centroid Error Growth",
+      "text": "Averaging the robot dynamics gives c t + 1 = c t + d ¯ t + n ¯ t , n ¯ t ∼ 𝒩 ⁡ ( 0 , σ p 2 N ​ I 2 ) , c_{t+1}=c_{t}+\\bar{d}_{t}+\\bar{n}_{t},\\qquad\\bar{n}_{t}\\sim\\mathcal{N}\\left(0,\\frac{\\sigma_{p}^{2}}{N}I_{2}\\right), where d ¯ t = N − 1 ​ ∑ i d i , t \\bar{d}_{t}=N^{-1}\\sum_{i}d_{i,t} and n ¯ t = N − 1 ​ ∑ i n i , t \\bar{n}_{t}=N^{-1}\\sum_{i}n_{i,t} . The average motion noise is independent of the motion noise that changes the robots’ relative positions. The observation history does not reduce uncertainty in c 0 c_{0} or the accumulated centroid noise. Thus, Cov ⁡ ( c t ∣ 𝒴 t ) = P c ​ 0 + t ​ σ p 2 N ​ I 2 , \\operatorname{Cov}(c_{t}\\mid\\mathcal{Y}_{t})=P_{c0}+\\frac{t\\sigma_{p}^{2}}{N}I_{2}, where 𝒴 t \\mathcal{Y}_{t} denotes the observation history through time t t . For any estimate based on this history, 𝔼 ​ ‖ c ^ t − c t ‖ 2 ≥ tr ⁡ P c ​ 0 + 2 ​ t ​ σ p 2 N . \\mathbb{E}\\|\\hat{c}_{t}-c_{t}\\|^{2}\\geq\\operatorname{tr}P_{c0}+\\frac{2t\\sigma_{p}^{2}}{N}.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "b48c7389ffeac655",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "Relative observations improve estimates of the robots’ positions with respect to one another. However, using weighted links alone cannot solve this problem.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c4bc3a47c2cdedc3",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "If r k r_{k} is invariant under the pose transformation X ↦ g ​ X X\\mapsto gX , differentiating along a gauge direction gives J k ​ G = 0 J_{k}G=0 , where J k = ∂ r k / ∂ X J_{k}=\\partial r_{k}/\\partial X . For the joint pose–map transformation above, the corresponding identity is J k , X ​ G X + J k , F ​ G F = 0 J_{k,X}G_{X}+J_{k,F}G_{F}=0 . The weighted relative information matrix is M ⁡ ( q ) = ∑ k q k ​ J k ⊤ ​ R k − 1 ​ J k M(q)=\\sum_{k}q_{k}J_{k}^{\\top}R_{k}^{-1}J_{k} , where q k q_{k} describes nonnegative radio weights and R k R_{k} is the indexed measurement noise covariance. Also, G X = G G_{X}=G from Eq. ( 1 ) describes the shared pose motion, and G F G_{F} describes the corresponding map change caused by the same translation and rotation.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4065a4dfbf02f6f4",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "For fixed nonnegative radio weights q k q_{k} on invariant relative measurements with covariances R k ≻ 0 R_{k}\\succ 0 ,",
+      "url": "https://arxiv.org/html/2611.08361v1#Thmproposition1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8e0b5a718a2e780",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "G ⊤ ​ M ​ ( q ) ​ G = ∑ k q k ​ ( J k ​ G ) ⊤ ​ R k − 1 ​ ( J k ​ G ) = 0 . G^{\\top}M(q)G=\\sum_{k}q_{k}(J_{k}G)^{\\top}R_{k}^{-1}(J_{k}G)=0.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.Ex3",
+      "kind": "table"
+    },
+    {
+      "id": "faa526c64229e640",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "Keeping only a subset of the relative factors still provides no information along the gauge directions.",
+      "url": "https://arxiv.org/html/2611.08361v1#Thmproposition1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "50a3eeea62dc462c",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "Each term in the sum is zero, so keeping only some of the factors does not change the result. ∎",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "f33b7d1d12a4426b",
+      "section": "IV-B Relative Weights",
+      "location": "IV-B Relative Weights",
+      "text": "The proposition shows that fixed-weight relative measurements provide no direct information about shared translation or rotation. Additional pose information can come from modeling how received radio power depends on the robot poses.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0b0f9097d2b61990",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "A registered attenuation map can constrain this common motion when shared displacement changes the power predicted for the observed links. Radio sensitivity to shared motion depends on how that motion changes the attenuation sampled by the observed links. Because a shared rigid motion leaves link length unchanged, only the map attenuation term changes the predicted power.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5d22e65be15991c4",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "Assume F ∈ C 1 F\\in C^{1} and w ℓ ​ ( g ​ v , g ​ X ) = w ℓ ​ ( v , X ) w_{\\ell}(gv,gX)=w_{\\ell}(v,X) . Then, substituting v = g ​ v ′ v=gv^{\\prime} gives ∫ w ℓ ​ ( v , g ​ X ) ​ F ​ ( v ) ​ 𝑑 v = ∫ w ℓ ​ ( v ′ , X ) ​ F ​ ( g ​ v ′ ) ​ d ​ v ′ \\int w_{\\ell}(v,gX)F(v)\\,dv=\\int w_{\\ell}(v^{\\prime},X)F(gv^{\\prime})\\,dv^{\\prime} , where v ′ = g − 1 ​ v v^{\\prime}=g^{-1}v is the spatial variable before applying the rigid transformation g g . This expresses the attenuation using the original link weights and the field evaluated at the transformed locations. For V ξ ​ ( v ′ ) = a + ω ​ S ​ ( v ′ − o ) V_{\\xi}(v^{\\prime})=a+\\omega S(v^{\\prime}-o) , differentiating along the shared motion at the identity gives",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "59ee938da88e7ddc",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "( J r G ξ ) ℓ = − ∫ w ℓ ( v ′ , X ) ∇ F ( v ′ ) ⊤ V ξ ( v ′ ) d v ′ . (J_{\\mathrm{r}}G\\xi)_{\\ell}=-\\int w_{\\ell}(v^{\\prime},X)\\nabla F(v^{\\prime})^{\\top}V_{\\xi}(v^{\\prime})\\,dv^{\\prime}. (2)",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.E2",
+      "kind": "table"
+    },
+    {
+      "id": "71eeae488e6c09cd",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "( J r ​ G ​ ξ ) ℓ (J_{\\mathrm{r}}G\\xi)_{\\ell} measures the sensitivity of link ℓ \\ell ’s predicted power to the shared motion ξ \\xi , with a fixed map. Let 𝒩 F \\mathcal{N}_{F} denote the shared motions satisfying ∇ F ( v ′ ) ⊤ V ξ ( v ′ ) = 0 \\nabla F(v^{\\prime})^{\\top}V_{\\xi}(v^{\\prime})=0 for all v ′ v^{\\prime} . The link sensitivity condition requires every motion that the map reveals outside 𝒩 F \\mathcal{N}_{F} to produce a nonzero first-order change in at least one observed link’s attenuation integral, despite possible missed variation or cancellation in other links.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "546a77156b0a28f8",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "Let ℒ obs \\mathcal{L}_{\\mathrm{obs}} be the set of observed links. With the map and the robots’ relative geometry fixed,",
+      "url": "https://arxiv.org/html/2611.08361v1#Thmproposition2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ab8811f938059c54",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "𝒩 F ⊆ { ξ : ( J r G ξ ) ℓ = 0 ∀ ℓ ∈ ℒ obs } . \\mathcal{N}_{F}\\subseteq\\left\\{\\xi:(J_{\\mathrm{r}}G\\xi)_{\\ell}=0\\quad\\forall\\,\\ell\\in\\mathcal{L}_{\\mathrm{obs}}\\right\\}.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.Ex4",
+      "kind": "table"
+    },
+    {
+      "id": "c5c4ccaf1027fad8",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "The equality holds under the link sensitivity condition.",
+      "url": "https://arxiv.org/html/2611.08361v1#Thmproposition2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "793da788a46b4fbf",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "If ξ ∈ 𝒩 F \\xi\\in\\mathcal{N}_{F} , ∇ F ( v ) ⊤ V ξ ( v ) = 0 \\nabla F(v)^{\\top}V_{\\xi}(v)=0 everywhere. By Eq. ( 2 ), ( J r ​ G ​ ξ ) ℓ = 0 (J_{\\mathrm{r}}G\\xi)_{\\ell}=0 for all links, proving the inclusion. Under the link sensitivity condition, every ξ ∉ 𝒩 F \\xi\\notin\\mathcal{N}_{F} gives ( J r ​ G ​ ξ ) ℓ ≠ 0 (J_{\\mathrm{r}}G\\xi)_{\\ell}\\neq 0 for at least one observed link, establishing equality. ∎",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "8f2a661e018974c5",
+      "section": "IV-C Map and Link Sensitivity",
+      "location": "IV-C Map and Link Sensitivity",
+      "text": "With the map fixed and link weights satisfying w ℓ ​ ( g ​ v , g ​ X ) = w ℓ ​ ( v , X ) w_{\\ell}(gv,gX)=w_{\\ell}(v,X) , we use Eq. ( 2 ) to construct several simple examples of unresolved motion. A constant field has zero spatial gradient, so the radio model cannot detect any shared translation or rotation. If F ⁡ ( v ) = f ⁡ ( v x ) F(v)=f(v_{x}) , vertical translation does not change sampled link attenuation. A radial field cannot distinguish rotation about its center. Uncertain field values reduce the information carried by these derivatives. Repeated map patterns can produce the same radio measurements at different team locations. However, the full rank of the shared-motion Jacobian ensures local distinguishability. This means that any small shared translation or rotation of the team changes at least one predicted radio measurement.",
+      "url": "https://arxiv.org/html/2611.08361v1#S4.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "3fa53f2e435271f9",
+      "section": "V RPI Interface",
+      "location": "V RPI Interface",
+      "text": "We design RPI using the insight that a radio map aligned to world coordinates can provide a reference for the team’s position. We treat the map’s position and orientation in world coordinates as known. This method accounts for Gaussian uncertainty in its attenuation values as we describe in § V-B . We introduce RPI to pass information from the radio module to the pose estimator, as Fig. 3 illustrates.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a59a546ff159fe8d",
+      "section": "V RPI Interface",
+      "location": "V RPI Interface",
+      "text": "Fig. 3: RPI converts power measurements and map information into ( Λ , η ) (\\Lambda,\\eta) for pose estimation. Updated poses feed back to the radio module for relinearization. Revised messages replace previous contributions.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1ee29c969be9a17a",
+      "section": "V-A Grid model",
+      "location": "V-A Grid model",
+      "text": "We first discretize the attenuation field and compute received power over it. To support nonlinear settings, where the predicted radio power depends nonlinearly on robot positions, we represent the attenuation field by grid values 𝐅 \\mathbf{F} . Within each cell, bilinear interpolation combines its four corner values with weights β m ​ ( v ) \\beta_{m}(v) that sum to one, giving F h ​ ( v ) = ∑ m β m ​ ( v ) ​ F m F_{h}(v)=\\sum_{m}\\beta_{m}(v)F_{m} , where h h denotes the grid spacing and F m F_{m} the attenuation value at grid vertex m m . We then sample this field along each radio link to obtain A h ​ ( X ) A_{h}(X) , the matrix that converts map grid values into attenuation for each link ℓ = ( i , j , t ) \\ell=(i,j,t) . Attenuation and distance loss use d ~ i ​ j , t = ‖ p j , t − p i , t ‖ 2 + δ d 2 \\widetilde{d}_{ij,t}=\\sqrt{\\|p_{j,t}-p_{i,t}\\|^{2}+\\delta_{d}^{2}} , where δ d ≈ 10 − 6 \\delta_{d}\\approx 10^{-6} m.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1a985077b9bfced0",
+      "section": "V-A Grid model",
+      "location": "V-A Grid model",
+      "text": "ℓ ​ m \\displaystyle{}_{\\ell m} = ∑ q = 1 Q α ℓ ​ q ​ ( X ) ​ β m ​ ( v ℓ ​ q ​ ( X ) ) , \\displaystyle=\\sum_{q=1}^{Q}\\alpha_{\\ell q}(X)\\beta_{m}(v_{\\ell q}(X)), [ μ free ​ ( X ) ] ℓ \\displaystyle[\\mu_{\\rm free}(X)]_{\\ell} = P ref − 10 ​ γ ​ log 10 ⁡ ( d ~ i ​ j , t d 0 ) , \\displaystyle=P_{\\rm ref}-10\\gamma\\log_{10}\\!\\left(\\frac{\\widetilde{d}_{ij,t}}{d_{0}}\\right), μ h ​ ( X , 𝐅 ) \\displaystyle\\mu_{h}(X,\\mathbf{F}) = μ free ​ ( X ) − A h ​ ( X ) ​ 𝐅 . \\displaystyle=\\mu_{\\rm free}(X)-A_{h}(X)\\mathbf{F}.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.Ex5",
+      "kind": "table"
+    },
+    {
+      "id": "3439dc33710b091b",
+      "section": "V-A Grid model",
+      "location": "V-A Grid model",
+      "text": "The vector μ free ​ ( X ) \\mu_{\\rm free}(X) contains the predicted received powers before mapped attenuation, with entry [ μ free ​ ( X ) ] ℓ [\\mu_{\\rm free}(X)]_{\\ell} for each link ℓ ∈ ℒ obs \\ell\\in\\mathcal{L}_{\\rm obs} . α ℓ ​ q \\alpha_{\\ell q} is the integration weight of sample q q along link ℓ \\ell . We use Q = 64 Q=64 samples including both endpoints, v ℓ ​ q = ( 1 − s q ) ​ p i , t + s q ​ p j , t v_{\\ell q}=(1-s_{q})p_{i,t}+s_{q}p_{j,t} , where s q = q − 1 Q − 1 s_{q}=\\frac{q-1}{Q-1} , with weights α ℓ ​ q = d ~ i ​ j , t ​ b q ∑ s b s , b q = 1 1 + e − κ ⁡ [ 1 − ( 2 ​ s q − 1 ) 2 ] \\alpha_{\\ell q}=\\widetilde{d}_{ij,t}\\frac{b_{q}}{\\sum_{s}b_{s}},\\qquad b_{q}=\\frac{1}{1+e^{-\\kappa[1-(2s_{q}-1)^{2}]}} . κ \\kappa is the spatial weight rise parameter that dictates how fast the weight gradient changes between the mid and endpoints. We set κ = 8 \\kappa=8 to give nearly uniform weights across the link interior while reducing the endpoint weights. We differentiate the discretized power prediction with respect to the poses at the current estimates, holding the grid values fixed, to obtain the radio pose Jacobian J X J_{X} . Then, we differentiate the prediction with respect to the grid values holding the poses fixed, which gives J F = − A h ​ ( X ) J_{F}=-A_{h}(X) .",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "2a293a3b095a92f8",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "We show how the radio module converts received power into an informative pose update. Let 𝐅 \\mathbf{F} denote the map values and 𝐅 ^ \\hat{\\mathbf{F}} their current estimate. At the current pose and map estimates ( X ^ , 𝐅 ^ ) (\\hat{X},\\hat{\\mathbf{F}}) , define the power residual r = y − μ h ​ ( X ^ , 𝐅 ^ ) r=y-\\mu_{h}(\\hat{X},\\hat{\\mathbf{F}}) . Assume a map prior 𝐅 ∼ 𝒩 ⁡ ( 𝐅 ¯ , P F ) \\mathbf{F}\\sim\\mathcal{N}(\\bar{\\mathbf{F}},P_{F}) , independent of the pose prior, where 𝐅 ¯ \\bar{\\mathbf{F}} is the prior map mean and P F ≻ 0 P_{F}\\succ 0 its covariance. Let z z denote a local pose correction and f = 𝐅 − 𝐅 ^ f=\\mathbf{F}-\\hat{\\mathbf{F}} a map correction. Linearization gives r ≈ J X ​ z + J F ​ f + ϵ r\\approx J_{X}z+J_{F}f+\\epsilon . Then f ∼ 𝒩 ⁡ ( m f , P F ) f\\sim\\mathcal{N}(m_{f},P_{F}) , where m f = 𝐅 ¯ − 𝐅 ^ m_{f}=\\bar{\\mathbf{F}}-\\hat{\\mathbf{F}} . Let H task H_{\\rm task} denote the pose information matrix and b task b_{\\rm task} the information vector driving the latest pose correction, both formed from the linearized odometry, relative factors, and pose priors. task \\rm task refers to the pose-estimation objective before adding radio information. Joint Gaussian estimation solves, with W = R r − 1 W=R_{r}^{-1} where W W is the precision matrix that describes how strongly radio prediction errors are penalized in the estimator,",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "7c222bc4c023518a",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "min z , f \\displaystyle\\min_{z,f} 1 2 ​ z ⊤ ​ H task ​ z − b task ⊤ ​ z \\displaystyle\\tfrac{1}{2}z^{\\top}H_{\\rm task}z-b_{\\rm task}^{\\top}z (3) + 1 2 ​ ‖ r − J X ​ z − J F ​ f ‖ W 2 + 1 2 ​ ‖ f − m f ‖ P F − 1 2 , \\displaystyle+\\tfrac{1}{2}\\|r-J_{X}z-J_{F}f\\|_{W}^{2}+\\tfrac{1}{2}\\|f-m_{f}\\|_{P_{F}^{-1}}^{2},",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.E3",
+      "kind": "table"
+    },
+    {
+      "id": "3413e93fa8ce8a8d",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "The radio residual is weighted by W W , and the map-prior deviation by the precision matrix P F − 1 P_{F}^{-1} , the inverse of the map-prior covariance. To pass the radio information to a pose-only estimator, define",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS2.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "2653b1d84a81f096",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "A \\displaystyle A = J X ⊤ ​ W ​ J X , \\displaystyle=J_{X}^{\\top}WJ_{X}, a \\displaystyle a = J X ⊤ ​ W ​ r , \\displaystyle=J_{X}^{\\top}Wr, B \\displaystyle B = J F ⊤ ​ W ​ J F + P F − 1 , \\displaystyle=J_{F}^{\\top}WJ_{F}+P_{F}^{-1}, b \\displaystyle b = J F ⊤ ​ W ​ r + P F − 1 ​ m f , \\displaystyle=J_{F}^{\\top}Wr+P_{F}^{-1}m_{f}, C \\displaystyle C = J X ⊤ ​ W ​ J F . \\displaystyle=J_{X}^{\\top}WJ_{F}.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.Ex6",
+      "kind": "table"
+    },
+    {
+      "id": "8ab6fb6f054efa8b",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "Eliminating the map correction f f through the Schur complement of the map information B B gives the RPI pair",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS2.p1.4",
+      "kind": "p"
+    },
+    {
+      "id": "07780552011454c2",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "Λ = A − C ​ B − 1 ​ C ⊤ , η = a − C ​ B − 1 ​ b . \\Lambda=A-CB^{-1}C^{\\top},\\qquad\\eta=a-CB^{-1}b. (4)",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.E4",
+      "kind": "table"
+    },
+    {
+      "id": "b5f5e21b9d8b4536",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "With a known map, we set 𝐅 ^ \\hat{\\mathbf{F}} to its known value, so f = 0 f=0 and ( Λ , η ) = ( A , a ) (\\Lambda,\\eta)=(A,a) . Adding task information gives the Gaussian pose covariance and update",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a3e2385c6cd23b18",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "P z = ( H task + Λ ) − 1 , z ^ = P z ​ ( b task + η ) . P_{z}=(H_{\\rm task}+\\Lambda)^{-1},\\qquad\\hat{z}=P_{z}(b_{\\rm task}+\\eta). (5)",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.E5",
+      "kind": "table"
+    },
+    {
+      "id": "2f1a84621db4336c",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "The summed information must be positive definite. For nonlinear iterations, the estimator solves for z ^ \\hat{z} , updates the poses, and relinearizes.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "16b0b7fcc06a401d",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "With matching factors, priors, weights, coordinates, and linearizations, Eq. ( 4 )–( 5 ) reproduce the pose mean and covariance obtained by solving Eq. ( 3 ) jointly.",
+      "url": "https://arxiv.org/html/2611.08361v1#Thmproposition3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5b68c77c90561b02",
+      "section": "V-B Power to Pose Information",
+      "location": "V-B Power to Pose Information",
+      "text": "The joint objective is quadratic in ( z , f ) (z,f) . Completing the square in f f and integrating it leaves 1 2 ​ z ⊤ ​ ( H task + Λ ) ​ z − ( b task + η ) ⊤ ​ z \\tfrac{1}{2}z^{\\top}(H_{\\rm task}+\\Lambda)z-(b_{\\rm task}+\\eta)^{\\top}z plus a constant. The minimizer and covariance are given by Eq. ( 5 ). ∎",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6d1cf8690528614c",
+      "section": "V-C Shared History",
+      "location": "V-C Shared History",
+      "text": "Uncertainty in the shared map can affect pose estimates for multiple robots at different times. RPI therefore combines the radio measurements across robots and time steps before eliminating the map variables. This maintains the cross-robot and cross-time correlations the shared map induces. With respect to Proposition 3 , the resulting message gives the exact pose marginal for the Gaussian system.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9ab0594ee7f09cd4",
+      "section": "V-C Shared History",
+      "location": "V-C Shared History",
+      "text": "The pose estimator reconstructs the RPI interface after each relinearization. For N N robots and L L time steps, a pose information matrix requires O ⁡ ( N 2 ​ L 2 ) O(N^{2}L^{2}) storage. The RPI message contains ( Λ , η ) (\\Lambda,\\eta) , the order of the pose variables, and the linearization point.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "01e766384dc3ccfd",
+      "section": "V-C Shared History",
+      "location": "V-C Shared History",
+      "text": "Fig. 4: Gaussian shared-map test over 1,000 paired trials. (a) Mean terminal centroid error versus radio-noise standard deviation. (b) Trajectory and terminal-centroid NEES per coordinate, with nominal value one. (c) Covariance difference relative to Joint. Error bars are 95% intervals from trial means.",
+      "url": "https://arxiv.org/html/2611.08361v1#S5.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "95ea2c6a36c4a223",
+      "section": "VI Evaluation",
+      "location": "VI Evaluation",
+      "text": "We evaluate how closely RPI matches joint Gaussian estimation (§ VI-B ), its ability to correct nonlinear drift (§ VI-C ), its sensitivity to map error (§ VI-D ), and the directions constrained by the map (§ VI-E ).",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3206d35a90a28e2b",
+      "section": "VI-A Methodology",
+      "location": "VI-A Methodology",
+      "text": "All evaluations generate noisy measurements from known robot trajectories and an attenuation map, then estimate positions with known headings. Methods within each trial share observations and initialization.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dee37d54c34c8cd3",
+      "section": "VI-A Methodology",
+      "location": "VI-A Methodology",
+      "text": "For position error e i , t = p ^ i , t − p i , t e_{i,t}=\\hat{p}_{i,t}-p_{i,t} , we report common error e ¯ t = N − 1 ​ ∑ i e i , t \\bar{e}_{t}=N^{-1}\\sum_{i}e_{i,t} and relative error e i , t − e ¯ t e_{i,t}-\\bar{e}_{t} , measuring centroid displacement and errors in the team’s relative arrangement, respectively. We evaluate nonlinear RMSE over the final third of each trajectory to emphasize accumulated drift later in the run.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9b4fa86bcd610fb5",
+      "section": "VI-A Methodology",
+      "location": "VI-A Methodology",
+      "text": "For stacked terminal-position covariance P P , common uncertainty is tr ⁡ P centroid \\sqrt{\\operatorname{tr}P_{\\mathrm{centroid}}} , where P centroid = C p ​ P ​ C p ⊤ P_{\\mathrm{centroid}}=C_{p}PC_{p}^{\\top} , C p = N − 1 ​ ( 𝟏 N ⊤ ⊗ I 2 ) . C_{p}=N^{-1}(\\mathbf{1}_{N}^{\\top}\\otimes I_{2}). Centroid NEES per coordinate is e ¯ t w ⊤ ​ P centroid − 1 ​ e ¯ t w / 2 \\bar{e}_{t_{w}}^{\\top}P_{\\mathrm{centroid}}^{-1}\\bar{e}_{t_{w}}/2 , with expected value one under a calibrated Gaussian model. Larger values indicate overconfidence. We also evaluate coverage of 95% coordinate intervals in the Gaussian test.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ddba4498b1a9c7ab",
+      "section": "VI-B Linear Gaussian Interface Test",
+      "location": "VI-B Linear Gaussian Interface Test",
+      "text": "We test whether RPI preserves the joint Gaussian pose solution and whether shared-map correlations affect accuracy. Across 1,000 trials, we record three robots at 12 time steps, giving 72 position coordinates. The measurement Jacobians remain fixed. For this test, we use a simplified map with nine uncertain radial-basis coefficients governed by a spatially correlated Gaussian prior. We set radio, relative-position, and map-coefficient standard deviations to be 0.12 0.12 dB, 0.06 0.06 m, and 0.25 0.25 dB/m, respectively. We vary radio standard deviation from 0.03 to 1.92 dB in the noise-sensitivity experiment.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a9472166c981ca6f",
+      "section": "VI-B Linear Gaussian Interface Test",
+      "location": "VI-B Linear Gaussian Interface Test",
+      "text": "We consider three configurations:",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7aa8578d33b794cd",
+      "section": "VI-B Linear Gaussian Interface Test",
+      "location": "VI-B Linear Gaussian Interface Test",
+      "text": "We expect RPI to outperform Per-step map because it preserves shared-map correlations across time. Similarly, if RPI is a useful abstraction, it would match Joint’s performance. Fig. 4 confirms these expectations. RPI and Joint overlap across radio-noise standard deviations from 0.03 0.03 to 1.92 1.92 dB, with mean terminal centroid error increasing from 0.686 0.686 to 0.797 0.797 m. As the noise level increases, all three configurations converge to the same pose priors and relative-position measurements.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a776dc413c675c25",
+      "section": "VI-B Linear Gaussian Interface Test",
+      "location": "VI-B Linear Gaussian Interface Test",
+      "text": "Per-step map also underestimates uncertainty. Terminal centroid NEES is 1.890 1.890 , compared with 1.012 1.012 for RPI and Joint, and nominal 95% coordinate coverage falls from approximately 94.7 % 94.7\\% to 84.88 % 84.88\\% .",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "b9e4e87c2c4cc2e1",
+      "section": "VI-C Nonlinear Drift Correction",
+      "location": "VI-C Nonlinear Drift Correction",
+      "text": "We test whether RPI reduces common drift while preserving relative accuracy. We simulate four robots moving for 80 steps of 0.5 0.5 s and observe all six inter-robot links. Known headings and world-coordinate relative-position measurements leave two common translation directions unconstrained by the relative measurements. We update radio predictions and Jacobians as the estimates change. Methods share relative-factor weights within each map condition, and these weights remain unchanged during optimization.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9ea2316688209a0f",
+      "section": "VI-C Nonlinear Drift Correction",
+      "location": "VI-C Nonlinear Drift Correction",
+      "text": "We compare four methods using the same supplied map, observations, initialization, and fixed relative-factor weights:",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "fefdaf8cb4c374df",
+      "section": "VI-C Nonlinear Drift Correction",
+      "location": "VI-C Nonlinear Drift Correction",
+      "text": "The uncertain-map method estimates all 40 × 40 40\\times 40 grid values with a Gaussian prior centered on the supplied map. We use a coefficient standard deviation of 0.25 0.25 dB/m and Gaussian spatial correlations with a 3 3 m length scale. The variance combines an 80% spatially correlated component and a 20% component independent across grid vertices. This covariance remains unchanged across map conditions. We use up to 25 Levenberg–Marquardt iterations, obtaining map increments after each pose update before relinearizing. Terminal uncertainty uses the terminal-position block of the undamped local marginal pose covariance P z P_{z} in Eq. ( 5 ).",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "be8087dff25e2539",
+      "section": "VI-C Nonlinear Drift Correction",
+      "location": "VI-C Nonlinear Drift Correction",
+      "text": "Across 32 paired trials, initial-position, odometry, relative-coordinate, and radio noise standard deviations are 0.5 0.5 m, 0.08 0.08 m, 0.1 0.1 m, and 3 3 dB. To standardize the test, all methods share fixed radio quality weights on relative factors.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "51c14a910f645038",
+      "section": "VI-C Nonlinear Drift Correction",
+      "location": "VI-C Nonlinear Drift Correction",
+      "text": "We expect that fixed-map RPI will again match Joint’s common error while preserving its relative accuracy, and will reduce common-position RMSE relative to Scalar. Fig. 5 confirms these results: fixed-map RPI and Joint reduce common-position RMSE from Scalar’s 0.542 0.542 m to 0.140 0.140 m, a 74 % 74\\% reduction, with paired-change interval [ − 0.494 , − 0.311 ] [-0.494,-0.311] m. Relative RMSE remains near 0.060 0.060 m. For fixed-map RPI and Joint, terminal common uncertainty decreases from Scalar’s 0.615 0.615 m to 0.189 0.189 m. Uncertain-map RPI gives common-position RMSE of 0.158 0.158 m and terminal common uncertainty of 0.232 0.232 m.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "2c070297fda0412d",
+      "section": "VI-C Nonlinear Drift Correction",
+      "location": "VI-C Nonlinear Drift Correction",
+      "text": "Fig. 5: Results from 32 paired nonlinear trials with correct and perturbed maps: (a) common-position RMSE, (b) relative-position RMSE, and (c) terminal common uncertainty. RMSE uses the final third of each trajectory. Error bars show 95% intervals computed from trial means.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "061cb0b3a84ce239",
+      "section": "VI-D Map Error Ablation",
+      "location": "VI-D Map Error Ablation",
+      "text": "We test sensitivity to map error by keeping the true map unchanged while supplying a map shifted by 1 1 m, attenuation values multiplied by 1.2 1.2 , or both. Relative-factor weights are recomputed for each supplied map and shared across methods. Fixed-map RPI and Joint treat the supplied map as exact, while uncertain-map RPI uses the same attenuation-value model and prior covariance as in § VI-C .",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4d6537cbe61d90c3",
+      "section": "VI-D Map Error Ablation",
+      "location": "VI-D Map Error Ablation",
+      "text": "Fig. 5 shows that fixed-map RPI and Joint overlap, with final-third common-position RMSE of 0.981 0.981 , 0.659 0.659 , and 1.183 1.183 m under registration, attenuation, and combined errors, respectively. Uncertain-map RPI reduces these errors to 0.957 0.957 , 0.172 0.172 , and 0.967 0.967 m, while maintaining relative RMSE near 0.060 0.060 m, and outperforms Scalar’s 0.542 0.542 m under attenuation error, but not under registration or combined errors. This occurs because uncertain-map RPI models attenuation-value uncertainty but does not explicitly model registration error, which can bias the position estimates.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1ae6228a47e9d92a",
+      "section": "VI-D Map Error Ablation",
+      "location": "VI-D Map Error Ablation",
+      "text": "Fixed-map RPI and Joint report terminal centroid uncertainty between 0.171 0.171 and 0.189 0.189 m despite their increased position errors. Uncertain-map RPI reports between 0.217 0.217 and 0.233 0.233 m. Thus, shared attenuation uncertainty improves robustness to attenuation-scale error but does not resolve registration bias in these experiments.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "95dcc3d0b688f692",
+      "section": "VI-E Directional Map Ablation",
+      "location": "VI-E Directional Map Ablation",
+      "text": "Finally, we test which translation directions the map can constrain using constant, x x -varying, and two-dimensional maps. At the supplied map means, we verify that the observed links provide information about zero, one, and two independent directions of shared translation, respectively. Trajectories, non-radio measurements, initialization, and radio-noise realizations remain fixed. Each map generates its own radio observations and is also used for inference, avoiding map mismatch. We compare Scalar, fixed-map RPI, and uncertain-map RPI using the nonlinear procedure in § VI-C .",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cffae94826114f13",
+      "section": "VI-E Directional Map Ablation",
+      "location": "VI-E Directional Map Ablation",
+      "text": "Fig. 6 shows that Scalar has common x / y x/y RMSE of 0.324 / 0.403 0.324/0.403 m in all conditions. Fixed-map RPI gives the same errors with the constant map, 0.170 / 0.403 0.170/0.403 m with the x x -varying map, and 0.099 / 0.091 0.099/0.091 m with the two-dimensional map. Uncertain-map RPI gives 0.322 / 0.407 0.322/0.407 , 0.219 / 0.405 0.219/0.405 , and 0.118 / 0.094 0.118/0.094 m, respectively, preserving the directional pattern with slightly higher mean errors in the useful directions. Both RPI variants therefore primarily reduce error in directions informed by the map.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e094c7d6be9e4993",
+      "section": "VI-E Directional Map Ablation",
+      "location": "VI-E Directional Map Ablation",
+      "text": "Fig. 6: Directional map ablation over 32 paired trials. Final-third common x / y x/y RMSE for maps with translation-information ranks zero, one, and two. Error bars show 95% intervals across trials.",
+      "url": "https://arxiv.org/html/2611.08361v1#S6.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "53cf72ba2ecd5af9",
+      "section": "VII Conclusion",
+      "location": "VII Conclusion",
+      "text": "In this work, we showed how a registered attenuation map provides information about shared robot motion that fixed weights on relative measurements cannot directly supply. We introduced RPI, a mathematical interface that converts radio measurements and map information into pose information while preserving shared-map correlations. Our analysis characterizes which shared motions the map and observed links can detect.",
+      "url": "https://arxiv.org/html/2611.08361v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "82c70b8c930aed4f",
+      "section": "VII Conclusion",
+      "location": "VII Conclusion",
+      "text": "Our simulations confirm that RPI matches the pose estimates and covariances from the benchmarked joint optimization method. Our nonlinear experiments show reduced common-position error while maintaining relative-position accuracy, with directional map ablations confirming that correction occurs in map-constrained directions. Map mismatch can increase position error without a corresponding increase in reported uncertainty. Future work will evaluate RPI on real measured radio data and study pose-update convergence. We will release the code upon acceptance.",
+      "url": "https://arxiv.org/html/2611.08361v1#S7.p2.1",
+      "kind": "p"
+    }
+  ]
+}

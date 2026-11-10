@@ -1,0 +1,267 @@
+{
+  "item_id": "arxiv:2610.28480",
+  "document_id": "fe213017ab062f4acc3965da89abd3c29969163e144a2628a662b8ce46691009",
+  "source_url": "https://arxiv.org/pdf/2610.28480v1",
+  "paper_version": "v1",
+  "prompt_version": "research-reading-pilot-v1",
+  "mode": "agent_pilot",
+  "model": "Codex会话代理",
+  "review_status": "needs_review",
+  "created": "2026-11-07T09:24:34+00:00",
+  "overview": "把大规模全身动作跟踪从纯仿真采样的 PPO 更新，改为共享可微世界模型上的短时域解析梯度更新。价值在于训练预算和方法路线发生明显变化；作者结果仍需独立复现。",
+  "coverage": {
+    "read": 81,
+    "total": 81,
+    "evidence_ids": [
+      "aa44d4837b60e918",
+      "a80a78f58c150ee9",
+      "b0188fd8292d5df4",
+      "c2aaaf183557e48e",
+      "d280773c7d81503e",
+      "c0dfb3432bc4e073",
+      "4d33a0c6b2b5bd6e",
+      "ffe41c612f66cd87",
+      "0f99d47af69aeac1",
+      "f83e022b480156cf",
+      "57184b34605e0b80",
+      "75d390f7ba91377a",
+      "22074c415a901409",
+      "11242fe3275a2a49",
+      "e3120babaf92e088",
+      "bb0ef607bad83059",
+      "8337571ebc363d2c",
+      "6347fb54591b451d",
+      "9c6f8edc8ab61e66",
+      "8c448263dfe31e29",
+      "613c8257686a7bae",
+      "b6566f768c70cdd3",
+      "96af47bbdcd6c6f5",
+      "bb0a759a888eb0f7",
+      "3cf87a9deb9d2f73",
+      "62dafada9c948af9",
+      "6f0423ed9e98aeea",
+      "3aa6eb65c0bb2559",
+      "bfcd74e5fc5dca0c",
+      "0dbbb88f436733f1",
+      "e2ea59ea70c87165",
+      "881fb4124c1ff145",
+      "a9903edd9b45fff5",
+      "251884bcbc001aa1",
+      "8f553f40cae2c84e",
+      "6b498fc92e528e68",
+      "f727f5271983ab48",
+      "96ebd6875c5db36d",
+      "ceae51c7cbf6e487",
+      "e7d3b6cb1f04fb9b",
+      "b1be4abd604f4076",
+      "8c7cc8ddb95b8e06",
+      "67e5df3f0b5f2e13",
+      "0d86fc399971394f",
+      "ebd608023f439ab3",
+      "875181910dd5869c",
+      "09eae6642b04db65",
+      "d30ca417b5e3650b",
+      "07f9caa7e29f095d",
+      "4a7cde8b50ed6401",
+      "7c414e06993f69e9",
+      "1a54c1045fd82678",
+      "35f2c1b62dbbf347",
+      "6cfc8414f5c65035",
+      "bbc0c90c776fccec",
+      "d66680aff1a94222",
+      "102b10845c03c897",
+      "ef5176d838806580",
+      "619c26d132e976f6",
+      "bd0db1887f538494",
+      "c8f9a45d3bbd65ac",
+      "7136ea3b15eb463b",
+      "009d37143b434303",
+      "9cce37c85beda4ac",
+      "02608facdf3de724",
+      "e51542999803449d",
+      "44ba0417c6571097",
+      "39bdeeef9c4d2b20",
+      "e5c9da11ecee3e7d",
+      "fe49185e9a4e4b30",
+      "ed503b8e58ff9ced",
+      "2503c57a2c0388f4",
+      "30b9279514f17c50",
+      "982feace81fbac85",
+      "4e3a1b4f362d6e69",
+      "6eaf3743f0e21346",
+      "a3894bab9c634e83",
+      "89a4c7185bb1dec3",
+      "6068badac0ecd674",
+      "309b095ade150583",
+      "19d679c094e8c0f8"
+    ]
+  },
+  "notice": "已完整读取 19 页提取文字，并目视核对第 7、8、18 页的图 3–5、表 A.8。未运行代码或真机复现；官网当前提供论文与演示，训练代码可用性仍需核实。",
+  "visual_checks": {
+    "pages": [
+      7,
+      8,
+      18
+    ],
+    "figures": [
+      "Figure 3",
+      "Figure 4",
+      "Figure 5",
+      "Table A.8"
+    ],
+    "performed_by": "Codex会话代理"
+  },
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "训练预算限制动作库扩展",
+      "text": "既有路线以单动作专家蒸馏或大规模 model-free RL 训练通用跟踪器；不同动作共享的机体动力学没有被显式复用，扩展动作库伴随高采样成本。",
+      "quote": "cluster-scale compute",
+      "evidence_ids": [
+        "a80a78f58c150ee9",
+        "c2aaaf183557e48e",
+        "4d33a0c6b2b5bd6e"
+      ]
+    },
+    {
+      "kind": "method",
+      "title": "在共同动力学上复用梯度",
+      "text": "循环收集仿真转移、用 8 步自回归窗口拟合模型，再固定模型权重，通过 32 步想象轨迹反传策略梯度；critic 接续时域外价值。模型持续更新，梯度不穿过刚体仿真器。",
+      "quote": "one differentiable world model",
+      "evidence_ids": [
+        "a80a78f58c150ee9",
+        "11242fe3275a2a49",
+        "bb0ef607bad83059",
+        "8c448263dfe31e29",
+        "613c8257686a7bae",
+        "96af47bbdcd6c6f5",
+        "9cce37c85beda4ac",
+        "02608facdf3de724"
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "受控对照支持训练方法收益",
+      "text": "LAFAN1 的 40 个动作、2.45 小时数据上，作者匹配观察、奖励、终止、随机化、网络规模与评测。单 GPU SuperMimic 在 1.2 小时达到 0.82；PPO-Sim 在 18 小时预算内未达到，1/4/8 GPU 最终为 0.60/0.70/0.72。图 5 的 PPO-WM 消融另支持解析梯度收益。",
+      "quote": "PPO-Sim does not reach it",
+      "evidence_ids": [
+        "3aa6eb65c0bb2559",
+        "bfcd74e5fc5dca0c",
+        "251884bcbc001aa1",
+        "f727f5271983ab48",
+        "96ebd6875c5db36d"
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "集群对照与训练集覆盖",
+      "text": "作者报告 1 张 H100、3 小时完整训练循环超过 SONIC 已发布策略的归一化回报；对照训练预算为 128 张 L40、168 小时，硬件与数据量不同。129,514 个训练动作的失败数为 179→25，2 张 H100、9.8 小时为 0；真机展示一个通用策略执行四类动作。",
+      "quote": "25 of 129,514",
+      "evidence_ids": [
+        "a80a78f58c150ee9",
+        "6f0423ed9e98aeea",
+        "3aa6eb65c0bb2559",
+        "ceae51c7cbf6e487",
+        "4e3a1b4f362d6e69",
+        "6eaf3743f0e21346"
+      ]
+    },
+    {
+      "kind": "limitation",
+      "title": "覆盖结果不能代替泛化结论",
+      "text": "失败数评测使用训练动作、确定性物理、固定摩擦且关闭随机化和观测噪声；终止口径取自 SuperMimic。训练限于平地，尚未覆盖地形和物体交互。主要图未提供种子方差，下游接口实验每种策略仅一个训练种子。",
+      "quote": "not generalization to new motions",
+      "evidence_ids": [
+        "62dafada9c948af9",
+        "6f0423ed9e98aeea",
+        "67e5df3f0b5f2e13",
+        "0d86fc399971394f",
+        "4e3a1b4f362d6e69",
+        "19d679c094e8c0f8"
+      ]
+    }
+  ],
+  "hypotheses": [
+    {
+      "kind": "limitation",
+      "title": "先验证训练收益能否保留到新动作",
+      "text": "共享动力学的训练收益可能延伸到未见动作。固定 G1、GPU、数据时长和奖励，对比 PPO-Sim、世界模型上 PPO、BPTT+critic；按动作类别划分训练/留出集，记录达到目标回报的 GPU 小时、留出集失败率和模型误差。若预算收益只存在于训练动作，或留出失败率明显恶化，则推翻可迁移收益假设。",
+      "quote": "only on flat ground",
+      "evidence_ids": [
+        "0d86fc399971394f",
+        "4e3a1b4f362d6e69"
+      ]
+    }
+  ],
+  "attention": {
+    "level": "priority",
+    "reason": "训练预算跨量级下降，值得重新评估全身控制的实验路线。",
+    "basis": [
+      "training_change",
+      "compute_shift",
+      "controlled_comparison",
+      "real_robot"
+    ],
+    "evidence_ids": [
+      "bb0ef607bad83059",
+      "3aa6eb65c0bb2559",
+      "bfcd74e5fc5dca0c",
+      "ceae51c7cbf6e487"
+    ],
+    "assessed_at": "2026-11-07T09:24:34+00:00"
+  },
+  "frontier_brief": {
+    "title": "SuperMimic：用可微世界模型把全身控制训练压到单卡 3 小时",
+    "change_type": "训练路线变化 · 全身控制",
+    "delta": "把策略更新移到共享的可微世界模型里：仿真采集、模型拟合与短轨迹反传交替进行，利用解析梯度降低训练预算。",
+    "before": "通用动作跟踪主要依赖仿真中的 model-free PPO，或训练多个专家后蒸馏；扩展动作库需要大量采样。",
+    "after": "同一动力学模型覆盖动作库，固定模型后反传 32 步想象回报，以 critic 接续远期价值；每轮继续更新模型。",
+    "relevance": "为缺少大集群的实验室提供值得优先复现的全身控制训练路线；优先对照受控 PPO-Sim 实验，再判断是否迁移到自己的动作数据和算力条件。",
+    "caveat": "作者实验，未独立复现。H100 与 L40 对照硬件和数据量不同；零失败衡量训练动作覆盖。仍需仿真采样，地形与物体交互尚未验证。",
+    "question": "在你的固定算力和留出动作集上，共享动力学加解析梯度还能保留多少训练预算收益？",
+    "evidence": [
+      {
+        "label": "达到 SONIC 已发布策略回报以上",
+        "value": "1×H100 · 3 小时",
+        "context": "作者图 3：包含采集、模型拟合和策略训练，评测另计。SONIC 报告预算为 128×L40、168 小时；硬件与数据量不完全匹配。"
+      },
+      {
+        "label": "同任务受控 PPO-Sim 对照",
+        "value": "0.82：1.2 小时达到，PPO 18 小时未达到",
+        "context": "LAFAN1，40 个动作、2.45 小时；观察、奖励、终止、随机化和网络规模等匹配；论文图 4。"
+      },
+      {
+        "label": "训练动作集失败数",
+        "value": "179 → 25 → 0",
+        "context": "129,514 个训练动作；SONIC 发布策略、SuperMimic 单卡 3 小时、双卡 9.8 小时；表 A.8。衡量覆盖，不是留出集泛化。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "共享动力学",
+        "text": "由当前策略采集仿真转移，拟合包含随机化上下文的可微动力学。"
+      },
+      {
+        "title": "解析策略梯度",
+        "text": "通过固定权重的世界模型反传短时域回报，降低随机采样策略梯度的成本。"
+      },
+      {
+        "title": "critic 接续",
+        "text": "用 critic 补足想象窗口外回报；图 4 对照显示它支持更短时域。"
+      }
+    ]
+  },
+  "paper": {
+    "id": "arxiv:2610.28480",
+    "title": "SuperMimic: Scaling Humanoid Whole-Body Control with One Differentiable World Model",
+    "url": "https://arxiv.org/abs/2610.28480v1",
+    "published": "2026-10-20",
+    "updated": "2026-10-20",
+    "topics": [
+      "control",
+      "evaluation",
+      "world"
+    ],
+    "summary": "Tracking large human-motion datasets has become the dominant route to general, expressive humanoid whole-body control, but scaling across many motions is expensive. Current pipelines use model-free reinforcement learning, either merging per-motion specialists through lossy distillation, or brute-forcing a single policy with cluster-scale compute. SuperMimic amortizes learning across all motions with one differentiable world model of their shared dynamics, fit from logged transitions of a standard rigid-body simulator. The world model and the tracking policy train together in one loop, and backpropagation-through-time over short imagined rollouts gives the policy analytic gradients. Fast imagined rollouts and analytic gradients make policy learning efficient. In 3 hours on a single GPU, SuperMimic surpasses the return of a state-of-the-art motion tracker baseline trained for 7 days on 128 GPUs. It reduces GPU-hours by more than $1000\\times$ and fails on only 25 of 129,514 benchmark motions, versus 179 failures for the baseline. After 9.8 hours on two GPUs, SuperMimic achieves zero failures. From 1 to 264 hours of motion, the world model's prediction error stays stable, and GPU-hours to a target return grow slowly. Our policy transfers to a physical Unitree G1 across diverse and acrobatic motions. SuperMimic removes compute as the bottleneck to scaling humanoid whole-body control, making it practical to measure motion-tracking scaling laws."
+  }
+}

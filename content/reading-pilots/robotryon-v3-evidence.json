@@ -1,0 +1,1311 @@
+{
+  "id": "7df68a123c8dc085fb61cd9f7c0165193ee89543b2f7bee8c529f7798d0c7c12",
+  "url": "https://arxiv.org/html/2611.05163v3",
+  "format": "html",
+  "passages": [
+    {
+      "id": "d6d3d106da3c0086",
+      "section": "正文",
+      "location": "正文",
+      "text": "Synthesizing Dexterous Robot Demonstrations from Human Videos via Virtual Try-On",
+      "url": "https://arxiv.org/html/2611.05163v3#p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee3ebc8ede87978d",
+      "section": "Synthesizing Dexterous Robot Demonstrations from Human Videos via Virtual Try-On",
+      "location": "Synthesizing Dexterous Robot Demonstrations from Human Videos via Virtual Try-On",
+      "text": "Robot foundation models have shown remarkable performance in robot control, yet adapting them to a new task still relies heavily on teleoperated demonstrations. Egocentric human videos offer a scalable substitute, but overlaying rendered robots on human videos or retargeting human poses into robot actions leaves significant visual or action gaps for high-DoF robot embodiments. To address this limitation, we propose RoboTryOn, which treats human-to-robot translation as virtual try-on: try-on keeps the person and swaps the garment, RoboTryOn keeps the demonstrated motion and swaps the human for the robot. Specifically, RoboTryOn converts a human video into a video of the target robot specified by a reference image, while preserving the original task, objects, and background. To maintain visual consistency, we translate selected keyframes autoregressively and use them to guide video synthesis with motion conditioned on the human hand skeleton. Additionally, we use an inverse dynamics model (IDM) that incorporates depth features to infer action labels from synthesized videos for policy learning. Our experiments across multiple humanoid embodiments show that policies trained with our synthetic data improve the average success rate on novel tasks, including challenging bimanual manipulation, from 2% to 60%, without any real robot demonstration of those tasks. Moreover, training with our synthetic data matches the performance of policies trained solely on teleoperated demonstrations at approximately a third of the collection cost, demonstrating the cost efficiency of our approach.",
+      "url": "https://arxiv.org/html/2611.05163v3#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e49d16372deba9da",
+      "section": "Synthesizing Dexterous Robot Demonstrations from Human Videos via Virtual Try-On",
+      "location": "Synthesizing Dexterous Robot Demonstrations from Human Videos via Virtual Try-On",
+      "text": "1 KAIST 2 RLWRLD 3 Korea University",
+      "url": "https://arxiv.org/html/2611.05163v3#p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0f41064848267bac",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Robot foundation models trained on large-scale demonstrations have made substantial progress toward general-purpose robot control ( Open X-Embodiment Collaboration, 2024 ; Octo Model Team et al., 2024 ; Kim et al., 2024 ; Black et al., 2024 ; Liu et al., 2025a ; NVIDIA et al., 2025 ; Black et al., 2025 ) , while extending them to new tasks and environments still requires additional robot demonstrations ( Open X-Embodiment Collaboration, 2024 ; Khazatsky et al., 2024 ; Bu et al., 2025 ) . Collecting such demonstrations through teleoperation requires robot hardware, a teleoperation system, and substantial operator effort ( Zhao et al., 2023 ; Wu et al., 2024 ; Chi et al., 2024 ; Khazatsky et al., 2024 ) . The burden is heaviest for dexterous hands, where operators must coordinate many degrees of freedom and fine-grained contacts through retargeting interfaces that are challenging to develop and operate ( Handa et al., 2020 ; Qin et al., 2023 ; Cheng et al., 2024 ; Wang et al., 2024 ; Xu et al., 2025 ) .",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "666bf2b8597e4f05",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Alternatively, human videos offer another way to demonstrate a new task. In particular, egocentric recordings of human object manipulation already exist at internet scale and far outnumber the demonstrations teleoperation can produce, ranging from in-the-wild collections to manually annotated corpora recorded for robot learning ( Goyal et al., 2017 ; Shan et al., 2020 ; Damen et al., 2022 ; Grauman et al., 2022 ; Grauman et al., 2024 ; Liu et al., 2022 ; Hoque et al., 2025 ; Li et al., 2025 ; Punamiya et al., 2026 ) . They capture how people grasp and manipulate objects, including coordinated bimanual interaction, without a robot during collection. Recent works use these videos to learn transferable visual and behavioral knowledge ( Nair et al., 2022 ; Yang et al., 2025 ; Luo et al., 2025 ; Dyna Robotics, 2026 ) , or convert them into robot data through retargeting ( Kareer et al., 2025 ) , rendering ( Lepert et al., 2025b ; Lepert et al., 2025a ; Wang et al., 2026 ; Liu et al., 2026 ) , or generative translation ( Song et al., 2025 ; Ci et al., 2025 ) .",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b81f136728f9fdd3",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "However, a human video is separated from a robot demonstration by a visual gap and an action gap, and both are severe for dexterous hands ( Liu et al., 2025b ; Punamiya et al., 2025 ; Liu et al., 2026 ) . In terms of appearance, human videos show a human arm and hand, whereas the policy observes a robot at deployment. Prior work narrows this gap by masking the human arm or overlaying a rendered robot, and must apply the same edit to the robot’s camera stream during both training and deployment ( Kareer et al., 2025 ; Lepert et al., 2025b ; Lepert et al., 2025a ) . In terms of action, the reconstructed hand pose is itself imprecise, and no exact retargeting map takes it to robot joint commands, since human and robot hands differ in morphology and kinematics ( Handa et al., 2020 ; Qin et al., 2023 ; Kong et al., 2026 ) . Even a perfect mapping would reproduce only the shape of the hand, not how firmly the robot must grip the object ( Chen et al., 2025 ; Liu et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a1d72d63596be83",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Our approach. We address these gaps by treating human-to-robot transfer as virtual try-on, which keeps the motion and changes the embodiment. RoboTryOn converts a human manipulation video into a paired robot demonstration with action labels. To this end, we first generate a target robot video performing the same task in the source scene and then predict the corresponding joint-space actions with an inverse dynamics model (IDM), rather than deriving robot actions directly from reconstructed hand motion. As in keyframe-based video virtual try-on ( Zuo et al., 2025 ) , we autoregressively translate selected human frames into robot keyframes, and synthesize the motion between consecutive keyframes under the guidance of the human hand skeleton flow. Our generative models learn this translation from robot videos through a shared arm mask and hand skeleton interface, allowing the same conditions to be extracted from human videos at inference without paired human and robot demonstrations. We then train a policy on the synthesized robot demonstrations, enabling the robot to learn new tasks with few or no teleoperated demonstrations.",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "74740a1d7a8c08d7",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Our experiments show that RoboTryOn consistently improves policy performance when task-specific robot demonstrations are limited or unavailable. In particular, averaged over two robot embodiments, RoboTryOn increases the success rate from 2.1% to 60.0% on out-of-domain tasks with goals, skills, and objects unseen in real robot demonstrations. It also achieves 45.9% on challenging bimanual tasks despite all teleoperated demonstrations containing only single-arm manipulation. Finally, training with demonstrations derived from human video matches the performance of training on teleoperated demonstrations alone while requiring approximately a third of the collection cost (see Figure 6 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "bc8997de4f92d8c9",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We summarize our main contributions below:",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "5f204abab4cae042",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We introduce RoboTryOn, which turns an egocentric human video into a robot demonstration the way virtual try-on swaps a garment, with generative models trained on robot data alone.",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "59b9c0a207b07509",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We show that our synthetic data bridge the visual and action gaps in human videos, removing the need for test-time visual editing and generating better action labels than retargeted actions.",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "20f88c2aab702ed9",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Through experiments on two real robots with dexterous hands over diverse out-of-domain tasks, we demonstrate that our synthesized demonstrations enable learning tasks without teleoperated demonstrations and reduce data collection costs relative to teleoperation.",
+      "url": "https://arxiv.org/html/2611.05163v3#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c5ed36e3dfb24510",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Learning from human videos. Human videos provide a scalable source of visual and behavioral knowledge for robot learning. Early work learns visual representations from human videos for downstream robot control ( Nair et al., 2022 ; Majumdar et al., 2023 ) , while recent approaches incorporate human videos into robot foundation model training to learn transferable visual and behavioral knowledge ( Yang et al., 2025 ; Luo et al., 2025 ; Dyna Robotics, 2026 ; NVIDIA et al., 2025 ) . Another line converts human demonstrations into robot training data through motion retargeting ( Kareer et al., 2025 ) , often combined with rendered robot observations ( Lepert et al., 2025b ; Lepert et al., 2025a ; Wang et al., 2026 ) . Approaches based on simulation further construct digital twins to generate robot observations and refine action trajectories ( Liu et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.05163v3#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "43d6850d717cd462",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Generative human-to-robot translation. Recent advances in video diffusion models have enabled direct translation of human demonstrations into robot videos. Mitty ( Song et al., 2025 ) conditions generation on human videos and learns from paired human and robot data, including synthetically rendered pairs. H2R-Grounder ( Ci et al., 2025 ) removes the need for paired supervision by reconstructing robot videos from inpainted backgrounds and gripper pose cues. Our approach supports multiple dexterous embodiments through shared generative models and produces demonstrations with action labels for real-world policy learning.",
+      "url": "https://arxiv.org/html/2611.05163v3#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "92e1e62c49021ad6",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Video synthesis and action labeling. Constructing robot demonstrations through video generation requires both temporally consistent synthesis and corresponding action labels. Video virtual try-on studies consistency when modifying a subject’s appearance ( Fang et al., 2024 ; Zuo et al., 2025 ) . In particular, DreamVVT generates keyframes and uses them to guide video synthesis. We adopt this decomposition for embodiment translation and, following prior work ( Baker et al., 2022 ; Du et al., 2023 ; Jang et al., 2025 ) , use IDMs to infer actions from the resulting videos.",
+      "url": "https://arxiv.org/html/2611.05163v3#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "b70165c2422d3a4a",
+      "section": "3 Method",
+      "location": "3 Method",
+      "text": "Figure 1: RoboTryOn pipeline. (a) The image model sequentially translates keyframes of a human video into robot keyframes, the video model synthesizes the motion between them under the guidance of the hand skeleton flow, and the inverse dynamics model labels the actions. (b) The image model inpaints the masked human frame, using the previous robot keyframe as a reference. (c) The video model synthesizes the robot video, conditioned on the robot keyframes at their temporal positions and the skeleton flow.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "72a8af29fa48a005",
+      "section": "3.1 Problem Setup and Overview",
+      "location": "3.1 Problem Setup and Overview",
+      "text": "Policy learning from demonstrations. We consider a teleoperated robot demonstration dataset 𝒟 = { 𝐗 ( i ) } i = 1 N {\\mathcal{D}}=\\{\\mathbf{X}^{(i)}\\}_{i=1}^{N} , where each demonstration 𝐗 ( i ) = ( ( 𝐨 t , 𝐪 t , 𝐚 t ) t = 1 T ( i ) , 𝐜 ) \\mathbf{X}^{(i)}=\\big(({\\mathbf{o}}_{t},{\\mathbf{q}}_{t},{\\mathbf{a}}_{t})_{t=1}^{T^{(i)}},{\\mathbf{c}}\\big) contains a visual observation 𝐨 t {\\mathbf{o}}_{t} , a proprioceptive state 𝐪 t {\\mathbf{q}}_{t} , and a robot action 𝐚 t {\\mathbf{a}}_{t} at each timestep t ∈ { 1 , … , T ( i ) } t\\in\\{1,\\dots,T^{(i)}\\} , together with a task instruction 𝐜 {\\mathbf{c}} . We mainly use vision-language-action models (VLAs) as our base policy π ω \\pi_{\\omega} , which predicts an action chunk 𝐀 t = 𝐚 t : t + H − 1 \\mathbf{A}_{t}={\\mathbf{a}}_{t:t+H-1} of horizon H H conditioned on ( 𝐨 t , 𝐪 t , 𝐜 ) ({\\mathbf{o}}_{t},{\\mathbf{q}}_{t},{\\mathbf{c}}) .",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9324550e23e6ac1a",
+      "section": "3.1 Problem Setup and Overview",
+      "location": "3.1 Problem Setup and Overview",
+      "text": "Demonstrations from human video. RoboTryOn aims to augment 𝒟 {\\mathcal{D}} with demonstrations synthesized from human video to address the expensive cost of collecting real robot data. A human demonstration 𝐗 h = ( ( 𝐨 t h ) t = 1 T , 𝐜 ) \\mathbf{X}^{h}=\\big(({\\mathbf{o}}^{h}_{t})_{t=1}^{T},{\\mathbf{c}}\\big) 1 1 1 For simplicity, we omit the demonstration index. contains egocentric observations 𝐨 t h {\\mathbf{o}}^{h}_{t} and the instruction 𝐜 {\\mathbf{c}} . Given 𝐗 h \\mathbf{X}^{h} and a reference image of the target robot r r , RoboTryOn uses a three-stage pipeline to generate a robot demonstration 𝐗 ^ r = ( ( 𝐨 ^ t r , 𝐪 ^ t , 𝐚 ^ t ) t = 1 T , 𝐜 ) \\hat{\\mathbf{X}}^{r}=\\big((\\hat{\\mathbf{o}}^{r}_{t},\\hat{\\mathbf{q}}_{t},\\hat{\\mathbf{a}}_{t})_{t=1}^{T},{\\mathbf{c}}\\big) that follows the human motion (see Figure 1 ). First, an image generation model f θ f_{\\theta} translates selected human keyframes into robot keyframes ( Section 3.2 ). Next, a video generation model g ϕ g_{\\phi} synthesizes the robot video between keyframes under the guidance of the hand skeleton ( Section 3.3 ). Finally, an inverse dynamics model h ψ h_{\\psi} predicts the action labels 𝐚 ^ \\hat{\\mathbf{a}} from the synthesized video, and the states 𝐪 ^ \\hat{\\mathbf{q}} are then derived from the predicted actions ( Section 3.4 ). The resulting demonstrations form synthetic data 𝒟 ^ \\hat{{\\mathcal{D}}} , on which we train the policy π ω \\pi_{\\omega} alone or together with 𝒟 {\\mathcal{D}} ( Section 3.5 ). We train the three models and the policy in the same way, as conditional flow-matching models ( Lipman et al., 2023 ; Liu et al., 2023 ) . We provide the details of the flow matching process in Appendix E .",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8737dcaf23d78969",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "In this section, we describe how RoboTryOn selects keyframes from the human demonstration 𝐗 h \\mathbf{X}^{h} and translates them into target robot keyframes. We first train the image generation model f θ f_{\\theta} on robot demonstrations and apply it to the selected human keyframes at inference.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "361d54d492621fb2",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "Keyframes. We select keyframes from the wrist trajectories of the reconstructed human hands ( Zhang et al., 2025 ) . A frame is selected when the speed of both wrists reaches a local minimum, where the hands are unblurred, and a wrist has moved more than a threshold from its position in the previous keyframe. We also always include the first and last frames. The resulting keyframe indices form the set 𝒯 = { t 1 < ⋯ < t L } \\mathcal{T}=\\{t_{1}<\\dots<t_{L}\\} .",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2eed6df192cb69d2",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "Conditioning. We condition f θ f_{\\theta} on an arm and hand mask 𝐌 t \\mathbf{M}_{t} and a hand skeleton 𝐒 t \\mathbf{S}_{t} . As in virtual try-on methods ( Choi et al., 2021 ; Choi et al., 2024 ; Jiang et al., 2024 ; Lee and Kwak, 2025 ) , we enlarge and smooth 𝐌 t \\mathbf{M}_{t} , so its outline does not reveal the embodiment it covers. The skeleton 𝐒 t \\mathbf{S}_{t} is a 2D projection of hand keypoints obtained by forward kinematics for a robot or by retargeting the reconstructed hand for a human. We define a conditioning function Φ ⁡ ( 𝐨 , 𝐌 , 𝐒 ) ≔ ( ( 𝟏 − 𝐌 ) ⊙ 𝐨 ) ⊕ 𝐒 \\Phi({\\mathbf{o}};\\mathbf{M},\\mathbf{S})\\coloneqq\\big((\\mathbf{1}-\\mathbf{M})\\odot{\\mathbf{o}}\\big)\\oplus\\mathbf{S} , which masks out the region 𝐌 \\mathbf{M} of a frame 𝐨 {\\mathbf{o}} and draws the skeleton 𝐒 \\mathbf{S} over it. The same function gives the conditioned robot frame 𝐨 ~ t = Φ ⁡ ( 𝐨 t , 𝐌 t , 𝐒 t ) \\tilde{\\mathbf{o}}_{t}=\\Phi({\\mathbf{o}}_{t};\\mathbf{M}_{t},\\mathbf{S}_{t}) for training and the conditioned human frame 𝐨 ~ t h = Φ ⁡ ( 𝐨 t h , 𝐌 t h , 𝐒 t h ) \\tilde{\\mathbf{o}}^{h}_{t}=\\Phi({\\mathbf{o}}^{h}_{t};\\mathbf{M}^{h}_{t},\\mathbf{S}^{h}_{t}) for inference. To make the model robust to imperfect hand retargeting, we perturb and randomly drop the skeleton during training. The skeleton then provides only coarse guidance on hand position and motion, while detailed hand configuration comes from the learned prior over robot hands.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "43534095cdb70dca",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "Model. The image generation model f θ f_{\\theta} aims to translate a human keyframe into a robot keyframe as inpainting guided by a reference image: it fills the masked region 𝐌 t \\mathbf{M}_{t} with the target robot in the pose specified by the skeleton 𝐒 t \\mathbf{S}_{t} , using the reference image to determine its appearance (see Figure 1 (b)).",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "4d723dfe1502a32c",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "We train f θ f_{\\theta} to generate a robot frame 𝐨 t {\\mathbf{o}}_{t} from two conditions: the conditioned frame 𝐨 ~ t \\tilde{\\mathbf{o}}_{t} with its mask 𝐌 t \\mathbf{M}_{t} , and a reference frame 𝐨 t ′ {\\mathbf{o}}_{t^{\\prime}} from the same episode at an earlier time t ′ < t t^{\\prime}<t , which provides the appearance of the embodiment, the objects, and the background. With a pretrained image encoder ℰ img \\mathcal{E}_{\\mathrm{img}} and 𝐳 = ℰ img ​ ( 𝐨 t ) \\mathbf{z}=\\mathcal{E}_{\\mathrm{img}}({\\mathbf{o}}_{t}) , we train f θ f_{\\theta} using the flow-matching objective with diffusion timestep τ \\tau :",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "93d8c03e92bdc1a6",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "ℒ img ( θ ) = 𝔼 ( 𝐨 t , 𝐨 t ′ ) ∼ 𝒟 , ϵ , τ [ ‖ f θ ( 𝐳 τ , τ ∣ 𝐨 ~ t , 𝐌 t , 𝐨 t ′ ) − ( 𝐳 − ϵ ) ‖ 2 2 ] . \\mathcal{L}_{\\mathrm{img}}(\\theta)=\\mathbb{E}_{({\\mathbf{o}}_{t},\\,{\\mathbf{o}}_{t^{\\prime}})\\sim{\\mathcal{D}},\\;\\bm{\\epsilon},\\;\\tau}\\left[\\left\\|f_{\\theta}\\big(\\mathbf{z}^{\\tau},\\tau\\mid\\tilde{\\mathbf{o}}_{t},\\;\\mathbf{M}_{t},\\;{\\mathbf{o}}_{t^{\\prime}}\\big)-(\\mathbf{z}-\\bm{\\epsilon})\\right\\|_{2}^{2}\\right]. (3.1)",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "14de7d27cf89c846",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "At inference, f θ f_{\\theta} translates the human keyframes in temporal order, each conditioned on the previously translated robot keyframe:",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p5.2",
+      "kind": "p"
+    },
+    {
+      "id": "1d04c74e18859f20",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "𝐨 ^ t j r ∼ p θ ( ⋅ ∣ 𝐨 ~ t j h , 𝐌 t j h , 𝐨 ^ t j − 1 r ) , j = 1 , … , L , \\hat{\\mathbf{o}}^{r}_{t_{j}}\\sim p_{\\theta}\\big(\\,\\cdot\\mid\\tilde{\\mathbf{o}}^{h}_{t_{j}},\\;\\mathbf{M}^{h}_{t_{j}},\\;\\hat{\\mathbf{o}}^{r}_{t_{j-1}}\\big),\\qquad j=1,\\dots,L, (3.2)",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "99f064a70a41a5a9",
+      "section": "3.2 Keyframe Translation",
+      "location": "3.2 Keyframe Translation",
+      "text": "where 𝐨 ^ t 0 r \\hat{\\mathbf{o}}^{r}_{t_{0}} is a reference image of the target robot, which selects the embodiment.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS2.p5.3",
+      "kind": "p"
+    },
+    {
+      "id": "d23bb46b92f392a9",
+      "section": "3.3 Video Synthesis",
+      "location": "3.3 Video Synthesis",
+      "text": "The video generation model g ϕ g_{\\phi} interpolates between the translated keyframes 𝐨 ^ 𝒯 r = ( 𝐨 ^ t r ) t ∈ 𝒯 \\hat{\\mathbf{o}}^{r}_{\\mathcal{T}}=(\\hat{\\mathbf{o}}^{r}_{t})_{t\\in\\mathcal{T}} to synthesize the full robot video, guided by the hand skeleton flow 𝐒 1 : T = ( 𝐒 t ) t = 1 T \\mathbf{S}_{1:T}=(\\mathbf{S}_{t})_{t=1}^{T} (see Figure 1 (c)). During training, g ϕ g_{\\phi} generates a robot video 𝐨 1 : T {\\mathbf{o}}_{1:T} conditioned on its keyframes 𝐨 𝒯 {\\mathbf{o}}_{\\mathcal{T}} and its skeleton flow 𝐒 1 : T \\mathbf{S}_{1:T} , whose keypoints are perturbed and dropped as for f θ f_{\\theta} . With a pretrained video encoder ℰ vid \\mathcal{E}_{\\mathrm{vid}} and 𝐰 = ℰ vid ( 𝐨 1 : T ) \\mathbf{w}=\\mathcal{E}_{\\mathrm{vid}}({\\mathbf{o}}_{1:T}) , the objective is",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b18ace691c08a443",
+      "section": "3.3 Video Synthesis",
+      "location": "3.3 Video Synthesis",
+      "text": "ℒ vid ( ϕ ) = 𝔼 𝐨 1 : T ∼ 𝒟 , ϵ , τ [ ‖ g ϕ ( 𝐰 τ , τ ∣ 𝐨 𝒯 , 𝐒 1 : T ) − ( 𝐰 − ϵ ) ‖ 2 2 ] . \\mathcal{L}_{\\mathrm{vid}}(\\phi)=\\mathbb{E}_{{\\mathbf{o}}_{1:T}\\sim{\\mathcal{D}},\\;\\bm{\\epsilon},\\;\\tau}\\left[\\left\\|g_{\\phi}\\big(\\mathbf{w}^{\\tau},\\tau\\mid{\\mathbf{o}}_{\\mathcal{T}},\\;\\mathbf{S}_{1:T}\\big)-(\\mathbf{w}-\\bm{\\epsilon})\\right\\|_{2}^{2}\\right]. (3.3)",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "9adc062e33cb706b",
+      "section": "3.3 Video Synthesis",
+      "location": "3.3 Video Synthesis",
+      "text": "At inference, g ϕ g_{\\phi} synthesizes the robot video 𝐨 ^ r 1 : T \\hat{\\mathbf{o}}^{r}_{1:T} conditioned on ( 𝐨 ^ 𝒯 r , 𝐒 1 : T h ) (\\hat{\\mathbf{o}}^{r}_{\\mathcal{T}},\\mathbf{S}^{h}_{1:T}) , as follows:",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "f9c297fe6bf478e3",
+      "section": "3.3 Video Synthesis",
+      "location": "3.3 Video Synthesis",
+      "text": "𝐨 ^ 1 : T r ∼ p ϕ ( ⋅ ∣ 𝐨 ^ 𝒯 r , 𝐒 1 : T h ) . \\hat{\\mathbf{o}}^{r}_{1:T}\\sim p_{\\phi}\\big(\\,\\cdot\\mid\\hat{\\mathbf{o}}^{r}_{\\mathcal{T}},\\;\\mathbf{S}^{h}_{1:T}\\big). (3.4)",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "d816f40648e8e482",
+      "section": "3.3 Video Synthesis",
+      "location": "3.3 Video Synthesis",
+      "text": "If T T exceeds the maximum length that g ϕ g_{\\phi} can generate at once, we synthesize the video as consecutive clips split at keyframes, where adjacent clips share the keyframe at their boundary.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS3.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "cf49bc5066262d27",
+      "section": "3.4 Pseudo Action Labeling",
+      "location": "3.4 Pseudo Action Labeling",
+      "text": "The inverse dynamics model h ψ h_{\\psi} infers robot action labels 𝐚 ^ 1 : T \\hat{\\mathbf{a}}_{1:T} from the synthesized video 𝐨 ^ r 1 : T \\hat{\\mathbf{o}}^{r}_{1:T} . From two observations K K steps apart, h ψ h_{\\psi} predicts the chunk of joint-space actions between them. We train h ψ h_{\\psi} using actions from teleoperated robot demonstrations as targets:",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e33838d862f358a0",
+      "section": "3.4 Pseudo Action Labeling",
+      "location": "3.4 Pseudo Action Labeling",
+      "text": "ℒ idm ( ψ ) = 𝔼 ( 𝐨 t , 𝐨 t + K , 𝐚 t : t + K ) ∼ 𝒟 , ϵ , τ [ ‖ h ψ ( 𝐚 t : t + K τ , τ ∣ 𝐨 t , 𝐨 t + K ) − ( 𝐚 t : t + K − ϵ ) ‖ 2 2 ] . \\mathcal{L}_{\\mathrm{idm}}(\\psi)=\\mathbb{E}_{({\\mathbf{o}}_{t},\\,{\\mathbf{o}}_{t+K},\\,{\\mathbf{a}}_{t:t+K})\\sim{\\mathcal{D}},\\;\\bm{\\epsilon},\\;\\tau}\\left[\\left\\|h_{\\psi}\\big({\\mathbf{a}}^{\\tau}_{t:t+K},\\tau\\mid{\\mathbf{o}}_{t},\\;{\\mathbf{o}}_{t+K}\\big)-({\\mathbf{a}}_{t:t+K}-\\bm{\\epsilon})\\right\\|_{2}^{2}\\right]. (3.5)",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "16c1ba70d8f56814",
+      "section": "3.4 Pseudo Action Labeling",
+      "location": "3.4 Pseudo Action Labeling",
+      "text": "At inference, h ψ h_{\\psi} labels the synthesized video as 𝐚 ^ t : t + K ∼ p ψ ( ⋅ ∣ 𝐨 ^ t r , 𝐨 ^ t + K r ) \\hat{\\mathbf{a}}_{t:t+K}\\sim p_{\\psi}(\\,\\cdot\\mid\\hat{\\mathbf{o}}^{r}_{t},\\hat{\\mathbf{o}}^{r}_{t+K}) over the whole sequence. The states are then derived from the action labels as 𝐪 ^ t = 𝐚 ^ t − d \\hat{\\mathbf{q}}_{t}=\\hat{\\mathbf{a}}_{t-d} , where d d is the lag between the commanded action and the recorded state, measured on the teleoperated data.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "78c653a5b9e9b274",
+      "section": "3.4 Pseudo Action Labeling",
+      "location": "3.4 Pseudo Action Labeling",
+      "text": "Since the IDM estimates wrist positions less accurately than the hand reconstruction, we use inverse kinematics to correct the wrist position in the action labels while keeping the hand joints predicted by the IDM. We provide further implementation details for all three models in Section B.2 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "99444ed2392a584a",
+      "section": "3.5 Policy Training",
+      "location": "3.5 Policy Training",
+      "text": "Each synthesized demonstration 𝐗 ^ r \\hat{\\mathbf{X}}^{r} has the same form as a teleoperated one, and the demonstrations synthesized from all human videos form 𝒟 ^ \\hat{\\mathcal{D}} . We train the policy on 𝒟 ∪ 𝒟 ^ {\\mathcal{D}}\\cup\\hat{\\mathcal{D}} , or on 𝒟 ^ \\hat{\\mathcal{D}} alone.",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3d3993ef20cc5e13",
+      "section": "3.5 Policy Training",
+      "location": "3.5 Policy Training",
+      "text": "Training objective and inference. Following recent VLAs ( Black et al., 2024 ; Black et al., 2025 ; NVIDIA et al., 2025 ) , we fine-tune the pretrained VLA as follows:",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9301eae5526ae6bb",
+      "section": "3.5 Policy Training",
+      "location": "3.5 Policy Training",
+      "text": "ℒ policy ( ω ) = 𝔼 ( 𝐨 t , 𝐪 t , 𝐀 t , 𝐜 ) ∼ 𝒟 ∪ 𝒟 ^ , ϵ , τ [ ‖ π ω ( 𝐀 t τ , τ ∣ 𝐨 t , 𝐪 t , 𝐜 ) − ( 𝐀 t − ϵ ) ‖ 2 2 ] . \\mathcal{L}_{\\mathrm{policy}}(\\omega)=\\mathbb{E}_{({\\mathbf{o}}_{t},{\\mathbf{q}}_{t},\\mathbf{A}_{t},{\\mathbf{c}})\\sim{\\mathcal{D}}\\cup\\hat{\\mathcal{D}},\\;\\bm{\\epsilon},\\;\\tau}\\left[\\left\\|\\pi_{\\omega}\\big(\\mathbf{A}_{t}^{\\tau},\\tau\\mid{\\mathbf{o}}_{t},{\\mathbf{q}}_{t},{\\mathbf{c}}\\big)-(\\mathbf{A}_{t}-\\bm{\\epsilon})\\right\\|_{2}^{2}\\right]. (3.6)",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "2f30b66530553a3a",
+      "section": "3.5 Policy Training",
+      "location": "3.5 Policy Training",
+      "text": "At inference, π ω \\pi_{\\omega} generates the action chunk 𝐀 t \\mathbf{A}_{t} from Gaussian noise conditioned on ( 𝐨 t , 𝐪 t , 𝐜 ) ({\\mathbf{o}}_{t},{\\mathbf{q}}_{t},{\\mathbf{c}}) with Euler ODE sampling ( Lipman et al., 2023 ) .",
+      "url": "https://arxiv.org/html/2611.05163v3#S3.SS5.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "4e395d1d46459561",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "We validate RoboTryOn on real robots with dexterous hands and investigate the following questions:",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ec0f2f47d52516bd",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "Can a policy learn tasks never demonstrated through teleoperation from human video alone, and does RoboTryOn outperform other retargeting or overlaying methods? ( Table 1 )",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ca219e16aad09a59",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "Does our synthesized data bridge the visual and action gaps between human videos and real robot data? ( Figures 3 , 4 and 5 )",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7262fd32a0e5fdc2",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "Can synthesized data replace teleoperated demonstrations, and how does the success rate change with the amount of human video? ( Figure 6 )",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a35f29dddfe8a0c0",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "With robot demonstrations (human video and teleoperated demonstration) PnP Bottle PnP Doll PnP Box PnP Ball",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F2.2",
+      "kind": "table"
+    },
+    {
+      "id": "9ed5d4cb0f8272e0",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Without robot demonstrations (human video only) PnP Coffee Pot PnP Bottle to Shelf Pouring Brushing Box Convey Air Fryer PnP Ball in Cup (novel object) (novel goal) (novel skill) (novel skill) (bimanual) (bimanual) (bimanual)",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F2.3",
+      "kind": "table"
+    },
+    {
+      "id": "7f18075adf2e25c1",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Figure 2: Examples of real-world benchmark tasks. For each of the four PnP tasks (top), both a human video and a teleoperated demonstration are available. For each of the remaining seven tasks (bottom), only a human video is available.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "401aa6d4b1e3c4fc",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Robots and tasks. We evaluate RoboTryOn on two bimanual robots with dexterous hands: an OpenArm with two 7-DoF arms and two 6-DoF Inspire RH56F1 hands, and an RB-Y1 with two 7-DoF arms and two 20-DoF WujiHand2 hands. Both are evaluated on eleven tabletop tasks (see Figure 2 ). There are four pick-and-place (PnP) tasks, i.e. , in-domain tasks, with 50 teleoperated demonstrations per robot and 50 human videos each: PnP Bottle , Doll , Box , and Ball . The other seven tasks, i.e. , out-of-domain tasks, have 50 human videos each and no robot demonstrations, and they introduce a single novel object task ( PnP Coffee Pot ), a single novel goal task ( PnP Bottle to Shelf ), two novel skill tasks ( Pouring , Brushing ), and three bimanual manipulation tasks ( Box Convey , Air Fryer , PnP Ball in Cup ), whereas the teleoperated tasks are all single-arm tasks. Further details on the robots and tasks are provided in Section C.1 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "07b02880a8011fae",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Baselines. We compare with the two existing ways of turning human video into robot training data. Both retarget the reconstructed hand into actions and differ in how they handle the human in the image. EgoMimic ( Kareer et al., 2025 ) masks the arm out of the human frames, while Masquerade ( Lepert et al., 2025a ) inpaints the arm out, composites a rendering of the robot in the retargeted pose, and adds an auxiliary loss on future 2D robot keypoints. Following their protocols, both apply the same edit to the robot data and to the live camera image at test time, whereas RoboTryOn runs on the raw camera view (see details in Section B.3 ). All methods share the policy model, the teleoperated episodes, and the human videos, so they differ only in how the human video is converted.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a0037740e822b631",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Implementation details. For each robot, we fine-tune π 0.5 \\pi_{0.5} ( Black et al., 2025 ) for the same number of training steps on 200 teleoperated episodes (50 per in-domain task), on 550 episodes synthesized by RoboTryOn from human videos (50 per task over all eleven tasks), or on all 750 together. We evaluate each policy over 28 trials per task with randomized object positions (see Section C.1 ). We train the image generation model, the video generation model, and the IDM on the teleoperated demonstrations of the four in-domain tasks and on additional robot videos, which enrich the embodiment prior of the models. The additional videos are not used to train any policy. We provide further details on the backbones and training in Section B.2.8 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9af149c56691aa53",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Table 1: Real-world results on (a) OpenArm and (b) RB-Y1. Success rate (%) over 28 trials per task. In-domain: the four PnP tasks with robot demonstrations. Out-of-domain: the seven tasks with human video only, grouped by what they add. “+” rows add the converted human videos to the teleoperated demonstrations, and the last row uses the synthesized episodes alone. Baselines are evaluated following their own protocols. Per-task results for the out-of-domain tasks are provided in Section F.2 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a84fba2d0e9b786a",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "(a) OpenArm Benchmark Results.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T1.st1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3d7ef119068b915e",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Method Data Source In-domain Out-of-domain Robot Human Novel Object Novel Goal Novel Skill Bimanual Avg. Teleop only ✓ ✗ 47.3 14.3 7.1 0.0 0.0 3.1 + EgoMimic ( Kareer et al., 2025 ) ✓ ✓ 50.0 14.3 0.0 10.7 0.0 5.1 + Masquerade ( Lepert et al., 2025a ) ✓ ✓ 67.9 21.4 7.1 14.3 0.0 8.2 + RoboTryOn (Ours) ✓ ✓ 75.9 64.3 89.3 83.9 63.1 73.0 RoboTryOn (Ours) ✗ ✓ 57.1 50.0 57.1 58.9 38.1 48.5",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T1.st1.2.1",
+      "kind": "p"
+    },
+    {
+      "id": "34e43ea30180b174",
+      "section": "4.1 Experimental Setup",
+      "location": "4.1 Experimental Setup",
+      "text": "Method Data Source In-domain Out-of-domain Robot Human Novel Object Novel Goal Novel Skill Bimanual Avg. Teleop only ✓ ✗ 69.6 7.1 0.0 0.0 0.0 1.0 + EgoMimic ( Kareer et al., 2025 ) ✓ ✓ 63.4 14.3 0.0 10.7 0.0 5.1 + Masquerade ( Lepert et al., 2025a ) ✓ ✓ 63.4 21.4 7.1 12.5 0.0 7.7 + RoboTryOn (Ours) ✓ ✓ 79.5 60.7 67.9 57.1 28.6 46.9 RoboTryOn (Ours) ✗ ✓ 60.7 64.3 60.7 53.6 16.7 40.3",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T1.st2.2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4f3a033dc2fd7f67",
+      "section": "4.2 Main Results",
+      "location": "4.2 Main Results",
+      "text": "In-domain tasks. As shown in Table 1 , RoboTryOn improves the success rate over both baselines on the in-domain tasks of both robots. In particular, the success rate rises from 47.3% to 75.9% on the OpenArm and from 69.6% to 79.5% on the RB-Y1. This suggests that synthesized demonstrations add useful variation even to tasks with teleoperated demonstrations, as they cover more object placements and more varied arm and hand motions than the 50 teleoperated demonstrations per task.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "88265369c4ded21f",
+      "section": "4.2 Main Results",
+      "location": "4.2 Main Results",
+      "text": "Out-of-domain tasks. RoboTryOn yields the largest gains on the seven tasks without robot demonstrations, enabling the policy to learn these tasks, whereas both baselines largely fail with success rates below 10% (see Table 1 ). In particular, the success rate rises from 3.1% to 73.0% on the OpenArm and from 1.0% to 46.9% on the RB-Y1. Notably, the policy also learns the bimanual tasks, although every teleoperated demonstration uses a single arm. This demonstrates that RoboTryOn turns human videos into robot demonstrations from which a policy learns new objects, goals, skills, and bimanual coordination. Moreover, a single image model, video model, and IDM serve both robots despite their different kinematics, hands, and camera placements (see Figure 10 ). Additionally, we analyze why the baselines fail in Section 4.3 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "053cdb008ea58541",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "In this section, we analyze the quality of our synthesized data and the effects of human and translated robot data on policy learning, focusing on the amount of data, collection cost, and execution speed. Unless otherwise stated, we use π 0.5 \\pi_{0.5} fine-tuned on the OpenArm in these experiments.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "048ef56ea74d2dfb",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Human EgoMimic Masquerade RoboTryOn (Ours) Real robot",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F3.2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7a22f79aca2be925",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Figure 3: Visual gap to real robot video. (a) The same moments as recorded, as EgoMimic and Masquerade edit them, and as RoboTryOn translates them, next to similar moments from teleoperation. (b) UMAP of SigLIP features of π 0.5 \\pi_{0.5} with density contours, using equal frame counts per corpus, real robot frames from the four PnP tasks, and the other frames from all eleven tasks.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a10be025a4dcec3b",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Human Retargeting Ours w/o corr. Ours PnP Box ✗ ✓ ✓ PnP Ball ✗ ✗ ✓",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F4.3.1",
+      "kind": "table"
+    },
+    {
+      "id": "48594e1708c77086",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Figure 4: Action gap: open-loop replay. (a) A real scene and its simulated replica. (b) The grasp moment of one human video under the three action labelings, replayed open loop. (c) Replay success over 66 episodes of three PnP tasks (per task in Table 8 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6a95a8b26c4dbfbb",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "We first examine whether synthesized videos resemble real robot videos (see Figure 3 ). We encode the frames of raw, masked (EgoMimic), overlaid (Masquerade), and synthesized human videos with the visual encoder of the policy and compare their embeddings with those of real robot videos. Videos synthesized by RoboTryOn overlap with real robot videos in this embedding space, whereas raw, masked, and overlaid videos form separate clusters. Quantitatively, the Fréchet SigLIP distance ( Heusel et al., 2017 ; Zhai et al., 2023 ) to real robot videos agrees: RoboTryOn reduces it from 125.5 to 32.7, while overlay reduces it by about half and masking leaves it largely unchanged. This suggests that RoboTryOn closes the visual gap while the policy uses raw camera observations at test time. In contrast, both baselines narrow the gap only by applying the same masking or overlay to every camera observation during deployment.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "46e034bee9ab958a",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Action gap. To evaluate action labels without ground truth robot actions, we replay them open loop in a simulated replica of each scene and measure task completion (see Figure 4 a). We compare the labels from our IDM with retargeted labels, which map the reconstructed human hand to the robot hand ( Qin et al., 2023 ) and solve for the arm by inverse kinematics. Replay succeeds in 69.7% of episodes with our labels and 34.8% with retargeted labels (see Figure 4 c), and the difference arises mainly during grasping: retargeted motions bring the robot hand near the object, but imprecise hand reconstruction and the difference in hand geometry prevent a secure grasp (see Figure 4 b). This suggests that labeling synthesized robot videos with the IDM yields more executable actions than retargeting, since RoboTryOn uses the reconstructed hand only to guide generation and the generated robot hand grasps the object as in the robot data.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "097b6efd6884f097",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "We then examine how these labels affect policy learning by comparing the actions and the training gradients they induce (see Figure 5 ). Retargeted hand actions differ substantially from teleoperated actions (see Figure 5 a). At the pretrained weights of π 0.5 \\pi_{0.5} , we compute the gradient of the flow-matching loss on teleoperated in-domain data and on the data of each out-of-domain task. The cosine similarity between the two gradients measures how much the two sources agree on the update direction ( Appendix D ). Our data yields a cosine similarity of 0.53, compared with 0.17 and 0.14 for the baselines, and retargeted data yields slightly negative similarity within the action expert (see Figure 5 b). This suggests that retargeted labels steer the policy in a direction that conflicts with the teleoperated data, which may explain why the baselines gain little on out-of-domain tasks. Consistently, the baselines’ hand actions during robot execution stay close to the teleoperated distribution on in-domain tasks but diverge on out-of-domain tasks, whereas our policy stays close on both (see Figure 5 c).",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "3cec69a197495b2e",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Teleoperation Ours (IDM labels) Masquerade EgoMimic 0.5 0.5 1 1 1.5 1.5 Thumb rotation (rad) Density 0 0 0.5 0.5 1 1 1.5 1.5 Finger flexion (rad) All params Action expert 0 0 0.25 0.25 0.5 0.5 0.75 0.75 0.53 0.17 0.14 0.51 − - 0.03 − - 0.05 Gradient cosine In- domain Out-of- domain 0 0 50 50 100 100 67 40 37 55 10 8 Close to teleop. (%) (a) Right-hand actions (b) Co-training with teleop. (c) Robot rollouts",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F5.2",
+      "kind": "p"
+    },
+    {
+      "id": "2d6618d04dc1dcf0",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Figure 5: Action gap: distribution and co-training. (a) Right-hand actions over all tasks. (b) Cosine between the policy gradients from teleoperated PnP data and from the out-of-domain tasks. (c) Share of hand actions within the teleoperated distribution in real robot rollouts.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f8e6b23a84575017",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Figure 6: Collection cost. Success rate versus person-hours on four tasks. Marker size indicates demonstrations per task.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "cc34164e9a044e9f",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Scaling and cost. To assess whether human videos are a cost-effective source of demonstrations, we vary the number of demonstrations per task on the four in-domain tasks and compare the success rate against collection cost in person-hours (see Figure 6 ). Recording a human video takes about a fifth of the time of a teleoperated episode (see Table 10 ). Notably, training with translated human videos alone matches the success rate obtained with 50 teleoperated demonstrations per task at about one third of the collection cost. This suggests that, although a translated human video yields a slightly lower success rate per demonstration than a teleoperated episode, it is more cost-effective in collection time. Moreover, augmenting the teleoperated dataset with an equal number of human videos increases the success rate from 47.3% to 71.4% and requires less than one additional hour of recording.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS3.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "07f51c7c77df48fe",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Table 2: Execution speed. Success rate (%) on the OpenArm and mean time from rollout start to object placement on the four PnP tasks.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d08e04f6b702a597",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Method Speed In-dom. Out-of-dom. Time (s) Teleop only 1 × 1\\times 47.3 0 3.1 14.2 Ours (as recorded) 1.25 × 1.25\\times 75.9 73.0 11.9 Ours (retimed) 1 × 1\\times 85.7 70.4 13.8 2 × 2\\times 57.1 42.9 0 7.4",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T2.4",
+      "kind": "table"
+    },
+    {
+      "id": "f6284bedcb0eb6e9",
+      "section": "4.3 Analysis",
+      "location": "4.3 Analysis",
+      "text": "Execution speed. Since human demonstrators move at roughly 1.25 × 1.25\\times the speed of the teleoperated demonstrations, we examine how the speed of synthesized demonstrations affects the policy. Using the same keyframes, we retime the skeleton flow to the teleoperated speed ( 1 × 1\\times ) or twice that speed ( 2 × 2\\times ) before synthesis and compare with videos synthesized at the recorded speed (see Table 2 ). Matching the teleoperated speed improves the in-domain success rate from 75.9% to 85.7% while keeping the out-of-domain success rate similar. This suggests that the policy inherits the speed of its training demonstrations, as its task completion time follows the speed of the synthesized videos. However, training at 2 × 2\\times produces the fastest policy at the cost of a lower success rate on both task groups.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS3.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "0daaee5a2628a554",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "We ablate the components of RoboTryOn and the policy backbone to verify that each component contributes to policy success and that the gains do not depend on a specific VLA. All ablations use the OpenArm, and per-task results are given in Tables 13 and 12 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "36ef91328931b27b",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "Pipeline components. As shown in Table 3(a) , removing any of the four components reduces the success rate on both task groups. Without the autoregressive reference, the robot appearance stays consistent but the scene changes across keyframes. Without subsequent keyframes, the video model is conditioned only on the first keyframe, so the motion is preserved but the objects and the scene deviate from the human video. Without the hand skeleton flow, the video model receives no motion guidance between keyframes, and the synthesized robot no longer follows the demonstrator, which causes the largest drop. This shows that each stage is needed to keep the synthesized demonstration faithful to the human video in scene, appearance, and motion. Interestingly, removing the wrist correction reduces the success rate more on out-of-domain tasks, since the policy relies more on generated action labels for tasks without teleoperated demonstrations, and many of their motions lie outside the training distribution of the IDM. We show failure cases of each variant in Section F.3 .",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9307a9e43771ed89",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "Policy backbone. To verify that the benefit of RoboTryOn is not specific to π 0.5 \\pi_{0.5} , we also fine-tune RLDX-1-Img ( Kim et al., 2026 ) , a VLA with a different architecture, on the same data (see Table 3(b) ). RoboTryOn consistently improves the success rate of RLDX-1-Img, from 53.6% to 60.7% on in-domain tasks and from 0.0% to 40.3% on out-of-domain tasks. This demonstrates that the demonstrations synthesized by RoboTryOn remain effective across policy architectures.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "221977eb3674faed",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "Table 3: Ablation study of RoboTryOn on OpenArm. Success rates (%) are averaged over four in-domain and seven out-of-domain tasks.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7dac7260ec40481a",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "Method In-dom. Out-of-dom. RoboTryOn (Ours) 75.9 73.0 w/o Autoregressive reference 68.8 66.3 w/o Subsequent keyframes 42.9 39.3 w/o Hand skeleton flow 42.0 21.4 w/o IDM wrist correction 65.2 48.0",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T3.st1.2",
+      "kind": "table"
+    },
+    {
+      "id": "a60373d0fcf2bcd2",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "(b) Policy backbone comparison.",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T3.st2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f4d57c87a4d1f929",
+      "section": "4.4 Ablations",
+      "location": "4.4 Ablations",
+      "text": "Method In-dom. Out-of-dom. π 0.5 \\pi_{0.5} (Teleop only) 47.3 3.1 + RoboTryOn (Ours) 75.9 73.0 RLDX-1-Img (Teleop only) 53.6 0.0 + RoboTryOn (Ours) 60.7 40.3",
+      "url": "https://arxiv.org/html/2611.05163v3#S4.T3.st2.2",
+      "kind": "table"
+    },
+    {
+      "id": "ca31c87c236a699a",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "We presented RoboTryOn, which turns a human video into a robot demonstration the way virtual try-on changes the garment on a person: it keeps the demonstrated motion and swaps the embodiment. RoboTryOn translates human keyframes into robot keyframes, synthesizes the robot video between them under the guidance of the hand skeleton, and labels its actions with an inverse dynamics model. On two real robots with dexterous hands, the synthesized demonstrations teach a policy seven tasks without any robot demonstration, including bimanual ones. Human video translated this way also matches the success rate of teleoperated demonstrations at about a third of their collection cost. We discuss limitations and future work in Appendix A .",
+      "url": "https://arxiv.org/html/2611.05163v3#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fd8eb7094e3359b5",
+      "section": "Acknowledgement",
+      "location": "Acknowledgement",
+      "text": "This paper was supported by RLWRLD Inc. We thank Beomjun Kim, Junhyeong Park, Jungwoo Park, and Seunghoon Sim for their help in collecting robot and human demonstrations for our real-world experiments.",
+      "url": "https://arxiv.org/html/2611.05163v3#Sx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "924465c96e864d77",
+      "section": "Appendix A Limitations and Future Work",
+      "location": "Appendix A Limitations and Future Work",
+      "text": "Limitations. Adding an embodiment still requires a few hours of teleoperated video of that robot, on any tasks, to teach the generative models and the inverse dynamics model what it looks like and how it moves. This cost is paid once per robot rather than once per task, but it is not zero. The actions are pseudo labels: the IDM reads the joints from pixels, and the hand reconstruction provides the wrist position. They cannot capture forces, and their precision is bounded by what stereo video and a hand reconstruction resolve, so tasks that depend on forces or on fine precision, such as tight insertion, are not yet labeled accurately enough. The wrist correction also relies on the head camera calibration. The human videos are recorded from the position of the robot’s head camera, and the teleoperated data keep the neck and the base of the robot fixed. Under this fixed viewpoint, RoboTryOn translates human videos into each embodiment reliably (see Figure 10 ). With a moving camera, as in in-the-wild egocentric videos, the input falls outside the training distribution of the video model and the IDM. In particular, the IDM always predicts fixed neck and base actions, since the neck and the base never move in its training data. The demonstrated motion must be one the robot can execute. The pipeline can retime the human video to the robot’s pace, but it cannot correct a motion toward a position beyond the reach of the robot arm or a grasp that the robot hand cannot form. Our evaluation covers tabletop manipulation on two robots. We also translate human videos into the GR-1, but could not evaluate policies on it without access to the physical robot. Finally, synthesis trades collection time for compute (see Table 10 ), which favors tasks that are expensive to teleoperate.",
+      "url": "https://arxiv.org/html/2611.05163v3#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8d238c8bf77356a9",
+      "section": "Appendix A Limitations and Future Work",
+      "location": "Appendix A Limitations and Future Work",
+      "text": "Future work. The natural next step is scale: translating large egocentric corpora such as EgoDex into every embodiment we own, so that a robot’s training data grows with the supply of human video rather than with the supply of operators. Since the policy learns from pseudo labels, improving the accuracy of the IDM is another key direction. Policy rollouts on the robot are recorded with their executed actions, so they naturally become training data for the IDM, and the IDM can keep improving as the policy is deployed. Currently, the IDM and the hand reconstruction estimate actions separately, and we simply replace the wrist position predicted by the IDM with the reconstructed one. An IDM that takes the reconstructed wrist position as an additional input could combine the two estimates and predict more accurate actions.",
+      "url": "https://arxiv.org/html/2611.05163v3#A1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "63c51a40b2c804fc",
+      "section": "B.1 Policy Training Details",
+      "location": "B.1 Policy Training Details",
+      "text": "π 0.5 \\pi_{0.5} is a mixture of transformers in which the action expert shares attention with the vision-language model, whereas RLDX-1-Img follows the design of GR00T N1 [ NVIDIA et al., 2025 ] , in which a separate action head is conditioned on vision-language features. Both π 0.5 \\pi_{0.5} and RLDX-1-Img are fully fine-tuned for 30k steps with a batch size of 64 on four H100 GPUs, with the same settings for every data mixture of Table 1 . π 0.5 \\pi_{0.5} is trained with AdamW ( β 1 = 0.9 \\beta_{1}=0.9 , β 2 = 0.95 \\beta_{2}=0.95 , ϵ = 10 − 8 \\epsilon=10^{-8} , weight decay 0.01) at a learning rate of 2.5 × 10 − 5 2.5\\times 10^{-5} with cosine decay to 2.5 × 10 − 6 2.5\\times 10^{-6} , gradient clipping at norm 1.0, and an action chunk of 50 steps (2.5 s). States and actions are normalized by their 1st and 99th percentiles to [ − 1 , 1 ] [-1,1] . RLDX-1-Img follows the configuration of its official repository: the vision-language backbone is frozen except for its top four language layers, the action expert is trained in full (2.4B of 6.9B parameters in total), the learning rate is 10 − 4 10^{-4} with cosine decay, and the action chunk is 16 steps (0.8 s), and the optimizer and the normalization are the same as for π 0.5 \\pi_{0.5} .",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3e831cdc2e6a2ecc",
+      "section": "B.2.1 Keyframe Selection",
+      "location": "B.2.1 Keyframe Selection",
+      "text": "Keyframes are selected from the 3D wrist trajectories of the reconstructed hands ( Section B.2.2 ), smoothed in time with a Gaussian of σ = 0.25 \\sigma=0.25 s. A frame is a candidate when the larger of the two wrist speeds has a local minimum within ± 1 \\pm 1 s: the hands are unblurred there, and a hand has typically arrived at a new location. The next keyframe is the first candidate at which a wrist has moved more than a threshold from its position in the previous keyframe. The threshold is set for each episode as the 30th percentile of the wrist displacements between all pairs of up to 400 frames sampled uniformly from the episode, where the displacement of a pair is the larger 3D movement of the wrists visible in both frames. Because the reconstruction is most reliable when a hand is slow and fully visible, this rule also tends to avoid frames in which a hand is undetected or detected with low confidence. The base video model supports clips of up to 20 seconds, but for the consistency of the synthesized video we cap the interval between consecutive keyframes at 145 frames, about 7.25 seconds at 20 Hz. When no candidate satisfies the rule within the cap, we take the frame with the largest displacement among those whose reconstruction confidence is at least the median of the interval, or the frame at the cap if no frame has a confidence. The first and last frames are always keyframes. Pick-and-place videos yield about four keyframes and the longer tasks six to seven.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ae7baba0fc8a176f",
+      "section": "B.2.2 Hand Skeleton",
+      "location": "B.2.2 Hand Skeleton",
+      "text": "Hand reconstruction. The human hands are reconstructed with HaWoR [ Zhang et al., 2025 ] from each view of the stereo camera. The depth of the wrist is corrected by triangulating the two views, and the left and right hand predictions of the two views complement each other, so that a hand that leaves the frame in one view and is misdetected there is recovered from the other view.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f72640578390af11",
+      "section": "B.2.2 Hand Skeleton",
+      "location": "B.2.2 Hand Skeleton",
+      "text": "Keypoint set. Each hand is represented by 17 keypoints: four on the thumb, three on each of the other four fingers (the knuckle, the middle joint, and the tip), and the wrist. The skeleton connects the keypoints of each finger in sequence and connects the finger bases to one another and to the wrist. The same set is defined for the human hand, the Inspire RH56F1, the WujiHand2, and the GR-1 hand, so that hands with different degrees of freedom map to the same keypoints. For a robot the keypoints come from forward kinematics of the recorded joint state, projected into each camera view, and for a person they come from the reconstructed hand, retargeted to the target robot hand. Because the retargeting is imprecise, keypoints are perturbed and randomly dropped during training: each keypoint is displaced by up to half the length of the finger segment it belongs to, the whole skeleton is dropped with probability 0.2, and each keypoint is dropped independently with probability 0.2. The model thus learns to treat the skeleton as a coarse guide while its prior over robot hands, learned from the robot data, determines the configuration the generated hand takes. The retargeting error does not enter the action labels, which are read from the generated video by the IDM. The skeleton is rendered as its 2D projection, drawn over the frame for the image model and as a video of the same length for the video model.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c4509f411187865f",
+      "section": "B.2.3 Keyframe Translation",
+      "location": "B.2.3 Keyframe Translation",
+      "text": "Mask construction. The mask is shape-agnostic in the sense of virtual try-on: it is enlarged and smoothed so that the model cannot recover the original silhouette of the arm and hand it covers. For a robot frame the mask is built from a rendering of the robot from its URDF at the recorded joint state and a SAM3 segmentation of the robot, which are complementary, since neither alone covers the robot exactly. During training the mask is further deformed to random sizes and shapes so that the model is robust to its size and outline, and, with some probability and where the object is known, the region of the manipulated object is removed from the mask. At inference the mask of the human arm and hand comes from SAM3 alone, dilated so that the shape cannot be inferred, and the region of the manipulated object is always removed so that the object is preserved.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bff1da20db19438c",
+      "section": "B.2.3 Keyframe Translation",
+      "location": "B.2.3 Keyframe Translation",
+      "text": "Reference sampling. The reference frame is sampled from the same episode two to five seconds before the target, since a closer frame would allow the model to copy the reference instead of learning to move the robot.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "540e2ab943df29df",
+      "section": "B.2.3 Keyframe Translation",
+      "location": "B.2.3 Keyframe Translation",
+      "text": "Stereo generation. Both views are generated as one token sequence with an additional rotary position dimension separating left and right tokens, and training mixes single-view and stereo examples.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0ff54aaad36e6bef",
+      "section": "B.2.3 Keyframe Translation",
+      "location": "B.2.3 Keyframe Translation",
+      "text": "Autoregressive inference. The denoised latent of 𝐨 ^ t j − 1 r \\hat{\\mathbf{o}}^{r}_{t_{j-1}} is reused directly as the reference tokens for 𝐨 ^ t j r \\hat{\\mathbf{o}}^{r}_{t_{j}} , without decoding and re-encoding.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "91477377f45f81fa",
+      "section": "B.2.3 Keyframe Translation",
+      "location": "B.2.3 Keyframe Translation",
+      "text": "First keyframe. The first keyframe has no previously translated keyframe to serve as reference, so its reference is a real frame of the target robot with everything but the robot masked out, which selects the embodiment. To train for this case, the reference is replaced by such a frame with probability 0.05 during training.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa70eb534d23371b",
+      "section": "B.2.4 Video Synthesis",
+      "location": "B.2.4 Video Synthesis",
+      "text": "All videos and actions are recorded, synthesized, and labeled at 20 Hz. A demonstration is cut at keyframe times into clips of at most 145 frames ( Section B.2.1 ). Each clip is synthesized with the two to four keyframes that fall inside it, adjacent clips share the keyframe at their boundary, and the clips are concatenated in time. The rendered skeleton flow is encoded by the video VAE like the clip itself and attended to as in-context tokens. Demonstrations of 10–25 seconds are synthesized in this way ( Figure 14 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f35eddd7b66aadcd",
+      "section": "B.2.5 Retiming",
+      "location": "B.2.5 Retiming",
+      "text": "By default the human video is synthesized as recorded. For Table 2 each human video is divided by its action into phases, approaching the object, grasping it, lifting it, and placing it, into which the tasks without robot demonstrations divide as well. For each phase the skeleton flow is resampled in time so that its speed matches the mean action speed of the teleoperated episodes in that phase, at the chosen multiple, and the video is synthesized again from the same keyframes at their new temporal positions. Human demonstrators grasp and lift faster than the teleoperators in many episodes, so these are the phases the retiming changes most.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d7a9871c07605d87",
+      "section": "B.2.6 Inverse Dynamics Model",
+      "location": "B.2.6 Inverse Dynamics Model",
+      "text": "The IDM takes frames t t and t + 20 t{+}20 (1 s at 20 Hz) at 224 × \\times 224, stereo for the OpenArm and RB-Y1 and monocular for the GR-1, and predicts a 20-step chunk of the full joint vector (28, 66, and 44 dimensions). Following the DreamGen IDM [ Jang et al., 2025 ] , the three embodiments share one model and are distinguished by an embodiment tag, and the action head is a flow-matching head on the Depth Anything V2 backbone. Of the 24 layers of its ViT, the first 11 are frozen and the rest are fine-tuned, and the Depth Anything head is not used. For labeling, the model is applied in a sliding window, overlapping predictions are averaged, and the sequence is smoothed with a Savitzky–Golay filter [ Savitzky and Golay, 1964 ] of polynomial order 2 over a window of 9 frames for the arm joints and 5 frames for the hand joints. The states 𝐪 ^ t \\hat{\\mathbf{q}}_{t} of a synthesized demonstration are derived from its action labels by the relation measured on the teleoperated data, where the recorded state lags the commanded action by four steps, so that 𝐪 ^ t = 𝐚 ^ t − 4 \\hat{\\mathbf{q}}_{t}=\\hat{\\mathbf{a}}_{t-4} .",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dd5c51285e0911a4",
+      "section": "B.2.7 End-Effector Correction",
+      "location": "B.2.7 End-Effector Correction",
+      "text": "The human wrist position is taken from the hand reconstruction of Section B.2.2 , in the camera frame, and transformed into the robot base frame with the head camera calibration, since the human video is recorded from the position of the robot’s head camera. The robot hand implied by the IDM’s joints is scaled, finger segment by finger segment, to the size of the reconstructed human hand, and the target wrist position is the one at which the end effector of the scaled hand coincides with the reconstructed wrist. Since the reconstruction is noisy, the target is taken only from segments with high reconstruction confidence and smoothed in time, so that the correction moves the arm gradually rather than snapping it to the reconstruction. The target orientation is the wrist orientation obtained by forward kinematics from the IDM’s arm joints, so that only the translation is corrected. The arm joints are then solved by inverse kinematics in MuJoCo, initialized from the IDM’s arm joints of the same frame, and the hand joints are left unchanged. The correction is applied to both arms for bimanual demonstrations. Section 4.4 ablates it.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "65c370fd630f3e39",
+      "section": "B.2.8 Training Setup",
+      "location": "B.2.8 Training Setup",
+      "text": "Table 4: Training configuration. Resolutions are per view.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5df7b74169db7dd8",
+      "section": "B.2.8 Training Setup",
+      "location": "B.2.8 Training Setup",
+      "text": "Image model f θ f_{\\theta} Video model g ϕ g_{\\phi} IDM h ψ h_{\\psi} Base model FLUX.2 [klein] 9B Base LTX-2.5 Depth Anything V2-L Trained parameters full LoRA (rank 64) ViT (layers 1–11 frozen) + action head Input resolution 1024 × \\times 576 512 × \\times 288, then 1024 × \\times 576 224 × \\times 224 Views stereo : mono = 3 : 1 stereo + mono stereo (GR-1: mono) Clip length / chunk – ≤ \\leq 145 frames @ 20 Hz 20 frames @ 20 Hz Steps 5k 4k + 1k 60k Global batch size 64 16 128 Learning rate 10 − 5 10^{-5} , cosine 10 − 4 10^{-4} 10 − 4 10^{-4} , cosine Optimizer AdamW (0.9, 0.999) AdamW (0.9, 0.999) AdamW (0.9, 0.999) Hardware 4 × \\times H100 4 × \\times H100, then 4 × \\times H200 4 × \\times H200",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.T4.4.1",
+      "kind": "p"
+    },
+    {
+      "id": "4d045daaafcf049c",
+      "section": "B.2.8 Training Setup",
+      "location": "B.2.8 Training Setup",
+      "text": "Training corpus. All three models, the image model, the video model, and the IDM, are trained on the same corpus of teleoperated robot episodes: 3.79 hours (453 episodes) collected on the OpenArm with the Inspire RH56F1 hand, 2.53 hours (352 episodes) on the RB-Y1 with the WujiHand2, and 2.50 hours (1,180 clips) of the GR-1 taken from the public GR00T teleoperation dataset released with DreamDojo [ Gao et al., 2026 ] . The OpenArm and RB-Y1 recordings are stereo, whereas the GR-1 recordings are monocular, so the generative models learn stereo generation from the first two. The corpus consists of the teleoperated demonstrations of the four pick-and-place tasks used in Section 4 plus additional teleoperated recordings. The additional recordings are used only to train the three models above and play no part in training any VLA policy.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "21bbffa61bafc815",
+      "section": "B.2.8 Training Setup",
+      "location": "B.2.8 Training Setup",
+      "text": "Training configuration. The image model f θ f_{\\theta} is a fully fine-tuned FLUX.2 [klein] 9B Base [ Black Forest Labs, 2026 ] , the video model g ϕ g_{\\phi} an in-context LoRA on LTX-2.5 [ Lightricks, 2026 , HaCohen et al., 2026 ] , and the IDM h ψ h_{\\psi} a Depth Anything V2 backbone [ Yang et al., 2024 ] with the action head of the DreamGen IDM [ Jang et al., 2025 ] . Table 4 lists their training configuration, and all three are trained on the corpus of Section B.2.8 . The image model is trained with AdamW ( β 1 = 0.9 \\beta_{1}=0.9 , β 2 = 0.999 \\beta_{2}=0.999 ) and a cosine learning rate schedule. Its input embedder does not accept the channel-wise concatenation of the conditioned frame with the noisy target, so the embedder is extended by zero-initialized input channels that are trained with the rest of the model. Training examples are stereo and single-view in a 3:1 ratio, and the GR-1 recordings are single-view only. The video model LoRA has rank 64 and is trained with AdamW ( β 1 = 0.9 \\beta_{1}=0.9 , β 2 = 0.999 \\beta_{2}=0.999 ) in two stages matching the two-stage inference of Section B.4 : 4k steps at 512 × \\times 288 per view followed by 1k steps at 1024 × \\times 576 per view.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS2.SSS8.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a4fa7b58824f47c",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Table 5: Inference configuration and cost per unit. Time is measured on a single H100. Video stage 2 upsamples and refines the output of stage 1.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "65b59a91a0bb2fb4",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Stage Model Output per view Views Steps Time (s) Hand reconstruction HaWoR 3D hand pose, per frame 2 – 0.448 / frame Keyframe translation f θ f_{\\theta} 1024 × \\times 576 2 30 34.6 / keyframe Video synthesis, stage 1 g ϕ g_{\\phi} 512 × \\times 288 2 8 50.0 / clip Video synthesis, stage 2 g ϕ g_{\\phi} 1024 × \\times 576 2 3 50.0 / clip Action labeling h ψ h_{\\psi} 20-step joint chunk 2 – 0.077 / window End-effector correction MuJoCo IK arm joints, per frame – – 0.22 / frame",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.T5.4",
+      "kind": "table"
+    },
+    {
+      "id": "f42fc95e039ca5e9",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Table 6: Pipeline wall-clock time for a 15 s demonstration (300 frames, one embodiment) on a single H100.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "34ae9a94729322d9",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Stage Units Time (s) Hand reconstruction + keyframe selection 300 frames 134 Keyframe translation 5 keyframes 173 Video synthesis, stage 1 3 clips 150 Video synthesis, stage 2 3 clips 150 Action labeling 281 windows 22 End-effector correction 300 frames 66",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.T6.4",
+      "kind": "table"
+    },
+    {
+      "id": "09d3436162c63b98",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Common setup. Both baselines are re-implemented on our hardware with the same backbone, teleoperated episodes, and human videos as RoboTryOn.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9bd51839877bcf1e",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Retargeting. Both use the same pseudo actions: the 3D hand pose reconstructed with HaWoR is mapped to the robot hand by a geometric mapping of joint angles (finger flexion angles matched to the hand’s joint ranges, wrist pose transformed into the base frame with the head camera calibration) following AnyTeleop [ Qin et al., 2023 ] , and the arm joints are obtained by inverse kinematics in MuJoCo from the wrist pose.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "91a021802751a78b",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "EgoMimic. The human arm and hand are masked in every human frame. In the robot episodes the robot arm is masked from the recorded state, by projecting the URDF into the camera. At test time the mask is placed on the live image from the current robot state and the camera calibration. The masking follows the official implementation.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5a5b65a06de8453e",
+      "section": "B.3 Baselines",
+      "location": "B.3 Baselines",
+      "text": "Masquerade. The human arm is inpainted out and a rendering of the robot from its URDF in the retargeted state is composited onto the frame. Robot episodes receive the same rendering from the recorded state, and at test time the rendering is composited onto the live image from the current state. The original uses E2FGVI [ Li et al., 2022 ] for the inpainting. We use ProPainter [ Zhou et al., 2023 ] , which leaves fewer artifacts on our videos. Following the original, the policy is trained with an auxiliary loss that predicts future 2D robot hand keypoints from the image features, with targets from the retargeted (human) or recorded (robot) state. The head, the prediction horizon, and the loss weight follow the official implementation. The original single-arm gripper pipeline is extended to both arms and to the dexterous hands of our robots.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "a22e14f3a8471b0e",
+      "section": "B.4 Inference Details",
+      "location": "B.4 Inference Details",
+      "text": "Inference configuration and compute. Table 5 lists the inference configuration of every stage and its cost on a single H100. The video model runs in two stages: the first generates the clip at 512 × \\times 288 per view with a distilled model in 8 sampling steps, and the second upsamples the result to 1024 × \\times 576 per view and refines it in 3 steps. Both stages are conditioned on the same keyframes and skeleton flow, the second at the higher resolution, and both generate the two stereo views in one sequence. The image model generates each keyframe at 1024 × \\times 576 per view in 30 sampling steps with a guidance scale of 3.5, and the keyframes of a demonstration are generated sequentially since each conditions on the previous one. The IDM predicts a 20-step action chunk from each 1 s window and is applied in a sliding window with a stride of one frame over the demonstration.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9965f0f82b174b30",
+      "section": "B.4 Inference Details",
+      "location": "B.4 Inference Details",
+      "text": "Table 6 breaks down the wall-clock time of the full pipeline for a typical 15 s demonstration (300 frames at 20 Hz, translated into one embodiment). Table 10 accounts for collection in person-hours and Appendix A notes the trade of collection time for compute.",
+      "url": "https://arxiv.org/html/2611.05163v3#A2.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "eac7ae1012eb5326",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "Hardware setup. We use two humanoid robots, OpenArm and RB-Y1 ( Figure 7 b,c), in our real-world experiments. Both humanoids are equipped with two 7-DoF arms. Each arm of the OpenArm is equipped with a 6-DoF Inspire RH56F1 hand, and each arm of the RB-Y1 is equipped with a 20-DoF WujiHand2 hand. The head of each robot is mounted on a 2-DoF neck that supports pitch and yaw motions. A stereo camera is mounted on each neck, and its left and right egocentric views are used as visual inputs throughout all experiments.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "59cb50bb957bb29e",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "Figure 7: Real-world setup. (a) Human video collection from the robot’s camera position. (b) OpenArm embodiment. (c) RB-Y1 embodiment. (d) Objects of the in-domain tasks. (e) Objects introduced for the out-of-domain tasks.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d126ff33bd3a0fd6",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "(a) In-domain tasks (b) Out-of-domain tasks",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.F8.2",
+      "kind": "p"
+    },
+    {
+      "id": "e2a7aba5e8c270b3",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "Figure 8: Real-world tasks. (a) In-domain tasks with teleoperated demonstrations and human videos. (b) Out-of-domain tasks with human videos only.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e07e12c6970a57fe",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "Task details. All tasks are formulated as language-conditioned manipulation tasks. We evaluate eleven tasks in total ( Figure 2 ), comprising four in-domain pick-and-place (PnP) tasks and seven out-of-domain tasks. The in-domain tasks ( Figure 2 a) consist of PnP Bottle , PnP Doll , PnP Box , and PnP Ball , with 50 teleoperated demonstrations per robot embodiment and 50 human videos for each task. The human videos are recorded from the position of the robot’s head camera ( Figure 7 a). The seven out-of-domain tasks ( Figure 2 b) have 50 human videos each and no robot demonstrations: PnP Coffee Pot , PnP Bottle to Shelf , Pouring , Brushing , Box Convey , Air Fryer , and PnP Ball in Cup .",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8c65a0fb51c7b1e0",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "The four in-domain PnP tasks share the same task structure, where the robot grasps a designated object and places it into a white container ( Figure 7 d). PnP Coffee Pot follows the same pick-and-place structure with a novel coffee pot object. PnP Bottle to Shelf requires the robot to grasp a bottle and place it at a designated location on a shelf. Pouring requires the robot to grasp a bottle and pour its contents into a red cup. Brushing requires the robot to grasp a brush and wipe the area marked with black tape. Box Convey requires the robot to move a box to the right using both hands sequentially, with the left hand moving it first and the right hand moving it further. Air Fryer requires the robot to open an air fryer, grasp an apple-shaped object, place it inside, and close the door. Finally, PnP Ball in Cup requires the robot to lift an inverted cup with the left hand, grasp the ball with the right hand, and place it into the target container. Figure 7 e shows the objects introduced by the out-of-domain tasks.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "08ec0f41a0ad7d5f",
+      "section": "C.1 Real-World Environment",
+      "location": "C.1 Real-World Environment",
+      "text": "We conduct 28 evaluation trials for each task. For single-arm tasks, a trial receives a score of 1 only when the task is successfully completed. For bimanual tasks, each hand contributes 0.5 to the score, yielding a maximum score of 1 when both required hand actions are successfully completed. The initial positions of the target objects are randomized within the workspace for each trial. For the PnP tasks, including PnP Bottle , PnP Doll , PnP Box , PnP Ball , PnP Coffee Pot , and PnP Bottle to Shelf , a trial is considered successful when the object is placed at the designated goal location. For Pouring , the trial is successful when the bottle is tilted over the target cup. For Brushing , success is determined by whether the brush reaches the designated region marked with black tape. For Box Convey , the trial is successful when the specified sequential manipulation with the left and right hands is correctly executed. For Air Fryer , success requires opening the air fryer, placing the apple-shaped object inside, and closing the door. For PnP Ball in Cup , success requires lifting the cup with the left hand, grasping the ball with the right hand, and placing the ball at the designated goal location.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "f6cb713201874fc5",
+      "section": "C.2 Simulation Environment",
+      "location": "C.2 Simulation Environment",
+      "text": "Figure 9: Simulated tasks. Each row shows the human video of a task (left) and a successful episode in simulation (1–5): the right hand grasps the object, lifts it, and places it in the container.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4548f75063fc8461",
+      "section": "C.2 Simulation Environment",
+      "location": "C.2 Simulation Environment",
+      "text": "Setup. We build a simulated counterpart of the OpenArm setup in Isaac Lab [ Mittal et al., 2023 ] . The simulated robot follows the real OpenArm: two 7-DoF arms with 6-DoF Inspire RH56F1 hands and a 2-DoF neck, fixed at the downward pitch measured on the real robot. The head camera is positioned to match the mounting configuration of the real stereo camera, ensuring that the simulated egocentric view shares the same viewpoint as the real one ( Figure 9 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d15525e4784b959b",
+      "section": "C.2 Simulation Environment",
+      "location": "C.2 Simulation Environment",
+      "text": "Tasks. We simulate the three in-domain pick-and-place tasks that have simulation assets, PnP Bottle , PnP Ball , and PnP Box . PnP Doll is excluded because no simulation asset of the doll exists. For each human video, the objects are placed at the positions recorded in the corresponding real scene, measured with the depth sensor and the stereo views of the ZED 2i head camera and verified by overlaying the first frame of the video on the simulated scene. As in the real setup, the robot grasps the object and places it into the white container (see Figure 9 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "53de4d7c8436ddce",
+      "section": "C.2 Simulation Environment",
+      "location": "C.2 Simulation Environment",
+      "text": "Evaluation protocol. Each task is evaluated on 22 episodes (66 in total), one for each human video. An episode counts as a success when the object is picked up and placed in the container.",
+      "url": "https://arxiv.org/html/2611.05163v3#A3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "bebeb68e7c1fee5c",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Table 7: Fréchet SigLIP distance to the real robot frames. Lower is closer. Real robot frames are from the four PnP tasks, and each corpus is compared on all eleven tasks (as in Figure 3 ), on the four PnP tasks alone, and on the seven tasks without robot data alone.",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "962c423602732a81",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Corpus All eleven tasks Four PnP tasks Seven tasks w/o robot data Human 125.5 120.1 133.5 EgoMimic 129.0 127.1 134.6 Masquerade 58.2 50.3 68.8 RoboTryOn (Ours) 32.7 26.6 41.9",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.T7.4",
+      "kind": "table"
+    },
+    {
+      "id": "68cb0a3c2a880472",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Table 8: Action gap, per task. Success (%) of replaying the action labels of the same human videos open loop, without a policy, in a simulated replica of the real scene with the objects at their recorded positions (OpenArm, 22 episodes per task). Averages are in Figure 4 (c).",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c82de45d270a9886",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Labeling PnP Bottle PnP Box PnP Ball Avg. Retargeting [ Qin et al., 2023 ] 63.6 31.8 9.1 34.8 RoboTryOn (Ours) w/o wrist correction 63.6 72.7 54.5 63.6 RoboTryOn (Ours) 77.3 63.6 68.2 69.7",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.T8.4",
+      "kind": "table"
+    },
+    {
+      "id": "f89d0dc8f7956c1c",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Visual gap analysis. From each corpus, 5,000 frames are sampled uniformly: the human videos, their EgoMimic and Masquerade edits, the RoboTryOn translations, and the teleoperated robot episodes. Each frame is encoded by the pretrained SigLIP vision tower [ Zhai et al., 2023 ] of π 0.5 \\pi_{0.5} and its features are mean-pooled over image tokens. Figure 3 (b) is a UMAP projection fitted on the union of the five sets. Table 7 gives the Fréchet distance [ Heusel et al., 2017 ] between the SigLIP features of each corpus and those of the real robot frames, once on the frames of Figure 3 , once restricted to the four PnP tasks that have robot data, and once to the seven tasks that do not. The frames of the seven tasks without robot data lie closer to the real frames than the edited frames of the four tasks with it, so the overlap in Figure 3 is not a reproduction of the training episodes.",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "45f6adf1cb3079f1",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Action replay in simulation. We replay each set of action labels in the simulation environment of Section C.2 . For each human video, the labels are executed open loop from the same initial configuration, with the objects at their recorded positions, and each episode is evaluated as described there. Retargeting : the reconstructed hand [ Zhang et al., 2025 ] is mapped to the robot hand [ Qin et al., 2023 ] and the arm joints are solved by inverse kinematics from the wrist pose, the labels EgoMimic and Masquerade train on. RoboTryOn : the IDM labels of the synthesized video, with and without the wrist correction of Section 3.4 . Each labeling is replayed on the same 22 episodes of each task. On Bottle, Box, and Ball, RoboTryOn succeeds on 17, 14, and 15 of them, RoboTryOn without the wrist correction on 14, 16, and 12, and retargeting on 14, 7, and 2 ( Table 8 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "57832fee67fe2953",
+      "section": "Appendix D Analysis Details",
+      "location": "Appendix D Analysis Details",
+      "text": "Action distribution and co-training. Figure 5 uses right-hand actions at 20 Hz, every frame without subsampling. Panel (a) shows the thumb rotation, the opposition axis that turns the thumb toward the palm, and the mean flexion of the other four fingers. We normalize each joint so that the 1st and 99th percentiles of the three sources pooled map to − 1 -1 and 1 1 , compute histogram densities over 40 bins on [ − 1.15 , 1.15 ] [-1.15,1.15] , and plot them against the corresponding joint angle in radians. Panel (b) is measured at the π 0.5 \\pi_{0.5} base weights before fine-tuning, so the three methods start from the same weights and differ only in the data they produce. Each method keeps the normalization statistics of its own training setup. We take the gradient of the flow-matching training loss averaged over 896 teleoperated PnP frames, and over 880 frames of the method’s human data for each out-of-domain task. We split the episodes of each source into two halves, compute the cosine for the two resulting pairs, and average them. The bars average over the seven out-of-domain tasks. All params covers the 4.1B parameters of the model, and Action expert covers its 0.69B parameters together with the action and time projections. Gradients from two halves of the same source give a cosine of 0.96 to 0.97 for teleoperation and 0.78 to 0.95 for each task, so the differences in panel (b) are not measurement noise. Panel (c) uses every frame of the right-hand actions that the policy outputs during real robot rollouts, before filtering, in the units of panel (a). As the reference we sample 8,000 frames of teleoperated right-hand actions from the four PnP tasks. Following the k-NN precision of Kynkäänniemi et al. [2019] , each reference frame defines a ball whose radius is the distance to its fifth nearest reference frame, and a rollout frame counts as within the teleoperated distribution if it falls inside any ball. We compute this share for each policy and task and average it over the in-domain and over the out-of-domain tasks. Measured the same way, two halves of the teleoperated episodes give about 73 to 80%.",
+      "url": "https://arxiv.org/html/2611.05163v3#A4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "bd885eba1325f915",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "We briefly describe conditional flow matching [ Lipman et al., 2023 , Liu et al., 2023 ] , the common formulation of the policy and the three models of RoboTryOn.",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d372d69b0eb290c4",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "Let 𝐱 \\mathbf{x} denote a clean target ( e.g. , an action chunk or a video latent) and 𝐲 \\mathbf{y} the conditioning inputs ( e.g. , observations and instructions) that define the conditional target distribution p ⁡ ( 𝐱 ∣ 𝐲 ) p(\\mathbf{x}\\mid\\mathbf{y}) . We construct a noisy input 𝐱 τ \\mathbf{x}^{\\tau} by linearly interpolating between Gaussian noise ϵ ∼ 𝒩 ⁡ ( 𝟎 , 𝐈 ) \\bm{\\epsilon}\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{I}) and 𝐱 \\mathbf{x} :",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e1b05c524c867af0",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "𝐱 τ = τ ​ 𝐱 + ( 1 − τ ) ​ ϵ , τ ∈ [ 0 , 1 ] , \\mathbf{x}^{\\tau}=\\tau\\mathbf{x}+(1-\\tau)\\bm{\\epsilon},\\qquad\\tau\\in[0,1], (E.1)",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.E1",
+      "kind": "table"
+    },
+    {
+      "id": "e06586fc7f3e5e67",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "where τ = 0 \\tau=0 corresponds to pure noise and τ = 1 \\tau=1 to clean data. A conditional velocity network 𝐯 ⁡ ( 𝐱 τ , τ ∣ 𝐲 ) \\mathbf{v}(\\mathbf{x}^{\\tau},\\tau\\mid\\mathbf{y}) is trained to predict the target velocity 𝐱 − ϵ \\mathbf{x}-\\bm{\\epsilon} :",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "df9d3aa368a5be8f",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "ℒ FM = 𝔼 ( 𝐱 , 𝐲 ) , ϵ , τ ​ [ ‖ 𝐯 ⁡ ( 𝐱 τ , τ ∣ 𝐲 ) − ( 𝐱 − ϵ ) ‖ 2 2 ] . \\mathcal{L}_{\\mathrm{FM}}=\\mathbb{E}_{(\\mathbf{x},\\mathbf{y}),\\,\\bm{\\epsilon},\\,\\tau}\\left[\\left\\|\\mathbf{v}(\\mathbf{x}^{\\tau},\\tau\\mid\\mathbf{y})-(\\mathbf{x}-\\bm{\\epsilon})\\right\\|_{2}^{2}\\right]. (E.2)",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.E2",
+      "kind": "table"
+    },
+    {
+      "id": "85a239010d5fa900",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "At inference, samples are generated from Gaussian noise by integrating the learned velocity from τ = 0 \\tau=0 to τ = 1 \\tau=1 . An Euler sampler [ Lipman et al., 2023 ] performs this integration through repeated updates",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "0c31221970979a36",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "𝐱 τ + Δ ​ τ = 𝐱 τ + Δ ​ τ ​ 𝐯 ​ ( 𝐱 τ , τ ∣ 𝐲 ) , \\mathbf{x}^{\\tau+\\Delta\\tau}=\\mathbf{x}^{\\tau}+\\Delta\\tau\\,\\mathbf{v}(\\mathbf{x}^{\\tau},\\tau\\mid\\mathbf{y}), (E.3)",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.E3",
+      "kind": "table"
+    },
+    {
+      "id": "75b7ac2be3266f4a",
+      "section": "Appendix E Flow-Matching Objective and Sampling",
+      "location": "Appendix E Flow-Matching Objective and Sampling",
+      "text": "where Δ ​ τ > 0 \\Delta\\tau>0 is the step size. In Section 3 , f θ f_{\\theta} , g ϕ g_{\\phi} , h ψ h_{\\psi} , and π ω \\pi_{\\omega} each serve as 𝐯 \\mathbf{v} , and p θ p_{\\theta} , p ϕ p_{\\phi} , and p ψ p_{\\psi} denote the distributions of the samples obtained in this way.",
+      "url": "https://arxiv.org/html/2611.05163v3#A5.p2.4",
+      "kind": "p"
+    },
+    {
+      "id": "c7c7455b796d9996",
+      "section": "Appendix F Additional Results",
+      "location": "Appendix F Additional Results",
+      "text": "Table 9: Success against collection cost, per condition. Data behind Figure 6 . Each policy is trained on the four PnP tasks alone with N N demonstrations per task and evaluated over 28 trials per task (112 in total). Person-hours follow Table 10 : 38 teleoperated episodes or 214 human videos per person-hour, and the equal split uses N / 2 N/2 of each.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f48fbec5f9b0d3f2",
+      "section": "Appendix F Additional Results",
+      "location": "Appendix F Additional Results",
+      "text": "Training data N N / task Person-hours Successes / 112 SR (%) Teleop only 10 1.05 21 18.8 30 3.16 39 34.8 50 5.26 53 47.3 Human video only 10 0.19 14 12.5 30 0.56 28 25.0 50 0.93 40 35.7 100 1.87 58 51.8 Teleop + human (1:1) 10 0.62 19 17.0 30 1.86 40 35.7 50 3.10 56 50.0 100 6.20 80 71.4",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T9.4",
+      "kind": "table"
+    },
+    {
+      "id": "2f72aa93e942eddf",
+      "section": "Appendix F Additional Results",
+      "location": "Appendix F Additional Results",
+      "text": "Table 10: Data collection cost. Teleoperation occupies two people, so one person-hour yields 14 min of robot demonstration against 45 min of egocentric human video. Because a person also performs each task faster than a teleoperated robot, the gap in episode count is 5–6 × \\times .",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "743d3ceef3db5096",
+      "section": "Appendix F Additional Results",
+      "location": "Appendix F Additional Results",
+      "text": "Robot Teleoperation Human Ego Video People per session 2 1 Demonstration footage / person-hour 14 min 45 min Episodes / person-hour 38 214 Hardware Robot + teleoperation system Fixed camera Trained operator required Yes No Occupies robot Yes No Bimanual overhead High (two arms to operate) None",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T10.4",
+      "kind": "table"
+    },
+    {
+      "id": "4f2271e329922940",
+      "section": "F.1 Data Collection Cost",
+      "location": "F.1 Data Collection Cost",
+      "text": "Table 10 lists the cost model behind the person-hour axis of Figure 6 , and Table 9 the eleven policies plotted there. Teleoperation occupies two people and yields about 14 minutes of demonstration per person-hour, whereas a single person records about 45 minutes of human video in the same time and completes each task faster, so the gap in episode count (38 against 214 per person-hour) is larger than the gap in footage. The teleop-only policy with 50 demonstrations per task is the Teleop only policy of Table 1(a) . The other ten policies are trained for this analysis on the four PnP tasks alone, so their values are not those of Table 1(a) , whose policies also train on the seven tasks without robot demonstrations.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f17572465f843da9",
+      "section": "F.2 Per-Task Results",
+      "location": "F.2 Per-Task Results",
+      "text": "Table 11: Per-task results behind Table 1 . Success rates (%) over 28 trials per task using π 0.5 \\pi_{0.5} on OpenArm and RB-Y1. Robot demonstrations are available only for the PnP tasks in (a). “+” rows add the human videos converted by each method to the teleoperated demonstrations, and the RoboTryOn (Ours) only rows use the synthesized episodes alone. EgoMimic and Masquerade are deployed with their test-time mask and overlay, whereas RoboTryOn uses the raw camera view.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "951413e6535e77fd",
+      "section": "F.2 Per-Task Results",
+      "location": "F.2 Per-Task Results",
+      "text": "(a) Tasks with robot demonstrations",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T11.st1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7ec072b61a23e1eb",
+      "section": "F.2 Per-Task Results",
+      "location": "F.2 Per-Task Results",
+      "text": "Data In-domain tasks Method Teleop Human PnP Bottle PnP Doll PnP Box PnP Ball Avg. OpenArm Teleop only ✓ ✗ 71.4 39.3 42.9 35.7 47.3 + EgoMimic [ Kareer et al., 2025 ] ✓ ✓ 64.3 50.0 42.9 42.9 50.0 + Masquerade [ Lepert et al., 2025a ] ✓ ✓ 92.9 42.9 71.4 64.3 67.9 + RoboTryOn (Ours) ✓ ✓ 92.9 71.4 71.4 67.9 75.9 RoboTryOn (Ours) only ✗ ✓ 82.1 57.1 50.0 39.3 57.1 RB-Y1 Teleop only ✓ ✗ 82.1 64.3 75.0 57.1 69.6 + EgoMimic ✓ ✓ 67.9 71.4 64.3 50.0 63.4 + Masquerade ✓ ✓ 67.9 57.1 67.9 60.7 63.4 + RoboTryOn (Ours) ✓ ✓ 89.3 75.0 85.7 67.9 79.5 RoboTryOn (Ours) only ✗ ✓ 71.4 64.3 75.0 32.1 60.7",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T11.st1.2",
+      "kind": "table"
+    },
+    {
+      "id": "a4ec862ab8625961",
+      "section": "F.2 Per-Task Results",
+      "location": "F.2 Per-Task Results",
+      "text": "(b) Tasks without task-specific robot demonstrations",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T11.st2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5dacb3115113c8e0",
+      "section": "F.2 Per-Task Results",
+      "location": "F.2 Per-Task Results",
+      "text": "Data Novel Object Novel Goal Novel Skill Bimanual Method Teleop Human PnP Coffee Pot PnP Bottle to Shelf Pouring Brushing Box Convey Air Fryer PnP Ball in Cup Avg. OpenArm Teleop only ✓ ✗ 14.3 7.1 0.0 0.0 0.0 0.0 0.0 3.1 + EgoMimic ✓ ✓ 14.3 0.0 7.1 14.3 0.0 0.0 0.0 5.1 + Masquerade ✓ ✓ 21.4 7.1 7.1 21.4 0.0 0.0 0.0 8.2 + RoboTryOn (Ours) ✓ ✓ 64.3 89.3 85.7 82.1 78.6 60.7 50.0 73.0 RoboTryOn (Ours) only ✗ ✓ 50.0 57.1 64.3 53.6 57.1 35.7 21.4 48.5 RB-Y1 Teleop only ✓ ✗ 7.1 0.0 0.0 0.0 0.0 0.0 0.0 1.0 + EgoMimic ✓ ✓ 14.3 0.0 10.7 10.7 0.0 0.0 0.0 5.1 + Masquerade ✓ ✓ 21.4 7.1 10.7 14.3 0.0 0.0 0.0 7.7 + RoboTryOn (Ours) ✓ ✓ 60.7 67.9 75.0 39.3 32.1 0.0 53.6 46.9 RoboTryOn (Ours) only ✗ ✓ 64.3 60.7 60.7 46.4 28.6 0.0 21.4 40.3",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T11.st2.2",
+      "kind": "table"
+    },
+    {
+      "id": "808ea3d21ac8eca3",
+      "section": "F.2 Per-Task Results",
+      "location": "F.2 Per-Task Results",
+      "text": "Table 11 gives the per-task results for the main experiments. Table 12 gives the per-task results for the two policy backbones, π 0.5 \\pi_{0.5} and RLDX-1-Img [ Kim et al., 2026 ] , behind Table 3(b) . Table 13 gives the per-task results behind Table 3(a) .",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "eadf05184c97f930",
+      "section": "F.3 Ablated Variants",
+      "location": "F.3 Ablated Variants",
+      "text": "Figure 11 shows failure cases of the ablated variants on PnP Coffee Pot . Without the autoregressive reference, each keyframe is translated independently, resulting in inconsistent grasp configurations: the fingers wrap the handle from below at 5.0 s and reach behind it at 6.0 s, causing visible hand jitter between keyframes. In contrast, the full model maintains a consistent grasp throughout.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dc78fc574a002bc7",
+      "section": "F.3 Ablated Variants",
+      "location": "F.3 Ablated Variants",
+      "text": "Without subsequent keyframes, the video is generated from the first keyframe alone. Although the hand still follows the skeleton, the coffee pot changes into a box inside the container at 11.0 s. Without skeleton flow, the motion between keyframes deviates from the demonstrator’s trajectory, causing the wrist and hand to lose the configuration required to grasp the handle at 3.5 s.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6cd4ffd93d5c222a",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Figure 10: One human video, three robots. Human videos (left) translated into the OpenArm, the RB-Y1, and the GR-1 by a single set of models, and only the embodiment changes.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.F10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "555634e784cff961",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Figure 10 shows human videos translated into the OpenArm, the RB-Y1, and the GR-1 by a single set of models.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "56abbf4500cdc4f7",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Table 12: Policy backbone, per task. Success rate (%) on the OpenArm for each backbone, trained on the teleoperated episodes alone and with the episodes synthesized by RoboTryOn.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "fe6299fa21378ec5",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "In-domain Out-of-domain Backbone Data PnP Bottle PnP Doll PnP Box PnP Ball Avg. PnP Coffee Pot PnP Bottle to Shelf Pouring Brushing Box Convey Air Fryer PnP Ball in Cup Avg. π 0.5 \\pi_{0.5} Teleop only 71.4 39.3 42.9 35.7 47.3 14.3 7.1 0.0 0.0 0.0 0.0 0.0 3.1 + RoboTryOn (Ours) 92.9 71.4 71.4 67.9 75.9 64.3 89.3 85.7 82.1 78.6 60.7 50.0 73.0 RLDX-1-Img Teleop only 50.0 100.0 57.1 7.1 53.6 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 + RoboTryOn (Ours) 57.1 57.1 64.3 64.3 60.7 28.6 21.4 42.9 32.1 64.3 21.4 71.4 40.3",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T12.4.1",
+      "kind": "p"
+    },
+    {
+      "id": "f545341e39f429c5",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Table 13: Component ablation, per task. Success rate (%) on the OpenArm with π 0.5 \\pi_{0.5} for the variants of Table 3(a) .",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "addfc1e07e69b3b0",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "In-domain Out-of-domain Variant PnP Bottle PnP Doll PnP Box PnP Ball Avg. PnP Coffee Pot PnP Bottle to Shelf Pouring Brushing Box Convey Air Fryer PnP Ball in Cup Avg. RoboTryOn (Ours) (full) 92.9 71.4 71.4 67.9 75.9 64.3 89.3 85.7 82.1 78.6 60.7 50.0 73.0 w/o Autoregressive reference 85.7 64.3 64.3 60.7 68.8 57.1 82.1 78.6 75.0 71.4 53.6 46.4 66.3 w/o Subsequent keyframes 53.6 39.3 39.3 39.3 42.9 21.4 17.9 53.6 60.7 53.6 39.3 28.6 39.3 w/o Hand skeleton flow 50.0 39.3 39.3 39.3 42.0 10.7 42.9 42.9 28.6 14.3 7.1 3.6 21.4 w/o IDM wrist correction 50.0 64.3 78.6 67.9 65.2 35.7 53.6 46.4 75.0 71.4 32.1 21.4 48.0",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.T13.4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d0ca64e26872cb9",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Figure 11: Failure cases of the ablated variants. Human video and videos synthesized by the variants in Table 3(a) at the same time steps. Boxed regions are enlarged at representative failure points.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.F11",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e94beda86a1c5c69",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Figure 12: Rollouts on all eleven tasks on the OpenArm , with the policy trained on the teleoperated and synthesized episodes: (a) the four tasks with robot demonstrations and (b) the seven with human video only.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.F12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "453843a9d9b949b6",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Figure 13: Rollouts on the RB-Y1 , with the policy trained on the teleoperated and synthesized episodes: (a) the four tasks with robot demonstrations and (b) the tasks with human video only. Air Fryer is omitted because no policy completes it on the RB-Y1 (0% success in Table 11 ).",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.F13",
+      "kind": "figcaption"
+    },
+    {
+      "id": "eb5bf438c8c31855",
+      "section": "F.4 Qualitative Results",
+      "location": "F.4 Qualitative Results",
+      "text": "Figure 14: Long-horizon synthesis. A 25-second human video (top) with its selected keyframes, and the generated robot video (bottom) with the clip boundaries at the keyframe times. Adjacent clips share the keyframe at their boundary, so robot and objects stay consistent across boundaries.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.F14",
+      "kind": "figcaption"
+    },
+    {
+      "id": "8e099658434ab32f",
+      "section": "F.4.1 Rollouts on OpenArm",
+      "location": "F.4.1 Rollouts on OpenArm",
+      "text": "In Figure 12 , we show all rollouts on the OpenArm from the policy trained on both teleoperated and synthesized episodes. Figure 12 (a) shows the four tasks with robot demonstrations, while Figure 12 (b) shows the seven tasks with human video only.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS4.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "33acc1eb4d4705aa",
+      "section": "F.4.2 Rollouts on RB-Y1",
+      "location": "F.4.2 Rollouts on RB-Y1",
+      "text": "In Figure 13 , we show all rollouts on the RB-Y1 from the policy trained on both teleoperated and synthesized episodes. Figure 13 (a) shows the four tasks with robot demonstrations, while Figure 13 (b) shows the six tasks with human video only, without Air Fryer .",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS4.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e82bd287446e045e",
+      "section": "F.4.2 Rollouts on RB-Y1",
+      "location": "F.4.2 Rollouts on RB-Y1",
+      "text": "No method completes Air Fryer on the RB-Y1 ( Table 11 ). The task requires inserting the fingers between the handle and the fryer body before closing, a fine-grained grasping motion not observed in the teleoperated data and beyond the resolution of the IDM labels. The longer, multi-joint fingers of the WujiHand2 also tend to push the fryer away when closing in front of the handle, unlike the shorter 1-DoF fingers of the Inspire RH56F1.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS4.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "63ec428f845c189e",
+      "section": "F.4.3 Long-Horizon Synthesis",
+      "location": "F.4.3 Long-Horizon Synthesis",
+      "text": "Figure 14 shows a 25-second human video and the corresponding long-horizon robot video generated from its selected keyframes. The generated video is divided into clips at the keyframe times, and adjacent clips share the keyframe at their boundary. This preserves the consistency of the robot and objects across clip boundaries.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.SS4.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ebaeab61a0aa3a67",
+      "section": "F.4.3 Long-Horizon Synthesis",
+      "location": "F.4.3 Long-Horizon Synthesis",
+      "text": "Figure 15: Failure cases. The red box in each row marks the region enlarged on the right. Generation failures (top): synthesized videos in which the generative models do not preserve the objects. On PnP Ball in Cup the transparent cup suddenly disappears from the hand as it is lifted, leaving the ball on the table. On Air Fryer the fingers pass through the handle instead of closing around it (dashed circle). IDM errors (bottom): policy rollouts that fail because the action labels of the synthesized episodes place the hand imprecisely. On PnP Coffee Pot the hand reaches the handle but closes below it, and on PnP Bottle to Shelf it closes low on the bottle and pushes it against the shelf instead of lifting it onto it.",
+      "url": "https://arxiv.org/html/2611.05163v3#A6.F15",
+      "kind": "figcaption"
+    }
+  ]
+}

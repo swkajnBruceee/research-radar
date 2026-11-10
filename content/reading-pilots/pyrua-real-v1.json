@@ -1,0 +1,382 @@
+{
+  "item_id": "arxiv:2611.06768",
+  "document_id": "1104c60d41fb6c08f3ed4ab3f4435dc206ff9304d853909787bca416c8e60d56",
+  "source_url": "https://arxiv.org/html/2611.06768v1",
+  "paper_version": "2611.06768v1",
+  "paper": {
+    "id": "arxiv:2611.06768",
+    "title": "PyRUA-REAL: Robot Exploration and Adaptive Learning through RSI in the Real World",
+    "url": "https://arxiv.org/abs/2611.06768v1",
+    "published": "2026-11-04",
+    "updated": "2026-11-04",
+    "topics": [
+      "planning",
+      "evaluation",
+      "control"
+    ],
+    "summary": "Coding agents powered by models such as GPT-6-Astra connect spatial reasoning with executable robot behavior, raising the question of how such agents can produce lasting improvements in robot capabilities from physical interaction. In this work, we study embodied recursive self-improvement (RSI) through real-world exploration, code refinement, and deployment using PyRUA-REAL, a framework in which coding agents retain interaction experience as persistent memory and reusable executable skills that inform subsequent exploration and improvement. Our empirical study places physical manipulation at the center of the improvement process, examining how agents collaborate, what kinds of execution feedback support effective code refinement, and how task specifications and previously acquired skills influence robustness and task transfer. We further investigate the efficiency and capability of the resulting programs when deployed without involving an online agent for decision-making. Across eight real-world tasks, PyRUA-REAL achieves an average success rate of 91.1%. In complementary evaluation on 42 tasks from the RoboDojo benchmark, it achieves an average success rate of 84.4%. This study provides empirical guidance for turning physical exploration into reusable robot skills that support continued improvement and robust, efficient deployment."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-05T17:54:29.268970+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "可复用的技术选择是把丰富的执行证据用于开发阶段改代码，再将验证后的程序冻结部署；冻结的是代码和基础模型参数，并非停止使用实时感知。四任务固定修订预算实验支持视频加关节轨迹这一反馈接口，但只有每任务条件一个开发会话。真机开发历史、部署耗时和榜单汇总属于不同证据；其中RoboDojo数字有内部矛盾，本报告保留缺口，不将该汇总作为主要技术结论。",
+  "coverage": {
+    "read": 122,
+    "total": 122,
+    "evidence_ids": [
+      "9f6364d7fe66b50e",
+      "9a4e2367ea0fd34e",
+      "c47d0d7527a66d98",
+      "1fa4b4e686585942",
+      "423e76c1bb05e3e7",
+      "c111fc5a5ecab938",
+      "7581da94148f30de",
+      "bb59f23145bf8655",
+      "c6243eeb0a09e4c5",
+      "5af2d9983c48ff28",
+      "5beaf0dbce0bde11",
+      "2d42d0373f253172",
+      "2c6e74aab6f5a4a2",
+      "bfe7664c38146b83",
+      "8e58c3ffefc6bb64",
+      "3e73bc47fe554442",
+      "ed116f60b641a69c",
+      "a1e8fb639bca4567",
+      "613cef59d764bf78",
+      "b7a09b9abd8dcb81",
+      "d4cee378d4bbeb9a",
+      "9751c81b60d26f13",
+      "2d0bb14a73324a65",
+      "2750e1b6fa6a9404",
+      "c62d943936f8d64f",
+      "9366538c71240f3a",
+      "f39b51d720c0b8e9",
+      "f37019ed2737cd4d",
+      "b7d465e34ca7f288",
+      "1b150a67d611dd57",
+      "1add3158b37f42f2",
+      "f8c411aaa3fc13be",
+      "88975658c75b1535",
+      "57a627e645e24748",
+      "6cc32adb9ad950cb",
+      "fffc90b089efc5ff",
+      "46c417058af29885",
+      "861c25ba7708026b",
+      "9cb20abff1c31145",
+      "762913d1dda94a11",
+      "c8794f2a04d94069",
+      "6848532a14e68a69",
+      "d95ce8faba494b5d",
+      "2f4f629c7dd8ea8a",
+      "02b6c3d3cdf13e07",
+      "281bac9943b5f23c",
+      "ac62af875c2c842a",
+      "a473e86ac116aded",
+      "ae626721c072e595",
+      "85fafa1b5ea7f03d",
+      "fb998cfb7aa9f405",
+      "a386f11b5b57163d",
+      "9c5444822a30e123",
+      "1323b73f71caa396",
+      "ead5aad3cc11b99d",
+      "a058bc4102759940",
+      "db30e279a65dd204",
+      "057c2193be57611d",
+      "bd6a580210717546",
+      "d3a42c9dfd62a10d",
+      "50379ba83928d689",
+      "48f91cb8cdffe4ac",
+      "31816b53be84db37",
+      "72b8d30cbf333b5a",
+      "58332495c245a2f4",
+      "49a6612309abd370",
+      "75f47aa69381ef96",
+      "4fd123d0f27c9394",
+      "1e3f13a660074465",
+      "8f5b7399462a5fc0",
+      "295a9e1f3d1dad96",
+      "8a565ce313aa506b",
+      "4634329c89ce1bbb",
+      "ba90899188b0871e",
+      "b8e7521f1566c6de",
+      "1bca360431d55564",
+      "adf105bc1eb1e833",
+      "f260ac6c4c5f5f42",
+      "478b5a1c5b9317c8",
+      "1c2ef62f96c2ef7f",
+      "07d59b3761366b28",
+      "9d87b070435ccea3",
+      "c8161e482c454bf7",
+      "4d5d6a257f505ecf",
+      "9b2c131dd3cf4ebf",
+      "dcbec19d12f531fd",
+      "b0816ad7a0558985",
+      "37327d9531cec920",
+      "fba2746a50417bf4",
+      "bb9d8f448b1d6924",
+      "4270a66649b37f3b",
+      "360a30ca6f89a6f4",
+      "ddbcf1313bf3790b",
+      "a1bde44026a68d6a",
+      "57c6a7a38311b6e5",
+      "ab2f6fee7a6baa6a",
+      "284391ba2021e6b5",
+      "b1f0f3e75948a585",
+      "2f22711389c4245c",
+      "fcc4e335f941c867",
+      "1e4d184ab6153a36",
+      "6fe6f2a4aa14bd27",
+      "48e98fb934bf6a9d",
+      "f67d8f397bf9ac59",
+      "2de5ac3050399c14",
+      "8930a713af7ba2ad",
+      "14d4faa55064d985",
+      "a497960d98f6d164",
+      "acae7700c0d0b687",
+      "4a4d0268559491cb",
+      "99937240da8ddf14",
+      "3fdb5ab3a5be898b",
+      "f501cb303ff6b42d",
+      "919c6d2d53c65e4d",
+      "5c6f1563807e7c6e",
+      "4df00bb44344abac",
+      "35801393acc574ab",
+      "9b2d97e0832d8377",
+      "0ab88cfb99bf0d1a",
+      "ae1a3bd2c2760285",
+      "b2c8f0a1d1426b27",
+      "abea36678775c2f0"
+    ],
+    "pdf_pages_visually_checked": [
+      13,
+      20,
+      21,
+      25
+    ],
+    "pdf_sha256": "174bff6dbaee4ce86a017ca30dbb4a36cd0107882d763516e24ac26be52b663f"
+  },
+  "notice": "已阅读HTML提取的122个文字片段，涵盖主文、实验与附录A–D。固定版本PDF共25页，目视核对第13、20、21、25页的图11/16/17、表3/5及相关协议文字；缓存HTML未发现额外data:text/plain listing块。没有逐一检查全部图片、重推全部公式、逐篇核查参考文献、执行源代码或复现实验。图17的示例源码差分仅作为论文图像读取，未执行。RoboDojo正文与表格数字不一致，尚未核查外部榜单原始评测。引文匹配仅验证出处，作者结果未独立复现。",
+  "findings": [
+    {
+      "title": "方法增量：开发时由agent改代码，部署时运行闭环程序",
+      "kind": "method",
+      "text": "PyRUA-REAL将改进、执行和经验分开：基础模型参数固定，研究者选实验与技术路线，工程者写代码、做试验、诊断，经验仓库存事实、失败和可复用技能。部署时冻结代码，不再反复调用语言模型，但程序仍用实时感知、控制和恢复逻辑。离线coding指代码在部署前开发，不表示开环动作回放，也不表示执行时完全不用视觉模型。",
+      "evidence_ids": [
+        "7581da94148f30de",
+        "3e73bc47fe554442",
+        "d4cee378d4bbeb9a",
+        "f39b51d720c0b8e9",
+        "f37019ed2737cd4d",
+        "b7d465e34ca7f288",
+        "1c2ef62f96c2ef7f"
+      ],
+      "quote": "Its sensing, conditional actions, and recovery logic still respond to live robot observations"
+    },
+    {
+      "title": "经验如何复用：事实、问题记忆与实现三层",
+      "kind": "method",
+      "text": "L0记录机器人、工作区和运行条件，L1记录问题、尝试方法、结果和失败原因，L2保存任务程序和可复用原语。研究者先检索事实/记忆并给出实现引用，工程者再检查适用条件、适配并测试；仅在最终实现采用的技能计入使用次数。一次实验可以因失败假设或局部改动无进展而终止，回到任务级重新选择方法。该结构是框架设计，不是单独证明三层记忆有效的消融。",
+      "evidence_ids": [
+        "1b150a67d611dd57",
+        "1add3158b37f42f2",
+        "88975658c75b1535",
+        "6cc32adb9ad950cb",
+        "fffc90b089efc5ff",
+        "46c417058af29885"
+      ],
+      "quote": "Adapted code must still be tested in the current environment"
+    },
+    {
+      "title": "关键对照：视频与关节轨迹用于修订，执行输入保持一致",
+      "kind": "evidence",
+      "text": "四个RoboDojo任务在两个开发布局上由GPT-6-Astra Medium生成初始程序并修订5次，随后冻结revision5，在6个留出布局各执行3次，每任务条件18次。B仅基本结果，BVJ再给完整视频和同步关节轨迹；执行程序均接收同样RGB-D、标定和机器人状态。四任务等权平均成功率B15.28%、BVJ54.17%。每任务条件只有一个开发会话，18次测试不能当成18个独立开发复现，也不能据此宣称跨会话统计显著。",
+      "evidence_ids": [
+        "ba90899188b0871e",
+        "b8e7521f1566c6de",
+        "37327d9531cec920",
+        "bb9d8f448b1d6924",
+        "4270a66649b37f3b",
+        "360a30ca6f89a6f4",
+        "1e4d184ab6153a36"
+      ],
+      "quote": "Each task–condition pair has one development session"
+    },
+    {
+      "title": "收益有任务差异，特权状态对照另算",
+      "kind": "evidence",
+      "text": "图11中，B/BVJ在Push T为5.6%/94.4%，Stack blocks为16.7%/66.7%，Deposit coin同为38.9%，Imitate sorting sequence为0%/16.7%。因此更丰富反馈并非每任务都提高。BS四任务均值45.83%，但修订者额外拿到物体ground truth，不能将其提升仅归因于数字报告格式；GT没有成为所有部署程序的新输入。",
+      "evidence_ids": [
+        "ba90899188b0871e",
+        "b8e7521f1566c6de",
+        "37327d9531cec920",
+        "bb9d8f448b1d6924",
+        "4270a66649b37f3b",
+        "1e4d184ab6153a36"
+      ],
+      "quote": "BS includes ground-truth object states as privileged diagnostics"
+    },
+    {
+      "title": "成本必须用完整五次修订，不能拿事后最佳版本当在线早停",
+      "kind": "evidence",
+      "text": "表3完整r0–r5的BVJ/B优化器时间25.40/31.82分钟，tokens3.647/3.536百万；视频条件模型token反而略高，且包含缓存输入。开发仿真另耗27.28/29.63分钟，测试和排队成本未纳入。图16/表3左半按测试得分事后选版本，给出BVJ58.33%、19.06分钟；它不是固定r5的54.17%、25.40分钟，也不能证明在线能找到该版本并提前停止。",
+      "evidence_ids": [
+        "b8e7521f1566c6de",
+        "a1bde44026a68d6a",
+        "57c6a7a38311b6e5",
+        "ab2f6fee7a6baa6a",
+        "284391ba2021e6b5",
+        "b1f0f3e75948a585",
+        "2f22711389c4245c",
+        "fcc4e335f941c867",
+        "1e4d184ab6153a36"
+      ],
+      "quote": "Selection uses test scores, not development scores"
+    },
+    {
+      "title": "真机诊断示例：先修验证器，不要把测量错误当运动错误",
+      "kind": "evidence",
+      "text": "井字棋红环摆放被报80.6mm误差而拒绝，agent查看原照片发现5个环被分割成4个：相邻两环合成轮廓。修改分割后，同一张照片的估计误差变5.7mm，接受阈值仍25mm。作者另做50个回归检查与178个静态感知帧检查，再恢复物理执行。该直接对照验证的是感知/验证器修复，不是把同一次物理摆放精度从80.6提升到5.7mm；178帧也不是178次操作试验。",
+      "evidence_ids": [
+        "4634329c89ce1bbb",
+        "6fe6f2a4aa14bd27",
+        "48e98fb934bf6a9d",
+        "f67d8f397bf9ac59",
+        "2de5ac3050399c14"
+      ],
+      "quote": "the same-image comparison is not a new physical placement"
+    },
+    {
+      "title": "真机总分属于开发记录，不等于冻结程序的重复可靠性",
+      "kind": "limitation",
+      "text": "摘要给八任务平均91.1%，正文说明这些是真机开发期间跨代码版本累计的记录；七任务获得无需在线LLM的程序，Ethernet插入没有达到agent-free。堆叠的285.3→156.0秒和视觉估计误差2.69→0.44mm属于特定开发阶段，误差不是独立物理精度测量。不能把这些数字当同一冻结程序、同一独立测试集上的最终可靠性或精度。",
+      "evidence_ids": [
+        "9a4e2367ea0fd34e",
+        "bb59f23145bf8655",
+        "ead5aad3cc11b99d",
+        "a058bc4102759940",
+        "db30e279a65dd204",
+        "057c2193be57611d",
+        "d3a42c9dfd62a10d",
+        "50379ba83928d689"
+      ],
+      "quote": "These rates aggregate attempts across program revisions"
+    },
+    {
+      "title": "部署收益与开发成本分开，精密接触仍可能需要在线帮助",
+      "kind": "limitation",
+      "text": "三个冻结程序成功周期（含reset）中位数为井字棋8.99、堆叠2.99、Hanoi16.72分钟。井字棋/堆叠在线coding慢约4.6–5.0倍，但比较排除了开发成本，在线基线也不是统一大量重复试验。Ethernet脚本0/4成功，带在线决策工作流10/17；例中220.8秒检查/决策间隔包含人类review，不能全记为LLM思考。Hanoi任务是八圆盘排序与孔柱装配，不是传统三柱搬移谜题；网线插入未评电连接。",
+      "evidence_ids": [
+        "1c2ef62f96c2ef7f",
+        "07d59b3761366b28",
+        "9d87b070435ccea3",
+        "c8161e482c454bf7",
+        "919c6d2d53c65e4d",
+        "5c6f1563807e7c6e"
+      ],
+      "quote": "These gaps include visual checks and human review"
+    },
+    {
+      "title": "reviewer慢、任务重评有效，仍主要是观察性历史",
+      "kind": "limitation",
+      "text": "带/不带reviewer的结果到下一次物理测试中位间隔为16.9/3.4分钟，记录40/9次转移；两阶段顺序发生，后阶段可能继承前期经验，不能把45小时无插入与2.8小时首次插入的差异全归因于移除reviewer。研究者重评后出现成功的案例也混合继续探索。真机改进有人类提示SigLIP、处理假接触等贡献，不能称完全无人干预或证明多agent结构普遍更好。",
+      "evidence_ids": [
+        "1e3f13a660074465",
+        "8f5b7399462a5fc0",
+        "295a9e1f3d1dad96",
+        "4d5d6a257f505ecf",
+        "9b2c131dd3cf4ebf"
+      ],
+      "quote": "the insertion timeline does not isolate the effect of removing the reviewer"
+    },
+    {
+      "title": "任务规格与技能迁移值得尝试，但各有控制缺口",
+      "kind": "limitation",
+      "text": "增加明确空间/目标变化规格后，32任务留出测试五类平均均提高，个别任务如Swap blocks由68.2%降59.1%。比较同时追加探索预算，不能分离规格文字的作用。另一八任务对照有技能库均值40.0%、无库21.3%，五任务受益三项无增益；已读正文没有给足独立会话重复与匹配成本细节，不能据此断言所有新任务均正迁移。",
+      "evidence_ids": [
+        "1bca360431d55564",
+        "adf105bc1eb1e833",
+        "f260ac6c4c5f5f42",
+        "478b5a1c5b9317c8",
+        "acae7700c0d0b687",
+        "4a4d0268559491cb",
+        "99937240da8ddf14"
+      ],
+      "quote": "This comparison includes additional exploration"
+    },
+    {
+      "title": "RoboDojo汇总存在内部数值矛盾，暂不据此下总榜结论",
+      "kind": "limitation",
+      "text": "同一v1中引言写84.82%，第4.3.3节和表5写84.42%。该节还称Generalization41.17%、Precision74%、Long-Horizon56%，表5却对应72.33%、91.50%、80.00%。表5另列Memory95.55%、Open88.24%；若按表注五类等权，对这五项做简单算术平均得到85.524%，也不等于该行84.42%。这个85.524%是本报告的核算，非替作者纠正后的官方成绩。且比较非匹配seed、外部榜单原始记录未核查，因此保留不一致，不用总榜数字支撑首页改进幅度。",
+      "evidence_ids": [
+        "bb59f23145bf8655",
+        "58332495c245a2f4",
+        "49a6612309abd370",
+        "ae1a3bd2c2760285",
+        "b2c8f0a1d1426b27",
+        "abea36678775c2f0"
+      ],
+      "quote": "not a matched-seed comparison"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "验证反馈中的信息，而不只验证更多上下文",
+      "text": "待验证假设：视频与关节轨迹的收益主要依赖当前失败的时序对齐证据，而不是仅增加上下文或调用预算。先在仿真Stack blocks和Push T比较基本报告B、当前episode对齐BVJ、同任务同长度但来自其他开发episode的BVJ三组；原始错配材料只用于仿真研究，不直接下发真实机器人。保持程序RGB-D/标定/状态输入、模型版本、两开发布局、初始生成+5修订预算和工具接口一致，真值不供修订者。对齐和错配组匹配视频长度、采样率、关节CSV字段、工具可访问次数及token上限，报告实际消耗；基本报告另做匹配预算复查。每条件至少3个独立开发会话，分别冻结r5，在相同6个留出布局各测3次，测试结果全程不用于选版本或早停。按任务和会话汇报成功率与差异区间、完整优化器时间、开发仿真和测试时间、输入/缓存/输出tokens、失败类型；统计单元保留开发会话层级。若对齐相对错配的增益在独立会话中不稳定，或差异区间上界仍低于预先约定的5个百分点实用阈值，则不支持时序对齐带来主要收益的解释。若进一步做早停，必须另设开发验证集，不能用最终测试布局挑版本。实验尚未运行，未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "ba90899188b0871e",
+        "b8e7521f1566c6de",
+        "37327d9531cec920",
+        "bb9d8f448b1d6924",
+        "4270a66649b37f3b",
+        "360a30ca6f89a6f4",
+        "a1bde44026a68d6a",
+        "2f22711389c4245c",
+        "1e4d184ab6153a36"
+      ],
+      "quote": "Test outcomes are not supplied to the optimizer"
+    }
+  ],
+  "frontier_brief": {
+    "title": "PyRUA-REAL：用视频与关节轨迹改代码，再冻结部署",
+    "change_type": "代码策略 · 执行反馈",
+    "delta": "在开发阶段把执行视频和同步关节轨迹交给编码agent诊断、修订程序；把经验保存为可复用代码，部署时再冻结程序，减少在线语言模型决策。冻结后仍读取实时感知，保留控制与恢复逻辑。",
+    "before": "反馈对照B只向修订者提供成功、终止原因、动作数和时间；在线coding部署还要在代码段之间等待agent判断。",
+    "after": "开发时提供完整视频与关节轨迹，按固定修订预算验证冻结版本；部署时由已编写的感知、控制和恢复程序闭环执行，仅在覆盖不到的情形另求在线帮助。",
+    "relevance": "做机器人agent自改进时，先把每次失败保存为可检查的视频、关节与验证日志，明确应改控制还是验证器。将开发预算和冻结程序表现分开报告，避免用开发成功曲线或事后最佳版本当部署结论。",
+    "caveat": "反馈比较来自四个仿真任务，每任务条件仅一个开发会话；特权状态条件另算，真实开发记录也跨多个代码版本。RoboDojo汇总数字内部不一致，未用于本卡主结论。作者实验未复现。",
+    "question": "改进来自当前失败的对齐证据，还是更多上下文？",
+    "evidence": [
+      {
+        "label": "固定5次修订后，冻结程序再测留出布局",
+        "value": "54.2% / 15.3%",
+        "context": "BVJ视频+关节轨迹 / B基本结果，四个RoboDojo任务等权平均；每任务条件在6个留出布局各执行3次，共18次。执行输入相同；每条件仅一个开发会话，尚无跨会话复现。"
+      },
+      {
+        "label": "优化器用时降低，token并未减少",
+        "value": "25.4 / 31.8 min",
+        "context": "BVJ / B，从初始生成到修订5的完整优化器时间均值。tokens为3.647/3.536百万，含缓存输入；开发仿真另需27.28/29.63分钟，测试与排队未计。表3右半。"
+      },
+      {
+        "label": "有时应修验证器，而不是机器人动作",
+        "value": "80.6 → 5.7 mm",
+        "context": "井字棋同一照片中，两个相邻环被误合成一个检测；修复分割后误差估计下降，25mm阈值不变。这是同图验证器修复，不是一次新的、更精确的物理摆放。图17。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "把失败变成可查证材料",
+        "text": "除成功/失败外，保留视频、关节轨迹和测量上下文，先确认错误来自执行、感知还是验收。"
+      },
+      {
+        "title": "让经验落到具体代码",
+        "text": "研究者组织事实与尝试记忆，工程者检查并适配实现；复用技能仍需在当前环境测试，局部改动停滞时重新选择技术路线。"
+      },
+      {
+        "title": "开发与部署分别验收",
+        "text": "用留出布局测试固定修订版本，再让冻结程序依靠实时观测执行。开发期总体成功率、事后最佳版本和在线决策时间不混为一个指标。"
+      }
+    ]
+  }
+}

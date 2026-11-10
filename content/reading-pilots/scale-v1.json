@@ -1,0 +1,434 @@
+{
+  "item_id": "arxiv:2611.08390",
+  "document_id": "a63354d4bb389823fbb7b29e2a81e5b3df31fa3d24af5944f476cc06dc14fb11",
+  "source_url": "https://arxiv.org/html/2611.08390v1",
+  "paper_version": "2611.08390v1",
+  "paper": {
+    "id": "arxiv:2611.08390",
+    "title": "SCALE: Real-Time Latent Communication for Cyber-Physical Agents",
+    "url": "https://arxiv.org/abs/2611.08390v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "evaluation"
+    ],
+    "summary": "arXiv:2611.08390v1 Announce Type: new Abstract: Latent communication enables agents to collaborate efficiently by directly exchanging intermediate model representations rather than raw sensor data or text messages. Existing approaches, however, are primarily designed for LLM agents and do not consider the bandwidth constraints and heterogeneous task deadlines faced by cyber-physical agents. In this work, we propose SCALE, a real-time latent communication method tailored for cyber-physical agents. Motivated by the spatio-temporal continuity of the physical world, SCALE matches tokens across consecutive latent messages using similarity scores to identify reusable information and avoid redundant transmission. It then profiles the semantic gain and communication cost of transmitting different amounts of latent information. Based on these profiles, SCALE employs a real-time scheduler that jointly determines which pending messages to transmit and how many latent tokens to send, subject to available bandwidth and task deadlines. We evaluate SCALE across three cyber-physical benchmarks and a physical spider robot case study under diverse network conditions and heterogeneous task deadlines. Our results show that SCALE significantly improves both task performance and on-time delivery in bandwidth-constrained networks. Our code is available at: https://anonymous.4open.science/r/SCALE-4E80/."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-08T05:18:01.560356+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 89,
+    "total": 89,
+    "evidence_ids": [
+      "9ce427141fde7e0e",
+      "ca54a95a3446f6df",
+      "94da0af7dc75533b",
+      "7a973e540bbb3e15",
+      "4a7fb7b1889b47e8",
+      "89e2037a9999e0e2",
+      "f32f9fc3fae0de47",
+      "8354713aa78d744a",
+      "80748f47800dac76",
+      "f409ef1756ced07c",
+      "fdc8b42cba49e74f",
+      "e8f1a557c836fbfa",
+      "9dfb24a97434dd9b",
+      "f996d4bd7562faa0",
+      "b55c4299410c4c3e",
+      "c492bd7826a9561f",
+      "560a5305688b09dc",
+      "bcdbdd6ce41ad2e3",
+      "44c9d8803a4fd108",
+      "efda1bd63b80962e",
+      "ecf2546527dd9651",
+      "31ddb5879c1b43fb",
+      "2a22889a000c5940",
+      "9c561fe36442877e",
+      "fb223e63b89480ff",
+      "06c7e8f45f743c46",
+      "eebd1b5f3e9792ef",
+      "380675332ecd25ec",
+      "e4c7ee86d74f0fa5",
+      "b4ac535329d49e3e",
+      "62849d1b1b3c61eb",
+      "57d83957695cfa81",
+      "647f52db6acc4cb9",
+      "e08c8c2967e2eb86",
+      "f1b9278211139a09",
+      "953ac0726566c610",
+      "2e93f72a030302bf",
+      "28329a7ba9497bf9",
+      "8bbfb8e86d2341a8",
+      "ff81711bc7b9223a",
+      "9860920df13d500d",
+      "dabced4f8e997011",
+      "23c214e2eb4cdda6",
+      "5b9924bce58eb044",
+      "d0f989d0c1e34ab5",
+      "3dce9dfe9affee6b",
+      "c2530a9a712edf0a",
+      "3e6731ab609837b9",
+      "0516027e0a3849ac",
+      "617f68bab14d4a4d",
+      "933808398c07ceb6",
+      "36d44569974a4cac",
+      "2b730c2c529985f2",
+      "6e636e6913d62852",
+      "3940120573d64d6f",
+      "a92fb90bfc600532",
+      "e5cbe3353770596b",
+      "9884849934354701",
+      "c8c201bc1a8da8bf",
+      "879791153e2f2b37",
+      "360f379e86284dbd",
+      "f8441e4fe244bc36",
+      "494f666f373b2389",
+      "e962e25a8227e830",
+      "da1601612b0bc29b",
+      "6da15541492938ce",
+      "67aafe318a19fa44",
+      "c240bc08a78c8a3d",
+      "05f680419e575280",
+      "d40ed3ffcfa1f062",
+      "6172e443f080bd61",
+      "8cbf09d5750aaf56",
+      "9a3fe3d64df2381a",
+      "94f1f13824581328",
+      "d243c5d96ccfc282",
+      "71875c2b34782af1",
+      "baf38718b0728f79",
+      "dc7ee19bd08ce4e3",
+      "47ccd4e02862efeb",
+      "b24c03483686f740",
+      "7fbcf7c96d51862e",
+      "f58745e606083ead",
+      "2bbbca8152945df2",
+      "ad84a5e39a0209ed",
+      "1f0c6a367d3d5212",
+      "4d62b75054bc9e51",
+      "1300203ff9a6a8ef",
+      "b1cc11e2d975211b",
+      "112ba2d61e7d38f4"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      6,
+      7,
+      8,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16
+    ],
+    "pdf_sha256": "4aa83cf164bd2e639ac3b65e32b6ee6fc15ba52802b6cb65471dc485316ed257"
+  },
+  "overview": "SCALE在已有模型编码器与接收端推理之间加入通信层：按余弦近邻复用接收端已确认token，把变化分数转成不同消息长度的收益/字节曲线，再按边际收益与EDF可行性联合选消息和长度。它把通信时效与任务质量一起评估，比单独压缩比例更贴近共享链路决策。作者在协同感知、单任务LIBERO闭环和固定路线蜘蛛机器人上给出收益；但没有模块消融或多seed误差，变化分数未验证等于下游价值，低于1ms开销仅桌面CPU平均。适合跟进通信系统设计，尚不足以推出任意边端或突发网络下的硬实时保证。",
+  "notice": "当前会话代理读完89/89个固定HTML证据片段，包含方法、实验及附录A–D；另读取固定PDF算法1，目视核对物理页4/6/7/8/10/11/12/14/15/16的公式、表1–6和延迟CDF。原始PDF16页，8787903字节。作者结果未复现，未运行或逐项审计匿名公开代码，没有独立确认数据划分、网络仿真实现、协议日志或边端尾延迟。正文未充分给出的实现参数与失败条件保留为证据缺口。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "从固定压缩量改成共享链路上的消息与长度联合选择",
+      "text": "多任务潜在消息共享变化带宽链路；每条消息有截止期，超过期限按firm-deadline目标不贡献效用。优化变量既包含选哪条消息，也包含各自传多少token，而非只统一截短编码器输出。SCALE运行于已有模态编码器之上，作者声明无需修改底层模型；本轮实际评测是感知/操控模型的中间特征，不应外推成任意异构LLM隐藏状态互通。",
+      "evidence_ids": [
+        "7a973e540bbb3e15",
+        "4a7fb7b1889b47e8",
+        "8354713aa78d744a",
+        "f996d4bd7562faa0",
+        "b55c4299410c4c3e",
+        "c492bd7826a9561f",
+        "560a5305688b09dc",
+        "bcdbdd6ce41ad2e3",
+        "44c9d8803a4fd108",
+        "efda1bd63b80962e",
+        "9860920df13d500d"
+      ],
+      "quote": "firm-deadline"
+    },
+    {
+      "kind": "method",
+      "title": "先对齐接收端已确认状态，再决定哪些token可复用",
+      "text": "对当前每个token，找接收端已确认潜在状态中余弦相似度最大的token；变化分数为1−最大余弦，相似度达到tau才可复用。这样允许物体或视角移动时跨位置对应，避免仅同位置比较把移动都当新信息。它是逐token最近邻，不是文中已证明的几何对齐或一一匹配；余弦变化也不是任务敏感性或幅值差异的直接度量。后两点是依据公式的解释边界，作者未以专门实验量化。",
+      "evidence_ids": [
+        "2a22889a000c5940",
+        "9c561fe36442877e",
+        "fb223e63b89480ff",
+        "06c7e8f45f743c46",
+        "eebd1b5f3e9792ef",
+        "380675332ecd25ec"
+      ],
+      "quote": "correspondences"
+    },
+    {
+      "kind": "method",
+      "title": "收益是变化分数的前缀和，成本需包含映射与版本元数据",
+      "text": "把token按变化降序排列，U_i(K)为前K个变化分数之和，B_i(K)=K×序列化token字节数+元数据；元数据包括token索引、对应映射和参考状态版本。这里所谓语义收益是余弦变化代理，没有用下游任务损失或成功概率拟合效用，也没有证明不同任务特征的变化分数可直接公平比较。方法公式纳入元数据是重要设计，但正文未给逐基准实测元数据/ACK占比或不同长度的字节分布，不能凭图示KB数字推算真实压缩比。",
+      "evidence_ids": [
+        "e4c7ee86d74f0fa5",
+        "b4ac535329d49e3e",
+        "62849d1b1b3c61eb",
+        "57d83957695cfa81",
+        "bcdbdd6ce41ad2e3",
+        "44c9d8803a4fd108",
+        "31ddb5879c1b43fb"
+      ],
+      "quote": "communication cost"
+    },
+    {
+      "kind": "method",
+      "title": "逐token贪心分配，并检查所有已选消息的EDF可行性",
+      "text": "所有K从0开始，每轮考察各消息的下一个token，以增加的U除以增加的B排序；试加后按EDF重排已选消息，使用当前R(t)计算每个前缀完成时间t+sum(8B/R)。只有所有已选消息都在deadline内的增量才可选，直到再无可行增量，随后按EDF传输。附录算法1确认为每轮重新形成可行候选集合，而非只检查被加token的那条消息。此为贪心启发式，文中无全局最优性或近似比证明；基于当前速率的可行性也不是未来链路的保证。",
+      "evidence_ids": [
+        "647f52db6acc4cb9",
+        "e08c8c2967e2eb86",
+        "f1b9278211139a09",
+        "953ac0726566c610",
+        "2e93f72a030302bf",
+        "28329a7ba9497bf9",
+        "8bbfb8e86d2341a8",
+        "05f680419e575280",
+        "d40ed3ffcfa1f062",
+        "c240bc08a78c8a3d"
+      ],
+      "quote": "deadline-feasible"
+    },
+    {
+      "kind": "method",
+      "title": "复用依赖接收确认，协议正确性与链路预测仍有边界",
+      "text": "接收端用新token更新状态，未更新部分按已建立对应复用旧token，随后确认新状态；发送端仅以已确认状态作为后续参考，减少把未收到内容当缓存的风险。论文成本项包含参考版本，但未详细说明丢包、ACK丢失/乱序、重连、首次无参考时初始化、以及预算不足而未发送且不满足复用阈值的token如何处理；本轮未审计实现，不能声称这些条件已解决或一定有bug。当前速率估算来不及应对短于调度间隔的骤降，是作者明确承认的限制。",
+      "evidence_ids": [
+        "380675332ecd25ec",
+        "57d83957695cfa81",
+        "8bbfb8e86d2341a8",
+        "c240bc08a78c8a3d"
+      ],
+      "quote": "acknowledges"
+    },
+    {
+      "kind": "evidence",
+      "title": "CooperScene有任务–时效联合收益，也有非最优准时率",
+      "text": "表1在3936个检测job、18693个预测目标上评估；CoBEVT检测100ms期限，冻结MTR做5秒预测200ms期限，检测AP以IoU0.5，预测成功为六条候选至少一条与真值位置相差2m以内。20Mbps时SCALE检测AP51.53/准时80.36%，CoSDH为31.34/48.02%，Uniform为23.38/68.64%；预测成功60.85%、准时100%。但15Mbps检测准时64.95%低于Uniform68.42%，尽管AP45.62高于22.50。故不能说所有任务所有带宽的准时率都最高。固定15–30Mbps相对全发参考118.5Mbps是严重受限链路；变带宽30/200Mbps每2秒切换。",
+      "evidence_ids": [
+        "ff81711bc7b9223a",
+        "9860920df13d500d",
+        "dabced4f8e997011",
+        "23c214e2eb4cdda6",
+        "5b9924bce58eb044",
+        "d0f989d0c1e34ab5",
+        "0516027e0a3849ac",
+        "933808398c07ceb6",
+        "36d44569974a4cac",
+        "6172e443f080bd61",
+        "8cbf09d5750aaf56",
+        "9a3fe3d64df2381a",
+        "1300203ff9a6a8ef"
+      ],
+      "quote": "prediction targets"
+    },
+    {
+      "kind": "evidence",
+      "title": "OPV2V分割显著改善，检测仍保留低带宽反例",
+      "text": "表2用528个检测job、265个分割job，CoBEVT的LiDAR检测与相机分割各自预训练权重，期限100/200ms。15Mbps分割mIoU47.14，Where2comm37.17、CooperTrim35.52、Uniform26.95；准时率97.09%，Where2comm7.82%，而准时率最强基线Uniform是81.09%，不能把7.82%称为最强准时基线。8Mbps检测AP83.41低于CooperTrim84.25，检测准时37.74%亦低于Uniform46.49%；15–61Mbps检测AP则SCALE最高。所有基线也用EDF，因此实验证据针对完整选token/长度/复用方案，并非EDF对无调度的比较。",
+      "evidence_ids": [
+        "9860920df13d500d",
+        "3dce9dfe9affee6b",
+        "c2530a9a712edf0a",
+        "3e6731ab609837b9",
+        "0516027e0a3849ac",
+        "2b730c2c529985f2",
+        "6e636e6913d62852",
+        "6172e443f080bd61",
+        "8cbf09d5750aaf56",
+        "b1cc11e2d975211b"
+      ],
+      "quote": "segmentation"
+    },
+    {
+      "kind": "evidence",
+      "title": "LIBERO是单任务闭环：及时但信息不足仍可能全部失败",
+      "text": "SmolVLA执行一个语言条件任务，每法每带宽45回合，280步内完成计成功；图5展示拿汤罐放入篮子的单回合。机器人20Hz，上传期限由动作缓冲剩余时间决定，并预留100ms推理与10ms动作返回。3.4Mbps下SCALE成功44.44%、准时77.76%，Uniform成功0%、准时74.47%，支持按时到达不等于保留有效信息；5Mbps成功86.67%，Full-send24.44%、Uniform0%，约为39/45对11/45和0/45。变带宽3.4/20Mbps时SCALE100%成功、89.28%准时，但这不是LIBERO全套或多任务泛化统计，亦无重复训练seed/置信区间。",
+      "evidence_ids": [
+        "9860920df13d500d",
+        "3940120573d64d6f",
+        "a92fb90bfc600532",
+        "9884849934354701",
+        "c8c201bc1a8da8bf",
+        "6172e443f080bd61",
+        "8cbf09d5750aaf56",
+        "47ccd4e02862efeb",
+        "ad84a5e39a0209ed",
+        "112ba2d61e7d38f4"
+      ],
+      "quote": "buffered actions"
+    },
+    {
+      "kind": "evidence",
+      "title": "蜘蛛机器人验证受限链路检测，不是导航能力或碰撞率测试",
+      "text": "树莓派蜘蛛机器人沿55.4秒固定路线走过微缩城市，相机检测与超声背景流量共用链路；检测通信期限1000ms。表4在1/2Mbps时SCALE检测成功77.62/91.67%、准时100/96.43%，原始RGB和全潜在发送两基线都是0；8Mbps全部100%。这说明受限链路感知在硬件在环场景可工作，但没有给检测成功的严格匹配阈值、评测消息/事件分母、重复路线次数或误差范围，也没有闭环自主导航、避碰或控制稳定性结果。不能把此检测百分比描述成路线任务完成率。",
+      "evidence_ids": [
+        "f8441e4fe244bc36",
+        "494f666f373b2389",
+        "e962e25a8227e830",
+        "da1601612b0bc29b",
+        "6da15541492938ce"
+      ],
+      "quote": "miniature city"
+    },
+    {
+      "kind": "evidence",
+      "title": "通信层平均开销低于1ms，仅针对指定桌面配置",
+      "text": "表6在CooperScene测SCALE三阶段每消息平均开销0.813–0.884ms，Intel i9-13900K用4CPU核与4个OpenBLAS线程；最后一阶段包含消息准备和状态更新。20Mbps分项0.355/0.130/0.374ms，总0.859ms。它不是编码器、下游推理、排队、网络和ACK整个链路的总延迟，也不是树莓派实测或尾延迟/最坏执行时间上界。论文网络延迟明确含排队与传输，但没有完整拆账证明所有控制路径开销均进入deadline核算，故部署前仍需端到端计时。",
+      "evidence_ids": [
+        "dabced4f8e997011",
+        "879791153e2f2b37",
+        "d243c5d96ccfc282",
+        "71875c2b34782af1",
+        "f58745e606083ead",
+        "9860920df13d500d"
+      ],
+      "quote": "computational"
+    },
+    {
+      "kind": "limitation",
+      "title": "收益依赖时空冗余，骤变与消息淘汰会削弱硬实时解释",
+      "text": "作者承认场景突变降低可复用信息，短于最小调度间隔的带宽骤降会使当前速率可行分配失效。主实验只给固定率及每2秒切换的链路，不是任意突发拥塞保证。准时率分母包括所有生成消息及未送达消息，CDF在deadline处的值才是OT，不能只按收到者统计；CDF未到100%可能包含未送达，不代表观测截断后必会交付。结果中大量消息在期限前集中完成说明余量很小，也提示需额外测试速率估计误差和计算抖动。",
+      "evidence_ids": [
+        "560a5305688b09dc",
+        "2e93f72a030302bf",
+        "28329a7ba9497bf9",
+        "dabced4f8e997011",
+        "e5cbe3353770596b",
+        "879791153e2f2b37",
+        "360f379e86284dbd",
+        "c240bc08a78c8a3d",
+        "1300203ff9a6a8ef",
+        "b1cc11e2d975211b",
+        "112ba2d61e7d38f4"
+      ],
+      "quote": "spatiotemporal"
+    },
+    {
+      "kind": "limitation",
+      "title": "整系统对照尚未隔离复用、评分与调度各自贡献",
+      "text": "全文实验包含完整方案对全发、均匀压缩及任务专用基线，没有关掉匹配、改同位置匹配、固定K、随机选token或只换调度器的组件消融。已有基线统一EDF有助于控制传输次序，却不能单独证明余弦变化评分或贪心长度分配各自是收益原因。正文/附录未给tau数值及敏感性、各模型token数量/维度/精度、缓存启动和替代规则的完整参数，基线自身模型/训练差异也未被统一消除。45回合仅LIBERO单任务，感知job/目标数量不是独立重复实验数量；表中无多seed波动或显著性检验。本轮未审计公开匿名代码，以上为论文正文证据边界，非断言代码一定缺失。",
+      "evidence_ids": [
+        "7a973e540bbb3e15",
+        "380675332ecd25ec",
+        "57d83957695cfa81",
+        "9860920df13d500d",
+        "23c214e2eb4cdda6",
+        "5b9924bce58eb044",
+        "3dce9dfe9affee6b",
+        "c2530a9a712edf0a",
+        "0516027e0a3849ac",
+        "3940120573d64d6f",
+        "a92fb90bfc600532",
+        "6172e443f080bd61",
+        "8cbf09d5750aaf56",
+        "d243c5d96ccfc282",
+        "f58745e606083ead"
+      ],
+      "quote": "pretrained weights"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：收益来自跨位置复用还是联合长度调度？",
+      "text": "待验证假设：在保留相同模型与EDF次序后，跨位置token匹配和按边际收益分配长度各自对任务质量–准时率前沿有独立贡献，而非仅仅少发送字节。仅做公开数据回放与LIBERO仿真，固定编码器/下游权重、token序列化、截止期、初始ACK状态和同一链路轨迹，采用2×2对照：余弦跨位置匹配或同位置匹配，贪心可行长度或校准固定长度；另加同字节随机token、无复用对照。每种条件匹配实际总字节（含索引、映射、版本和ACK），在低带宽及每2秒切换之外加入预先定义的100ms短时骤降与场景切换，至少5组随机消息/网络seed，LIBERO扩展多个任务且每任务至少45同初始状态回合。记录各任务AP/mIoU/闭环成功、所有生成消息OT、信息年龄、缓存重建误差、CPU/GPU耗时与p99端到端延迟；同时独立测余弦变化与真实任务损失增量相关性。若匹配字节后跨位置匹配或贪心长度的收益消失、低变化但关键token引发任务失败，或计算/ACK开销吞噬deadline余量，则推翻独立收益假设。实验未执行，不调用外部付费服务，不创建选题；未全面查新，不宣称研究空白。",
+      "evidence_ids": [
+        "fb223e63b89480ff",
+        "eebd1b5f3e9792ef",
+        "380675332ecd25ec",
+        "62849d1b1b3c61eb",
+        "57d83957695cfa81",
+        "e08c8c2967e2eb86",
+        "f1b9278211139a09",
+        "2e93f72a030302bf",
+        "8bbfb8e86d2341a8",
+        "0516027e0a3849ac",
+        "3940120573d64d6f",
+        "879791153e2f2b37",
+        "c240bc08a78c8a3d",
+        "d243c5d96ccfc282",
+        "f58745e606083ead"
+      ],
+      "quote": "marginal semantic"
+    }
+  ],
+  "attention": {
+    "level": "notable",
+    "reason": "值得借鉴其按接收确认复用特征并联合分配消息长度的通信层设计，但缺少模块消融、突发链路与边端尾延迟证据，采用前应先做匹配字节和完整deadline核算。",
+    "basis": [
+      "compute_shift",
+      "controlled_comparison",
+      "real_robot"
+    ],
+    "evidence_ids": [
+      "fb223e63b89480ff",
+      "62849d1b1b3c61eb",
+      "2e93f72a030302bf",
+      "8bbfb8e86d2341a8",
+      "23c214e2eb4cdda6",
+      "c2530a9a712edf0a",
+      "3940120573d64d6f",
+      "e962e25a8227e830",
+      "d243c5d96ccfc282"
+    ]
+  },
+  "frontier_brief": {
+    "title": "SCALE：复用已确认潜在token，联合选择消息与传输长度",
+    "change_type": "推理系统 · 通信预算与截止期",
+    "delta": "对当前token与接收端确认缓存做余弦匹配，用变化分数/字节建立不同长度选项；逐token贪心分配并检查所有已选消息的EDF完成期限，避免统一压缩比例。",
+    "before": "全发或按带宽统一截短后再EDF，未同时利用跨位置缓存复用与每条消息不同的变化收益；准时到达也可能只送到不足以完成任务的信息。",
+    "after": "无需修改底层模型的通信层，在协同感知与单任务LIBERO低带宽测试改善质量和多数准时率；桌面CPU测得0.813–0.884ms平均通信层计算开销，未证明边端最坏延迟。",
+    "relevance": "多个感知/控制消息竞争同一链路时，可把“发谁、发多少、接收端已有多少”一起决策；评测应保留任务质量与所有生成消息准时率两个轴。",
+    "caveat": "缺少组件消融/多seed误差，变化分数非真实任务效用；低带宽检测并非所有指标最优。LIBERO仅1任务，蜘蛛机器人固定路线检测，短时带宽骤降与缓存协议细节仍待核查。",
+    "question": "匹配总字节和EDF次序后，跨位置复用与可变长度调度各能保留多少独立收益？",
+    "evidence": [
+      {
+        "label": "协同感知对照",
+        "value": "20Mbps检测AP31.34→51.53；准时48.02%→80.36%",
+        "context": "CoSDH→SCALE，CooperScene3936检测job，100ms期限；全部基线亦EDF。15Mbps时SCALE检测准时率反低于Uniform。"
+      },
+      {
+        "label": "质量与时效分开",
+        "value": "3.4Mbps：成功0%→44.44%，准时74.47%→77.76%",
+        "context": "Uniform→SCALE，SmolVLA、LIBERO单任务、每法45闭环回合；不能外推全套LIBERO。"
+      },
+      {
+        "label": "低带宽反例",
+        "value": "8Mbps检测AP83.41，低于CooperTrim84.25",
+        "context": "OPV2V528检测job；SCALE准时37.74%，亦低于Uniform46.49%，并非所有任务指标都最高。"
+      },
+      {
+        "label": "有限开销证据",
+        "value": "平均0.813–0.884ms/消息",
+        "context": "CooperScene，i9-13900K四核/四OpenBLAS线程，三阶段含状态更新；非树莓派、端到端或尾延迟。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "以接收确认状态作匹配参考",
+        "text": "每个当前token找缓存余弦近邻，相似度过阈值才能复用；发送对应映射/版本并由接收端确认更新。"
+      },
+      {
+        "title": "按变化代理建立长度选项",
+        "text": "变化=1−最大余弦，按降序前缀累计收益，成本包含token字节与元数据；不等同于直接优化任务成功概率。"
+      },
+      {
+        "title": "逐次加token并检查全队列",
+        "text": "选择边际变化收益/字节最大的可行增量，每次核所有已选消息EDF前缀deadline；仅当前速率模型可行，无全局最优或未来网络保证。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08390v1",
+      "checked": "固定PDF16页、8787903字节；目视物理页4/6/7/8/10/11/12/14/15/16，核公式3–6、算法1、表1–6与图3/4/5/8/9/10。核低带宽非最优项、准时率分母、LIBERO单任务45回合、i9平均开销。未运行公开代码或复现。"
+    }
+  ]
+}

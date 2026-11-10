@@ -1,0 +1,389 @@
+{
+  "item_id": "arxiv:2611.08462",
+  "document_id": "5d10993940d73e3d7ad40439b18c3b04e2081feb8acf7e1d3399f6c56e8c3144",
+  "source_url": "https://arxiv.org/html/2611.08462v1",
+  "paper_version": "2611.08462v1",
+  "paper": {
+    "id": "arxiv:2611.08462",
+    "title": "OopsieRecover: Learning Transferable VLA Corrections from Semantic Interventions",
+    "url": "https://arxiv.org/abs/2611.08462v1",
+    "published": "2026-11-05",
+    "updated": "2026-11-05",
+    "topics": [
+      "vla",
+      "data",
+      "planning"
+    ],
+    "summary": "Vision-Language-Action (VLA) models can perform a wide range of robotic manipulation tasks, but often fail during deployment. Teaching them to recover from these failures requires substantial corrective data: existing approaches learn to recover from failures by directly associating corrective actions with the observations in which they were demonstrated. For instance, DAgger-like fine-tuning can require tens to hundreds of interactions, yet the resulting policy may still fail to generalize the learned corrections beyond the demonstrated scenarios. We hypothesize that semantics can capture the underlying reasons for failures and their corrections, enabling policies to learn from only a handful of corrective demonstrations and generalize those corrections to novel objects, and scene variations. We propose OopsieRecover, a framework that uses abduction to infer the intent behind a small set of corrective demonstrations and encodes the inferred knowledge as dense spatial representations and conditional costs. These costs capture when a behavior is undesirable and steer the policy toward more desirable action regions. We experiment across 6 tasks and variations in object poses, scenes, and related tasks, and find that only a handful of corrective demonstrations can enable a VLA to overcome failures across a broad range of novel situations, without requiring new corrective data for each variation. Please refer to https://robin-lab.cs.utexas.edu/oopsierecover for videos."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-06T06:03:37.909404+00:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "overview": "可复用的改变是纠正表示：从人工接管轨迹及原因推断“何时触发、怎样约束”，冻结VLA后用空间代价重排动作。真机任务进度改善，但检查可在未通过时因预算结束；样本效率口径也有冲突。",
+  "coverage": {
+    "read": 71,
+    "total": 71,
+    "evidence_ids": [
+      "56d26f2c53b3239f",
+      "b48b2777fe52786b",
+      "b968cdbf8d0184d1",
+      "2c8ebd12a18dc47f",
+      "2e4509f2fb5a7f89",
+      "d9b44b3e634474a8",
+      "e097b4a3662eb430",
+      "1882e72de11dac05",
+      "afb617d3a67e0bf1",
+      "48b361512e660698",
+      "190f832e77ba5843",
+      "34d8934a082744b0",
+      "0b3ef6d5e8db9bfe",
+      "ad8f60e1eaafdc50",
+      "abf1a261b87f6cdb",
+      "ac84a4c410baf523",
+      "8ae6280fb841ea56",
+      "7aaf055586fda594",
+      "e26e68a0ae81a926",
+      "ee19236ec2fb4185",
+      "d6924e7637e33480",
+      "951ac7c549b38ace",
+      "be9e400d17e59aa6",
+      "fc3b4cfd99d64c4d",
+      "2edd5c3fb77561c4",
+      "0e2fd7168f44ccb3",
+      "d956599d64bcd8f1",
+      "37118fc62f1c1010",
+      "3a893bb675d6c7fe",
+      "8e9f5bcb330dff43",
+      "65de21501045e383",
+      "a099970fcdce3fef",
+      "2a88484a65285e61",
+      "d7a880f5b948733e",
+      "26e3a185d4ca72be",
+      "a5c72fb526b806e4",
+      "0f75a34eb53820ba",
+      "6c0fec05b531f2e5",
+      "5cd5b5f3cf87414c",
+      "7a1e8edfe4cb35b9",
+      "7ea0ab59e400b075",
+      "7f8acbcbcac2e5be",
+      "d85d0f64618d9119",
+      "3905eb8516443331",
+      "2de3a4517d8bd660",
+      "2ea129eb429a033d",
+      "3f67fc4c49de71cc",
+      "ba149646161ef3de",
+      "6b6045147b547fb5",
+      "b86f5c6b0c601c24",
+      "3160bdd543a40888",
+      "0a81bdd2aa029d0c",
+      "105c8f0cc2b56f36",
+      "09f48fc914a7f0e7",
+      "bca30a346eaee0e3",
+      "ec0f1705bd85689d",
+      "64a5686d0b9e5618",
+      "2422ce84d6a01e13",
+      "3e73647484c73d21",
+      "c366b3e7be7da387",
+      "d815d09ffbdf9fae",
+      "68969e7c1482b24d",
+      "86fa59f50fe943d1",
+      "ba21d93ee4cade1d",
+      "0351ce66014420ad",
+      "c7339eba88c2ac9d",
+      "04e5098bfd0e9e6c",
+      "41f32d01849959d3",
+      "bf2848f0b182e44f",
+      "6b89e59fd4f7a410",
+      "7bb465d5967e516d"
+    ],
+    "pdf_pages_visually_checked": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "pdf_sha256": "940d68450966b7193087301814b80a7ca222d7d5d8286290bfd212699ac7fe5c"
+  },
+  "notice": "已完整阅读71个提取片段，覆盖正文方法、公式、实验和限制。PDF共9页，无附录；目视核对第3–7页公式2–8、图2流程、图3任务与图4/5实验曲线。HTML未发现额外编码listing块。另只读核对作者项目页文字，未观看视频、执行生成程序、运行源码或复现实验；未逐篇核查参考文献。保留细化未过检仍沿用最后一版、样本数表述与曲线/正文不一致等缺口。",
+  "findings": [
+    {
+      "title": "问题：纠正轨迹记住了动作，未必解释何时适用",
+      "text": "把人工接管前的失败上下文、接管后的偏好动作及语言解释结合，推断可重用原则。目标是跨物体位姿与场景复用同一种纠正，而非每换布局就重新采轨迹；本文不是新的通用VLA预训练方法。",
+      "evidence_ids": [
+        "b48b2777fe52786b",
+        "b968cdbf8d0184d1",
+        "2e4509f2fb5a7f89",
+        "d9b44b3e634474a8",
+        "abf1a261b87f6cdb"
+      ],
+      "quote": "when the same correction should apply again",
+      "kind": "problem"
+    },
+    {
+      "title": "输入：轨迹之外还要人解释原因和分组",
+      "text": "保留接管前、人控中及可用的交还控制后三段窗口；人提供纠正原因文字和纠正类型，把同类型示范合并。RoboCasa三任务各5–8次纠正；DROID真机三项不同任务各3–6次。少量指新增纠正，不含基础π0.5及其已有训练数据。",
+      "evidence_ids": [
+        "ac84a4c410baf523",
+        "8ae6280fb841ea56",
+        "7aaf055586fda594",
+        "64a5686d0b9e5618",
+        "86fa59f50fe943d1"
+      ],
+      "quote": "human-provided correction type",
+      "kind": "method"
+    },
+    {
+      "title": "改动：把示范变成有适用条件的空间代价",
+      "text": "每种纠正生成C=gate×(correction+λ·task)：二值gate控制适用上下文，correction刻画避碰、朝向或放置关系，task维持任务进度。底座VLA冻结，适配发生在可执行代价及动作选择；这不是只靠一句语言直接改控制器。",
+      "evidence_ids": [
+        "d9b44b3e634474a8",
+        "abf1a261b87f6cdb",
+        "ee19236ec2fb4185",
+        "d6924e7637e33480",
+        "951ac7c549b38ace",
+        "be9e400d17e59aa6"
+      ],
+      "quote": "a gate, a correction term, and a task term",
+      "kind": "method"
+    },
+    {
+      "title": "几何落地：语义区域点集，换场景重新定位",
+      "text": "VLM预测物体/部件/区域的图像种子点，分割后采样像素并用深度提升为3D点集；逐帧跟踪区域、重采样，给VLM的是语义实体质心轨迹。新场景再次用参考图和种子点定位对应实体，复用代价而不回放原轨迹。仍依赖深度、分割及跟踪质量。",
+      "evidence_ids": [
+        "951ac7c549b38ace",
+        "2edd5c3fb77561c4",
+        "0e2fd7168f44ccb3",
+        "d956599d64bcd8f1",
+        "37118fc62f1c1010",
+        "3a893bb675d6c7fe",
+        "3f67fc4c49de71cc"
+      ],
+      "quote": "re-finding these same correction-relevant entities",
+      "kind": "method"
+    },
+    {
+      "title": "触发阈值：从接管前窗口取最低有效分数",
+      "text": "先算s_gate=gate×correction，在门控为真的接管前状态上取最小分数；同类多示范再跨episode取最小值。部署时s_gate严格大于阈值才触发。它校准的是已见接管证据，不是基于干净负样本的误报率保证；低阈值的误触发影响仍需另测。",
+      "evidence_ids": [
+        "8e9f5bcb330dff43",
+        "65de21501045e383",
+        "a099970fcdce3fef",
+        "d7a880f5b948733e",
+        "26e3a185d4ca72be",
+        "a5c72fb526b806e4",
+        "7f8acbcbcac2e5be",
+        "d85d0f64618d9119",
+        "3f67fc4c49de71cc"
+      ],
+      "quote": "minimum over episodes",
+      "kind": "method"
+    },
+    {
+      "title": "检查：纠正后分数更低，接管前能触发",
+      "text": "比较等长窗口，要求接管前均分高于人工纠正段和可用的交还后VLA段，并在接管前至少一次超过阈值；同类型全部episode按逻辑AND检查。任务代价不参与这一细化。它只是所录行为的一致性检验，不能证明推断到了唯一或普适正确的意图。",
+      "evidence_ids": [
+        "0f75a34eb53820ba",
+        "6c0fec05b531f2e5",
+        "5cd5b5f3cf87414c",
+        "7a1e8edfe4cb35b9",
+        "7ea0ab59e400b075",
+        "7f8acbcbcac2e5be",
+        "d85d0f64618d9119",
+        "3905eb8516443331",
+        "2ea129eb429a033d"
+      ],
+      "quote": "two empirical consistency checks",
+      "kind": "method"
+    },
+    {
+      "title": "关键例外：用尽细化预算，仍保留未过检版本",
+      "text": "VLM根据失败证据修改gate/correction的参数或逻辑，直到通过或预算B用尽。原文明确说预算用尽而两项检查未通过时，仍保留最后一轮参数与逻辑；因此不能把最终程序全部描述为已验证通过，更不能称为形式化安全证书。",
+      "evidence_ids": [
+        "3905eb8516443331",
+        "2de3a4517d8bd660",
+        "2ea129eb429a033d",
+        "bf2848f0b182e44f"
+      ],
+      "quote": "retain the parameters and logic from the final round",
+      "kind": "limitation"
+    },
+    {
+      "title": "执行：预测候选动作，再按激活代价重排",
+      "text": "触发后采K个H步动作块，预测点集轨迹并累加折扣代价，选择最低者；可加基轴方向动作扩展候选，多条纠正加权组合。仿真直接使用模拟器物理，真机使用基于抓取关系的动力学模型，不能把结果当作学得通用世界模型的证据。",
+      "evidence_ids": [
+        "3f67fc4c49de71cc",
+        "ba149646161ef3de",
+        "6b6045147b547fb5",
+        "b86f5c6b0c601c24",
+        "3160bdd543a40888",
+        "0a81bdd2aa029d0c",
+        "105c8f0cc2b56f36"
+      ],
+      "quote": "physics from the simulator",
+      "kind": "method"
+    },
+    {
+      "title": "结果：真实任务进度35.1%→61.0%，不是成功率",
+      "text": "作者汇总真机三任务的阶段完成比例从35.1%升至61.0%，增加25.9个百分点；约74%是相对提升。每项评估20次rollout。图4按NSCORE、全局95%置信水平标组：L0/L2与基线分开，L1与π0.5共享组，不能宣称每种难度都显著胜过底座。",
+      "evidence_ids": [
+        "e097b4a3662eb430",
+        "bca30a346eaee0e3",
+        "86fa59f50fe943d1",
+        "ba21d93ee4cade1d"
+      ],
+      "quote": "35.1% to 61.0%",
+      "kind": "evidence"
+    },
+    {
+      "title": "迁移：相同纠正复用到新位姿和新场景",
+      "text": "L0复用采集初态，L1换同场景位姿，L2换位姿及未见场景；基础π0.5已在完整RoboCasa数据上微调。仿真图4用STEP检验，L1/L2中本方法与其他组分开，L0与HG-DAgger共享组。正文写每方法50个episode，但未清楚分解各任务/难度的分母，不扩写成更多独立样本。",
+      "evidence_ids": [
+        "bca30a346eaee0e3",
+        "64a5686d0b9e5618",
+        "2422ce84d6a01e13",
+        "3e73647484c73d21",
+        "c366b3e7be7da387",
+        "d815d09ffbdf9fae",
+        "68969e7c1482b24d"
+      ],
+      "quote": "unseen scenes",
+      "kind": "evidence"
+    },
+    {
+      "title": "数据效率：8次84%与30次28%不是同次数比较",
+      "text": "CoffeeMug用25个留出场景评估；正文/图注报告本方法8次纠正到84%，图5把HG-DAgger的28%画在30次，作者项目页也明确为30次。正文却称同次数、图注称三倍，口径不一致；追加纠正后本方法曲线也有回落，不采纳“无退化”或同量8次对比。",
+      "evidence_ids": [
+        "0351ce66014420ad",
+        "c7339eba88c2ac9d"
+      ],
+      "quote": "same number of corrections",
+      "kind": "limitation"
+    },
+    {
+      "title": "单故障检查：10/10防止碰撞，边界很窄",
+      "text": "CoffeeMug的一次“避开蒸汽把手”纠正迁移到10个新场景，人为遥操作诱发该故障；10次均触发且在后续100环境步阻止目标碰撞。它检查一个已知故障与短时窗口，不是全任务100%成功，也没有给出无故障场景误报率。",
+      "evidence_ids": [
+        "04e5098bfd0e9e6c",
+        "41f32d01849959d3",
+        "bf2848f0b182e44f"
+      ],
+      "quote": "over 100 environment steps",
+      "kind": "evidence"
+    },
+    {
+      "title": "归因与成本：监督和推理资源没有完全对齐",
+      "text": "HG-DAgger用同一轨迹做20K次LoRA迭代，VLS只从任务描述取奖励；本方法还使用原因文字、类型标签、几何和候选预测，不能将优势仅归因于门控。没有独立拆解语言、验证、门控或候选扩增的消融；VLM型号、K/H/B具体取值、调用成本、GPU与端到端延迟披露不足，不宣称免费或实时。",
+      "evidence_ids": [
+        "8ae6280fb841ea56",
+        "fc3b4cfd99d64c4d",
+        "0e2fd7168f44ccb3",
+        "3a893bb675d6c7fe",
+        "2ea129eb429a033d",
+        "ba149646161ef3de",
+        "105c8f0cc2b56f36",
+        "64a5686d0b9e5618",
+        "3e73647484c73d21",
+        "c366b3e7be7da387",
+        "d815d09ffbdf9fae",
+        "68969e7c1482b24d",
+        "86fa59f50fe943d1",
+        "c7339eba88c2ac9d"
+      ],
+      "quote": "20K iterations",
+      "kind": "limitation"
+    },
+    {
+      "title": "适用范围：空间可表达、候选中确实有解",
+      "text": "表示不显式编码接触力或不可见物理属性。几何定位、跟踪和动力学都会影响触发与排序；有限候选若不含有效纠正，重排也无法恢复。实验未建立任意物体、任意故障、跨机器人或新任务普适保证；零新增纠正不等于零VLM重定位和推理成本。",
+      "evidence_ids": [
+        "abf1a261b87f6cdb",
+        "ee19236ec2fb4185",
+        "951ac7c549b38ace",
+        "3f67fc4c49de71cc",
+        "ba149646161ef3de",
+        "105c8f0cc2b56f36",
+        "64a5686d0b9e5618",
+        "86fa59f50fe943d1",
+        "41f32d01849959d3",
+        "bf2848f0b182e44f"
+      ],
+      "quote": "finite set of sampled action chunks",
+      "kind": "limitation"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "验证：上下文门控是否减少无关状态中的干扰？",
+      "text": "待验证假设：在同一纠正代价和相同动作候选下，上下文门控能保留跨场景避碰收益，同时减少对无故障动作的干扰。先选一个可运行的RoboCasa杯子放置任务，固定冻结的同一π0.5检查点、5条带原因及类型的纠正、实体点集、动力学、候选K/H、基轴动作比例和随机种子。程序只用训练场景生成与细化，阈值只从训练纠正窗口校准；记录未通过检查或预算耗尽的程序，不把最后一版默认为过检。A使用完整门控代价，B使用同一已生成代价但始终激活，C只用同一任务项排序，D不重排而取原始底座候选。A/B/C共享完全相同的候选动作块，隔离候选扩增和模型容量。在独立留出场景中同时测试有碰撞风险与无需纠正两类初态，保留全部试验，不用结果挑场景；分开标注实体定位错误、动力学误差和候选中无解。报告完整任务成功率与阶段进度、碰撞率、已知故障检出/漏检、无故障误触发、正常任务退化，以及程序通过率、候选覆盖、每步p50/p95延迟和VLM调用量。跨至少3次独立程序生成与不同留出布局重复，以场景为配对单元报告不确定性；再注入深度和跟踪噪声检查收益是否依赖精确几何。若A相对B没有稳定降低干净场景干扰，或因漏触发而失去避碰收益，则反对该门控假设；若收益只来自额外候选或模拟器真值，不归因于语义门控。这是待执行的仿真实验草案，未运行、未创建个人选题，未称为已发现研究空白。",
+      "evidence_ids": [
+        "d9b44b3e634474a8",
+        "ee19236ec2fb4185",
+        "d6924e7637e33480",
+        "be9e400d17e59aa6",
+        "8e9f5bcb330dff43",
+        "a5c72fb526b806e4",
+        "0f75a34eb53820ba",
+        "3905eb8516443331",
+        "2ea129eb429a033d",
+        "3f67fc4c49de71cc",
+        "ba149646161ef3de",
+        "105c8f0cc2b56f36",
+        "41f32d01849959d3",
+        "bf2848f0b182e44f"
+      ],
+      "quote": "This separation keeps corrections local"
+    }
+  ],
+  "source_checks": [
+    {
+      "url": "https://robin-lab.cs.utexas.edu/oopsierecover/",
+      "title": "OopsieRecover 作者项目页",
+      "checked_at": "2026-11-06T06:03:37.909404+00:00",
+      "observations": "项目页明确84%对应8次纠正、HG-DAgger的28%对应30次；真机使用3–6次纠正，指标是阶段进度。仅核对页面文字及图表说明，视频未观看，页面脚本未执行。"
+    }
+  ],
+  "frontier_brief": {
+    "title": "OopsieRecover：把少量人工纠正变成按需触发的空间代价",
+    "change_type": "少样本纠正 · 推理时重排",
+    "delta": "冻结π0.5，把接管前后轨迹＋原因文字转成“适用条件×纠正代价”。换场景重新定位同类实体，只在触发时预测并重排候选动作，不再仅把纠正段当作微调标签。",
+    "before": "用纠正轨迹监督动作，泛化依赖采到足够相似的状态；任务级代价又可能缺少具体失败信息。",
+    "after": "将纠正拆成何时适用、应改变何种空间关系；用已见干预检查，部署时按预测代价选动作。",
+    "relevance": "适合底座已有动作能力、但重复犯可用几何表达的错误时评估；先看纠正是否能跨布局复用，再测误触发、候选覆盖和推理成本。",
+    "caveat": "预算耗尽时可保留未过检程序。依赖几何与动力学，候选无解则无法恢复；缺少组件消融和运行成本。84%/28%的纠正次数表述不一致。未复现。",
+    "question": "同样的代价和动作候选下，门控能否减少正常场景干扰，又不漏掉需要纠正的情况？",
+    "evidence": [
+      {
+        "label": "真实阶段进度，区别于成功率",
+        "value": "35.1% → 61.0%",
+        "context": "作者汇总，DROID三任务，每任务3–6次语义纠正，每项评估20次rollout；+25.9个百分点。L0/L2统计分组领先，L1与底座未显著分开。"
+      },
+      {
+        "label": "已知故障的跨场景检查",
+        "value": "1次纠正 → 10/10",
+        "context": "CoffeeMug避蒸汽把手，一次纠正、10个新场景，人为诱发风险；均触发且100环境步内防止目标碰撞，不等于整任务成功或低误报。"
+      },
+      {
+        "label": "样本效率数字需保留口径",
+        "value": "8次 vs 30次纠正",
+        "context": "作者报告84% vs 28%；图5横坐标和项目页对应8次/30次，正文“相同次数”和图注“三倍”不一致。25个留出场景，不作为同量消融。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "提取可迁移关系",
+        "text": "从语义点集与接管前后轨迹推断适用条件、纠正项和任务项。"
+      },
+      {
+        "title": "用记录检查",
+        "text": "要求纠正后代价更低、接管前可触发；预算结束时仍可能保留未通过版本。"
+      },
+      {
+        "title": "触发后重排",
+        "text": "冻结底座采样动作，用模拟器物理或抓取关系模型预测后果，选激活代价最低的候选。"
+      }
+    ]
+  }
+}

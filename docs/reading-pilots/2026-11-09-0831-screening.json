@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.07275",
+    "source_signature": "5d5a4d748becd1a6efa2d167340a8b8385a82d3477cc258b7a6a8e95e289d56f",
+    "level": 2,
+    "reason": "用噪声与动作共享表征连接价值并免逐步反传，跨控制任务有性能对照，可能改变扩散策略RL微调成本路线，理论假设需核。",
+    "quote": "Efficient Diffusion"
+  },
+  {
+    "item_id": "arxiv:2611.07261",
+    "source_signature": "e495170ac75167bfedac575085bfc62112058cc6f5e7d92a12c5178f5183b045",
+    "level": 1,
+    "reason": "同墙钟预算训练栈与观测设计对照、三类DLO真机迁移明确，但限定平面单端夹持关键点跟踪。",
+    "quote": "An Empirical"
+  },
+  {
+    "item_id": "arxiv:2611.01215",
+    "source_signature": "4deefbae73bbba5681b54e9f765fab6e816380a01ed4f9a332e2cad86a9582a4",
+    "level": 2,
+    "reason": "VLM每步读动作潜变量并直接受去噪监督，改变VLA参数与推理路径，多模拟及实机对照值得先核净延迟。",
+    "quote": "Vision-Language"
+  },
+  {
+    "item_id": "arxiv:2610.31166",
+    "source_signature": "b78f6c35b54c63db5eaa6297fbe9709692930f3c3d0ebf3d572fc9f6d6064625",
+    "level": 1,
+    "reason": "目标事件选历史帧优于均匀记忆，并有六类模拟和实机对照；适合历史依赖全身任务，但依赖跟踪与专用任务。",
+    "quote": "Memory before"
+  },
+  {
+    "item_id": "arxiv:2610.21180",
+    "source_signature": "1a4e82c99dca92ab715ebd01680fd34746af87485db8896197809d80de17ccc5",
+    "level": 1,
+    "reason": "控制源任务关系和目标演示量的灵巧手基准可辅助迁移研究，已有相同数据比较；仍为特定功能家族与仿真。",
+    "quote": "Evo-DexBench:"
+  },
+  {
+    "item_id": "arxiv:2611.08398",
+    "source_signature": "e774461834f0346a38266b9390b6eb4c4f90b20e9f05bc86ba6007cffb99181b",
+    "level": 0,
+    "reason": "软硬度温度联动显示器有机械热学实测，但主要服务触觉显示研究，与机器人策略训练执行的关联较弱。",
+    "quote": "A Multimodal"
+  },
+  {
+    "item_id": "arxiv:2611.08275",
+    "source_signature": "52a8b4568546e8db08ce562c0657e6e103acc2f4123c932e48e6e4315872b0fe",
+    "level": 2,
+    "reason": "Point-MAE形状教师仅训练时对齐图像补丁，保持部署接口且有4.7/5.6倍收敛对照，可降低多类图像策略训练门槛。",
+    "quote": "Aligning Policy"
+  },
+  {
+    "item_id": "arxiv:2611.08209",
+    "source_signature": "d903d2fdd27b25f942701dd422463d9486b0864e6efc4cab59b3b2b82b9c04f0",
+    "level": 1,
+    "reason": "三本体长任务基准提供接口成本、记忆与假成功诊断及公开轨迹，适合评测代理，但尚非新训练执行机制。",
+    "quote": "RoboARCade: Benchmarking"
+  },
+  {
+    "item_id": "arxiv:2611.04226",
+    "source_signature": "cb5dbf32e481c88a37a3be526292c605963e99c1fa6082f83040546531dbb7c6",
+    "level": 1,
+    "reason": "诊断后程序复用和局部恢复在同物理步预算提升明显；完整版本额外预算且案例为开发集，先核证据范围。",
+    "quote": "DiMuRe: Diagnosis-Guided"
+  },
+  {
+    "item_id": "arxiv:2611.04255",
+    "source_signature": "7b29fa99f6707a8150fbb6b84355c12ffd57b4927c0152a6ee40b9b73f6d5f13",
+    "level": 1,
+    "reason": "双相机数字孪生和反馈重规划有分项模拟与mock实机结果，适合环境感知协作；不等于真实手术室部署验证。",
+    "quote": "ActOR: Ambient"
+  },
+  {
+    "item_id": "arxiv:2611.04334",
+    "source_signature": "5452c05e81163337f0f30a0641609ecd1df1df5214a6c41f61d7734e7af55570",
+    "level": 1,
+    "reason": "按人上肢任务指标设计力速热边界，硬件载荷速度实测明确；适用执行器机构设计，未给通用策略训练收益。",
+    "quote": "RAIPAL: A Powerful"
+  },
+  {
+    "item_id": "arxiv:2611.04392",
+    "source_signature": "3548474a5ea4e89c8a52177f1e76af5b37d5adda0c1bb3c001309aa15e5817e9",
+    "level": 1,
+    "reason": "多个检查点配对表明运行盾可降低崩溃并增加超时，负结果透明；仍是森林SITL与特定安全结构，需区分策略和盾。",
+    "quote": "Aero-VPA: Few-Step"
+  },
+  {
+    "item_id": "arxiv:2611.04477",
+    "source_signature": "795f4a1c0896e5809852febeb6b9cf3062aed42d6b6d62b9885b48987efaf1be",
+    "level": 1,
+    "reason": "正交谱专家与输入旋转缓解多任务干扰，模拟及实机阶段对照明确；冻结视觉编码与两阶段效果尚待分离，先跟进。",
+    "quote": "Spectrally Routed"
+  },
+  {
+    "item_id": "arxiv:2611.04485",
+    "source_signature": "f9e0603f6bb7ed1ed75b556722c11cfb528f4835f895c1af452515314d044a3c",
+    "level": 2,
+    "reason": "多VFM教师知识蒸馏至RGB轻量学生，有参数和延迟及模拟实机对照，可改变部署资源门槛，须核相对基线与成本。",
+    "quote": "All-For-One:"
+  },
+  {
+    "item_id": "arxiv:2611.04492",
+    "source_signature": "0f39b558cb0ad59d4d67fd1bd4eb6a61b6da0f91e84994cfd2272951d15f6c9d",
+    "level": 1,
+    "reason": "粒子体素潜动态联合视觉触觉并支持新视角规划，路线相关；摘要缺受控预测质量和完整50Hz成本对照，暂不高判。",
+    "quote": "Hybrid Particle-Voxel"
+  },
+  {
+    "item_id": "arxiv:2611.04493",
+    "source_signature": "3f08c9c206e714758f5eff0ca795c81c9173083172a3ecbaa9ee92bea38332ad",
+    "level": 1,
+    "reason": "可微MPM识别材料再条件化专家策略，物理记忆库避免在线优化；摘要缺量化预算与比较，需核物理辨识可靠性。",
+    "quote": "Physical Diffusion"
+  },
+  {
+    "item_id": "arxiv:2611.08097",
+    "source_signature": "beb34d9ee85cb002cc30354f34cf1fa581145a95393e9536fe739f61b7f83a47",
+    "level": 1,
+    "reason": "跨模态掩码与动作条件未来预测用于行走表示，降质实验和98/100真机有依据；单本体地形控制范围较窄。",
+    "quote": "STEP: Spatiotemporal"
+  },
+  {
+    "item_id": "arxiv:2611.07912",
+    "source_signature": "89cbcede92f3f90de32ff22f990dc235dc4bcabdcb77501b498a5ce90d7cb0c0",
+    "level": 2,
+    "reason": "冻结三个WAM以动作能量注入新目标，三种子和采样耗时对照可改变无重训部署控制，需核约束和净收益。",
+    "quote": "GuidedWAM: Training-Free"
+  },
+  {
+    "item_id": "arxiv:2611.06442",
+    "source_signature": "bbcd4aef232162f7952d0f7cf3a9fe00f6f26fc568b97b3138ad8486d53805fa",
+    "level": 1,
+    "reason": "数字孪生提供初始化及过程奖励可缩短实验室真实交互，五任务对照相关；人介入与孪生建设成本未在摘要量化。",
+    "quote": "TwinBridge: Digital"
+  },
+  {
+    "item_id": "arxiv:2611.07964",
+    "source_signature": "9bceb15cfa32719c4f7fc3ffc7e5d45820d8d2af100311afba92a5b5bf333a59",
+    "level": 1,
+    "reason": "延迟索引成功模型有预测基线与实机失校准反例，适合动态技能选择；场景较窄且匹配物理预测在实机也校准。",
+    "quote": "Time-Indexed"
+  },
+  {
+    "item_id": "arxiv:2611.06184",
+    "source_signature": "b879eae65e16c83718b6f4d7de6b326201bf75d4ea49f2d5f32fa2ba5872e946",
+    "level": 1,
+    "reason": "大模型规划与小监视器分级降低调用频率并有基准收益，但专用训练与记忆协议需核，不直接代表全成本降低。",
+    "quote": "Can Astra Solve"
+  },
+  {
+    "item_id": "arxiv:2611.05979",
+    "source_signature": "2ebb16e036f00409c1530f17815384c9304374c0cce86e4dcc047fe4541bc2dc",
+    "level": 1,
+    "reason": "人手物未来状态作奖励减少逐任务工程并跨手迁移，技术相关但摘要无具体基线差异与成本，先核实验。",
+    "quote": "Learning Object-Centric"
+  },
+  {
+    "item_id": "arxiv:2611.07900",
+    "source_signature": "7bea6ae50f6bc94ee124c0f7cb1086055859082ebb1623cbf70161b97a2f83a0",
+    "level": 1,
+    "reason": "显式空腔假设的全局搜索加局部可微细化有SfC对照与拓扑压力测试；复用主要在碰撞逆物理结构估计。",
+    "quote": "Structure from"
+  },
+  {
+    "item_id": "arxiv:2611.08075",
+    "source_signature": "38b7205c64edb3bf6fa792b6399df6dc2ca4f890e7dcf40c549fd66a15b7bdc0",
+    "level": 2,
+    "reason": "独立训练机器人共享价值与KNN不确定性过滤，直接针对组合共训成本，有模拟实机朴素自利对照，需核可共享状态前提。",
+    "quote": "Leave It Better"
+  }
+]

@@ -1,0 +1,98 @@
+{
+  "fe213017ab062f4acc3965da89abd3c29969163e144a2628a662b8ce46691009": {
+    "requirements": [
+      {
+        "label": "数据与环境",
+        "status": "known",
+        "text": "需要刚体仿真器记录的状态转移，以及要跟踪的参考动作；不能直接当作免仿真或视觉操作方案。",
+        "evidence_ids": [
+          "a80a78f58c150ee9"
+        ],
+        "quote": "standard rigid-body simulator"
+      },
+      {
+        "label": "策略更新",
+        "status": "known",
+        "text": "世界模型拟合与策略更新交替进行，以短想象轨迹反向传播更新策略。",
+        "evidence_ids": [
+          "a80a78f58c150ee9"
+        ],
+        "quote": "backpropagation-through-time"
+      },
+      {
+        "label": "训练资源",
+        "status": "known",
+        "text": "作者报告单H100的三小时设置；跨硬件结果不能直接换算为你本机的用时。",
+        "evidence_ids": [
+          "a80a78f58c150ee9"
+        ],
+        "quote": "one H100 for 3 h"
+      },
+      {
+        "label": "复现条件",
+        "status": "unknown",
+        "text": "本机可用GPU、完整训练代码和依赖版本仍需确认；未运行作者实现。",
+        "evidence_ids": [],
+        "quote": ""
+      }
+    ]
+  },
+  "369d294e87e78f0e17324e0ed5a5cbfcf42326069691232981686876407d14a9": {
+    "requirements": [
+      {
+        "label": "表征与模型",
+        "status": "known",
+        "text": "需要预训练V-JEPA 2.1视觉表征；策略DiT从零训练，不能把整套系统称为无预训练。",
+        "evidence_ids": [
+          "22c281b0486cb1ce"
+        ],
+        "quote": "pretrained V-JEPA 2.1 encoder"
+      },
+      {
+        "label": "策略输入",
+        "status": "known",
+        "text": "输入多相机观察、本体感觉和语言指令，输出动作块；先核对你现有动作接口与相机布局。",
+        "evidence_ids": [
+          "90856612300e7e01"
+        ],
+        "quote": "multi-camera observations"
+      },
+      {
+        "label": "硬件与依赖",
+        "status": "unknown",
+        "text": "当前未确认论文所用GPU型号与完整可运行训练仓库；参数量小不直接等于本机成本已知。",
+        "evidence_ids": [],
+        "quote": ""
+      }
+    ]
+  },
+  "7df68a123c8dc085fb61cd9f7c0165193ee89543b2f7bee8c529f7798d0c7c12": {
+    "requirements": [
+      {
+        "label": "数据输入",
+        "status": "known",
+        "text": "需要人类视频和目标机器人参考图，保留任务、对象与场景，再合成机器人视频。",
+        "evidence_ids": [
+          "ee3ebc8ede87978d"
+        ],
+        "quote": "reference image"
+      },
+      {
+        "label": "动作监督",
+        "status": "known",
+        "text": "需要额外的逆动力学模型生成动作标签；合成视频本身不等于可直接训练的动作示范。",
+        "evidence_ids": [
+          "ee3ebc8ede87978d"
+        ],
+        "quote": "inverse dynamics model"
+      },
+      {
+        "label": "资源与边界",
+        "status": "unknown",
+        "text": "视频生成、动作标注及原有机器人先验的完整成本、代码和许可需再核对；不是零机器人先验。",
+        "evidence_ids": [],
+        "quote": ""
+      }
+    ]
+  }
+}

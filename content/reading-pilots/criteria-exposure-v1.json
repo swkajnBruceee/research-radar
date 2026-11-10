@@ -1,0 +1,552 @@
+{
+  "item_id": "arxiv:2611.08318",
+  "document_id": "f254edb3e42e16da6495c790abc98037b71b56137b126768542176fb98560db5",
+  "source_url": "https://arxiv.org/html/2611.08318v1",
+  "paper_version": "2611.08318v1",
+  "paper": {
+    "id": "arxiv:2611.08318",
+    "title": "Learning the Task or Learning the Verifier? Rethinking Criteria Exposure in Embodied Self-Improvement",
+    "url": "https://arxiv.org/abs/2611.08318v1",
+    "published": "2026-11-05",
+    "updated": "2026-11-05",
+    "topics": [
+      "imitation",
+      "planning",
+      "sim"
+    ],
+    "summary": "Self-improving embodied agents are increasingly being developed and compared on robot simulation benchmarks. Several recent works expose the benchmark's success criteria to the learning agent, a practice we call Criteria Exposure (CE). These criteria, originally written to verify policies trained by imitation learning, often demand more than the corresponding language instructions, so a score from such a verifier may not faithfully reflect whether the instructed task was completed, especially for robot-control programs written by an agent. As embodied coding agents report ever higher benchmark scores, a natural question arises: when a coding agent is exposed to the benchmark's criteria, does it generate code that better performs the instructed task, or code that simply overfits to the verification criteria? We conduct controlled experiments with a self-improving agent with and without CE, and find that with CE the agent quickly produces code with a higher success rate under the given criteria, but this advantage disappears when the criteria are changed slightly without departing from the original instructions. More importantly, the skills the agent develops under CE transfer poorly across tasks. We further propose instruction-faithful criteria and show that they better reflect the performance of agent-generated programs."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-09T08:39:32.715564+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 85,
+    "total": 85,
+    "evidence_ids": [
+      "0367e524e64aff8f",
+      "4bcba9f332e0242f",
+      "36d8a40321c5d824",
+      "a17b5106b7fdcede",
+      "c3cc0b9ef644157c",
+      "b3c0c15b15e23c7c",
+      "863dcfb9918dd238",
+      "fb46202184185bc3",
+      "7f5d251915e8bd9c",
+      "7a222fb8f68d3136",
+      "34872ca128c11273",
+      "9290882554b9b400",
+      "8a656dfcc6cf80a8",
+      "b81617a5f0a632cb",
+      "e60d1fcd6badf2d0",
+      "b6ec4df6f3e451b6",
+      "47124ae39b902bc6",
+      "745a784be548639a",
+      "06d19f362f0d0ba1",
+      "4b521c44f631c4fe",
+      "97719bde0c8dbfbb",
+      "65d6e32b94f4647e",
+      "7208fddb35de79e5",
+      "ed0d4c635f4783d1",
+      "6ff58a46aa78eae5",
+      "1071c04524be151f",
+      "bbbd9ec97c402af1",
+      "92472b1cd6697d3b",
+      "670087821c72cb15",
+      "c9aed72eb41e95f5",
+      "29ed522b49f28a96",
+      "4024a3934248210f",
+      "d7280db2fac9ed34",
+      "1fc59787bfd1020f",
+      "5e0cd353c2a5975d",
+      "238b04398fbc6272",
+      "ae6e6f8fbb2d169e",
+      "b68fbb7865e1ba71",
+      "4d8bab88ff756c1e",
+      "91a0da87f5aab008",
+      "700289580727178f",
+      "f86abb1f4d42c2b8",
+      "4106e149627f9584",
+      "500698521d24da0f",
+      "57bfdca21177e3a9",
+      "af2a15d7a1855d02",
+      "43846cb23a77b3e7",
+      "d1453c5c2aea7d12",
+      "6ce6f19bc9e5e723",
+      "9dbdf9cb93f66faf",
+      "48a91d6912ec593f",
+      "d02b138d2241a551",
+      "c03bb8a4da6ebf73",
+      "0cbe1ca0ed464973",
+      "513ebeaa00467efb",
+      "779c3efc5ed7dd72",
+      "2d0001911d958884",
+      "594d7473ac862030",
+      "d8277c71a746076c",
+      "1ea88f761a3952ae",
+      "0613f5c18b9c3c19",
+      "567bcce9e7a68aa6",
+      "80958a62a66af9cc",
+      "ad670ba20df581b3",
+      "17a35e62fcf5aa21",
+      "c523a819d6eca740",
+      "a02b8264ad02a122",
+      "755fa4734e214035",
+      "86299b46021974c4",
+      "36b1c7ddc9af3514",
+      "376dc292ec2f9086",
+      "c01448e4e914c20e",
+      "28c2a16f95136253",
+      "8b1b34d337e279a4",
+      "553b3f150167ee1a",
+      "8715354087f6ad17",
+      "09bfc732ca2438ef",
+      "08697456d37c70d2",
+      "24a8bb4d0df29c90",
+      "f727561277fbe860",
+      "253a48c49073df1b",
+      "00fc413a563a951f",
+      "9dc0812a7328836f",
+      "fe891aeab63edea2",
+      "8aa1edd8e8707dba"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      6,
+      7,
+      8,
+      16,
+      17,
+      18,
+      20,
+      22
+    ],
+    "pdf_sha256": "4860b1de3b219ecdd0320e40644c35521196581fd6172b405c8024d2a6905141"
+  },
+  "overview": "本文将自改进循环的反馈暴露作为变量：无CE仅向learner给轨迹和二元成功，有CE还给判据代码、分数和阶段；actor固定，仅改技能/记忆库。16类判据与指令不一致任务的同一批轨迹，用原判据计CE优势23.8个百分点，用作者重写判据则约−2.2个百分点，差距收缩25.9个百分点。可复用的是同轨迹双判、互换学习判据和迁移评测，不是证明所有显式规格都无用。重写判据是作者代理，含主观阈值及两臂回位保留；CE反馈多因素捆绑，跨任务机制只有描述性证据，仍须独立规范审查与分项消融。",
+  "notice": "当前会话代理完整读完HTML证据85/85片段。提取包在附录C表头处结束，漏掉算法具体步骤、表6内容与附录D–J；已从固定PDF补读这些部分，含表7–10、蒸馏说明、记忆/技能调用案例和原语对齐，未将85/85本身冒充全文完整。PDF共22页、3182400字节，补读参考文献与实现，目视物理页4/6/7/8/16/17/18/20/22，核算法1、图2–5及7、表1/2/6–10。作者所有实验均为仿真，本轮未运行代码、模型、仿真或外部模型API，未复现；公开项目页浏览不可访问，curl TLS连接失败，未验证代码发布内容。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "评分器与指令不一致时，得分可混入补全隐含规格的收益",
+      "text": "研究问题是自改进所得增益在多大程度上来自阅读评测判据，而非新控制技能。作者将判据与reset时指令有冲突、额外隐含要求或遗漏要求的任务称criteria-limited，审查RoboDojo42任务后统计20类、26变体；只在RoboDojo重写判据。隐含顺序、阈值、一次性事件、缺陷、额外终态、过松判据与矛盾均可能改变得分。部分规则本就在官网公开，只是未出现在reset指令；所以CE不全是作弊，可能补足合法任务信息。作者称模仿数据通常已含这些细节，不等于本轮证明所有模仿策略评测都不受该错配影响。",
+      "evidence_ids": [
+        "36d8a40321c5d824",
+        "b3c0c15b15e23c7c",
+        "863dcfb9918dd238",
+        "7f5d251915e8bd9c",
+        "745a784be548639a",
+        "06d19f362f0d0ba1",
+        "d7280db2fac9ed34",
+        "86299b46021974c4",
+        "36b1c7ddc9af3514",
+        "376dc292ec2f9086",
+        "c01448e4e914c20e",
+        "28c2a16f95136253",
+        "8b1b34d337e279a4",
+        "553b3f150167ee1a",
+        "8715354087f6ad17",
+        "09bfc732ca2438ef",
+        "08697456d37c70d2",
+        "24a8bb4d0df29c90"
+      ],
+      "quote": "criteria-limited"
+    },
+    {
+      "kind": "method",
+      "title": "暴露发生在learner，且代码、分数、阶段一起增加",
+      "text": "固定actor为GPT-6 Astra高推理，通过PyRUA-Lean RGB感知/SAM3和运动原语写代码，不用VLA、深度或sim状态；作者的learner为Claude Code/Opus5.5高推理，只改每任务技能及记忆库，actor不直接读判据，但库可间接传递其内容。无CE给完整轨迹与成功，有CE同时加代码、分数、阶段，因而实验识别的是反馈包效应，不能独立归因于读代码。每任务5轮×5个开发layout，库最多40000字符，测试冻结只读；完整开发批次比历史最好少≥2次成功则回滚。附录还用阶段数为并列批次破同分，因此无CE是learner看不到阶段，不是整个选库控制器完全不使用阶段。各条件同轮数与上限，不代表实际调用token/验证次数或总费用相同；本轮未调用作者模型或API。",
+      "evidence_ids": [
+        "b81617a5f0a632cb",
+        "e60d1fcd6badf2d0",
+        "b6ec4df6f3e451b6",
+        "47124ae39b902bc6",
+        "97719bde0c8dbfbb",
+        "2d0001911d958884",
+        "594d7473ac862030",
+        "d8277c71a746076c",
+        "0613f5c18b9c3c19",
+        "567bcce9e7a68aa6",
+        "80958a62a66af9cc",
+        "ad670ba20df581b3",
+        "17a35e62fcf5aa21",
+        "c523a819d6eca740",
+        "a02b8264ad02a122"
+      ],
+      "quote": "Criteria Exposure",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            4,
+            13,
+            14
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "method",
+      "title": "同轨迹双判减少行为混杂，但新判据并非无主观性的真值",
+      "text": "只改判据及内存中的资产标注，不改指令或原仓库；既放宽也收紧/纠错，并非原判据的简单超集。PDF表6：press_by_number由两组红键中间/末尾各蓝一次改为按每卡红键次数后蓝一次，另修按键释放阈值；倒液阈值97%→90%，fasten_screws拧紧由下沉9mm收紧为35mm，同时共轴容差放宽。作者还定义塔与笔记本可落边，保留所有两臂回位，尽管42任务有33要求回位、只有5条指令明说。因此C_faith是作者对意图的代理，不是独立测得的任务真值。离线单测、seed0/2双判及手查翻转增加可信度，但未报告盲评、多评审一致性。双判只有两者都得出结论才早停，确保判决未截断，也与单判立即停止协议有差别。",
+      "evidence_ids": [
+        "745a784be548639a",
+        "06d19f362f0d0ba1",
+        "4b521c44f631c4fe",
+        "d02b138d2241a551",
+        "a02b8264ad02a122",
+        "86299b46021974c4",
+        "00fc413a563a951f",
+        "9dc0812a7328836f",
+        "fe891aeab63edea2",
+        "8aa1edd8e8707dba"
+      ],
+      "quote": "hard thresholds",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            16,
+            17
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "原判据下CE增益集中在16类错配任务，不能说无CE不学习",
+      "text": "表1：25任务×20测试布局，空库24.6%，无CE47.8%，CE62.0%；无CE自身已有+23.2个百分点，CE额外+14.2。16类criteria-limited中8.4→27.8→51.6，9类faithful中53.3→83.3→80.6。后者没有CE优势，但未作等效性验证，不能宣称两者严格一样。样本并非随机全42任务：选20个零样本成功不足半数的任务加5个较强任务；开发seed1 layouts0–4反复使用，测试seed0 layouts0–19未给learner。开发相同空库起点也能差约13%–14%，曲线只作描述，不能将某轮差距当稳健学习加速。",
+      "evidence_ids": [
+        "97719bde0c8dbfbb",
+        "bbbd9ec97c402af1",
+        "92472b1cd6697d3b",
+        "670087821c72cb15",
+        "c9aed72eb41e95f5",
+        "29ed522b49f28a96",
+        "4024a3934248210f",
+        "2d0001911d958884",
+        "d8277c71a746076c",
+        "1ea88f761a3952ae"
+      ],
+      "quote": "empty library",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            6
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "同轨迹换判据使CE优势收缩25.9个百分点",
+      "text": "图4及PDF表7，每库16任务×20布局=320轨迹，保持行为不变双判：CE原判据165/320=51.6%，新判据144/320=45.0%；无CE89/320=27.8%→151/320=47.2%。原CE仅胜93布局、无CE仅胜17；新判据对应47对54，差−7例。CE在重判时失27、得6；无CE失2、得64，说明不是统一加分或重新执行更好。两条件差距收缩25.9个百分点，95%按任务bootstrap区间4.7–54.4，区间宽但支持评价依赖；新判据下−2.2个百分点不能当无CE已显著优于CE。press_by_number CE原20/20而新0/20，无CE原0而新19；原库确实匹配另一套按钮协议，不等于证明读取任何明确规格都会损害物理能力。",
+      "evidence_ids": [
+        "c3cc0b9ef644157c",
+        "4b521c44f631c4fe",
+        "92472b1cd6697d3b",
+        "5e0cd353c2a5975d",
+        "238b04398fbc6272",
+        "b68fbb7865e1ba71",
+        "700289580727178f",
+        "d02b138d2241a551",
+        "9dc0812a7328836f"
+      ],
+      "quote": "same episodes",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            7,
+            17
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "互换学习所读判据后，高分跟着所读规格走",
+      "text": "图5与PDF附录E表8只比较10任务、每库200测试轨迹，不是上项16任务320轨迹。读原判据的库在原/新下57.0/45.0%；读新判据的库在新/原下130/200=65.0%和27/200=13.5%。pour_by_language读新规则后19/20通过新判据，原判据0，因不再把瓶摆正而原规则在该事件才验收。这支持跨规则稳健性不足，但新旧规格要求并不语义完全等价，方向不对称；分数跟规则也可能是对明示规格的正常优化，不能由此确定哪套规范正确或评价所有形式化目标。",
+      "evidence_ids": [
+        "ae6e6f8fbb2d169e",
+        "4d8bab88ff756c1e",
+        "91a0da87f5aab008",
+        "700289580727178f",
+        "d02b138d2241a551"
+      ],
+      "quote": "pour_by_language",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            7,
+            18
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "记忆条目内容提示规则拟合，机制尚无条目级因果消融",
+      "text": "主文称约三分之一CE记忆引用判据。PDF附录F细数19/55条，占47%字符；无CE0/53。例子包括蓝键顺序、夹拉按键帽以满足释放阈值、按原判据不看扫帚而建议不用扫帚。无CE的空夹问题追到KEEP会再次闭指，形成空手移动显式OPEN规则；CE保留半开公式。附录H图7/表9空手移动OPEN比例为空库35%、无CE91%、CE3%；insert_tubes重测动作均值40/57/116、成功12/11/6（各20布局）。这些是条目/调用/动作统计的描述，不是已隔离的原因；表9行为统计仅取首跑，147/132可用episode且部分任务不足10，不能把它们当全部200任务执行的无偏机制估计。",
+      "evidence_ids": [
+        "f86abb1f4d42c2b8",
+        "9dbdf9cb93f66faf",
+        "48a91d6912ec593f",
+        "0cbe1ca0ed464973",
+        "567bcce9e7a68aa6"
+      ],
+      "quote": "criteria code",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            18,
+            19,
+            20,
+            21
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "evidence",
+      "title": "迁移比较包含单次蒸馏及CE专用过滤，优势未复现",
+      "text": "表2同RoboDojo十目标任务200例，空库65、无CE80、CE71；十源任务与这十目标不重合，不等于目标均在全25学习任务之外。PDF附录G：每库只蒸馏一次，CE brief额外要求删掉仅描述判据的规则，实际删9条；这套蒸馏/翻译操作也是处理的一部分，不能把最终差异完全归给原始暴露。跨基准LIBERO-PRO为45/60、48/60、46/60；RoboCasa365为22/100、24/100、24/100；同RoboCasa其他源任务蒸馏后33/100、29/100。均是各自原生判据，不是C_faith。没有迁移差值置信区间或重复蒸馏方差，支持本协议下CE优势未复现，不能证明所有库跨任务必不泛化。",
+      "evidence_ids": [
+        "97719bde0c8dbfbb",
+        "4106e149627f9584",
+        "500698521d24da0f",
+        "57bfdca21177e3a9",
+        "af2a15d7a1855d02",
+        "43846cb23a77b3e7",
+        "d1453c5c2aea7d12",
+        "6ce6f19bc9e5e723",
+        "9dbdf9cb93f66faf",
+        "48a91d6912ec593f",
+        "0cbe1ca0ed464973"
+      ],
+      "quote": "distillation variance",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            8,
+            19
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "method",
+      "title": "原语对齐显著改变空库基线，不能混用官方分数",
+      "text": "跨基准前先将原语及prompt与RoboDojo对齐。PDF附录J表10：对齐后空库LIBERO-PRO四suite成功41/50、47/50、50/50、50/50，共188/200；已发表PyRUA-Lean同任务种子为36/50、45/50、44/50、39/50。RoboCasa原子55/90对59/90，复合54/160对32/160，说明接口改动本身可改变基线，不能归因于库迁移。40任务中34任务五seed全成，迁移专挑其余6任务扩为10seed=60，不是整个LIBERO-PRO仅75%或更广泛泛化基准。",
+      "evidence_ids": [
+        "97719bde0c8dbfbb",
+        "65d6e32b94f4647e",
+        "57bfdca21177e3a9",
+        "af2a15d7a1855d02",
+        "d1453c5c2aea7d12",
+        "6ce6f19bc9e5e723",
+        "48a91d6912ec593f",
+        "0613f5c18b9c3c19",
+        "755fa4734e214035"
+      ],
+      "quote": "aligned primitives",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            22
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "limitation",
+      "title": "技能未调用、目标瓶颈不同，尚未隔离迁移失效路径",
+      "text": "PDF附录I：来自RoboDojo的两库在200条RoboCasa目标episode都没调用skill，LIBERO-PRO各5和12/60调用；memory始终进prompt，因此没调用技能不等于库完全无影响。同RoboCasa源库合计158/200有技能调用，主要感知/关节余量；源库不含移动基座或铰接部件经验，目标正需要这些。该描述与迁移不足相符，但未做强制调用、去memory/去skills或瓶颈匹配消融；也只测试一种翻译。作者不能由调用相关性单独证明通用物理规则与判据规则各自的因果迁移价值。",
+      "evidence_ids": [
+        "f86abb1f4d42c2b8",
+        "d1453c5c2aea7d12",
+        "6ce6f19bc9e5e723",
+        "9dbdf9cb93f66faf",
+        "48a91d6912ec593f",
+        "0cbe1ca0ed464973",
+        "0613f5c18b9c3c19",
+        "567bcce9e7a68aa6"
+      ],
+      "quote": "action statistics",
+      "additional_sources": [
+        {
+          "url": "https://arxiv.org/pdf/2611.08318v1",
+          "physical_pages": [
+            19,
+            21,
+            22
+          ],
+          "note": "固定PDF补读或目视核对；这些细节未在HTML提取包中完整收录。"
+        }
+      ]
+    },
+    {
+      "kind": "limitation",
+      "title": "指令代理、二元干净反馈与单模型组合限制外推",
+      "text": "全部为模拟、同一actor/learner与原语栈，只有RoboDojo重写判据；没有实机、真实人/VLM噪声反馈、中间暴露水平或代码/分数/阶段独立消融。每任务20测试布局，单任务案例是定性，蒸馏随机性未估；作者称分组/重写规则提前定好，本轮未独立审其时间线、原始库、轨迹或评审独立性。回位保留与拧紧35mm等规范需独立审核。项目页本轮浏览不可访问、curl TLS连接失败，不能声称代码已验证可获取；也不据此断言资源永久不存在。实际真实机器人可获得明确任务规格、规划约束或用户反馈，本文不证明一律隐藏形式规格最佳；应先保证指令/评分契约一致，再比较等信息和等成本的学习。",
+      "evidence_ids": [
+        "0367e524e64aff8f",
+        "7f5d251915e8bd9c",
+        "06d19f362f0d0ba1",
+        "4b521c44f631c4fe",
+        "d02b138d2241a551",
+        "c03bb8a4da6ebf73",
+        "0cbe1ca0ed464973",
+        "513ebeaa00467efb",
+        "2d0001911d958884",
+        "594d7473ac862030",
+        "1ea88f761a3952ae",
+        "ad670ba20df581b3",
+        "c523a819d6eca740",
+        "86299b46021974c4",
+        "00fc413a563a951f",
+        "9dc0812a7328836f",
+        "fe891aeab63edea2"
+      ],
+      "quote": "independent review"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：补全指令后，原规则暴露的额外优势是否仍存在？",
+      "text": "待验证假设：先把独立评审认可的合法任务要求补全到指令，并保持反馈信息量与预算可比后，源码暴露相对仅分数/阶段反馈的额外收益会明显缩小，且更少依赖某一个判据实现。仅公开仿真实验草案：先用公开轨迹离线比较现有判据，不调用任何模型API；进一步实验在本地可执行的固定coding-agent组合上，将原简略/补全指令两组与四种learner反馈交叉：轨迹+二元成功、再加分数阶段、代码+二元成功、全包。相同轮次/布局/动作和上下文预算，记录token、验证调用与wall-clock，不将同轮数等同同成本；选库并列规则统一只用成功，避免阶段暗入控制器。至少3次独立库学习和蒸馏、每任务20以上独立测试布局，按任务分层bootstrap。开发前由未看策略输出的评审冻结完整任务规范和至少两套语义等价的判据实现，额外盲评视频，保留评审分歧，不把同团队重写判据当绝对真值。对全部轨迹双判且统一停止规则，分别报告原规则得分、规范一致任务完成、跨判据差距、原任务与匹配瓶颈的源外迁移、成本；技能/记忆的删除和互换另设因果消融。若补全规范后源码相对同等分数阶段反馈仍在两套判据及盲评上稳定显著提高完整完成与迁移，而非仅多用预算，则推翻假设；区间宽时保留无定论。草案未执行、未创建选题，未全面查新或声称研究空白。",
+      "evidence_ids": [
+        "7f5d251915e8bd9c",
+        "b6ec4df6f3e451b6",
+        "06d19f362f0d0ba1",
+        "4b521c44f631c4fe",
+        "97719bde0c8dbfbb",
+        "d7280db2fac9ed34",
+        "b68fbb7865e1ba71",
+        "91a0da87f5aab008",
+        "f86abb1f4d42c2b8",
+        "af2a15d7a1855d02",
+        "d1453c5c2aea7d12",
+        "48a91d6912ec593f",
+        "d02b138d2241a551",
+        "c03bb8a4da6ebf73",
+        "0cbe1ca0ed464973",
+        "594d7473ac862030",
+        "1ea88f761a3952ae",
+        "ad670ba20df581b3",
+        "c523a819d6eca740",
+        "86299b46021974c4",
+        "00fc413a563a951f",
+        "9dc0812a7328836f",
+        "fe891aeab63edea2"
+      ],
+      "quote": "intermediate levels"
+    }
+  ],
+  "attention": {
+    "level": "priority",
+    "reason": "同轨迹双判与反馈暴露对照直接改变自改进增益的解释，值得优先核查评测契约；结论依赖作者判据代理且代码分数阶段捆绑，尚不支持一概禁止明确规格。",
+    "basis": [
+      "controlled_comparison",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "b81617a5f0a632cb",
+      "b6ec4df6f3e451b6",
+      "4b521c44f631c4fe",
+      "97719bde0c8dbfbb",
+      "670087821c72cb15",
+      "5e0cd353c2a5975d",
+      "b68fbb7865e1ba71",
+      "4d8bab88ff756c1e",
+      "91a0da87f5aab008",
+      "af2a15d7a1855d02",
+      "d02b138d2241a551",
+      "c03bb8a4da6ebf73",
+      "0cbe1ca0ed464973",
+      "ad670ba20df581b3",
+      "00fc413a563a951f",
+      "9dc0812a7328836f",
+      "fe891aeab63edea2"
+    ]
+  },
+  "frontier_brief": {
+    "title": "把判据暴露做成实验变量：同轨迹换评分器，额外优势消失",
+    "change_type": "自改进反馈与基准效度审计",
+    "delta": "固定actor和原语，只让learner可选读取判据代码/分数/阶段；冻结技能记忆库后，对同轨迹用原判据与作者重写判据双评，再互换学习所读规则、测试库迁移。",
+    "before": "只在learner见过的判据上报告自改进，隐含按钮协议、阈值、缺陷或遗漏动作可能把规格拟合计为通用能力增益。",
+    "after": "16类错配任务各320轨迹，CE/无CE原判据51.6/27.8%，换判据45.0/47.2%；优势收缩25.9个百分点，95%按任务bootstrap4.7–54.4。无CE本身仍有学习收益。",
+    "relevance": "适合设计具身自改进与编码代理的反馈和评测：区分读形式规格与改进控制，固定明确指令/评分契约，报告独立判据与迁移，保留真实调用成本。",
+    "caveat": "作者实验未复现、全为仿真；新判据是作者代理，保留两臂回位且含自定阈值。CE把代码/分数/阶段捆绑，未隔离源码效应；蒸馏单次且CE条目过滤不同。跨基准未重写判据，无实机或真实噪声反馈证据。",
+    "question": "补全合法任务规格并等信息/等成本后，读取源码还能比仅分数阶段反馈更稳定地改善任务完成与迁移吗？",
+    "evidence": [
+      {
+        "label": "原判据下的增益来源",
+        "value": "全25任务：24.6→47.8→62.0%",
+        "context": "表1，空库→无CE→CE，每任务20测试布局。16错配任务27.8对51.6，9 faithful任务83.3对80.6；CE未在后组显示优势，但非严格等效性检验。"
+      },
+      {
+        "label": "同轨迹双判",
+        "value": "CE 165→144/320；无CE 89→151/320",
+        "context": "图4、PDF表7；原→作者新判据，同一行为无重跑混杂。CE失27得6，无CE失2得64；优势收缩25.9pp、任务bootstrap95%区间4.7–54.4。"
+      },
+      {
+        "label": "互换学习所读规则",
+        "value": "读新判据：65.0→13.5%",
+        "context": "图5、PDF表8，10任务×20布局；130/200在新判据成功，27/200在原判据成功。两套规则并非简单宽松包含，不能以此裁定哪个规范客观正确。"
+      },
+      {
+        "label": "迁移优势未复现",
+        "value": "十目标任务：空65/200、无CE80、CE71",
+        "context": "表2；十源库一次蒸馏，CE额外删除判据专用规则。跨RoboCasa目标仅22→24/100，同基准源库达33/29；无重复蒸馏区间，不是所有迁移必失败。"
+      },
+      {
+        "label": "评分代理有规范选择",
+        "value": "两臂回位保留；拧紧35mm；倒液90%",
+        "context": "PDF表6及附录C；作者也收紧遗漏动作并修缺陷，非统一放宽。42任务33要求回位仅5指令明说；人工翻转核查未替代独立盲评。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "反馈包驱动库修改",
+        "text": "actor不直接读判据；learner写技能与记忆后间接传递规则。CE全包与二元成功条件不同，源码/分数/阶段没有分别消融。"
+      },
+      {
+        "title": "双判轨迹与互换所读规则",
+        "text": "相同轨迹按两套判据判断，停止需两者均有结论；再让learner读另一规则，区分评分依赖与行为改变，但新判据仍为意图代理。"
+      },
+      {
+        "title": "把迁移看成另一检验",
+        "text": "十源库蒸馏到源外任务，翻译到对齐原语；专用判据内容被过滤，技能未调用也不代表memory无影响，机制需要条目级干预验证。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/html/2611.08318v1",
+      "checked": "85/85固定HTML片段全部读完；发现提取在附录C表头结束，未把提取计数当全文保证。"
+    },
+    {
+      "url": "https://arxiv.org/pdf/2611.08318v1",
+      "checked": "固定PDF22页、3182400字节；补读算法1、表6内容和附录D–J（表7–10、记忆、蒸馏、调用、原语对齐），参考文献与完整实现。目视物理页4/6/7/8/16/17/18/20/22，核图2–5/7、算法1、表1/2/6–10。额外PDF位置写入相应finding.additional_sources，未篡改队列原始证据。未复现。"
+    },
+    {
+      "url": "https://dagroup-pku.github.io/PyRUA-Lean/RSIJudge",
+      "checked": "浏览工具不可访问；curl只读请求TLS连接失败、HTTP000。未下载或核验代码/数据，不据此断言资源不存在。"
+    }
+  ]
+}

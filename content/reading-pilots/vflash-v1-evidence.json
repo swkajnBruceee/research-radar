@@ -1,0 +1,1119 @@
+{
+  "id": "06a4644bb56a2dd69d7bc8b984f1d0a23a7285513a8846c3db50fb439c7c5e05",
+  "url": "https://arxiv.org/html/2611.08449v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "2f30d21e002c5e61",
+      "section": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
+      "location": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
+      "text": "Models for physical AI tasks, such as robotics and autonomous driving, need not reason solely in language. They can use visual plans—points, bounding boxes, and trajectories—to represent spatial goals and anticipate motion. However, autoregressive vision-language models generate these plans one coordinate token at a time, making richer predictions increasingly costly. We introduce VFlash, a method for fast, accurate visual planning through Flash Primitive Decoding. VFlash exploits the known structure of visual primitives to predict their coordinates jointly, using a lightweight drafter that generates an entire primitive in one forward pass. The layout adapts to the primitive’s type, dimensionality, and length, supporting compact boxes and long, variable-length trajectories. Crucially, spatial accuracy need not require reproducing an autoregressive model’s exact token sequence. VFlash therefore trains on annotated primitives and directly accepts structurally valid predictions without target-token agreement. Across the evaluated 2D and 3D robot trajectory tasks, VFlash consistently reduces prediction errors relative to autoregressive decoding. Preliminary single-rollout measurements indicate approximately 25 × 25\\times faster generation for 3D point motion forecasting. A world action model conditioned on VFlash plans achieves 70.2% average success across four MolmoSpaces task suites, compared with 62.6% for the baseline.",
+      "url": "https://arxiv.org/html/2611.08449v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "457cc7139e23004e",
+      "section": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
+      "location": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
+      "text": "Figure 1: VFlash is a generalist decoding framework for fast, accurate visual planning across Physical AI tasks such as robotics and autonomous driving. By aligning prediction blocks with the known structure of visual primitives, it enables parallel decoding of common structured outputs such as bounding boxes, variable-length 2D/3D trajectories, and dense point motion, while retaining verified speculative decoding for text and sub-task plans. Compared with autoregressive (AR) decoding, VFlash improves accuracy on 3D robot trajectory planning while substantially reducing decoding latency across NVIDIA platforms, including Jetson Thor, DGX Spark, and H100.",
+      "url": "https://arxiv.org/html/2611.08449v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3a836ec4133e24cf",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Vision-language models (VLMs) are increasingly used as high-level brains for physical AI systems, interpreting visual observations and task instructions to guide behavior in robotics and autonomous driving ( Gemini Robotics Team, 2025 ; Tian et al., 2025 ; NVIDIA et al., 2025 ) . Their reasoning need not be expressed solely in language. VLMs can formulate intermediate predictions as visual plans: points and bounding boxes identify relevant locations or objects ( Yuan et al., 2025 ; Jiang et al., 2025 ) , while trajectories describe intended motion or forecast how a scene will evolve ( Gu et al., 2024 ; Zhang et al., 2026a ) . Recent work uses spatial traces and visual primitives to guide action generation ( Li et al., 2025a ; Lee et al., 2025 ; Guo et al., 2026 ) . These plans make spatial goals and anticipated motion explicit before action. Each visual primitive has identifiable boundaries and an organized coordinate layout.",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c72b7658f82b393",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Generating such plans efficiently becomes increasingly important as their spatial detail grows. Longer trajectories, additional objects, and joint 2D image and 3D predictions require more coordinate tokens, which autoregressive VLMs decode sequentially ( Chen et al., 2022 ; Bai et al., 2023 ; Zhu et al., 2025 ; Bai et al., 2025 ) . For physical agents that update their plans as new observations arrive, sequential decoding limits spatial detail and update frequency under a fixed latency budget. This motivates decoding methods that can generate complete visual plans with fewer sequential forward passes while preserving their spatial accuracy.",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b5c979712115aa0c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Parallel decoding offers a promising route to reducing this sequential cost, particularly for latency-sensitive physical AI systems operating at batch size one. Existing approaches include speculative decoding with parallel verification ( Leviathan et al., 2023 ; Li et al., 2025b ) and diffusion language models (dLLMs) with parallel denoising ( Nie et al., 2025 ; Arriola et al., 2025 ) . However, dLLMs often exhibit a speed–quality trade-off relative to autoregressive models ( Wu et al., 2025 ; Liu et al., 2025 ) . DFlash combines these approaches using a lightweight block diffusion draft model to predict draft tokens in a single forward pass, followed by target verification that preserves the autoregressive model’s output distribution ( Chen et al., 2026 ) . For visual outputs, LocateAnything exploits spatial structure through parallel box decoding ( Wang et al., 2026 ) .",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5511b3de838fd8ec",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "In this work, we introduce VFlash , a generalist decoding framework for physical AI (Figure 1 ) that accommodates both text (e.g., sub-task plans) and diverse visual primitives, such as bounding boxes, variable-length trajectories, and dense 3D motion predictions. Our study reveals an interesting observation: a lightweight diffusion drafter can even surpass its autoregressive target in spatial accuracy of the visual plans while decoding much faster. The structure of visual primitives helps explain this finding: once a primitive’s type, dimensionality, and length are specified, its boundaries and coordinate layout are known. Aligning draft blocks with these boundaries allows an entire geometric object to be predicted jointly, with tens to hundreds of tokens decoded in a single forward pass. These observations motivate aligning training and decoding with complete primitive boundaries and directly accepting structurally valid drafts without requiring token-level agreement with the target, while retaining verified decoding for text.",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "1c28d949b5f633fc",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "At the center of VFlash is Flash Primitive Decoding (FPD), which uses the requested output structure to organize both drafter training and inference. A tool call specifies the size of a variable-length prediction, while the primitive type determines its coordinate layout. Conditioned on features from a frozen target VLM, a lightweight diffusion drafter learns to predict complete primitives from annotated spatial data. At inference, the decoder applies layout-specific constraints ( Willard and Louf, 2023 ; Geng et al., 2023 ) and accepts valid primitives in full. The target VLM supplies context for subsequent predictions, and ordinary text retains speculative decoding with target verification.",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e890140e1692093",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We evaluate VFlash on 2D and 3D robot trajectories, bounding boxes, and dense 3D point motion forecasting, and study its use in downstream manipulation and driving. VFlash consistently reduces prediction errors relative to its autoregressive target across the evaluated robot trajectory tasks. In the downstream robot manipulation pipeline shown in Figure 1 , it reduces inference latency by about 80% on both Jetson Thor and DGX Spark. These visual plans also provide useful conditioning for action models: on MolmoSpaces ( Kim et al., 2026b ) , a world action model ( Ye et al., 2026 ; NVIDIA, 2026c ) conditioned on VFlash plans achieves 70.2% average success across four task suites, compared with 62.6% for the baseline.",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "a71c46e5a30798d3",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Beyond acceleration, our work suggests a broader role for parallel decoding in multimodal systems. Lossless speculative decoding preserves the autoregressive target’s output distribution ( Leviathan et al., 2023 ; Chen et al., 2023a ) , whereas structured visual planning instead permits predictions to be judged by their spatial accuracy and usefulness for action, in the spirit of relaxed acceptance criteria ( Bachmann et al., 2025 ; Wang et al., 2025c ) . VFlash enables a System-1 mode ( Kahneman, 2011 ) of visual planning in VLMs, producing fast, structured spatial predictions through joint coordinate decoding. This perspective interestingly connects to recent System-1 models such as Jev, which emphasize fast, typed decisions ( Almeida, 2026 ; Yu and Yao, 2026 ) . VFlash brings this perspective to complete geometric predictions, exploiting structure within each primitive. The resulting gains in both speed and spatial accuracy suggest that autoregressive decoding need not define the quality ceiling for visual outputs.",
+      "url": "https://arxiv.org/html/2611.08449v1#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "f8584c02ca29f6aa",
+      "section": "2 Method",
+      "location": "2 Method",
+      "text": "This section presents the generalist decoding framework of VFlash for physical AI, covering both the preliminaries of DFlash and the detailed design of Flash Primitive Decoding (Figure 2 ).",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d2486f77444f414b",
+      "section": "2.1 Preliminaries",
+      "location": "2.1 Preliminaries",
+      "text": "In speculative decoding, a draft model q ϕ q_{\\phi} proposes γ \\gamma tokens that the target model p θ p_{\\theta} verifies in parallel, giving an average per-token latency of",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2ae22a8b7a9109fc",
+      "section": "2.1 Preliminaries",
+      "location": "2.1 Preliminaries",
+      "text": "L = T draft + T verify τ , L=\\frac{T_{\\mathrm{draft}}+T_{\\mathrm{verify}}}{\\tau}, (1)",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.E1",
+      "kind": "table"
+    },
+    {
+      "id": "17d7cea3bf25d794",
+      "section": "2.1 Preliminaries",
+      "location": "2.1 Preliminaries",
+      "text": "where τ \\tau is the expected number of tokens accepted per cycle ( Chen et al., 2026 ) . DFlash reduces the numerator with a lightweight block diffusion drafter. Features H θ ​ ( x ) H_{\\theta}(x) from selected target layers are fused and injected as keys and values into each draft layer. Given a start token a 0 a_{0} , the drafter predicts γ \\gamma masked tokens in one bidirectional forward pass, yielding T draft = t par ≪ γ ​ t step T_{\\mathrm{draft}}=t_{\\mathrm{par}}\\ll\\gamma\\,t_{\\mathrm{step}} , where t step t_{\\mathrm{step}} is the sequential drafting cost per token. Longer drafts, however, need not increase τ \\tau : greedy verification accepts tokens only up to the first mismatch with the target:",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "518b1040d301b3bd",
+      "section": "2.1 Preliminaries",
+      "location": "2.1 Preliminaries",
+      "text": "τ ver = 1 + max ⁡ { k ≤ γ : a j = arg ​ max v ⁡ p θ ​ ( v ∣ x , a < j ) ​ for all ​ j ≤ k } . \\tau_{\\mathrm{ver}}=1+\\max\\Big\\{k\\leq\\gamma:\\;a_{j}=\\argmax_{v}\\,p_{\\theta}\\!\\left(v\\mid x,a_{<j}\\right)\\ \\text{for all}\\ j\\leq k\\Big\\}. (2)",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.E2",
+      "kind": "table"
+    },
+    {
+      "id": "0958b3492c25f86f",
+      "section": "2.1 Preliminaries",
+      "location": "2.1 Preliminaries",
+      "text": "τ ver \\tau_{\\mathrm{ver}} often saturates well below γ \\gamma . Thus enlarging a block does not necessarily enlarge its final throughput. For text generation, the goal is to preserve the target distribution ( Leviathan et al., 2023 ) via verification. But token-level agreement need not reflect spatial accuracy. VFlash retains the drafting architecture and replaces Eq. 2 with direct acceptance of structurally valid visual primitives.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS1.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "c59c04555d22aa61",
+      "section": "2.2 Flash primitive decoding",
+      "location": "2.2 Flash primitive decoding",
+      "text": "Given visual observations and a task instruction, the VLM predicts spatial objects such as boxes, robot trajectories, or future point positions. Each prediction is a visual primitive with a schema s s specifying its type, coordinate dimensions, and extent. This fixes each coordinate’s role while leaving its value to be inferred from the input. A trajectory’s 2D image coordinates and 3D spatial coordinates can form one primitive and be predicted jointly. For variable-length predictions, a tool call declares the extent, which together with the primitive type determines the layout; for fixed-size predictions such as boxes, the type alone suffices. The structure is thus known before coordinate prediction, and each decoding block covers a complete primitive.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "02e62ce176eff718",
+      "section": "2.2 Flash primitive decoding",
+      "location": "2.2 Flash primitive decoding",
+      "text": "The schema defines a block of length B ⁡ ( s ) B(s) : an observed start token a 0 a_{0} followed by B ⁡ ( s ) − 1 B(s)-1 masked tokens. An autoregressive target factorizes the blocks as ∏ j p θ ​ ( a j ∣ x , a < j ) \\prod_{j}p_{\\theta}(a_{j}\\mid x,a_{<j}) and needs B ⁡ ( s ) − 1 B(s)-1 sequential passes. Given the layout and the target context, VFlash instead predicts all positions conditionally independently,",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c55db30834745d8d",
+      "section": "2.2 Flash primitive decoding",
+      "location": "2.2 Flash primitive decoding",
+      "text": "q ϕ ( a 1 : B ⁡ ( s ) − 1 ∣ H θ ( x ) , a 0 ) = ∏ j = 1 B ⁡ ( s ) − 1 q ϕ , j ( a j ∣ H θ ( x ) , a 0 , MASK B ⁡ ( s ) − 1 ) , q_{\\phi}\\!\\left(a_{1:B(s)-1}\\mid H_{\\theta}(x),a_{0}\\right)=\\prod_{j=1}^{B(s)-1}q_{\\phi,j}\\!\\left(a_{j}\\mid H_{\\theta}(x),a_{0},\\mathrm{MASK}^{B(s)-1}\\right), (3)",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.E3",
+      "kind": "table"
+    },
+    {
+      "id": "d6778edf84bc2c40",
+      "section": "2.2 Flash primitive decoding",
+      "location": "2.2 Flash primitive decoding",
+      "text": "in a single forward pass. The complete primitive is thus the unit of parallel prediction, with a speculation budget γ = B ⁡ ( s ) − 1 \\gamma=B(s)-1 set by the request rather than by a fixed window. The same principle covers targets that emit coordinates as ordinary text: we align their numeric fields in a fixed-width layout and render the predictions back into the target’s text format. Appendix A gives the coordinate conventions and serialization formats of each task.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "b949c582a047c824",
+      "section": "2.2 Flash primitive decoding",
+      "location": "2.2 Flash primitive decoding",
+      "text": "Figure 2: FPD design. A primitive-start token triggers a prediction block layout determined by the primitive type and the preceding tool calling. By adapting the prediction block to each primitive’s structure, VFlash supports different spatial formats and lengths without requiring token-level agreement with the VLM.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "72aa92a5ea0afe78",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "Visual plans often require large, variable-length draft blocks. For example, NAVSIM requires eight waypoints over four seconds, while Waymo requires twenty over five seconds. Drafting such blocks introduces challenges in format following and spatial accuracy. We find that two design principles help address these challenges:",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7baae0e71c4ba9bd",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "Boundary alignment decides what is predicted together: each draft block covers one complete primitive, avoiding the splits caused by fixed-length windows. The tool call declares the block length, from which the waypoint count P P follows, and a shared layout template accommodates different lengths, allowing the whole primitive to be drafted in one pass.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b04104cc608ba487",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "Position alignment decides what each position predicts: every slot has a known role—a waypoint, axis, or delimiter—before decoding. This supports parallel prediction with a consistent layout and per-position constraints at inference.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "7767555328c3369e",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "Table 1: Primitive layouts. Each block begins with the start token a 0 a_{0} . P P denotes the number of points; ( u , v ) (u,v) and ( x , y , z ) (x,y,z) denote image-plane and metric coordinates in special tokens.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "46cea628965c3405",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "Primitive Layout B-box <box> u 1 ​ v 1 ​ u 2 ​ v 2 u_{1}\\,v_{1}\\,u_{2}\\,v_{2} </> 2D+3D traj. <2D> ( u ​ v ) × P (u\\,v)\\!\\!\\times\\!\\!{P} </> <3D> ( x ​ y ​ z ) × P (x\\,y\\,z)\\!\\!\\times\\!\\!{P} </> Dense motion <Dense> t 1 ​ t 2 t_{1}t_{2} [ k ( s d 1 ⋯ d 5 ) × 3 ] × P \\big[\\,k\\;(s\\,d_{1}{\\cdots}d_{5})\\!\\!\\times\\!\\!{3}\\,\\big]\\!\\!\\times\\!\\!{P} </>",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.T1.4",
+      "kind": "table"
+    },
+    {
+      "id": "0e9e425edafb8d0c",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "Maintaining this layout requires each coordinate to occupy a fixed number of positions. Recent VLMs normalize image coordinates to 0–1,000 and write them as ordinary text ( Bai et al., 2023 ; Zhu et al., 2025 ) ; models built around visual primitives often use special tokens ( Jiang et al., 2025 ; Wang et al., 2026 ) . A special coordinate token occupies one position, whereas text tokenization can vary with the value and shift subsequent coordinates. VFlash supports both representations.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "3ec14dc90588f00a",
+      "section": "2.3 Token representations",
+      "location": "2.3 Token representations",
+      "text": "For our base model (Section 3 ), typed start and end tokens mark primitive boundaries and transitions between text and primitive decoding. Each coordinate uses one of 1,001 special tokens, allowing prediction to be restricted to its legal vocabulary. For text-tokenized targets, VFlash gives each coordinate a sign and five digit positions, with unused high-order positions filled by the mask token. This fixed-width grid preserves position roles and is rendered back into the target’s text format, whose delimiters mark block boundaries. Table 1 and Appendix A give the formats details.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "d0dc7261c5798b16",
+      "section": "2.4 Training",
+      "location": "2.4 Training",
+      "text": "We adapt an autoregressive VLM to the spatial response format with next-token supervision, then freeze it and train a shallow, non-causal drafter on its features. For an annotated block a a , we minimize the weighted cross-entropy of Eq. 3 ,",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0de5814de04f3da6",
+      "section": "2.4 Training",
+      "location": "2.4 Training",
+      "text": "ℒ prim = − ∑ j = 1 B ⁡ ( s ) − 1 w j log q ϕ , j ( a j ∣ H θ ( x ) , a 0 , MASK B ⁡ ( s ) − 1 ) , \\mathcal{L}_{\\mathrm{prim}}=-\\sum_{j=1}^{B(s)-1}w_{j}\\log q_{\\phi,j}\\!\\left(a_{j}\\mid H_{\\theta}(x),a_{0},\\mathrm{MASK}^{B(s)-1}\\right), (4)",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.E4",
+      "kind": "table"
+    },
+    {
+      "id": "f57cb94ad58304f4",
+      "section": "2.4 Training",
+      "location": "2.4 Training",
+      "text": "with all logits computed jointly in one forward pass. Primitive positions use uniform w j w_{j} , unlike the decaying weights that favor early positions under Eq. 2 . Crucially, labels a j a_{j} come from annotated coordinates or rendered grids rather than the target’s continuation, optimizing the drafter for spatial accuracy instead of token-level agreement.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "93a00aadb820f53f",
+      "section": "2.4 Training",
+      "location": "2.4 Training",
+      "text": "Each annotated primitive contributes one complete block. Where the response also contains text, sampled short blocks train the ordinary drafting path, so one drafter serves both the verified text path and the direct primitive path. Packed attention keeps examples and independent blocks separate while preserving attention within each primitive. Backbones, data, validity weights, and adaptation recipes are given in Appendix B .",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3e3434ca1841b055",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "Decoding runs 16-position DFlash blocks until a primitive-start token is accepted; the decoder then resolves the declared schema and drafts the complete block of length B ⁡ ( s ) B(s) in one pass. Per-position constraints restrict coordinates and delimiters to their legal vocabularies, and cross-position rules pair out-of-frame coordinates; both act on logits already computed and add no neural evaluation.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c7e1bb15145b0dc5",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "Let a ^ \\hat{a} be the resulting prediction and A s A_{s} its acceptance test: the schema validator, plus for boxes the spatial-confidence guard of LocateAnything ( Wang et al., 2026 ) . VFlash replaces Eq. 2 with",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "033c44e3a8a59e01",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "τ dir = { B ⁡ ( s ) , A s ​ ( a ^ ) = 1 , 1 + r , otherwise , \\tau_{\\mathrm{dir}}=\\begin{cases}B(s),&A_{s}(\\hat{a})=1,\\\\[2.0pt] 1+r,&\\text{otherwise},\\end{cases} (5)",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.E5",
+      "kind": "table"
+    },
+    {
+      "id": "f57986635bc83521",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "where the first r r draft slots are retained ( r = 0 r=0 for trajectories; for boxes, those before the first uncertain coordinate) and the rest are regenerated by constrained target AR. An accepted primitive is committed without token-level agreement; one target pass updates the cache and context features and emits the next token. Text still follows Eq. 2 ; Appendix C gives both procedures.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS5.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "0284c79630803908",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "Substituting Eq. 5 into Eq. 1 , a valid primitive costs",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS5.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "938691db7a4cab26",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "L dir = t par + t target B ⁡ ( s ) , L_{\\mathrm{dir}}=\\frac{t_{\\mathrm{par}}+t_{\\mathrm{target}}}{B(s)}, (6)",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.E6",
+      "kind": "table"
+    },
+    {
+      "id": "0c6a6423b7e94346",
+      "section": "2.5 Inference",
+      "location": "2.5 Inference",
+      "text": "against one target forward t target t_{\\mathrm{target}} per coordinate under autoregressive decoding, up to prefix and continuation overhead. Both passes grow mildly with B ⁡ ( s ) B(s) , but their number does not, so a more detailed plan adds no sequential decoding steps.",
+      "url": "https://arxiv.org/html/2611.08449v1#S2.SS5.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "b71819979705f791",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "Base VLM. Most experiments use a customized embodied VLM combining Qwen3-4B ( Yang et al., 2025 ) , a native-resolution MoonViT encoder ( Kimi Team, 2025 ) , and an MLP connector. It is trained progressively on general vision-language tasks, grounding ( Wang et al., 2026 ) , embodied spatial understanding, and joint 2D/3D trajectory prediction. Coordinates for bounding box and trajectory use special tokens, with 2D image coordinates normalized to 0–1,000 and 3D coordinates uniformly quantized within predefined ranges. For dense motion prediction, we use the released MolmoMotion-AR model ( Zhang et al., 2026a ) , retaining its text-based coordinate representation.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "91898e74832c3424",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "Per-task training. For clean ablation studies, we fine-tune the AR target on task-specific data, then freeze it and train a five-layer VFlash drafter on the same data. For MolmoMotion, we train only the drafter on the frozen released target. Detailed per-task datasets, training mixtures, and optimization settings are provided in Appendix B .",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2318bd36576b5b2b",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "Visual-plan conditioning. Despite differences in DiT/WAM architectures and their interfaces with the VLM, a commonality is that the action models cross-attend to VLM features encoding the generated visual plans. These features are obtained by processing VFlash’s accepted primitives with the frozen target VLM. Appendix D details the architectures and conditioning mechanisms.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "fe523db4822ba983",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "Table 2: Open-loop 2D trajectory prediction. DFD, HD, and RMSE in normalized image coordinates ( ↓ \\downarrow ). Reference rows are taken from prior work; Baseline (AR) and VFlash share the same 4B target and differ only in the decoder. Bold and underline mark the best and second-best values.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T3.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "133cac60688f2fe0",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "ShareRobot-Bench VABench-V Method Params DFD HD RMSE DFD HD RMSE Qwen3-VL ( 2025 ) 4B 0.381 0.329 0.220 0.279 0.253 0.204 Qwen3-VL ( 2025 ) 8B 0.392 0.341 0.233 0.274 0.255 0.202 MolmoAct ( 2025 ) 7B 0.776 0.776 0.677 0.814 0.814 0.688 Embodied-R1 ( 2026b ) 3B 0.343 0.300 0.239 0.303 0.259 0.213 HAMSTER ( 2025a ) 13B 0.437 0.392 0.355 0.212 0.205 0.183 RoboBrain-2.0 ( 2025 ) 7B 0.167 0.158 0.125 0.329 0.260 0.224 LoHo-Manip ( 2026b ) 4B 0.231 0.206 0.156 0.212 0.182 0.147 Baseline (AR) 4B 0.202 0.175 0.142 0.130 0.125 0.093 VFlash (ours) 4B 0.194 0.162 0.133 0.126 0.116 0.089",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T3.fig1.3.1",
+      "kind": "table"
+    },
+    {
+      "id": "6f9b6e6fe666c43b",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "Table 3: Category-conditioned box generation. F1 (%, ↑ \\uparrow ) and boxes per second (BPS, ↑ \\uparrow ). Direct accepts every schema-valid box without verification; AR fallback regenerates boxes rejected by the spatial-confidence guard with constrained AR (Appendix F.4 ). BPS is measured separately on each dataset.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T3.fig2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ef564d0dfa364e37",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "F1@IoU (%) Method Dataset Mean 0.50 0.95 BPS COCO 48.68 65.29 16.09 3.15 Baseline (AR) Dense200 60.10 76.70 16.95 6.73 COCO 41.32 59.64 10.76 5.96 VFlash (direct) Dense200 39.09 55.06 6.59 22.66 COCO 47.79 66.38 13.48 8.76 VFlash (AR fallback) Dense200 61.78 82.64 12.11 17.46",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T3.fig2.7",
+      "kind": "table"
+    },
+    {
+      "id": "2f2660fa1a2772bf",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "Table 4: Open-loop 3D robot trajectory prediction. ADE and FDE in meters ( ↓ \\downarrow ); SR@5 and SR@10 are the fraction of waypoints within 5 cm and 10 cm ( ↑ \\uparrow ). The three variants differ in what the model generate (3D only, 2D+3D) and whether wrist-camera views were added in training. All groups are evaluated with the same single-view inputs. Bold marks the best value per column.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "eb4fb6c65d3d969a",
+      "section": "3 Experiment",
+      "location": "3 Experiment",
+      "text": "InternA1 ( 2026 ) AgiBot ( 2025 ) MolmoBot ( 2026 ) Training Variant Decoder ADE FDE SR@5 SR@10 ADE FDE SR@5 SR@10 ADE FDE SR@5 SR@10 AR 0.101 0.155 0.412 0.658 0.083 0.125 0.503 0.799 0.066 0.104 0.526 0.804 3D-only VFlash 0.065 0.098 0.638 0.820 0.042 0.067 0.731 0.914 0.054 0.083 0.653 0.870 AR 0.153 0.233 0.273 0.473 0.105 0.151 0.398 0.698 0.076 0.116 0.467 0.767 2D+3D VFlash 0.062 0.091 0.640 0.827 0.041 0.064 0.739 0.919 0.055 0.085 0.640 0.862 AR 0.130 0.196 0.360 0.554 0.084 0.129 0.456 0.749 0.066 0.102 0.547 0.813 2D+3D w/ wrist- camera training VFlash 0.060 0.091 0.651 0.835 0.036 0.057 0.794 0.937 0.052 0.080 0.671 0.877",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T4.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "14a203a536638a63",
+      "section": "3.1 Visual primitive prediction",
+      "location": "3.1 Visual primitive prediction",
+      "text": "2D trajectory prediction. On ShareRobot-Bench ( Ji et al., 2025 ) and VABench-V ( Yuan et al., 2026a ) , VFlash lowers all six errors of its AR target (Table 3 ), by 7% on HD and 3–6% on DFD and RMSE across both benchmarks. On VABench-V, VFlash cuts every error by roughly 40% relative to the best prior model, LoHo-Manip ( Liu et al., 2026b ) , with our AR target already outperforming the listed baselines; on ShareRobot-Bench, VFlash is second only to RoboBrain-2.0 ( BAAI RoboBrain Team, 2025 ) .",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0994dd101d1198c8",
+      "section": "3.1 Visual primitive prediction",
+      "location": "3.1 Visual primitive prediction",
+      "text": "2D bounding box prediction. On COCO ( Lin et al., 2014 ) and Dense200 ( Jiang et al., 2025 ) , VFlash with AR fallback matches AR on mean F1 while decoding 2.6–2.8 × \\times faster (Table 3 ), with higher F1 at IoU 0.50, especially on the crowded Dense200 scenes, but lower F1 at IoU 0.95. Without fallback, mean F1 drops by about 20 points on Dense200.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "77bd42321a525a89",
+      "section": "3.1 Visual primitive prediction",
+      "location": "3.1 Visual primitive prediction",
+      "text": "3D trajectory prediction. On InternA1 ( Tian et al., 2026 ) , AgiBot ( Bu et al., 2025 ) , and MolmoBot ( Deshpande et al., 2026 ) , VFlash improves all four metrics for all three target variants (Table 4 ). ADE falls by 18–49% with the 3D-only target and by 28–61% with the 2D+3D target; waypoint accuracy at 5 cm on AgiBot rises from 50% to 73% and from 40% to 74%, respectively. With joint 2D+3D outputs, AR’s 3D ADE is 15–51% higher than with 3D-only outputs, while VFlash maintains similar accuracy by predicting both segments in one parallel pass. The wrist-camera training variant further reduces VFlash’s ADE by 3–12%, with evaluation still using only the primary camera.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0bd74aee992f58ad",
+      "section": "3.1 Visual primitive prediction",
+      "location": "3.1 Visual primitive prediction",
+      "text": "Dense 3D motion prediction. On PointMotionBench ( Zhang et al., 2026a ) , we freeze the backbone of MolmoMotion-AR and draft each future frame of query points as one block with a fixed-width digit layout (Appendix A ). As shown in Table 5 , VFlash reduces DAVIS ADE and FDE by 27% and 19%, respectively, and HOT3D FDE by 8%. Its ADE ranks second on HOT3D and WorldTrack, behind AR but ahead of the flow-matching variant, although WorldTrack FDE increases by 15% and PWT is 7–12% lower across the three datasets. These results extend VFlash to dense motion prediction with text-tokenized coordinates, with gains over AR on several error metrics and approximately 25 × 25\\times faster single-rollout generation (Appendix F.3 ).",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "00eb6ad65a43c391",
+      "section": "3.1 Visual primitive prediction",
+      "location": "3.1 Visual primitive prediction",
+      "text": "Table 5: 3D point motion forecasting on PointMotionBench. VFlash uses MolmoMotion-AR ( Zhang et al., 2026a ) as its target. VFlash achieves approximately 25 × 25\\times faster single-rollout generation than AR (Appendix F.3 ). ADE/FDE are in meters ( ↓ \\downarrow ); Frames and Text indicate observation history and language input. Bold and underline mark the best and second-best values.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d51853937016fe6b",
+      "section": "3.1 Visual primitive prediction",
+      "location": "3.1 Visual primitive prediction",
+      "text": "Input HOT3D WorldTrack DAVIS Method Frames Text ADE ↓ \\downarrow FDE ↓ \\downarrow PWT ↑ \\uparrow ADE ↓ \\downarrow FDE ↓ \\downarrow PWT ↑ \\uparrow ADE ↓ \\downarrow FDE ↓ \\downarrow PWT ↑ \\uparrow ObjectForesight ( 2026 ) 3 No 0.129 0.192 0.353 — — — — — — EgoScaler ( 2025 ) 1 Yes 0.170 0.179 0.218 — — — — — — Robot4DGen ( 2026d ) 3 No 0.212 0.271 0.112 0.548 0.704 0.121 2.120 3.382 0.081 Track2Act ( 2024 ) 1 No 0.294 0.413 0.202 1.230 1.567 0.053 4.853 8.110 0.018 MolmoMotion-FM ( 2026a ) 3 Yes 0.135 0.255 0.382 0.158 0.295 0.438 1.480 2.520 0.130 MolmoMotion-AR ( 2026a ) 3 Yes 0.109 0.217 0.444 0.143 0.261 0.445 1.227 2.108 0.153 VFlash 3 Yes 0.122 0.200 0.391 0.145 0.300 0.408 0.893 1.716 0.143",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T5.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "7dab6414576592db",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Experiment Setup. We prioritize controlled comparisons of visual-plan conditioning over maximizing benchmark scores through additional model enhancements. The VLM remains frozen in all configurations; action policies condition on its hidden states encoding the generated plans and visual context. Within each application, we keep the action-model architecture fixed across comparisons.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c816361cd2cfb4ad",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Table 6: MolmoSpaces manipulation results. Baseline and VFlash share the same WAM; Baseline keeps its original text encoder, VFlash replaces it with our VLM and conditions on the generated plan. Bold marks the best value per column.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T7.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a85af91081fe8a35",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Method Avg. Pick P&P Open Close π 0 \\pi_{0} -FAST DROID ( 2025 ) 20.7 22.0 11.0 11.1 38.6 π 0 \\pi_{0} DROID ( 2024 ) 23.2 16.2 12.5 11.0 53.1 π 0.5 \\pi_{0.5} DROID ( 2025 ) 34.5 36.4 13.6 22.7 65.1 PRTS-Droid ( 2026c ) 42.4 53.8 27.7 12.0 76.3 Cosmos3-Nano-Policy ( 2026a ) 53.0 65.5 35.2 32.0 79.1 WALL-OSS-0.5 ( 2026 ) 53.8 73.8 46.0 16.8 78.5 PrimeR0 ( 2026 ) 60.3 77.5 54.6 27.8 81.3 Baseline 62.6 81.1 55.7 49.3 64.2 VFlash 70.2 83.6 67.3 52.8 77.0",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T7.fig1.3.1",
+      "kind": "table"
+    },
+    {
+      "id": "6f55a09539621cc4",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Table 7: All variants use the same WAM with different decoders, primitive types, or conditioning features. Baseline uses WAM’s original text encoder. Q, S, T, and I denote the VLM hidden features for the question, subtask, trajectory, and image tokens. Image context baseline uses VFlash to decode subtask.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T7.fig2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5ecf9213a6deb496",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Variant Decode Primitive Context Avg. Baseline — — Native 62.6 AR generation AR 2D+3D Q+S+T 61.0 3D-only VFlash 3D Q+S+T 69.3 Image context VFlash — Q+S+I 63.7 VFlash VFlash 2D+3D Q+S+T 70.2",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T7.fig2.1.1",
+      "kind": "table"
+    },
+    {
+      "id": "94febd3d89d9665f",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "MolmoSpaces. For MolmoSpaces ( Kim et al., 2026b ) the policy is a world action model (WAM) obtained by post-training Cosmos-Predict2.5 ( NVIDIA, 2026c ) for robot control. We replace its Cosmos-Reason text encoder with our VLM. The WAM reads the VLM’s hidden states at the question, the generated subtask, and the visual plans of 2D+3D trajectories with ten waypoints, passed through a linear projection into its existing text cross-attention path. It keeps its own camera and robot-state inputs, predicts 20-step action chunks, and requests a new plan every three chunks. The baseline is the unmodified WAM with its original text encoder.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7322cfb8cb51111b",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "As shown in Table 7 , visual-plan conditioning raises average success from 62.6% to 70.2%, exceeding the listed public model, PrimeR0 ( Lumos Robotics, 2026 ) , by 9.9 percentage points on average and scoring higher on three of four tasks. The largest gains over the baseline are on Pick & Place and Close (11.6 and 12.8 points), compared with 2.5 points on Pick, suggesting greater benefits for tasks involving multiple dependent motions.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "8dcdd32223360c63",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Table 7 compares plan representations and conditioning choices. Using AR-generated 2D+3D plans instead of VFlash plans lowers average success from 70.2% to 61.0%. Replacing trajectory states with image states lowers success by 6.5 percentage points to 63.7%. A 3D-only plan reaches 69.3%, while joint 2D+3D plans achieve the best average.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "cf62c979860dc663",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Figure 3: LIBERO family. Average success (%) of the same PIv3 head conditioned on a frozen Qwen3-VL-4B (Baseline), on our VLM’s states up to the generated subtask (w/o Visual Primitives), and on the full visual plan (VFlash).",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e51a50a4c9695a1a",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "LIBERO family. On LIBERO ( Liu et al., 2023 ) , LIBERO-Plus ( Fei et al., 2025 ) , and LIBERO-PRO ( Zhou et al., 2025b ) , we train a PIv3 flow-matching action head in StarVLA ( StarVLA Community, 2026 ) , with per-layer cross-attention to a frozen VLM. Given primary and wrist images, the VLM generates a subtask and a ten-waypoint 2D+3D trajectory before each eight-action chunk. We compare conditioning on VLM states through the subtask or the full plan. The baseline uses the same action head with a frozen Qwen3-VL-4B encoding only images and instructions.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "7dc9f5331d1eca7e",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "As shown in Figure 3 , gains over the baseline increase from 0.8 percentage points on LIBERO to 1.9 on LIBERO-Plus and 6.8 on LIBERO-PRO, indicating greater benefits under perturbations. On LIBERO-PRO, visual plans improve Spatial, Object, and Goal by 11.1, 9.4, and 6.9 points over the baseline. Compared with subtask-only conditioning, they add 2.6 points on Spatial, 1.2 on Goal, and 2.0 on Long, showing that trajectories provide useful information beyond the generated subtask.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "ef7a6e1b3ec0a898",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Autonomous driving. For NAVSIM ( Dauner et al., 2024 ) and Waymo ( Xu et al., 2026b ) the policy is a ReCogDrive-derived diffusion transformer ( Li et al., 2026 ) that reads the VLM’s final-layer states over the prompt and the generated plan through cross-attention, alongside ego history and vehicle state, and outputs a continuous trajectory. The VLM is frozen and generates a 2D+3D trajectory on each dataset’s native grid; separate heads are trained on Waymo, NAVSIM, and Alpamayo-derived data. RL then fine-tunes the head alone with PDMS and RFS as rewards, so the plans are identical in the SFT and RL rows.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "6695760e1955cdd1",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "As shown in Table 8 , VFlash achieves competitive driving performance with a frozen planning VLM and a small action head. With supervised training, it reaches 87.1 PDMS on NAVSIM, above ReCogDrive (86.8), and 7.79 RFS on Waymo, comparable to Qwen-Drive-1.0-SFT (7.78). RL on the action head raises these scores to 90.7 PDMS and 7.86 RFS, matching Qwen-Drive-1.0-RL on NAVSIM and coming within 0.05 RFS of the best listed Waymo result. These gains require no updates to the VLM or its generated plans. Together, the results show that VFlash supports competitive plan-conditioned driving while substantially reducing decoding latency (Section 3.3 ).",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS2.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "5ceb7fb80ba13f93",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Table 8: Autonomous driving results on NAVSIM (left) and the Waymo test split (right). RL indicates reinforcement learning; ↑ \\uparrow / ↓ \\downarrow denote higher / lower is better.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "9f24f3668301af96",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Method RL NC ↑ \\uparrow DAC ↑ \\uparrow EP ↑ \\uparrow TTC ↑ \\uparrow Comf. ↑ \\uparrow PDMS ↑ \\uparrow Hydra-MDP ( 2024b ) – 98.3 96.0 78.7 94.6 100.0 86.5 DiffusionDrive ( 2025 ) – 98.2 96.2 82.2 94.7 100.0 88.1 ReCogDrive ( 2026 ) – 98.3 95.1 81.1 94.3 100.0 86.8 ReCogDrive ( 2026 ) ✓ \\checkmark 98.2 97.8 83.5 95.2 99.8 89.6 SpanVLA ( 2026c ) ✓ \\checkmark 99.1 97.1 86.3 95.2 100.0 90.3 ExploreVLA ( 2026 ) ✓ \\checkmark 98.8 98.4 83.5 96.5 99.9 90.4 EponaV2 ( 2026a ) ✓ \\checkmark 98.6 97.9 84.8 95.7 100.0 90.4 Qwen-Drive-1.0-SFT ( 2026b ) – 98.4 96.6 82.4 94.7 100.0 88.2 Qwen-Drive-1.0-RL ( 2026b ) ✓ \\checkmark 98.6 98.2 84.8 95.9 100.0 90.7 VFlash-SFT – 98.1 95.2 81.7 94.3 100.0 87.1 VFlash-RL ✓ \\checkmark 98.3 97.8 85.9 95.4 100.0 90.7",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T8.4.1",
+      "kind": "table"
+    },
+    {
+      "id": "071c0f8ca18df690",
+      "section": "3.2 Downstream applications",
+      "location": "3.2 Downstream applications",
+      "text": "Method RL ADE 3 ​ s ↓ {}_{3\\mathrm{s}}\\downarrow ADE 5 ​ s ↓ {}_{5\\mathrm{s}}\\downarrow RFS ↑ \\uparrow DiffusionLTF ( 2025 ) – 1.36 2.89 7.72 dVLM-AD ( 2026 ) – 1.29 3.02 7.63 HMVLM ( 2025a ) – 1.33 3.07 7.74 MindVLA-U1 ( 2026 ) – 1.16 2.67 7.77 Fast-dDrive ( 2026b ) – 1.25 2.91 7.82 NoRD ( 2026 ) ✓ \\checkmark 1.25 – 7.71 MindVLA-U1 ( 2026 ) ✓ \\checkmark 1.09 2.66 7.87 Qwen-Drive-1.0-SFT ( 2026b ) – 1.19 2.65 7.78 Qwen-Drive-1.0-RL ( 2026b ) ✓ \\checkmark 1.19 2.67 7.91 VFlash-SFT – 1.23 2.71 7.79 VFlash-RL ✓ \\checkmark 1.22 2.70 7.86",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.T8.5.1",
+      "kind": "table"
+    },
+    {
+      "id": "5acd32e4e7867306",
+      "section": "3.3 Throughput analysis",
+      "location": "3.3 Throughput analysis",
+      "text": "Figure 4 splits per-step latency into visual encoding, prefill, decoding, and the action model at batch size one on Jetson Thor, DGX Spark, and H100. Thor is an embedded platform for robots and vehicles and Spark a desktop-class system, typical on-device hardware for the System-1 visual planning of Section 1 ; H100 is the server reference. Appendix E gives the timing boundary and the full table. Across devices, VFlash cuts per-step latency 5.1–5.2 × \\times on MolmoSpaces on Thor and Spark and 3.6 × \\times on H100, and 3.4–3.6 × \\times and 2.6 × \\times on NAVSIM; on Waymo (Figure 5 ) the H100 reduction is 4.5 × \\times . The gain comes almost entirely from decoding: under AR it takes 75–87% of each step on Thor, and VFlash cuts it 12–42 × \\times while the other stages are unchanged.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "235502b1c26c96d9",
+      "section": "3.3 Throughput analysis",
+      "location": "3.3 Throughput analysis",
+      "text": "Figure 4: VFlash latency across different downstream tasks on Jetson Thor, DGX Spark and H100.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7347098ce63778bd",
+      "section": "3.3 Throughput analysis",
+      "location": "3.3 Throughput analysis",
+      "text": "AR decoding runs one 4B VLM pass per token (35–39 ms on Thor, 33–40 ms on Spark, 4.7–6.0 ms on H100), so decoding time grows roughly linearly with token count. Drafting predicts the remaining tokens of a 36–84-token primitive in one pass, taking 13–23 ms on Thor and 1–3 ms on H100. Verification still needs a target pass per block, so its benefit depends on the tokens committed per iteration. On MolmoSpaces, DFlash commits 5.5 tokens per iteration on subtask text but only 2.2 within trajectory blocks: a coordinate one bin off the target’s choice fails Eq. 2 even with small geometric error. DFlash thus only about halves decoding time. VFlash skips token-level verification for visual primitives, using one drafter pass and one target pass per primitive; the target pass updates the cache and extracts hidden states for the action head, amortized over the block. On Thor, decoding takes 72–78 ms as the driving primitive grows from 36 to 84 tokens, so denser plans add little latency over this range.",
+      "url": "https://arxiv.org/html/2611.08449v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "941bc2a990ab24c5",
+      "section": "4 Related Work",
+      "location": "4 Related Work",
+      "text": "Embodied VLMs and visual plans. Embodied VLMs are increasingly used as high-level modules that turn visual observations and language instructions into plans, affordances, and trajectories ( Ji et al., 2025 ; BAAI RoboBrain Team, 2025 ; Gemini Robotics Team, 2025 ; Yuan et al., 2026b ; Dang et al., 2026 ) . Spatial prediction is central to these models: points and boxes localize objects or affordances ( Yuan et al., 2025 ; Zhou et al., 2025a ; Deitke et al., 2025 ; Jiang et al., 2025 ) , while traces describe intended or predicted motion ( Zhou et al., 2026a ; Wen et al., 2024 ; Zhang et al., 2026a ) . These visual plans can condition manipulation policies ( Gu et al., 2024 ; Li et al., 2025a ; Liu et al., 2026b ; Tan et al., 2026 ; Huang et al., 2025 ) or be fed back as prompts ( Zheng et al., 2025 ) . Other work reasons spatially before acting ( Lee et al., 2025 ; Fang et al., 2026 ; Guo et al., 2026 ) , predicts future states ( Kim et al., 2026a ; Ye et al., 2026 ) , or plans driving trajectories from scene understanding ( Tian et al., 2025 ; Wang et al., 2025b ; NVIDIA et al., 2025 ) . While this literature asks what embodied models should predict, we ask how fast such spatial predictions can be produced. Token-by-token coordinate generation makes every extra waypoint, object, or dimension an additional decoding step.",
+      "url": "https://arxiv.org/html/2611.08449v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "75a5525f9e219a31",
+      "section": "4 Related Work",
+      "location": "4 Related Work",
+      "text": "Parallel and speculative decoding. Speculative decoding accelerates LLM inference by verifying multiple drafted tokens in parallel ( Stern et al., 2018 ; Leviathan et al., 2023 ; Chen et al., 2023a ) . Medusa, EAGLE, TIDAR, and DFlash explore different ways to produce these drafts ( Cai et al., 2024 ; Li et al., 2024a ; Liu et al., 2026c ; Chen et al., 2026 ) . For visual outputs, LocateAnything decodes points and boxes as units, but is limited to fixed-size 2D primitives ( Wang et al., 2026 ) . Closest to this work, Spec-VLA accelerates OpenVLA by accepting draft action tokens whose bins lie near the target’s ( Wang et al., 2025c ) . However, it still verifies each action token against the target and commits only 2.10 2.10 – 2.94 2.94 tokens per pass. Based on our finding that, for visual trajectory prediction, one-pass drafts are more accurate than the autoregressive target, VFlash instead drafts the entire visual primitive in one pass rather than by agreement with the target.",
+      "url": "https://arxiv.org/html/2611.08449v1#S4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c551cab31746a0ea",
+      "section": "4 Related Work",
+      "location": "4 Related Work",
+      "text": "Embodied and System-1 models. In a deployed perception-action loop, VLM latency directly limits how quickly the agent can react. Prior efficiency works mainly accelerate the action execution pipeline, for example via action compression, parallel action chunks, or flow matching ( Pertsch et al., 2025 ; Kim et al., 2025 ; Song et al., 2025 ; Black et al., 2024 ) . Prior VLM-based planning, however, still often rely on highly autoregressive token decoding. System-1 models such as Jev make fast typed decisions that downstream applications can use directly ( Almeida, 2026 ) , and Visual Jev answers many independent visual questions in parallel after one image encoding ( Yu and Yao, 2026 ) . Our work can be seen as a relevant effort that enables System-1 VLM spatial prediction. Within this context, our work studies optimized token representation and decoding schemes systematically, supporting both dedicated special tokens ( Chen et al., 2022 ) and plain numbers ( Chen et al., 2023b ; Bai et al., 2023 ; Zhu et al., 2025 ) .",
+      "url": "https://arxiv.org/html/2611.08449v1#S4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "bd9158cebf0b607a",
+      "section": "4 Related Work",
+      "location": "4 Related Work",
+      "text": "In summary, VFlash uses DFlash-style drafting without target-token agreement, extending fast and accurate visual plan generation from LocateAnything’s parallel box decoding to richer and more general visual primitives that are useful for downstream embodied applications. It also enables more efficient decoding parallelism via systematic studies, in contrast to relevant or concurrent works.",
+      "url": "https://arxiv.org/html/2611.08449v1#S4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee98718725d2e6a2",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "We presented VFlash, which uses the known structure of visual primitives to replace sequential coordinate generation with parallel prediction. Our results show that useful spatial predictions need not reproduce an autoregressive model’s output: direct drafts reduce robot trajectory errors, while single-rollout timing estimates indicate approximately 25 × 25\\times faster generation for 3D object point forecasting. Plan-conditioned manipulation further demonstrates how these predictions support downstream action generation. Future work will examine whether generating multiple complementary primitives from shared observations improves control within a fixed latency budget.",
+      "url": "https://arxiv.org/html/2611.08449v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "38d69831026c00e5",
+      "section": "5 Conclusion",
+      "location": "5 Conclusion",
+      "text": "Acknowledgement. The team would like to thank Pavlo Molchanov, Jindong Jiang, Yonggan Fu, Guillermo Siman, Andrew Tao, Karan Sapra, Pulkit Kumar, Patrick Liu and Yan Wang for the valuable discussions. The team would also like to give special thanks to the NVIDIA TSE Team for their exceptional work on the TensorRT deployment of this work.",
+      "url": "https://arxiv.org/html/2611.08449v1#S5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1a98ba32ccc2781d",
+      "section": "AI use statement",
+      "location": "AI use statement",
+      "text": "Generative AI tools were used to assist with manuscript drafting, language polishing, and structural editing, as well as with literature search and code development. AI-generated suggestions were used only as assistance and were reviewed, revised, and verified by the authors. All technical claims, experimental results, interpretations, and final written content were validated by the authors, who take full responsibility for the work.",
+      "url": "https://arxiv.org/html/2611.08449v1#S5.SSx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "65df748621ec78c8",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "Special tokens and tool call. Our base VLM adds three groups of special tokens: the numbers <0> , …, <1000> ; the primitive delimiters listed in Table 9 ; and two markers, <oof> for an out-of-frame image position and <text_mask> , the mask token that occupies every position before the drafter predicts it. A primitive is requested by a tool call that the target writes as ordinary text:",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fd292728e947cd0f",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "<tool_call>{\"name\":\"atomic_decoding\",\"arguments\":{\"block_size\":54}}</tool_call>",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "ed429f72c5be86d7",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "where block_size counts every token of the block including its start token. The start token that follows identifies the layout, and the two together fix the role of every position before drafting. A block whose length does not match any layout, or that exceeds the remaining output budget, is rejected before drafting begins.",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "59cef2123496c923",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "Table 9: Primitive specifications for our base VLM. P P is the number of waypoints per arm or vehicle. Block length includes the start token and all delimiters. Dual-arm blocks repeat the single-arm layout for the left and then the right arm, with left / right replacing single in the start tokens.",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.T9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e582b28846807a1d",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "Primitive Layout Length Bounding box <box> u 1 ​ v 1 ​ u 2 ​ v 2 u_{1}v_{1}u_{2}v_{2} </box> 6 6 Robot 3D <robot_single> ( x ​ y ​ z ) P (x\\,y\\,z)^{P} </robot> 3 ​ P + 2 3P+2 Robot 2D+3D <robot_single_2d> ( u ​ v ) P (u\\,v)^{P} </robot> 5 ​ P + 4 5P+4 <robot_single> ( x ​ y ​ z ) P (x\\,y\\,z)^{P} </robot> Dual-arm 3D / 2D+3D left-arm block, then right-arm block 6 ​ P + 4 6P+4 / 10 ​ P + 8 10P+8 Driving 3D <drive> ( x ​ y ) P (x\\,y)^{P} </drive> 2 ​ P + 2 2P+2 Driving 2D+3D <drive_2d> ( u ​ v ) P (u\\,v)^{P} </drive> 4 ​ P + 4 4P+4 <drive> ( x ​ y ) P (x\\,y)^{P} </drive>",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.T9.16",
+      "kind": "table"
+    },
+    {
+      "id": "ae04634ac83fd5f9",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "Coordinate quantization. A coordinate q ∈ [ ℓ , u ] q\\in[\\ell,u] is mapped to a number token by",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "09ad250ce2a747fa",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "k = ⌊ 1000 ​ q − ℓ u − ℓ + 1 2 ⌋ , q ^ = ℓ + k 1000 ​ ( u − ℓ ) , k=\\left\\lfloor 1000\\frac{q-\\ell}{u-\\ell}+\\frac{1}{2}\\right\\rfloor,\\qquad\\widehat{q}=\\ell+\\frac{k}{1000}(u-\\ell), (7)",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.E7",
+      "kind": "table"
+    },
+    {
+      "id": "c5d854172828bf87",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "rounding half up. Robot XYZ uses [ − 5 , 5 ] [-5,5] , [ − 5 , 5 ] [-5,5] , and [ 0 , 10 ] [0,10] meters in the current primary camera’s OpenCV frame (X right, Y down, Z forward), giving a 1 cm resolution. Driving uses ego-frame X forward in [ − 10,200 ] [-10,200] meters and Y left in [ − 50 , 50 ] [-50,50] meters; height is omitted and heading is left to the action head. Image coordinates are normalized to [ 0 , 1000 ] [0,1000] : robot projections divide by the image dimension minus one, boxes divide by width and height. These ranges are independent of the action heads’ own normalization (Appendix D.3 ).",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "f7753006bc414fb9",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "Validity rules. A block is accepted only if every delimiter is in its declared position, every coordinate position holds a number token, and the waypoint count matches the tool call. A robot or driving waypoint whose projection falls outside the image is written as a pair of <oof> markers in the 2D segment; its metric waypoint is kept. Boxes must satisfy u 1 < u 2 u_{1}<u_{2} and v 1 < v 2 v_{1}<v_{2} ; the converter clips training boxes to the image and expands zero-area boxes to one bin. Boxes within a category are generated one block at a time, sorted lexicographically in training, and an empty category is answered with the text None . Decoding enforces the same rules by restricting each position to its legal tokens (Appendix C ).",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "64d57c7b67ae2762",
+      "section": "Appendix A Visual Primitive Specifications",
+      "location": "Appendix A Visual Primitive Specifications",
+      "text": "Dense motion on a text-tokenized target. The MolmoMotion target keeps its own tokenizer and text format: coordinates are signed millimeter integers relative to the first query point at the current frame, and future frames are separated by a fixed separator. One block covers one future frame of P P query points and has 19 ​ P + 3 19P+3 positions: the frame separator serves as the start token, two positions hold the timestamp, and each point gets one position for its index followed by three coordinates of a sign and five digits. Unused high-order digits, and every position of a point the target would omit, are filled with the target’s mask token, so an omitted point is signaled by a masked index rather than by a shorter frame. The completed block is rendered back into the target’s text by inserting its fixed punctuation; the mask token never appears in the rendered answer. The target’s vocabulary is unchanged. Following MolmoMotion ( Zhang et al., 2026a ) , we use P = 8 P=8 and five-digit coordinates in all experiments (Appendix B ).",
+      "url": "https://arxiv.org/html/2611.08449v1#A1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "699c7daeffc38021",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Base VLM. The visual encoder is MoonViT-SO-400M ( Kimi Team, 2025 ) with 27 layers of width 1,152, 14-pixel patches, and 2 × 2 2\\times 2 spatial merging; a two-layer MLP connects it to Qwen3-4B ( Yang et al., 2025 ) , whose decoder has 36 layers of width 2,560. It is trained on image and video question answering, grounding, pointing, and spatial reasoning data. Every task-specific AR target in Section 3 is fully fine-tuned from this checkpoint. The dense-motion experiment instead uses the released MolmoMotion-4B-H3-F30 ( Zhang et al., 2026a ) target without fine-tuning.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c29c9b9f914073d0",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Drafter architecture. Following DFlash ( Chen et al., 2026 ) , the drafter has five full-width Qwen3 transformer layers with 32 query heads, eight key/value heads, 128-dimensional heads, and a 9,728-dimensional feed-forward layer. Target layers 1, 9, 17, 25, and 33 (zero-based) provide context features; their concatenated 12,800-dimensional states are projected to 2,560 dimensions and RMS-normalized. The drafter shares the frozen target’s input embedding and output projection and has 537M trainable parameters. Positions inside a block attend to each other and to the target context before the block; target features are computed online with gradients disabled.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "66da4414242c36fc",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Loss weights. We minimize Eq. 4 over the annotated sequence, with the target encoding the clean sequence and the drafter reconstructing the masked positions. Primitive positions have unit weight. Ordinary-text positions decay as w j = exp ( − ( j − 1 ) / 7 ) w_{j}=\\exp(-(j-1)/7) with distance from the anchor, following DFlash. Out-of-frame labels are downweighted by 0.1 in both the target’s fine-tuning loss and the drafter loss. Anchors and padding are excluded. No soft-logit distillation or hidden-state regression is used.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "00a713d225e8709b",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Block sampling and packing. Each annotated primitive contributes one complete block. The 2D, 2D+3D, and wrist-camera drafters additionally sample up to 512 ordinary-text anchors per example, shared across assistant turns, so that one drafter serves both the text and the primitive path; text blocks stop at primitive boundaries. The 3D-only and box drafters train on primitive blocks only. Packed examples keep independent position indices and attention masks: each block sees only its own positions and the target positions of its own example before its anchor, so schemas and lengths mix freely in a batch without leaking labels across blocks or examples.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "129749b75afcf024",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Table 10: Task adaptation budgets. AR columns describe full target fine-tuning; draft columns describe drafter training on the frozen target. Batch is the number of examples per draft update.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.T10",
+      "kind": "figcaption"
+    },
+    {
+      "id": "93dda8042bc96da1",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Task AR updates AR peak LR Draft updates Draft peak LR Draft batch 2D trajectories 10,800 2 × 10 − 6 2{\\times}10^{-6} 7,142 2 × 10 − 4 2{\\times}10^{-4} 64 Robot 3D-only 10,317 2 × 10 − 6 2{\\times}10^{-6} 30,562 6 × 10 − 4 6{\\times}10^{-4} 512 Robot 2D+3D 11,207 2 × 10 − 6 2{\\times}10^{-6} 30,562 6 × 10 − 4 6{\\times}10^{-4} 512 Robot 2D+3D, wrist camera 26,245 2 × 10 − 6 2{\\times}10^{-6} 46,306 6 × 10 − 4 6{\\times}10^{-4} 512 Driving 3D-only 13,740 2 × 10 − 6 2{\\times}10^{-6} 4,028 6 × 10 − 4 6{\\times}10^{-4} 512 Driving 2D+3D 13,740 2 × 10 − 6 2{\\times}10^{-6} 4,028 6 × 10 − 4 6{\\times}10^{-4} 512 Boxes 3,000 2 × 10 − 6 2{\\times}10^{-6} 14,722 6 × 10 − 4 6{\\times}10^{-4} 256",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.T10.6",
+      "kind": "table"
+    },
+    {
+      "id": "9945bfe0dcbc9ea8",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Data and optimization. Table 10 lists the budgets. The 2D target uses ShareRobot ( Ji et al., 2025 ) trajectories and affordances plus FSD ( Yuan et al., 2026a ) direct and reasoning annotations: 69,129 source records, 152,346 repeat-weighted examples per pass, about two passes, two 8,192-token packs per update. Its drafter trains for three passes with 16 examples per GPU on four GPUs and a 1,700-token limit per example. The two primary-view robot targets share 5,215,780 repeat-weighted examples from MolmoBot ( Deshpande et al., 2026 ) , AgiBot ( Bu et al., 2025 ) , InternA1 ( Tian et al., 2026 ) , OXE-Trace ( Open X-Embodiment Collaboration, 2024 ) , and DROID ( Khazatsky et al., 2024 ) , serialized as 3D-only or joint 2D+3D trajectories; each AR run covers about one pass with 16 packs of 32,768 tokens per update, and each drafter trains for three passes with a 4,096-token limit per example. The wrist-camera variant adds LIBERO ( Liu et al., 2023 ) two-camera observations and additional views of the same robot data, for 7,902,844 weighted examples; its target uses 32 packs of 16,384 tokens, its drafter an 8,192-token limit. All runs use AdamW, BF16, zero weight decay, gradient clipping at 1.0, and cosine decay to zero. Target warm-up is 200 updates for 2D trajectories and 500 for robot 3D and boxes; drafter warm-up is 4% of the budget. Each drafter is paired with its own target and evaluated at the final checkpoint.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "3b6b815757aec8f3",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Boxes. The box target is trained on COCO train2017 ( Lin et al., 2014 ) , CountAnything ( Lei et al., 2026 ) , and KubriCount ( Liu et al., 2026a ) multi-turn conversations. Each COCO image is queried for its present categories and up to ten sampled absent categories, with the image supplied in the first turn only; three COCO variants differ in their negative-category samples, and CountAnything and KubriCount use positive categories. Repeating each source twice gives 1,256,254 weighted conversations per pass, with category outputs capped at 900 boxes. Post-training image identifiers do not overlap the evaluation sets. The AR target trains for 3,000 updates with 16 packs of up to 32,768 tokens per update. The drafter trains for three passes with 16 conversations per GPU on 16 GPUs and a 262,144-token pack limit, supervising every six-token box block with uniform weights; a mixed text-and-box variant with up to 512 text anchors was also trained, but the reported results use the box-only drafter.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "d0b54205d46f6a48",
+      "section": "Appendix B Training Details",
+      "location": "Appendix B Training Details",
+      "text": "Dense motion. The MolmoMotion drafter is randomly initialized and trained with uniform cross-entropy over the 19 ​ P + 2 19P+2 predicted positions of each frame block, mask tokens included. It uses the same five-layer architecture and the frozen target’s embedding and output weights. The mixture contains 241,692 entries from EgoDex ( Hoque et al., 2025 ) , HD-EPIC ( Perrett et al., 2025 ) , Stereo4D ( Jin et al., 2025 ) , Xperience ( Ropedia, 2026 ) , and YouTube-VIS ( Yang et al., 2019 ) , sampled in proportion to the square root of each source’s size. Training windows use eight points, up to 30 future frames, and one or three history frames with equal probability; frames whose coordinates exceed five digits are excluded. Training runs 34,563 updates over 12.7M sampled windows, each update using four 6,144-token packs per GPU on 32 H100 GPUs. AdamW uses learning rate 2 × 10 − 4 2\\times 10^{-4} , ( β 1 , β 2 ) = ( 0.9 , 0.999 ) (\\beta_{1},\\beta_{2})=(0.9,0.999) , zero weight decay, gradient clipping at 1.0, BF16 computation with FP32 master weights, and 4% linear warm-up followed by cosine decay to zero. Table 5 uses the final checkpoint.",
+      "url": "https://arxiv.org/html/2611.08449v1#A2.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "23726a6a1db599e7",
+      "section": "Appendix C Decoding Details",
+      "location": "Appendix C Decoding Details",
+      "text": "Algorithm 1 summarizes one generation. Text follows the DFlash procedure and primitives follow VFlash; the two share the drafter, the target, and the KV cache.",
+      "url": "https://arxiv.org/html/2611.08449v1#A3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "99f25816ff336384",
+      "section": "Appendix C Decoding Details",
+      "location": "Appendix C Decoding Details",
+      "text": "Algorithm 1 Flash primitive decoding for one response",
+      "url": "https://arxiv.org/html/2611.08449v1#alg1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "498efa6c5b1eff28",
+      "section": "Appendix C Decoding Details",
+      "location": "Appendix C Decoding Details",
+      "text": "Text and routing. After multimodal prefill, ordinary text is generated in DFlash blocks of 16 positions: one accepted anchor and up to 15 proposals. The target verifies the block in one pass and keeps the longest matching prefix plus its own next token. The tool call is generated on this path. When an accepted prefix reaches a primitive-start token, any speculative tokens after it are discarded and the declared schema and block length take over. A block whose length exceeds the remaining budget is rejected before drafting.",
+      "url": "https://arxiv.org/html/2611.08449v1#A3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "71dec2a07d695815",
+      "section": "Appendix C Decoding Details",
+      "location": "Appendix C Decoding Details",
+      "text": "Primitive prediction and acceptance. The drafter processes the start token and all masked positions in one pass. Delimiter positions are fixed, coordinate positions are restricted to number tokens, and coupled rules such as the pairing of out-of-frame markers and the ordering of box corners are resolved by a small selection loop over the logits already computed, with no further network evaluation. The target then processes the completed block once to update its cache, supply context features for the next block, and predict the continuation. A schema-valid block is accepted in full without token-level agreement. If validation fails, the target cache is rolled back to the anchor and the block is regenerated by constrained target AR from the first invalid position ( r = 0 r=0 for trajectories); the drafter cache is reset afterwards. The DFlash baseline in Section 3.3 instead applies 16-position blocks and longest-prefix acceptance throughout the response, including inside primitives.",
+      "url": "https://arxiv.org/html/2611.08449v1#A3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2b8390b44a2a2440",
+      "section": "Appendix C Decoding Details",
+      "location": "Appendix C Decoding Details",
+      "text": "Dense motion continuation. For the MolmoMotion target the drafter fills the 19 ​ P + 2 19P+2 positions of one frame. The rendered frame receives one target pass, which supplies the next frame’s features and chooses between the frame separator and the closing delimiter; the target writes the answer’s opening and closing text autoregressively. Missing or non-increasing timestamps are set to the previous timestamp plus one, and a frame whose points are all masked keeps its highest-margin point. Malformed frames fall back to target AR. Generation continues for at most 30 frames, so parallelism is across the points and coordinates of one frame while frames remain sequential.",
+      "url": "https://arxiv.org/html/2611.08449v1#A3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "e46c804ddda9d25a",
+      "section": "D.1 MolmoSpaces",
+      "location": "D.1 MolmoSpaces",
+      "text": "Plan conditioning. The manipulation policy is the world action model (WAM) of MolmoSpaces ( Kim et al., 2026b ) , obtained by post-training Cosmos-Predict2.5 ( NVIDIA, 2026c ) for robot control. Unless otherwise specified, MolmoSpaces uses the primary-view 2D+3D robot target–drafter pair described in Appendix B . We replace its text-encoder context with states from the frozen 4B planning VLM. For every retained position, each of the VLM’s 36 layer outputs is standardized along its 2,560 channels and the results are concatenated; a newly initialized linear projection followed by GELU maps this vector to the WAM’s context width. The resulting 512 context positions enter the WAM through its existing text cross-attention path. The trajectory reaches the WAM only through these states; there is no separate numeric trajectory encoder. The VLM stays frozen throughout.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9652095f2f5cff1a",
+      "section": "D.1 MolmoSpaces",
+      "location": "D.1 MolmoSpaces",
+      "text": "Post-training. All five configurations start from the same pretrained WAM checkpoint and are evaluated after 100,000 post-training updates. Post-training uses AdamW with learning rate 10 − 4 10^{-4} , weight decay 0.01, gradient-norm clipping at 1.0, BF16, and global batch size 512 (32 GPUs, four examples per device, four accumulation steps); the schedule warms up for 15,000 steps and stays at its peak through the evaluated checkpoint, for 51.2 million samples per model. Training uses seed 24, and every configuration is evaluated at the same update count rather than at its own best checkpoint. The post-training data are 172.5 million frames of simulated Franka demonstrations in six task splits covering picking, placing, and opening",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "db6d646139bff79c",
+      "section": "D.1 MolmoSpaces",
+      "location": "D.1 MolmoSpaces",
+      "text": "Execution and scoring. The WAM executes 20-action chunks. A new plan is generated synchronously every three chunks, or 60 control steps; the simulator pauses during inference. Evaluation uses seed 42 and all 3,915 benchmark episodes: 1,000 each for Pick, Pick & Place, and Open, and all 915 Close episodes. Horizons are 455 control steps for Pick, Open, and Close and 682 for Pick & Place. An episode succeeds if the goal is reached at any step; episodes run to the horizon. Suite success is aggregated before rounding, and the mean is the unweighted average of the four suites. Each row is one training seed and one evaluation seed.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "c130abb7d27270c5",
+      "section": "D.2 LIBERO",
+      "location": "D.2 LIBERO",
+      "text": "Action head. The LIBERO policies use the PIv3 flow-matching action head of StarVLA ( StarVLA Community, 2026 ) . The LIBERO experiments use the wrist-camera-trained 2D+3D robot target–drafter pair described in Appendix B . A LayerNorm and linear projection map each of the frozen VLM’s 36 hidden-state layers from 2,560 to 1,024 dimensions, and action-transformer layer i i cross-attends to projected VLM layer i i . The 36-layer head and projections contain about 634 million trainable parameters. Both primary and wrist images are rotated by 180 ∘ 180^{\\circ} , resized to 224 × 224 224\\times 224 , and included in the VLM sequence; no proprioceptive input is used. The head predicts eight seven-dimensional actions (end-effector increments and a gripper command) with four flow-matching steps. VFlash generates a fresh subtask and plan before every action chunk. The two context variants retain the prompt through the generated subtask, or the prompt through the full generated answer. The baseline is the same head on a frozen Qwen3-VL-4B that encodes only the images and the instruction.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bb24696309f6dce1",
+      "section": "D.2 LIBERO",
+      "location": "D.2 LIBERO",
+      "text": "Training and evaluation. All policies train on 273,463 demonstration steps from the same 1,693 episodes. The randomly initialized heads train for 80,000 AdamW updates with batch size 128, learning rate 10 − 4 10^{-4} , 5,000 warm-up steps, cosine decay to 10 − 6 10^{-6} , ( β 1 , β 2 ) = ( 0.9 , 0.95 ) (\\beta_{1},\\beta_{2})=(0.9,0.95) , weight decay 10 − 8 10^{-8} , BF16, and seed 42. Evaluation uses seed 7. LIBERO ( Liu et al., 2023 ) covers four suites with ten tasks and 50 initial states each (2,000 episodes). LIBERO-Plus ( Fei et al., 2025 ) evaluates 10,030 perturbed task instances once each. LIBERO-PRO ( Zhou et al., 2025b ) crosses the four base suites with object, swap, language, and task perturbations (8,000 episodes); environment perturbations are excluded. The policies train on the standard 40 LIBERO tasks and are evaluated unchanged on the two perturbation benchmarks. Success follows each environment’s goal predicate. We report the unweighted mean of the success rates across its four task suites.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "17c8d8dcbe1e0d32",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Conditioning on the target VLM.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9d83fe64b9e384bd",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "The action head conditions on selected 2,560-dimensional final-layer states of the frozen target VLM. States at generated trajectory positions are obtained by processing the accepted primitive with the target VLM. We define conditioning sequence as prompt and plan. Variable-length BF16 states are projected to 384 dimensions, with padding masked in pooling and cross-attention.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "dacda2167a2f3ef7",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Ego motion inputs. The head uses 16 history entries, each containing position and heading ( x , y , ψ ) (x,y,\\psi) , three availability indicators, and a relative timestamp. The resulting 112-dimensional vector is standardized using training-set statistics, with unavailable values zeroed and shorter histories left-padded. The 16-dimensional current-state vector contains four command indicators, four motion measurements, and eight availability indicators. Separate MLPs with 1,024 hidden units and LayerNorm map the history and current state to 384-dimensional embeddings.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "be49ebaf85fe910a",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Trajectory head. The ReCogDrive-derived head alternates eight self-attention and eight cross-attention blocks, with eight heads of width 48, adaptive normalization, and SwiGLU feed-forward layers. Each noisy waypoint is embedded with a learned index and a sinusoidal encoding of its physical future time; the index table supports up to 64 waypoints. Concatenating the waypoint embedding with the broadcast history embedding and masked mean VLM context yields 1,152 channels, which are projected to 384. The current-state and diffusion-timestep embeddings condition the transformer blocks. A 512-dimensional output projection followed by an MLP with 1,024 hidden units predicts three noise components per waypoint, for ( x , y , ψ ) (x,y,\\psi) on NAVSIM and ( x , y ) (x,y) on Waymo, where the heading channel is masked. NAVSIM and Waymo use the same architecture with separately trained weights.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "1998ecccbceeb0a7",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Diffusion objective and sampling. For normalized recorded future waypoints Y ~ \\widetilde{Y} , the head ϵ θ \\epsilon_{\\theta} minimizes masked noise-prediction error:",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "5848531b8ff1512e",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Y s = α ¯ s ​ Y ~ + 1 − α ¯ s ​ ϵ , ℒ drive = 𝔼 ⁡ [ ∑ h , c m h ​ c ​ ( ϵ θ , h ​ c ​ ( Y s , s , Z , u , τ ) − ϵ h ​ c ) 2 ∑ h , c m h ​ c ] . Y_{s}=\\sqrt{\\bar{\\alpha}_{s}}\\,\\widetilde{Y}+\\sqrt{1-\\bar{\\alpha}_{s}}\\,\\epsilon,\\qquad\\mathcal{L}_{\\mathrm{drive}}=\\mathbb{E}\\!\\left[\\frac{\\sum_{h,c}m_{hc}\\bigl(\\epsilon_{\\theta,hc}(Y_{s},s;Z,u,\\tau)-\\epsilon_{hc}\\bigr)^{2}}{\\sum_{h,c}m_{hc}}\\right]. (8)",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.E8",
+      "kind": "table"
+    },
+    {
+      "id": "352dc20cb663c7b1",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Here ϵ ∼ 𝒩 ⁡ ( 0 , I ) \\epsilon\\sim\\mathcal{N}(0,I) , s s is the diffusion timestep, α ¯ s \\bar{\\alpha}_{s} is the cumulative noise schedule, Z Z denotes VLM states, u u contains ego history and state, and τ \\tau contains future timestamps. The mask m h ​ c m_{hc} is one for valid coordinates and zero otherwise; the heading channel is masked out on Waymo. The schedule has 100 training timesteps. Five deterministic DDIM steps ( Song et al., 2020 ) , at indices 80, 60, 40, 20, and 0, produce the continuous trajectory. During SFT, only the action head and its input projections receive gradients.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p5.2",
+      "kind": "p"
+    },
+    {
+      "id": "89188dcf4541b53a",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Normalization and training configuration. Each channel is mapped affinely to [ − 1 , 1 ] [-1,1] , z norm = 2 ​ ( z − z min ) / ( z max − z min ) − 1 z_{\\mathrm{norm}}=2(z-z_{\\min})/(z_{\\max}-z_{\\min})-1 , with bounds set per dataset. The NAVSIM head inherits the fixed ReCogDrive bounds: X in [ − 1.57 , 65.17 ] [-1.57,65.17] m, Y in [ − 19.68 , 22.32 ] [-19.68,22.32] m, and ψ \\psi in [ − 1.67 , 1.86 ] [-1.67,1.86] rad; targets are not clipped, while denoised predictions and the final normalized actions are clipped to [ − 1 , 1 ] [-1,1] . The Waymo head uses X in [ − 46.98,138.77 ] [-46.98,138.77] m and Y in [ − 18.14 , 17.81 ] [-18.14,17.81] m, fitted on training trajectories as the smaller of zero and the minimum to the 99th percentile for X and the 0.5th to 99.5th percentiles for Y, with no clipping. Both heads are initialized from scratch and trained for 200 epochs with AdamW at learning rate 10 − 4 10^{-4} , weight decay 10 − 4 10^{-4} , ( β 1 , β 2 ) = ( 0.9 , 0.95 ) (\\beta_{1},\\beta_{2})=(0.9,0.95) , and gradient-norm clipping at 1.0; three warmup epochs are followed by cosine decay to 10 − 6 10^{-6} . Training uses batch size 64 per GPU on eight GPUs with FP16 mixed precision.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "3a02a5cd19ed4ef5",
+      "section": "D.3.1 Action Model Training",
+      "location": "D.3.1 Action Model Training",
+      "text": "Reinforcement learning. After SFT, each head is fine-tuned with DiffGRPO ( Li et al., 2026 ) , which treats the five-step DDIM chain as a policy rollout. For every training scene, the head samples eight trajectories, scores them with a dataset-specific reward, and updates with group-standardized advantages. A behavior-cloning loss with weight 0.1 regularizes the update. It is the negative log-likelihood under the current head of denoising chains sampled from the frozen SFT head. No KL penalty is used. Both heads use an initial learning rate of 10 − 5 10^{-5} with cosine decay and no warmup. On NAVSIM the reward is PDMS from the non-reactive simulator ( Dauner et al., 2024 ) on the training split, with ego progress, time-to-collision within bound (TTC), and comfort weighted 10/5/2 during training against the official 5/5/2 used for evaluation. Training runs 10 epochs (6,650 updates) at batch size 16 per GPU on eight GPUs. The checkpoint is selected by PDMS on an internal validation split held out from navtrain by log (18,179 clips, Appendix F.5 ). On Waymo the reward is RFS from the official implementation on the 479 validation scenes. Training runs 20 epochs (300 updates) at batch size 4 per GPU on eight GPUs, and the checkpoint is selected on the same 479 scenes, so the selection score is in-sample. These settings are shared by all layout and context configurations. The VLM, its plans, and the conditioning states stay fixed, so the SFT and RL rows of Table 8 consume identical plans and differ only in head weights. Reported scores use the held-out test splits, which take no part in SFT, RL, or checkpoint selection.",
+      "url": "https://arxiv.org/html/2611.08449v1#A4.SS3.SSS1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "4928bf9f37f73273",
+      "section": "E.1 Deployment and Configuration",
+      "location": "E.1 Deployment and Configuration",
+      "text": "Figure 5: Waymo planning latency on H100 (ms, batch size one). AR, DFlash, and VFlash share the VLM, primitive, and action head and differ only in the decoder. Qwen-Drive-1.0 is measured on the same hardware; the Fast-dDrive value is from its paper and its AR baseline is not the AR bar shown here.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "38dd2e11c71727ff",
+      "section": "E.1 Deployment and Configuration",
+      "location": "E.1 Deployment and Configuration",
+      "text": "Hardware and runtime. All measurements use batch size one and one request at a time on NVIDIA Jetson AGX Thor (SM110), DGX Spark (GB10, SM121), and a single H100 80 GB (SM90). Our models run in a locally modified TensorRT-Edge-LLM ( NVIDIA, 2026b ) C++ runtime: vision encoder, target VLM, and drafter are exported through ONNX and compiled into TensorRT engines, TensorRT selects kernels for the exported operators, and Edge-LLM plugins supply attention (CuTe DSL FMHA for vision and prefill, XQA for decoding and speculative verification), cache updates, and positional encoding. Engines and kernel artifacts are built separately for each architecture. The stacks are CUDA 13.0 and TensorRT 10.15.2.7 on Thor, CUDA 13.0.88 and TensorRT 10.14.1.48 on Spark, and CUDA 12.9.86 and TensorRT 10.11.0.33 on H100. All Thor runs use a modified Edge-LLM 0.9.0 tree; all Spark runs and the H100 MolmoSpaces runs use Edge-LLM 0.10.1; the H100 driving runs use the 0.9.0 tree with an SM90 attention bridge. Vision, target, and draft engines run in FP16 with FP16 KV caches; no weight or KV quantization is used.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "226347f6ef708241",
+      "section": "E.1 Deployment and Configuration",
+      "location": "E.1 Deployment and Configuration",
+      "text": "Decoders. AR performs target-only single-token decoding. DFlash drafts 16-token blocks and accepts the longest prefix that matches the target’s greedy choice exactly, plus the correction token; numeric coordinates receive no tolerance. VFlash decodes text with the same verified blocks, then drafts the whole primitive in one unverified block (54 tokens for MolmoSpaces, 36 for NAVSIM, 84 for Waymo) and runs one cached target prefill over the accepted block, the EOS token, and end-of-text padding to produce the hidden states the action model consumes. This prefill is counted as decoding. For MolmoSpaces the prefill retains 512 non-image positions from all 36 target layers; for driving it exports the final layer only, padded to 2,200 positions on NAVSIM. In both pipelines the fixed tool-call JSON is supplied rather than generated; on MolmoSpaces it is committed inside the text verification pass, and on driving the think-and-tool prefix precedes generation, so decoding covers exactly the primitive. All decoders use the same supplied tool-call JSON and the same primitive length. AR and DFlash reuse the target states computed during generation and need no separate feature pass.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1ef5eb16c731c00d",
+      "section": "E.1 Deployment and Configuration",
+      "location": "E.1 Deployment and Configuration",
+      "text": "Action models. The MolmoSpaces WAM runs one WAN encoder call and four DiT calls (joint, action, joint, action) inside a CUDA graph, with BF16 DiT weights and FP16 attention through a custom head-dimension-128 CuTe DSL kernel on Thor and Spark; the H100 baseline uses native TensorRT attention. The ReCogDrive head is a BF16 TensorRT engine containing feature encoding and the DDIM sampler. Latency profiles unroll ten DDIM steps to match the ten-step Qwen-Drive planner; the quality results of Table 8 use five steps (Appendix F.5 ).",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "c00d0e5a2e4b5f31",
+      "section": "E.1 Deployment and Configuration",
+      "location": "E.1 Deployment and Configuration",
+      "text": "Qwen-Drive-1.0. We run the released checkpoint in its reasoning planning mode with greedy decoding. On Thor and Spark it uses a customized Edge-LLM 0.9.0 runtime with CuTe DSL Gated DeltaNet kernels for its 24 linear-attention layers and FMHA/XQA for its eight full-attention layers; on H100 it uses the TensorRT-LLM backend with FlashInfer kernels. Its 1.04B flow-matching planner is a separate TensorRT engine with BF16 weights, FP16 attention, and ten Euler steps in a CUDA graph. Inputs are one 1600 × \\times 896 front image on NAVSIM (1,400 visual tokens; 1600 × \\times 800 in the Thor runs) and three 800 × \\times 896 images on Waymo (2,100 tokens). The Fast-dDrive value in Figure 5 is taken from its paper and was not measured here.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "b23491c8edbd52a1",
+      "section": "E.1 Deployment and Configuration",
+      "location": "E.1 Deployment and Configuration",
+      "text": "Timing protocol. Each request starts from fresh vision computation and model state. CUDA events bracket each stage (preprocessing and vision encoding, prefill, decoding, action model) and are summed over all calls within a request; these intervals include host launch gaps and are not kernel-only durations. Model loading, engine construction, graph capture, warmup, image loading and CPU preprocessing outside the instrumented modules, and output detokenization are excluded. Repeat counts differ by run: the Thor MolmoSpaces pipeline uses 24 records and ten passes after five warmups; the Spark and H100 robotics runs one pass over the same 24 records after five warmups; driving runs five records and ten passes after five warmups; the Qwen-Drive H100 run five scenes twice after five warmups. Reported per-step latency is the sum of stage means. Within each device and task, the vision, prefill, and action-model means are shared across decoders; decoding is profiled separately. The MolmoSpaces AR decoding time comes from an earlier standalone profile with an output-only target engine, whereas the VFlash decoding time includes the all-layer feature completion described above; the driving decoders share one target-engine configuration.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "6d799ff8402d8bf6",
+      "section": "E.2 Profiling Results",
+      "location": "E.2 Profiling Results",
+      "text": "Table 12 lists the stage means behind Figures 4 and 5 , and Table 12 the decoding statistics behind the per-pass numbers of Section 3.3 .",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0ce545e386310d32",
+      "section": "E.2 Profiling Results",
+      "location": "E.2 Profiling Results",
+      "text": "Table 11: Per-step latency by stage (ms). Batch size one, FP16 VLM engines. Action is WAN encoder plus DiT for MolmoSpaces and the ReCogDrive DiT (ten DDIM steps) or the Qwen-Drive planner for driving. Within each task and device, vision, prefill, and action means are shared across AR, DFlash, and VFlash and shown once; decoding is profiled separately and for VFlash includes the target prefill over the accepted primitive. Total is the sum of stage means. Qwen-Drive-1.0 is measured end to end on its own stack (Appendix E.1 ); Fast-dDrive is reported by its paper without a stage split.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5ebda002bb725704",
+      "section": "E.2 Profiling Results",
+      "location": "E.2 Profiling Results",
+      "text": "Device Method Prepro. ViT Prefill Decoding Action Total MolmoSpaces Thor AR 19.1 24.4 61.8 3,107.6 339.8 3,552.7 DFlash 1,383.3 1,828.4 VFlash 258.2 703.3 Spark AR 18.2 19.0 53.4 2,950.9 315.0 3,356.5 DFlash 1,403.6 1,809.2 VFlash 244.3 649.9 H100 AR 4.0 5.8 10.1 411.8 84.4 516.1 DFlash 235.7 340.0 VFlash 38.0 142.3 NAVSIM Thor AR 18.6 195.0 223.9 1,380.0 25.0 1,842.5 DFlash 1,147.0 1,609.5 VFlash 71.9 534.4 Qwen-Drive-1.0 12.2 139.0 160.0 828.4 171.0 1,310.6 Spark AR 16.0 205.3 219.0 1,428.2 24.6 1,893.1 DFlash 1,100.0 1,564.9 VFlash 64.4 529.3 Qwen-Drive-1.0 12.0 100.8 192.0 720.9 158.6 1,184.4 H100 AR 5.0 47.2 31.8 206.3 12.3 302.6 DFlash 197.0 293.3 VFlash 19.2 115.5 Qwen-Drive-1.0 5.0 21.5 42.0 71.9 40.0 180.4 Waymo Thor AR 26.0 277.8 359.9 3,254.0 32.0 3,949.7 DFlash 2,431.6 3,127.3 VFlash 78.3 774.0 Qwen-Drive-1.0 13.5 170.1 252.5 749.7 195.5 1,381.3 Spark AR 26.0 240.5 333.1 3,390.0 31.2 4,020.8 DFlash 2,804.2 3,435.0 VFlash 69.5 700.3 Qwen-Drive-1.0 13.5 123.5 280.8 651.2 180.2 1,249.2 H100 AR 6.0 45.5 45.4 501.8 18.6 617.3 DFlash 432.0 547.5 VFlash 21.1 136.6 Qwen-Drive-1.0 5.0 21.0 41.0 65.5 47.8 180.3 Fast-dDrive – – – – – 665.0",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.T12.7",
+      "kind": "table"
+    },
+    {
+      "id": "194981402f8db7e7",
+      "section": "E.2 Profiling Results",
+      "location": "E.2 Profiling Results",
+      "text": "Table 12: Decoding statistics on MolmoSpaces (Thor). Tokens committed per target pass, passes per request, and per-pass cost of the drafter and target. The output is 88.75 tokens on average: about 36 of text and tool call, then the 54-token primitive. VFlash’s text stage uses the same verified blocks as DFlash; the fused tool-call JSON is excluded from its committed count. DFlash’s decoding time in Table 12 additionally includes a final padding forward that completes the feature sequence (58.5 ms on Thor, 54.5 on Spark, 11.2 on H100); for VFlash this work is folded into the target prefill over the primitive.",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.T12",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0e9c57cbf82ea463",
+      "section": "E.2 Profiling Results",
+      "location": "E.2 Profiling Results",
+      "text": "Decoder Segment Tokens/pass Passes Drafter ms Target ms AR all 1.0 88.75 – 35.0 DFlash all 3.0 29.5 9.1 35.7 text 5.5 trajectory 2.2 VFlash text 5.5 3.25 11.8 42.5 primitive 53 1 12.9 68.4",
+      "url": "https://arxiv.org/html/2611.08449v1#A5.T12.13",
+      "kind": "table"
+    },
+    {
+      "id": "0fb63ae0137ffe1b",
+      "section": "F.1 2D Trajectories",
+      "location": "F.1 2D Trajectories",
+      "text": "We evaluate 200 ShareRobot-Bench queries and 300 VABench-V queries with the same 4B target and its drafter. Coordinates are on the 0–1,000 image scale. Predictions are linearly interpolated by waypoint index to the reference point count before computing discrete Fréchet distance, symmetric Hausdorff distance, and RMSE, the square root of the mean squared Euclidean waypoint error; Table 3 divides each distance by 1,000. All AR and VFlash outputs parse and enter the means.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "787eb2fc8c109665",
+      "section": "F.2 3D Robot Trajectories",
+      "location": "F.2 3D Robot Trajectories",
+      "text": "Inputs and references. Every decoder is evaluated on the same 1,000 InternA1, 999 AgiBot, and 4,221 MolmoBot records. InternA1 uses the current image; AgiBot contains 499 image and 500 video records, MolmoBot 2,757 and 1,464. Video records sample six frames from the preceding three seconds and exclude the current frame. Each record supplies only the primary camera, including for the model trained with wrist-camera views. References contain ten waypoints per gripper, uniformly resampled by 3D arc length over a nominal five-second window that may end early at an episode or action boundary; they describe path geometry rather than fixed-time control samples. Coordinates are in meters in the current primary camera frame and lie on a 1 cm grid inherited from the annotation export.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "048adecdc48fea53",
+      "section": "F.2 3D Robot Trajectories",
+      "location": "F.2 3D Robot Trajectories",
+      "text": "Metrics. The scorer requires the expected arm identities and exactly ten points per arm, without interpolation or repair; all reported configurations return valid trajectories for every record. ADE averages Euclidean waypoint error and FDE the final-waypoint error over the evaluated arms. SR@ τ \\tau is the fraction of waypoints with error below τ \\tau , averaged within a record and then across records, for τ = 5 \\tau=5 and 10 cm. An arm is active when the sum of its XYZ standard deviations is at least 5 mm; if any reference arm is active, only active arms are scored. InternA1 evaluation episodes are absent from training; MolmoBot uses five held-out validation configurations covering pick, place, and opening tasks.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9208bdcadfa44017",
+      "section": "F.3 Dense Motion",
+      "location": "F.3 Dense Motion",
+      "text": "Inputs and selection. Each record gives three observed frames, the caption, and the observed XYZ coordinates of eight query points, and asks for up to 30 future frames. We use PointMotionBench with one fixed point selection shared by all local evaluations: points must be visible with finite coordinates in all three observed frames; at most 24 are sampled per clip with seed zero and split into groups of eight, discarding incomplete groups; HOT3D uses one fifth of its clips. This gives 491/144/88 clips and 1,473/412/257 records for HOT3D/WorldTrack/DAVIS. Frames are consecutive at the source rate, so the horizon is 1.0 s for HOT3D and WorldTrack and 1.25 s for DAVIS; shorter clips keep their available frames. WorldTrack uses the provided world coordinates.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6f7c33c861cb0c44",
+      "section": "F.3 Dense Motion",
+      "location": "F.3 Dense Motion",
+      "text": "Speed annotation. The 25 × 25\\times in Table 5 compares one VFlash rollout with the target’s AR rollout on the same selections, both on one H100 at batch size one: 3.21/3.86/3.78 s against 79.8/90.6/99.6 s on HOT3D/WorldTrack/DAVIS, or 24.8/23.5/26.4 × \\times .",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "ca47d5c7e25b5c38",
+      "section": "F.4 Box Generation",
+      "location": "F.4 Box Generation",
+      "text": "Queries and generation. Evaluation uses 4,952 COCO val2017 images and 200 Dense200 images. The prompt asks for every instance of a given category in the primitive format. COCO queries each ground-truth-present category as one turn of a multi-turn conversation over the image; Dense200 has one category per image. AR and VFlash share the image, query, and reference records, decode greedily with neutral repetition penalty, and apply no resizing before the model’s image processor. The output budget is 512 new tokens per COCO turn and 4,096 per Dense200 query; only complete boxes are returned when the budget runs out. Boxes are mapped back to pixels and merged per image.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "65200cf36bfc7b23",
+      "section": "F.4 Box Generation",
+      "location": "F.4 Box Generation",
+      "text": "Direct and AR fallback. Direct accepts every schema-valid box. AR fallback adds the spatial-confidence criterion of LocateAnything ( Wang et al., 2026 ) : for each coordinate, the numeric tokens among the five most probable full-vocabulary predictions are examined, and the box is regenerated by constrained target AR if this set is empty, or if the top numeric token has probability below 0.9 and at least two numeric candidates span more than 60 bins. Boxes before the first uncertain coordinate are kept (Eq. 5 ). On COCO a third consecutive identical box ends the list, keeping the first two copies; Dense200 uses the guard without this rule.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0740ab1f6842f226",
+      "section": "F.4 Box Generation",
+      "location": "F.4 Box Generation",
+      "text": "Metrics. COCO F1 follows the inherited evaluator: every prediction receives confidence 0.2, and per-category precision and recall are aggregated into F1 at each IoU threshold; this is distinct from COCO AP. Dense200 greedily matches ground-truth boxes to unused predictions at each τ ∈ { 0.50 , 0.55 , … , 0.95 } \\tau\\in\\{0.50,0.55,\\ldots,0.95\\} , averages per-image precision and recall, and computes F 1 , τ = 2 ​ P ¯ τ ​ R ¯ τ / ( P ¯ τ + R ¯ τ ) F_{1,\\tau}=2\\overline{P}_{\\tau}\\overline{R}_{\\tau}/(\\overline{P}_{\\tau}+\\overline{R}_{\\tau}) ; mean F1 averages the ten thresholds. Boxes per second (BPS) divides the number of returned boxes by generation time on one H100 at batch size one, where generation time covers all queries of an image including prefill, target passes, and fallback, and excludes model loading.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "dba029562cade4bb",
+      "section": "F.5 Autonomous Driving",
+      "location": "F.5 Autonomous Driving",
+      "text": "Splits and data separation. NAVSIM training uses navtrain, divided by log into 85,109 training and 18,179 internal validation clips; SFT and RL fit on the former, and checkpoints are selected on the latter by PDMS. Test scores use all 12,146 navtest scenes. Waymo SFT uses the official training split. The 479 validation scenes provide the RL reward and are used to select both SFT and RL checkpoints by RFS. Test scores come from the official test split. Neither test split enters SFT, RL, or checkpoint selection. The upstream VLM was fine-tuned on all of navtrain and on the Waymo training split. The NAVSIM internal validation clips are therefore held out from action-head fitting but not from VLM fine-tuning. The Waymo validation scenes and both test splits are excluded from VLM fine-tuning.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2635207793c24350",
+      "section": "F.5 Autonomous Driving",
+      "location": "F.5 Autonomous Driving",
+      "text": "Scoring. Each scene is evaluated once: the initial Gaussian noise is seeded from the clip identifier, and five deterministic DDIM steps produce the trajectory. On NAVSIM the head’s eight ( x , y , ψ ) (x,y,\\psi) waypoints at 2 Hz are scored by the official non-reactive PDM simulator ( Dauner et al., 2024 ) with the standard 5/5/2 weights for ego progress, time-to-collision within bound, and comfort. On Waymo the head’s twenty ( x , y ) (x,y) waypoints at 4 Hz are scored by the official RFS implementation, and ADE at 3 s and 5 s averages Euclidean position error over the horizon; both require a complete prediction through the horizon.",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1379ce9724ce0f5b",
+      "section": "F.5 Autonomous Driving",
+      "location": "F.5 Autonomous Driving",
+      "text": "Compared methods. DiffusionLTF is the DiffusionDrive-based policy released with Open X-AV ( Nguyen et al., 2025 ) ; its scores are taken from the WOD-E2E leaderboard. Qwen-Drive-1.0 ( Zhou et al., 2026b ) couples Qwen3.5-4B with a flow-matching planner conditioned on VLM representations of the scene and an autoregressively generated text reasoning trace; its RL stage, like ours, optimizes only the planner with PDMS and RFS rewards. Fast-dDrive ( Zhang et al., 2026b ) is a block-diffusion dLLM that generates reasoning and trajectory as structured text and reports Waymo results only. Both reason in text where VFlash uses a visual plan. Latency measurement conditions for these methods, including our own measurement of Qwen-Drive-1.0, are given in Appendix E .",
+      "url": "https://arxiv.org/html/2611.08449v1#A6.SS5.p3.1",
+      "kind": "p"
+    }
+  ]
+}

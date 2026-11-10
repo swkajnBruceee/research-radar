@@ -1,0 +1,405 @@
+{
+  "item_id": "arxiv:2611.08372",
+  "document_id": "87b5884784b3e2ff850a72e72ebdd5b06c0ac80ea618d78477121ba8d3c919a3",
+  "source_url": "https://arxiv.org/html/2611.08372v1",
+  "paper_version": "2611.08372v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-07T02:11:39.913824+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.08372",
+    "title": "MOMASPLAT: Dynamic Novel-View Demonstration Augmentation for Mobile Manipulation",
+    "url": "https://arxiv.org/abs/2611.08372v1",
+    "published": "2026-11-05",
+    "updated": "2026-11-05",
+    "topics": [
+      "data",
+      "imitation",
+      "planning"
+    ],
+    "summary": "Visuomotor policies trained through imitation learning are highly sensitive to changes in camera viewpoint. This is particularly problematic for mobile manipulation (MoMa), where robots rarely execute manipulation from the exact same base pose used during demonstration collection due to navigation uncertainty, localization drift, and environmental constraints. Recent approaches use novel-view synthesis (NVS) to augment demonstrations with unseen viewpoints, but they assume static scenes and therefore fail to re-render the manipulated object during the post-contact interaction phase, leaving the most critical parts of the demonstration unaugmented. We present MOMASPLAT, a novel-view demonstration augmentation framework for mobile manipulation that synthesizes full manipulation trajectories from unseen robot base poses, including dynamic object interactions. Our key insight is that standard MoMa data collection naturally provides the multiview observations needed to reconstruct both the static scene and the manipulated object in 3D. MOMASPLAT combines 3D Gaussian Splatting, feed-forward 3D foundation models, and kinematics-based action retargeting to separately reconstruct the scene and manipulated object, render them from novel viewpoints, and generate geometrically consistent synthetic demonstrations paired with transformed actions. We evaluate MOMASPLAT on five real-world mobile manipulation tasks involving both rigid and articulated objects across three scenes, and validate the fidelity of its synthesized demonstrations against ground truth in simulation. MOMASPLAT substantially improves robustness to unseen base poses, more than doubling the average success rate of the strongest baseline and maintaining non-trivial success at large base displacements where all baselines fail, while reducing the need for largescale real-world data collection."
+  },
+  "overview": "可复用的增量是把静态背景、运动刚体和机器人拆开渲染，并同步变换动作与本体感觉，让新底座视角覆盖接触后的物体运动。导航时物体静止，提供场景与物体重建的共同标尺；这不等于学习了新接触动力学。真机未见位姿平均37%对最强静态重建基线17%，但没有等数量、逐组件的动态物体消融，且底座在操作期间固定。",
+  "coverage": {
+    "read": 93,
+    "total": 93,
+    "evidence_ids": [
+      "ff3c06f7c1237443",
+      "c1cd0aa0b100a904",
+      "52ee2d053822b3a3",
+      "1228f9af1666c216",
+      "e7a0b9ff296b6b03",
+      "6d620650972383b8",
+      "cac69a7254df5080",
+      "b29c70a77e950d6d",
+      "e32933bf4ec62dc4",
+      "d4d80d1cfd68cb14",
+      "dfd12b6304e934f0",
+      "aab36837d47d1c69",
+      "635d5b6c7344799e",
+      "0ff565eeba88f705",
+      "b47cc5d086c58ed3",
+      "33d55ef68dc54893",
+      "b9c3b8b83b3f1fcb",
+      "afa85c698db7d843",
+      "bec78b27630e2e26",
+      "4593c711a9e07185",
+      "bfc4a3383d82e9f8",
+      "2e69ad8167b1f44f",
+      "9cb1643b1c21ab7a",
+      "58c89aff54378448",
+      "5c9e66b84c038144",
+      "f13485d72d437f92",
+      "4d470ea28c5c7b2c",
+      "466e6544a03d7616",
+      "1d258e4ea406b221",
+      "5409eca67b844353",
+      "32cbd9679cd2dd4a",
+      "a5f241d51a1d280a",
+      "c05b256db7803115",
+      "dfe65756f273ad20",
+      "0d2bc7f0423dc9d3",
+      "6fe4495afb391322",
+      "de30f8de65e4f941",
+      "57edbe51146adf6b",
+      "5db12c3140562d92",
+      "0825e3863c184250",
+      "75fc17fff4217950",
+      "9616345292405c8b",
+      "3d9aa8f740a7b9ce",
+      "d8955a3ea4346684",
+      "8ac9dfc338b2282e",
+      "6b842c0da0cffd90",
+      "c7bf29125318e902",
+      "22105b173a4837c7",
+      "fe8867d0abc39ecd",
+      "666922a72cd28109",
+      "7e0fed187809e26c",
+      "932098cef9815762",
+      "5ec95b58e108168a",
+      "4511c3998ed5261a",
+      "b2f7b2d5a93723b9",
+      "fda9a5e044e17377",
+      "af015daf5d3a28b5",
+      "3ffb7211e2db8956",
+      "208d911f384d4260",
+      "0a6def1277b21449",
+      "aee1159e63f58e98",
+      "2545a512472af312",
+      "c2348455a46adfd7",
+      "8681da88124455db",
+      "0b4363df9e092f4f",
+      "2fef7fab2dee50ab",
+      "552f200f1277ff9a",
+      "2a8729b4676ade00",
+      "7c9c26a72faa0b7a",
+      "920d0d72cdada3e2",
+      "1fe1362a09abb296",
+      "dc4250e05d708d4b",
+      "1f3dde0e4f01d6e8",
+      "f7d8c8792b8f151d",
+      "16211d21e2267667",
+      "38695ec9dc6848d1",
+      "0fd5ea50a1cef9df",
+      "07047fb92292e9c9",
+      "2e23191da5394bf8",
+      "8be1bba1ce2cb334",
+      "204dee0f6bed691c",
+      "f37d55962e4eb9e5",
+      "bd18ea9fa7c5c5a8",
+      "db8e46adcf00bca0",
+      "40ed0d245cd9df9c",
+      "5602f963fc42ff31",
+      "866435eb7a6576ed",
+      "23cbdf74df6b346b",
+      "0f0dbb3850466021",
+      "1afaa5ffdb0380b7",
+      "bfa0d4c5535c51ab",
+      "eff00c9ceed60543",
+      "e57f6262532fe378"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      7,
+      8,
+      11,
+      12
+    ],
+    "pdf_sha256": "f665ca6e72c4a788c7e0108e4ed92af0545de430e46a540c350cff2972f3fada"
+  },
+  "notice": "完整阅读93个提取片段，含主文方法、实验、限制及附录A基线、B重建、C采样和D策略训练。固定版本PDF12页；目视核对物理页4、7、8、11、12的图2/4/5、表I/II、配准、插值和训练细节。未逐一检查其他图片、逐篇核查参考文献、执行源码、观看项目视频或复现实验。作者汇总成功率经过取整，未补造精确成功次数或显著性。",
+  "findings": [
+    {
+      "title": "问题范围：改变起始底座位姿，不是在操作中连续移动",
+      "kind": "problem",
+      "text": "目标是让同一操作策略容忍导航后的底座偏差，并补足静态NVS只覆盖接触前轨迹的问题。机器人先导航、再在固定底座上操作；实验只涉及三场景的五种刚体或单自由度关节任务，不是边走边操作、跨房间任务迁移或未知物体策略。测试朝向对准目标，未验证任意导航朝向。",
+      "evidence_ids": [
+        "52ee2d053822b3a3",
+        "1228f9af1666c216",
+        "b47cc5d086c58ed3",
+        "bfc4a3383d82e9f8",
+        "58c89aff54378448",
+        "8ac9dfc338b2282e",
+        "7e0fed187809e26c",
+        "932098cef9815762"
+      ],
+      "quote": "post-contact"
+    },
+    {
+      "title": "场景重建：导航RGB建外观，RGB-D给米制尺度",
+      "kind": "method",
+      "text": "导航记录经COLMAP恢复相机与稀疏点，再用WildGaussians拟合背景；屏蔽物体和机器人，避免物体运动后留下静态重影。静态场景30k迭代，DSSIM权重0.2，隔8帧留出。SfM任意尺度用机载深度恢复：每帧有效深度与渲染深度取像素比值中位，再跨帧取中位。方法离线需要深度、相机与运动学信息，不能描述成任意现成RGB示范都可直接增广；部署策略本身只读RGB与EEF状态。",
+      "evidence_ids": [
+        "466e6544a03d7616",
+        "1d258e4ea406b221",
+        "5409eca67b844353",
+        "1fe1362a09abb296",
+        "dc4250e05d708d4b",
+        "f7d8c8792b8f151d",
+        "0f0dbb3850466021",
+        "e57f6262532fe378"
+      ],
+      "quote": "WildGaussians"
+    },
+    {
+      "title": "动态物体：分割、前馈姿态、静止导航对齐，再联合优化",
+      "kind": "method",
+      "text": "GroundingDINO加SAM2按物体文字和种子帧提取mask；每轨迹约10–20帧，加一条导航的50帧，总输入上限400。FastVGGT预测相对物体的相机姿态、深度和内参，先bundle adjustment；导航时物体静止，让场景SfM和物体模型得到的同一批相机可用Sim(3)配准。附录是5相机子集、8000次RANSAC、0.2m相机中心内点阈值，再Huber细化；0.2m是配准筛选阈值，不是最终物体精度。物体3DGS训练60k步并以1e-5学习率优化姿态；SLERP/平移插值、平滑与回环异常过滤补齐中间帧。关节物体只重建运动刚性link并重放示范路径，不识别或外推关节动力学。",
+      "evidence_ids": [
+        "32cbd9679cd2dd4a",
+        "a5f241d51a1d280a",
+        "c05b256db7803115",
+        "dfe65756f273ad20",
+        "0d2bc7f0423dc9d3",
+        "f7d8c8792b8f151d",
+        "16211d21e2267667",
+        "38695ec9dc6848d1",
+        "0fd5ea50a1cef9df",
+        "07047fb92292e9c9",
+        "2e23191da5394bf8",
+        "8be1bba1ce2cb334",
+        "40ed0d245cd9df9c"
+      ],
+      "quote": "segmentation"
+    },
+    {
+      "title": "合成标签必须一起变：绝对姿态做刚变换，动作增量只旋转",
+      "kind": "method",
+      "text": "每条示范在原底座周围1.2×1.2m采样，朝目标加±20°噪声，剔除越出视野或若干探测时刻IK不可达的样本。用Δ=(T_new)^−1 T_source将EEF状态变到新基座；保持世界中的末端轨迹不变。平移增量乘R_Δ，不加平移；基座坐标系左作用的旋转增量做共轭，等价于转轴乘R_Δ、角度不变，夹爪指令不变。新视角下分别渲染背景、运动物体、IK后的模拟机器人，按深度/alpha合成；不是只换图像保留动作标签。多时刻IK可达不构成全轨迹碰撞或接触可行证明。",
+      "evidence_ids": [
+        "6fe4495afb391322",
+        "de30f8de65e4f941",
+        "57edbe51146adf6b",
+        "5db12c3140562d92",
+        "0825e3863c184250",
+        "204dee0f6bed691c",
+        "f37d55962e4eb9e5",
+        "bd18ea9fa7c5c5a8",
+        "db8e46adcf00bca0"
+      ],
+      "quote": "proprioception"
+    },
+    {
+      "title": "训练：真实/合成25:75采样，策略仍是普通Diffusion Policy",
+      "kind": "method",
+      "text": "每条源示范生成10条新基座轨迹；真实序列以0.25、合成以0.75概率采样，不能把文件数量10:1当成实际采样比例。策略为从零训练ResNet18加32关键点spatial-softmax、1D U-Net；输入最近2步224×224 RGB与EEF状态，输出8步7维动作。训练100k梯度步、batch32、AdamW3e-4，DDIM训练与推理均50步；没有换成VLA底座来解释增益。",
+      "evidence_ids": [
+        "75fc17fff4217950",
+        "9616345292405c8b",
+        "3d9aa8f740a7b9ce",
+        "d8955a3ea4346684",
+        "40ed0d245cd9df9c",
+        "866435eb7a6576ed",
+        "23cbdf74df6b346b",
+        "0f0dbb3850466021",
+        "1afaa5ffdb0380b7",
+        "bfa0d4c5535c51ab",
+        "eff00c9ceed60543"
+      ],
+      "quote": "demonstrations"
+    },
+    {
+      "title": "真机主结果：37%对17%，仍有多数未见位姿试验失败",
+      "kind": "evidence",
+      "text": "每任务12个未见底座×每位姿3次，五任务每方法合计180次未见位姿试验。另评三个原始位姿各15次，37%不含这组。作者报告未见位姿平均MoMaSplat37%、静态One-Thousand Trajectories17%、Source Only6%、VISTA8%、动作增广6%；约+20个百分点、2.18倍，均为取整汇总，不能还原精确成功计数。图4瓶子30cm处33%、关笔记本40cm处50%，对应基线均0；距离是到最近原始示范底座位置，不含朝向差。平均37%仍远非可靠全覆盖，且没有跨训练seed方差或配对显著性。",
+      "evidence_ids": [
+        "fe8867d0abc39ecd",
+        "666922a72cd28109",
+        "7e0fed187809e26c",
+        "932098cef9815762",
+        "5ec95b58e108168a",
+        "b2f7b2d5a93723b9",
+        "e57f6262532fe378"
+      ],
+      "quote": "37% of unseen"
+    },
+    {
+      "title": "基线边界：静态方法被适配，但瓶子增广量不相同",
+      "kind": "limitation",
+      "text": "One-Thousand Trajectories复用相同导航与静态重建，并额外使用本方法动作变换；只采用其NVS部分，未采用原工作额外轨迹增广。瓶子任务因初始物体位置限制，只能从40条源轨迹生成400条，而本方法由90条生成900条；双方策略训练仍含全部90真实示范。VISTA只在±10cm范围逐帧生成、动作不变且时序不一致，与本方法1.2m区域及标签重定向不匹配。主比较支持整套增广管线，但没有在相同姿态/数量/渲染设置下只开关动态物体，不能把37对17的全部差距都归因于接触后动态重建。",
+      "evidence_ids": [
+        "5ec95b58e108168a",
+        "4511c3998ed5261a",
+        "b2f7b2d5a93723b9",
+        "552f200f1277ff9a",
+        "2a8729b4676ade00",
+        "7c9c26a72faa0b7a",
+        "920d0d72cdada3e2"
+      ],
+      "quote": "temporally consistent"
+    },
+    {
+      "title": "少示范证据：10条加合成33%，90条不增广8%",
+      "kind": "evidence",
+      "text": "瓶子任务用10/50/90条真实源示范，各自每条合成10条，在离示范10–20cm的四个测试位置，成功率分别33/42/50%；90条真实但不增广为8%。这是单任务和四位置子实验，不能替代五任务12位姿主评测。源轨迹减少也同时减少合成数量，且未量化导航、重建与模型处理总成本，不能直接称完整研究流程的数据/计算效率提高了9倍。",
+      "evidence_ids": [
+        "7e0fed187809e26c",
+        "4511c3998ed5261a",
+        "fda9a5e044e17377",
+        "e57f6262532fe378"
+      ],
+      "quote": "source demonstrations"
+    },
+    {
+      "title": "生成质量：只在一个仿真任务有同步真值",
+      "kind": "evidence",
+      "text": "OmniGibson瓶子任务75条生成轨迹，每10帧取样共2486帧；表I按75条示范汇总均值±标准差。全图PSNR21.27±1.12dB、对象18.18±2.15、机器人17.43±1.30；场景26.40±2.18只每示范一次、共75张。30条源轨迹（含直接估计和插值）物体位姿相对仿真真值：平移误差1.46±0.71cm、旋转4.01±4.66°，不是基座或末端控制误差。渲染视角距离0.4–27.3cm指到重建输入视角，不能与主评测到示范底座的30/40cm直接对齐。帧并非2486个独立任务，单仿真场景也未证明真实接触动力学正确。",
+      "evidence_ids": [
+        "8ac9dfc338b2282e",
+        "22105b173a4837c7",
+        "7e0fed187809e26c",
+        "af015daf5d3a28b5",
+        "0a6def1277b21449",
+        "aee1159e63f58e98"
+      ],
+      "quote": "interpolated poses"
+    },
+    {
+      "title": "真实图像质量：背景24dB不能当作完整动态合成质量",
+      "kind": "limitation",
+      "text": "真机场景在110张留出帧屏蔽机器人/物体后PSNR24.00dB；对象用去背景bbox crop，直接注册姿态23.63dB、插值22.59dB。没有报告真机完整图像NVS指标，原因是模拟机器人与实机外观不同会主导像素误差；也没有真实物体运动真值的同类误差评估。不能用背景分数代替接触时的机器人遮挡、对象边界和全图时序质量。",
+      "evidence_ids": [
+        "af015daf5d3a28b5",
+        "3ffb7211e2db8956",
+        "208d911f384d4260",
+        "0a6def1277b21449",
+        "aee1159e63f58e98"
+      ],
+      "quote": "held-out frames"
+    },
+    {
+      "title": "物理与可见性边界：重放物体运动，不模拟新的接触",
+      "kind": "limitation",
+      "text": "背景主要静态，物体须刚性、可见且可可靠分割；导航视图中被初始物体遮住的桌面、抽屉/炸锅内部等区域从未被背景重建，物体移开后会缺失。合成重放源物体轨迹，不建接触力或动力学，不能保证新IK姿态下抓握/碰撞一致。形变、强遮挡、弱纹理和动态背景仍是困难；view变化质量依赖导航覆盖。改变的是已演示轨迹的观察与机器人配置，没有生成新交互策略。",
+      "evidence_ids": [
+        "afa85c698db7d843",
+        "1d258e4ea406b221",
+        "0d2bc7f0423dc9d3",
+        "de30f8de65e4f941",
+        "57edbe51146adf6b",
+        "c2348455a46adfd7",
+        "f7d8c8792b8f151d",
+        "8be1bba1ce2cb334",
+        "db8e46adcf00bca0"
+      ],
+      "quote": "non-physical"
+    },
+    {
+      "title": "复现资源缺口：模块步数明确，端到端工时未披露",
+      "kind": "limitation",
+      "text": "TIAGo单平台、头部RGB-D，关笔记本75条操作示范、其他任务各90条，均来自三底座；论文另报告9条导航轨迹。每任务750–900条合成，但生成能力依赖多视角覆盖、分割、已知相机/机器人几何、COLMAP、VGGT/BA、场景30k和物体60k优化及策略100k步。未充分披露GPU型号/总GPU时、导航/重建工时、IK拒绝率、全部平滑阈值和跨训练重复，因此“减少额外实机示范”不等于免费、任意数据可用或端到端算力更省。本轮未运行任何依赖或外部付费API。",
+      "evidence_ids": [
+        "7e0fed187809e26c",
+        "4511c3998ed5261a",
+        "1fe1362a09abb296",
+        "dc4250e05d708d4b",
+        "f7d8c8792b8f151d",
+        "16211d21e2267667",
+        "38695ec9dc6848d1",
+        "0fd5ea50a1cef9df",
+        "07047fb92292e9c9",
+        "2e23191da5394bf8",
+        "8be1bba1ce2cb334",
+        "db8e46adcf00bca0",
+        "40ed0d245cd9df9c",
+        "bfa0d4c5535c51ab",
+        "e57f6262532fe378"
+      ],
+      "quote": "training steps"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：匹配位姿和数据量后，接触后动态渲染还有独立贡献吗？",
+      "text": "待验证假设：MoMaSplat的关键额外收益来自接触后正确的物体运动渲染，而不是只扩大新位姿/训练样本覆盖。先用初始物体位置固定的Close Laptop任务，保持75条源示范、同一750个合成底座和IK结果、相同背景/机器人图层、动作与本体重定向、25:75采样及100k训练步。两组为完整动态物体、将物体固定在初始姿态；两组均渲染完整轨迹，并分别报告各阶段样本数与算力。以至少3个训练seed，在相同未见底座和朝向分箱做匹配评测；记录接触前到达率、闭合阶段条件成功率、全任务成功率、碰撞/抓握失效及按底座聚类的区间，不能把重建PSNR当成功率。若动态组在匹配位姿数量后不提高闭合阶段条件成功率，或静态组获得相同提升，就反对动态交互覆盖是主要来源的解释；若差距只在少量位置出现则缩小适用范围。实验未运行，未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "1228f9af1666c216",
+        "afa85c698db7d843",
+        "0d2bc7f0423dc9d3",
+        "7e0fed187809e26c",
+        "5ec95b58e108168a",
+        "4511c3998ed5261a",
+        "b2f7b2d5a93723b9",
+        "c2348455a46adfd7",
+        "7c9c26a72faa0b7a",
+        "920d0d72cdada3e2",
+        "eff00c9ceed60543"
+      ],
+      "quote": "post-contact"
+    }
+  ],
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08372v1",
+      "checked": "网页PDF工具返回缓存缺失；直接下载同一固定版本2,699,349字节PDF成功，并本机渲染。图4距离分箱、图5测试位姿、表I分区域图像质量、表II超参数及附录重建/动作设置已核查。"
+    }
+  ],
+  "frontier_brief": {
+    "title": "MoMaSplat：分离运动物体，连同动作重定向增广接触后视角",
+    "change_type": "数据增广 · 动态新视角",
+    "delta": "将导航和操作记录拆成背景3DGS、运动刚体3DGS和模拟机器人三层，用静止导航帧对齐物体与场景坐标。在新底座渲染整条轨迹，同时重定向EEF状态与动作，让接触后运动也进入视角增广。",
+    "before": "静态场景NVS把物体固定在初始姿态，主要增广接触前；只换图像或加动作噪声还可能让图像、动作与新基座坐标不一致。",
+    "after": "从真实示范恢复物体运动，在每个源时刻分别渲染背景/物体/机器人、按深度合成；在1.2×1.2m区域采样可达基座，合成标签与本体感觉一起变换，按真实/合成25:75训练同一个Diffusion Policy。",
+    "relevance": "移动机器人导航后落点与示范不同、已有导航RGB-D及运动学记录时，可考虑复用轨迹重建并补足接触后视角。先核对覆盖、米制配准和动作坐标变换，再用等数量静态/动态组确认重建是否值得投入。",
+    "caveat": "五任务未见位姿平均仍只有37%；每位姿仅3次。瓶子静态基线400条合成对本方法900条，缺少单独动态物体消融；物体运动是示范重放、无新接触动力学，操作时底座固定。作者结果未复现。",
+    "question": "合成位姿与数量匹配后，接触后动态物体渲染还提高闭合阶段成功率吗？",
+    "evidence": [
+      {
+        "label": "真机未见底座，整套管线比较",
+        "value": "37%对17%",
+        "context": "五任务、三场景、每任务12未见底座×3次；MoMaSplat对适配后的One-Thousand Trajectories。作者取整平均，约+20个百分点，不能恢复精确成功次数。"
+      },
+      {
+        "label": "较远底座仍有部分成功",
+        "value": "瓶子30cm：33%；笔记本40cm：50%",
+        "context": "图4/正文，同距离分箱的全部基线均0。距离到最近示范底座，分箱每任务不同，不能当任意朝向或连续作业半径保证。"
+      },
+      {
+        "label": "少示范的单任务子实验",
+        "value": "10条加合成33%；90条不增广8%",
+        "context": "瓶子任务，四个距示范10–20cm的位置；每源轨迹生成10条。50/90条加合成为42/50%，不是五任务主评测或端到端成本对照。"
+      },
+      {
+        "label": "动态重建的真实边界",
+        "value": "仿真对象：1.46cm / 4.01°误差",
+        "context": "30条源轨迹相对模拟器真值，含直接估计/插值；分别±0.71cm/±4.66°。是物体位姿估计误差，非实机末端精度，不能代替动力学可行性。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "用静止导航解开相机与物体运动",
+        "text": "导航时物体静止，同一批相机可分别由场景SfM与物体前馈模型定位，再经鲁棒Sim(3)对齐，给操作阶段的物体模型统一坐标与尺度。"
+      },
+      {
+        "title": "把移动物体从背景中移除再重放",
+        "text": "背景重建屏蔽物体/机器人，物体单独拟合并按源轨迹运动；新视角合成时由深度和alpha决定遮挡，避免静态物体重影。"
+      },
+      {
+        "title": "同时变换标签与本体感觉",
+        "text": "EEF绝对状态做坐标刚变换；平移增量只旋转，旋转增量做共轭、夹爪保持。多时刻IK筛选用于可达性，尚不验证全程物理接触。"
+      }
+    ]
+  }
+}

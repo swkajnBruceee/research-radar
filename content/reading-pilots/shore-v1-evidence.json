@@ -1,0 +1,1087 @@
+{
+  "id": "9f93239ca383e241459872f5bf55dfaaab1aee03e641300faf35f12f63eafef7",
+  "url": "https://arxiv.org/html/2611.08364v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "ce4fa07068806b1e",
+      "section": "SHORE: Stability-Hybrid On-Policy Reinforcement Learning for Online Bin Packing",
+      "location": "SHORE: Stability-Hybrid On-Policy Reinforcement Learning for Online Bin Packing",
+      "text": "Online 3D bin packing with a processing buffer requires choosing which box to pack, its orientation, and its placement while keeping the stack stable under unknown future arrivals. A collapse ends the episode and forfeits the remaining volume. Existing methods use geometric rules or hard stability masks, limiting how risk can influence the joint choice of box, orientation, and placement. We propose Stability-Hybrid On-Policy Reinforcement Learning (SHORE), which combines a learned stability probability of a placement with an on-policy estimate of its return conditional on stability. A 3D U-Net learns stability from executed outcomes and simulated alternatives, revealing outcomes of actions underrepresented in early rollouts. A discrete on-policy actor–critic uses stability predictions in both its action values and policy prior, with gates that limit the effect of an untrained or changing model. In deployment, SHORE does not require additional search or simulation overhead. In Isaac Gym, SHORE reaches 73% space utilization by 0.4M environment steps, while the same learner without stability modeling reaches that level at about 1M. On the expanded 60-box set, SHORE achieves 0.734 space utilization versus 0.588 for the GOPT state-of-the-art baseline, with a higher placement-failure frequency (1.03% vs. 0.63%), trading more risk for greater packed volume. The results show faster learning and higher utilization on the more demanding realistic box arrival set. Ablations suggest that simulated alternatives provide useful early supervision, while executed outcomes alone sustain later performance. We also demonstrate the method on a real robot to verify the simplicity of integrating the method to real bin packing pipelines.",
+      "url": "https://arxiv.org/html/2611.08364v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b065dc6a9577a6f7",
+      "section": "SHORE: Stability-Hybrid On-Policy Reinforcement Learning for Online Bin Packing",
+      "location": "SHORE: Stability-Hybrid On-Policy Reinforcement Learning for Online Bin Packing",
+      "text": "Fig. 1 : Illustration of the online bin packing setting with a finite processing buffer. The packing agent selects a box from the buffer, its orientation, and its placement while future arrivals remain unknown.",
+      "url": "https://arxiv.org/html/2611.08364v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5e3a1f4d57606c83",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Online 3D bin packing requires selecting and placing boxes as they arrive, without knowing the complete arrival sequence. In warehouse settings, a small processing buffer allows for limited reordering prior to placement (Fig. 1 ). The objective is to pack densely while keeping the stack stable, which depends on the box dimensions, physics, and the order, orientation, and location of placement.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "dab5b596262d87e5",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Physical stability depends on more than the visible top surface. Supporting material properties and the arrangement of multiple supporting boxes can affect a placement’s outcome. One box collapse can leave the bin disorganized and hurt the long-term packing compactness. Therefore, there have been works trying to integrate physics-aware stability information into packing decision making.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5cb8a67cd3fd7d8f",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Reinforcement learning (RL) packers usually handle stability with an action mask. Most masks are computed using geometric or physics-based rules on the height map or the stacking structure [ 1 , 2 ] . Instead, [ 3 ] and [ 4 ] learn the stability mask through simulation outcomes together with a Proximal Policy Optimization (PPO) policy [ 5 ] , but apply the masks as hard filters on the placement of a box the policy has already chosen. Stability therefore cannot influence which box to pack, leading to a policy that is not jointly optimal. Moreover, a placement is either allowed or forbidden, with no trade-off between its risk and the volume it adds. This motivates designing a more advanced joint policy in which stability awareness can directly affect selection among boxes, orientations, and placements in the long run.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "84068d93b4b53cbe",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We propose SHORE, which separates the prediction of the outcome of the current placement from the value of the subsequent packing, but intelligently fuses the stability information back to guide the long-term joint policy learning. A 3D U-Net reads bin occupancy and the oriented box properties to estimate whether the whole stack satisfies the stability test after the placement. A separate action-conditioned critic learns the return if the current placement holds, including its immediate reward and subsequent packing, from on-policy rollouts. The stability estimate modulates this value and provides a soft prior to the joint actions of the actor (Fig. 2 ). In this on-policy actor–critic method, the critic scores every valid (box, orientation, placement) triple, and the actor follows the exact expected gradient over all of them, so the stability estimate shapes which box is packed and how it is turned, not only where it goes. At inference, SHORE chooses each placement with one pass of the actor and of the stability network.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d0954e0de2ea8c4",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "In short, our contributions are:",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "50ff748544e37c9a",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "A physics-aware RL strategy that uses learned placement-stability probabilities as continuous weights on action values for policy improvement over joint box–orientation–placement actions, so that the packing agent can trade the risk of an unstable placement against the volume it adds.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c8cd1725a5756d82",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "A highly parallel, Isaac Gym-based bin packing environment that enables fast, large-scale on-policy RL training.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9cdd61318a4c54cf",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "An empirical study of the efficiency of this method on a realistic box distribution, together with an initial real-robot deployment test.",
+      "url": "https://arxiv.org/html/2611.08364v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e28cad63f8ad1c46",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Online 3D Bin Packing. This problem setting involves making packing decisions without knowledge of incoming items, leading to unique challenges in achieving optimality and efficiency. The early efforts on this problem are mostly studies about developing adaptive heuristics and algorithms that can handle the sequential nature of item arrivals. For example, [ 6 ] and [ 7 ] utilize deepest-bottom-left (DBL) heuristics, while [ 8 ] introduces Heightmap-Minimization heuristics.",
+      "url": "https://arxiv.org/html/2611.08364v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a87821f9a0494680",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Recent work in this area has moved beyond classical heuristics to incorporate deep learning, physics constraints, and more generalizable models. [ 9 ] use DRL to solve the specific setting with an arbitrary number of bins and any bin size, and show RL + search heuristics outperform traditional online heuristics across a range of instances. [ 10 ] tackle the problem with constrained DRL, framing the problem as a constrained Markov decision process under limited lookahead and enforcing physical stability, and show strong improvements over previous heuristics. [ 11 ] designs a complete robot pipeline to narrow the gap of heuristic DRL framework between simulation and real world. More recently, [ 2 ] introduces a DRL model that not only places items but also generalizes to bins of varying sizes via a transformer architecture that fuses item and bin subspace features. [ 12 ] integrate a physics heuristic with object rearrangement and stable placement into a DRL framework to reduce wasted space and improve utilization. However, the design of good heuristics remains a challenge, which leads to the emergence of learning-based action masking models.",
+      "url": "https://arxiv.org/html/2611.08364v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "124276c45157a968",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Action masking models. Action masking has emerged as a practical strategy to tackle the enormous, state-dependent action space in the online 3D bin packing setting. [ 13 ] propose a feasibility-prediction module that learns a binary “feasibility mask” over placement choices and uses that mask to modulate actor probabilities during training, which substantially speeds learning and enforces collision/stability constraints. Building on the same idea, [ 14 ] allows custom action-mask definitions including reorientation and empty maximal spaces (EMSs), and compares masking strategies with search-based planners. [ 1 ] instead compute the feasibility mask for the placement actions based on the stacking tree analysis. [ 4 ] incorporate physics properties into the mask calculation to improve sample efficiency and reduce unsafe actions during exploration. [ 2 ] uses pairwise action-masking between EMSs and orientations to guarantee that the policy only samples pairs, further improving generalization in the online setting. [ 3 ] learn the mask online from physics simulations, jointly with the policy. All of these masks are hard filters on placements. SHORE instead keeps a geometric mask only for fit and support, and uses a learned stability probability inside the action value, where it can be traded against packed volume and affects which box is packed.",
+      "url": "https://arxiv.org/html/2611.08364v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "58f6e4cba9b8d295",
+      "section": "III Preliminaries",
+      "location": "III Preliminaries",
+      "text": "We consider online 3D single-bin packing with a processing buffer of size N N . Only the first N N unplaced boxes are visible, and placing one admits the next arrival. The full simulator state ξ t \\xi_{t} includes the physical configuration and the entire arrival queue. It evolves as an MDP ℳ = ( 𝒳 , 𝒜 , P , r ¯ , γ ) \\mathcal{M}=(\\mathcal{X},\\mathcal{A},P,\\bar{r},\\gamma) , where 𝒳 \\mathcal{X} is the full state space, 𝒜 \\mathcal{A} the joint action space, P P the transition kernel, and r ¯ ( ξ , a ) = 𝔼 [ r t ∣ ξ t = ξ , a t = a ] \\bar{r}(\\xi,a)=\\mathbb{E}[r_{t}\\mid\\xi_{t}=\\xi,a_{t}=a] the expected reward. We use γ = 1 \\gamma=1 and maximize J ⁡ ( θ ) = 𝔼 π ​ [ ∑ t γ t ​ r t ] J(\\theta)=\\mathbb{E}_{\\pi}[\\sum_{t}\\gamma^{t}r_{t}] , the expected packed-volume fraction. The policy receives only the observation s t s_{t} defined below, so its decision problem is partially observable. Arrival order is exogenous; the agent controls only the reordering allowed by the buffer.",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f66015eb46148d0d",
+      "section": "III-A State and Observation",
+      "location": "III-A State and Observation",
+      "text": "The policy observation is s t = ( C t , d t ) s_{t}=(C_{t},d_{t}) : the voxelized bin configuration and the properties of the visible boxes. The unseen arrival queue and unresolved contact details belong to ξ t \\xi_{t} , not s t s_{t} . We use s s as shorthand for this observation in the policy, critic and stability model. The bin has physical dimensions ( L p , W p , H p ) (L_{p},W_{p},H_{p}) and is discretized into ( l p , w p , h p ) (l_{p},w_{p},h_{p}) cells. C t C_{t} records voxel densities, and its height map η t ∈ { 0 , … , h p } l p × w p \\eta_{t}\\in\\{0,\\dots,h_{p}\\}^{l_{p}\\times w_{p}} gives the top occupied cell of each column. The buffer d t d_{t} contains each visible box’s dimensions and density. Following GOPT [ 2 ] , these observations are encoded as two token sets (Fig. 2 ):",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a29847d4fc646ee",
+      "section": "III-A State and Observation",
+      "location": "III-A State and Observation",
+      "text": "Item tokens. There is one token for each pair u = ( b , j ) u=(b,j) of a visible box b b and an orientation j ∈ 𝒪 j\\in\\mathcal{O} , where 𝒪 \\mathcal{O} contains the six axis-aligned orientations. Token 𝐱 u \\mathbf{x}_{u} contains the oriented extents, expressed in voxel units and normalized by ( l p , w p , h p ) (l_{p},w_{p},h_{p}) , the similarly normalized unrotated extents, a heavy flag derived from density, a presence flag and a selectability flag. Duplicate tokens remain in the observation but are not selectable.",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0c0811c7e9fdb3fd",
+      "section": "III-A State and Observation",
+      "location": "III-A State and Observation",
+      "text": "Placement tokens. There are at most K K empty maximal spaces (EMSs), each extending to the bin’s maximum height. For EMS k k , let ( x 1 , y 1 , z 1 ) (x_{1},y_{1},z_{1}) and ( x 2 , y 2 , h p ) (x_{2},y_{2},h_{p}) be its corners in voxel coordinates. Its token 𝐲 k \\mathbf{y}_{k} contains these first five coordinates normalized by the corresponding grid dimensions, followed by support fractions ρ k flat \\rho_{k}^{\\mathrm{flat}} and ρ k rigid \\rho_{k}^{\\mathrm{rigid}} . These measure the part of its base supported at height z 1 z_{1} , and the part supported there by the bin floor or a heavy box, respectively. They are the only density-layout information provided to the actor and critic. EMSs are sorted by ( z 1 , y 1 , x 1 ) (z_{1},y_{1},x_{1}) and truncated to K K ; unused slots are zero-padded and cannot be selected.",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "691f64985385f203",
+      "section": "III-B Action",
+      "location": "III-B Action",
+      "text": "An action a = ( u , k ) a=(u,k) pairs an item token u = ( b , j ) u=(b,j) with an EMS k k . Box b b is rotated to orientation j j and placed with its minimum corner at ( x 1 , y 1 ) (x_{1},y_{1}) of EMS k k , resting on the highest column under its footprint. Placements are therefore limited to EMS corners rather than every grid cell, and box order, orientation and placement are chosen jointly at every step. A rule-based mask m ⁡ ( s , a ) ∈ { 0 , 1 } m(s,a)\\in\\{0,1\\} admits a pair if and only if u u is selectable, the oriented box fits inside the EMS (and hence inside the bin and below H p H_{p} ), and the placement passes GOPT’s geometric support test [ 2 ] . The test requires that more than half of the footprint rests at the placement height, or that the footprint center lies within the convex hull of the supported cells. The valid action set is 𝒜 ⁡ ( s ) = { a : m ⁡ ( s , a ) = 1 } \\mathcal{A}(s)=\\{a:m(s,a)=1\\} , with | 𝒜 ⁡ ( s ) | ≤ 6 ​ N ​ K |\\mathcal{A}(s)|\\leq 6NK .",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b46f5397e5423396",
+      "section": "III-C Reward Design",
+      "location": "III-C Reward Design",
+      "text": "The goal is to maximize space utilization while every placement stays stable. The reward at each step is the placed box’s share of the bin volume:",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bec5d6e932675a4a",
+      "section": "III-C Reward Design",
+      "location": "III-C Reward Design",
+      "text": "r t = χ t ​ V b t V bin , r_{t}=\\chi_{t}\\,\\frac{V_{b_{t}}}{V_{\\mathrm{bin}}}, (1)",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "e0a3a34cd6ec9d19",
+      "section": "III-C Reward Design",
+      "location": "III-C Reward Design",
+      "text": "where b t b_{t} is the selected box, V b t V_{b_{t}} its volume, V bin = L p ​ W p ​ H p V_{\\mathrm{bin}}=L_{p}W_{p}H_{p} , and χ t ∈ { 0 , 1 } \\chi_{t}\\in\\{0,1\\} is the observed stability outcome: it is one exactly when Eq. ( 2 ) holds. An unstable placement earns zero and ends the episode (Sec. III-E ). With γ = 1 \\gamma=1 , the undiscounted reward sum is the stably packed volume fraction at termination, bounded by the total sequence volume ( 0.691 0.691 for the base set and 0.866 0.866 for the expanded set). The reward of a successful placement depends only on its box volume; order, orientation and placement affect subsequent rewards through future fit and stability. Learners use the scaled reward c r ​ r t c_{r}r_{t} , with c r = 10 c_{r}=10 .",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "c7a6d713104f649b",
+      "section": "III-C Reward Design",
+      "location": "III-C Reward Design",
+      "text": "Near the end of an episode the buffer can hold fewer than N N boxes. Empty slots are marked absent and masked, so the policy cannot select them. No invalid-selection penalty is needed, unlike the penalty used in [ 3 ] .",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "151c6dc9762aa577",
+      "section": "III-D Stability and Feasibility Criteria",
+      "location": "III-D Stability and Feasibility Criteria",
+      "text": "We make the two criteria used throughout the paper explicit. Stability (evaluated after placement). A placement is executed by releasing the box 2 2 mm above its target position in the chosen orientation and simulating the scene forward for τ = 80 \\tau=80 ms. Let 𝐩 i tgt , 𝐩 i settled ∈ ℝ 3 \\mathbf{p}_{i}^{\\mathrm{tgt}},\\mathbf{p}_{i}^{\\mathrm{settled}}\\in\\mathbb{R}^{3} denote box i i ’s target and settled positions, and let ℐ t \\mathcal{I}_{t} contain all boxes in the stack, including the new box. Stability requires",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "89cdb9fa5a5f425e",
+      "section": "III-D Stability and Feasibility Criteria",
+      "location": "III-D Stability and Feasibility Criteria",
+      "text": "max i ∈ ℐ t ⁡ ‖ 𝐩 i settled − 𝐩 i tgt ‖ 2 ≤ ϵ s . \\max_{i\\in\\mathcal{I}_{t}}\\left\\|\\mathbf{p}_{i}^{\\mathrm{settled}}-\\mathbf{p}_{i}^{\\mathrm{tgt}}\\right\\|_{2}\\leq\\epsilon_{s}. (2)",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "4d6f1481a244aee4",
+      "section": "III-D Stability and Feasibility Criteria",
+      "location": "III-D Stability and Feasibility Criteria",
+      "text": "The threshold ϵ s \\epsilon_{s} is a positional displacement tolerance; the test checks movement of both the new box and previously placed boxes. Feasibility (evaluated before placement). Feasibility is the geometric mask m ⁡ ( s , a ) m(s,a) of the action definition. Apart from excluding duplicate tokens, it encodes only fit and GOPT’s support test, both computed from the height map, so it does not predict Eq. ( 2 ), which depends on box densities and on the response of the whole stack. Stability is learned instead: SHORE trains a separate model of the probability that a placement satisfies Eq. ( 2 ) (Sec. IV-C ) and uses it in both the critic and the policy.",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "abca01d533218823",
+      "section": "III-E Episode End",
+      "location": "III-E Episode End",
+      "text": "An episode ends in one of three ways: (i) completion , when every box in the sequence has been placed; (ii) infeasibility , when the method’s feasibility filter admits no placement for the next decision; and (iii) instability , when an executed placement violates Eq. ( 2 ). For SHORE, GOPT+ and GOPT, the feasibility filter is purely geometric: it is the rule-based mask m ⁡ ( s , a ) m(s,a) of Sec. III-B , which admits a placement only if the oriented box fits inside the EMS and passes GOPT’s support test, both computed from the height map. SHORE and GOPT+ apply it to every visible box in every orientation, so an infeasible ending means that no visible box fits anywhere with enough support; GOPT applies it only to the buffer head in its stored orientation. For OL Mask, the filter of the selected box also includes the learned stability mask, so its episodes can also end when the mask rejects every placement as unstable. An infeasible ending can therefore mean that no box fits in the remaining space, or that the filter rejects placements that would in fact be stable, and the evaluation does not separate the two.",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e8e0572d833ccf2a",
+      "section": "III-E Episode End",
+      "location": "III-E Episode End",
+      "text": "Fig. 2 : SHORE framework. The bin configuration C t C_{t} and the buffer d t d_{t} are encoded as EMS tokens and (box, orientation) item tokens, and the rule-based mask m m keeps the geometrically valid pairs. The actor, a Packing Transformer, scores every valid pair and samples the action a = ( u , k ) a=(u,k) , which Isaac Gym executes and adjudicates by Eq. ( 2 ). A second Packing Transformer, the critic, values every pair in one pass, and a discretized REPPO learner updates both from on-policy rollouts (Sec. IV-B ).",
+      "url": "https://arxiv.org/html/2611.08364v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "141c122604d98453",
+      "section": "IV Method",
+      "location": "IV Method",
+      "text": "SHORE trains an actor–critic over the joint action a = ( u , k ) a=(u,k) with a discretized version of REPPO [ 15 ] (Secs. IV-A – IV-B ) and adds a learned estimate S ⁡ ( s , a ) S(s,a) of the probability that placement a a holds, i.e., satisfies Eq. ( 2 ) (Secs. IV-C – IV-D ). S S enters learning in two places: it weights the critic’s value ( critic weighting , Sec. IV-E ) and it acts as a prior on the actor ( actor prior , Sec. IV-F ). Two safeguards keep an untrained or changing S S from disturbing the learner (Sec. IV-G ). Fig. 2 gives an overview, and Algorithm 1 lists one training iteration.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7ffa5005e4f771ff",
+      "section": "IV Method",
+      "location": "IV Method",
+      "text": "The stability model addresses a specific weakness of the plain learner. A collapse pays 0 and ends the episode, so a plain critic must learn, for every action, the product of two different quantities: the chance that the placement holds, which depends on the densities and support under the footprint, and the value of the packing that follows. The token observation shows EMS rectangles and two support fractions but not the interior of the stack, and collapses are rare, so the critic learns this product slowly and only for the actions the policy executes.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3c364f3a3d8c8927",
+      "section": "IV-A Policy and Critic Networks",
+      "location": "IV-A Policy and Critic Networks",
+      "text": "The actor and the critic each have their own Packing Transformer backbone [ 2 ] . MLPs embed the item tokens 𝐱 u \\mathbf{x}_{u} and EMS tokens 𝐲 k \\mathbf{y}_{k} into 𝐡 u , 𝐞 k ∈ ℝ 128 \\mathbf{h}_{u},\\mathbf{e}_{k}\\in\\mathbb{R}^{128} , and three encoder blocks apply self-attention within each token type and cross-attention between items and EMSs. Actor and critic parameters are denoted θ \\theta and ϕ \\phi . With learned affine projections followed by LeakyReLU, denoted F 1 , F 2 F_{1},F_{2} , the base policy before adding stability information is",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "b41b491af59c06fe",
+      "section": "IV-A Policy and Critic Networks",
+      "location": "IV-A Policy and Critic Networks",
+      "text": "ℓ θ ​ ( s , u , k ) \\displaystyle\\ell_{\\theta}(s,u,k) = ⟨ F 1 ​ ( 𝐡 u ) , F 2 ​ ( 𝐞 k ) ⟩ , \\displaystyle=\\langle F_{1}(\\mathbf{h}_{u}),\\,F_{2}(\\mathbf{e}_{k})\\rangle, (3) π θ base ​ ( a ∣ s ) \\displaystyle\\pi_{\\theta}^{\\mathrm{base}}(a\\mid s) = m ⁡ ( s , a ) ​ e ℓ θ ​ ( s , a ) ∑ a ′ m ⁡ ( s , a ′ ) ​ e ℓ θ ​ ( s , a ′ ) . \\displaystyle=\\frac{m(s,a)\\,e^{\\ell_{\\theta}(s,a)}}{\\sum_{a^{\\prime}}m(s,a^{\\prime})\\,e^{\\ell_{\\theta}(s,a^{\\prime})}}.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E3",
+      "kind": "table"
+    },
+    {
+      "id": "ffe29ab73056240d",
+      "section": "IV-A Policy and Critic Networks",
+      "location": "IV-A Policy and Critic Networks",
+      "text": "The critic forms a pair feature 𝐟 ϕ ​ ( s , u , k ) = MLP ϕ ​ ( P h ​ 𝐡 u + P e ​ 𝐞 k + P s ​ [ 𝐡 ¯ ; 𝐞 ¯ ] ) \\mathbf{f}_{\\phi}(s,u,k)=\\mathrm{MLP}_{\\phi}(P_{h}\\mathbf{h}_{u}+P_{e}\\mathbf{e}_{k}+P_{s}[\\bar{\\mathbf{h}};\\bar{\\mathbf{e}}]) , where P h , P e , P s P_{h},P_{e},P_{s} are learned projections and the bars denote token means. Its head predicts a categorical distribution p ϕ ​ ( i ∣ s , a ) p_{\\phi}(i\\mid s,a) on n b = 151 n_{b}=151 atoms z i z_{i} spanning [ − 40 , 40 ] [-40,40] , with mean Q ϕ ​ ( s , a ) = ∑ i z i ​ p ϕ ​ ( i ∣ s , a ) Q_{\\phi}(s,a)=\\sum_{i}z_{i}p_{\\phi}(i\\mid s,a) . The HL-Gauss encoding HLG ⁡ ( g ) \\mathrm{HLG}(g) maps a scalar target g g to histogram-bin probabilities from 𝒩 ⁡ ( g , σ HL 2 ) \\mathcal{N}(g,\\sigma_{\\mathrm{HL}}^{2}) , after clipping g g to the atom support and normalizing the retained bin masses, with σ HL \\sigma_{\\mathrm{HL}} equal to 0.75 bin widths [ 16 ] . One forward pass scores all valid actions. Policy distributions are defined only for nonempty 𝒜 ⁡ ( s ) \\mathcal{A}(s) ; terminal states have zero continuation value.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS1.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "c1839ece73caf3a6",
+      "section": "IV-B REPPO-D Backbone",
+      "location": "IV-B REPPO-D Backbone",
+      "text": "We use the discrete REPPO formulation of [ 15 , Appendix C] , denoted REPPO-D here. Its action-value expectation, entropy and KL divergence are evaluated exactly over the finite action set. In our setting, the sums cover the geometrically valid joint actions 𝒜 ⁡ ( s ) \\mathcal{A}(s) , with the networks of Sec. IV-A scoring every pair in one pass. This discrete update is inherited from REPPO, rather than a contribution of SHORE.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "fa57b126ce3d3224",
+      "section": "IV-B REPPO-D Backbone",
+      "location": "IV-B REPPO-D Backbone",
+      "text": "We retain REPPO’s on-policy soft λ \\lambda -returns, HL-Gauss critic loss with latent self-prediction, and KL-gated actor update with adaptive entropy temperature α \\alpha and KL multiplier β \\beta ; their definitions are given in [ 15 , Secs. 3.1–3.3 and Appendix C] . The rollout-generating distribution is denoted π old \\pi_{\\mathrm{old}} . It remains fixed as the reference throughout the minibatch updates. Return targets use the scaled reward c r ​ r t c_{r}r_{t} , zero continuation at terminal states, and value bootstrapping at rollout boundaries.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "fccdf0c72582046e",
+      "section": "IV-B REPPO-D Backbone",
+      "location": "IV-B REPPO-D Backbone",
+      "text": "SHORE changes the action value, the actor’s prior and entropy regularizer, and the entropy target, as detailed below. Its soft returns use the modified value in Eq. ( 11 ), and its actor uses Eq. ( 10 ) inside the inherited KL gate. Setting w Q = w π = 0 w_{Q}=w_{\\pi}=0 recovers our masked REPPO-D backbone, called SHORE − - actor prior − - critic weighting in the experiments. Training settings are listed in Table VII .",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "3235a28030393723",
+      "section": "IV-C Stability Model",
+      "location": "IV-C Stability Model",
+      "text": "S ψ ​ ( s , a ) ∈ [ 0 , 1 ] S_{\\psi}(s,a)\\in[0,1] , with parameters ψ \\psi , estimates the probability of satisfying Eq. ( 2 ). The voxel grid hides sub-cell offsets, velocities and contact states, so identical observed grids can have different placement outcomes. A probability supports expected-value estimation under this partial observability.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c56700479ab570c",
+      "section": "IV-C Stability Model",
+      "location": "IV-C Stability Model",
+      "text": "The network takes the voxel grid and one oriented box. Its input has six channels on the l p × w p × h p l_{p}\\times w_{p}\\times h_{p} grid: occupancy, the voxel densities of C t C_{t} , and the box’s length, width, height and density, each broadcast as a constant channel. Extents are normalized by the grid dimensions, and densities by the maximum box density. A 3D U-Net [ 17 ] with the architecture of the OL Mask network [ 3 ] (8 base feature maps, 3 levels, group normalization) ends in a convolution that collapses the height axis, giving 16 feature channels on the l p × w p l_{p}\\times w_{p} grid. Five heads, each a 3 × 3 3\\times 3 convolution, a ReLU and a 1 × 1 1\\times 1 convolution, map these features to logit maps g ψ ( n ) g_{\\psi}^{(n)} , n = 1 , … , 5 n=1,\\dots,5 , with one logit per placement corner. For action a = ( u , k ) a=(u,k) , each head reads the map computed for item token u u at the corner ( x 1 , y 1 ) (x_{1},y_{1}) of EMS k k :",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "07aa88e2a8fbc5f7",
+      "section": "IV-C Stability Model",
+      "location": "IV-C Stability Model",
+      "text": "p ψ , n ​ ( s , a ) \\displaystyle p_{\\psi,n}(s,a) = sigmoid ⁡ ( g ψ ( n ) ​ ( s , a ) ) , \\displaystyle=\\operatorname{sigmoid}\\big(g_{\\psi}^{(n)}(s,a)\\big), (4) S ψ ​ ( s , a ) \\displaystyle S_{\\psi}(s,a) = 1 5 ​ ∑ n = 1 5 p ψ , n ​ ( s , a ) , \\displaystyle=\\tfrac{1}{5}\\textstyle\\sum_{n=1}^{5}p_{\\psi,n}(s,a), ν ψ ​ ( s , a ) \\displaystyle\\nu_{\\psi}(s,a) = h bin ​ ( S ψ ​ ( s , a ) ) \\displaystyle=h_{\\mathrm{bin}}\\big(S_{\\psi}(s,a)\\big) − 1 5 ∑ n = 1 5 h bin ( p ψ , n ( s , a ) ) , \\displaystyle-\\tfrac{1}{5}\\textstyle\\sum_{n=1}^{5}h_{\\mathrm{bin}}\\big(p_{\\psi,n}(s,a)\\big),",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E4",
+      "kind": "table"
+    },
+    {
+      "id": "2e013014a53c3a7e",
+      "section": "IV-C Stability Model",
+      "location": "IV-C Stability Model",
+      "text": "where h bin ​ ( p ) = − p ​ log ⁡ p − ( 1 − p ) ​ log ⁡ ( 1 − p ) h_{\\mathrm{bin}}(p)=-p\\log p-(1-p)\\log(1-p) is binary entropy; all logarithms are natural. Entropy evaluation clips probabilities to [ 10 − 6 , 1 − 10 − 6 ] [10^{-6},1-10^{-6}] for numerical stability. A learning copy has parameters ψ \\psi and a separate acting copy has parameters ψ ¯ \\bar{\\psi} . Below, S = S ψ ¯ S=S_{\\bar{\\psi}} and ν = ν ψ ¯ \\nu=\\nu_{\\bar{\\psi}} denote the acting predictions, held fixed during actor–critic updates (Sec. IV-G ). For numerical stability, the policy and its regularizer use S ~ ​ ( s , a ) = max ⁡ { S ⁡ ( s , a ) , ϵ log } \\widetilde{S}(s,a)=\\max\\{S(s,a),\\epsilon_{\\log}\\} , with ϵ log = 10 − 6 \\epsilon_{\\log}=10^{-6} ; critic weighting uses the unmodified S S . The head disagreement ν \\nu (BALD [ 18 ] ) estimates epistemic uncertainty: it is high when the heads disagree, whereas uniformly uncertain heads can have low disagreement. It is used only to choose which placements to label (Sec. IV-D ). One network pass covers every EMS of an item token, and tokens with equal extents and density share a pass, so a state costs at most 6 ​ N = 30 6N=30 passes. Invalid actions get S = 1 S=1 and ν = 0 \\nu=0 .",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS3.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "bf323b865e0b3726",
+      "section": "IV-C Stability Model",
+      "location": "IV-C Stability Model",
+      "text": "A separate convolutional network can use local density and support information absent from the actor–critic tokens. It also isolates supervised updates on buffered labels from the critic’s on-policy representation.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "fefbdccac2592c5a",
+      "section": "IV-D Stability Labels",
+      "location": "IV-D Stability Labels",
+      "text": "A label is the binary outcome of a placement, y = 1 y=1 if it held and y = 0 y=0 if it collapsed, stored with its state in a buffer 𝒟 S \\mathcal{D}_{S} . Recorded physical outcomes can be reused across policy updates; predictive accuracy is checked on recent held-out placements as the visited states change. They come from two sources, collected during the rollout phase of Algorithm 1 :",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1e0599cd067a48a3",
+      "section": "IV-D Stability Labels",
+      "location": "IV-D Stability Labels",
+      "text": "Executed placements. Every placement executed in a rollout is labeled by its real outcome, with label weight ζ = 2 \\zeta=2 . A random 10% of executed outcomes go to a holdout set, excluded from supervised training and used to assess the learning copy S ψ S_{\\psi} before activation (Sec. IV-G ).",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9b2c8bfc92b9d929",
+      "section": "IV-D Stability Labels",
+      "location": "IV-D Stability Labels",
+      "text": "Simulated placements. At every step, up to B = B s + B r B=B_{s}+B_{r} other valid placements per environment are tested in a copy of the environment and labeled by their simulated outcome, with label weight ζ = 1 \\zeta=1 . They are never executed. The copies run in a pool of Isaac Gym environments alongside the rollout environments, so they settle in the same batched simulation. Up to B s = 6 B_{s}=6 placements are selected by descending score π ​ ( a ∣ s ) γ π ​ ν ​ ( s , a ) \\pi(a\\mid s)^{\\gamma_{\\pi}}\\nu(s,a) , with γ π = 0.5 \\gamma_{\\pi}=0.5 and at most two per item token, so that labels go to placements the policy might choose and S S is unsure about. Up to B r = 2 B_{r}=2 more are drawn uniformly without replacement from the remaining candidates, so that S S cannot keep confirming its own confident mistakes. Every eighth step, the executed placement is also simulated. Its simulated outcome is added to the training buffer and compared with the executed outcome to measure copy bias. Thus the holdout excludes executed outcomes, but can overlap simulated training queries at the same state–action pair.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "967d2ebc1f7af57f",
+      "section": "IV-D Stability Labels",
+      "location": "IV-D Stability Labels",
+      "text": "The buffer keeps the labels of the most recent 40,000 visited states. After each rollout’s actor–critic update phase, S ψ S_{\\psi} takes 64 Adam steps on a weighted binary cross-entropy with a bootstrap mask drawn once when each label is stored: independently, each head sees that label with probability 1 2 \\tfrac{1}{2} . Keeping this mask fixed across reuse encourages head diversity:",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "1fbc51f12edc2139",
+      "section": "IV-D Stability Labels",
+      "location": "IV-D Stability Labels",
+      "text": "ℒ S ​ ( ψ ) = ∑ i , n μ i ​ n ​ ζ i ​ BCE logit ​ ( y i , g ψ ( n ) ​ ( s i , a i ) ) max ⁡ { 1 , ∑ i , n μ i ​ n ​ ζ i } , \\mathcal{L}_{S}(\\psi)=\\frac{\\sum_{i,n}\\mu_{in}\\,\\zeta_{i}\\,\\mathrm{BCE}_{\\mathrm{logit}}\\big(y_{i},g_{\\psi}^{(n)}(s_{i},a_{i})\\big)}{\\max\\{1,\\sum_{i,n}\\mu_{in}\\,\\zeta_{i}\\}}, (5)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E5",
+      "kind": "table"
+    },
+    {
+      "id": "326a7e0c38549792",
+      "section": "IV-D Stability Labels",
+      "location": "IV-D Stability Labels",
+      "text": "where i i indexes sampled labels, μ i ​ n ∼ Bernoulli ⁡ ( 1 2 ) \\mu_{in}\\sim\\mathrm{Bernoulli}(\\tfrac{1}{2}) decides whether head n n sees label i i , ζ i \\zeta_{i} is its source weight, and BCE logit \\mathrm{BCE}_{\\mathrm{logit}} is binary cross-entropy evaluated from logits. Executed labels weigh more because a simulated copy reports collapses that the real step does not have, mostly on tall stacks. With B s = B r = 0 B_{s}=B_{r}=0 and the periodic copy check disabled, S S learns from executed placements only, and SHORE makes no simulator calls beyond the rollout itself.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS4.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "b1447b35e8f8c7e2",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "For a fixed policy and fixed return targets, let G t G_{t} be the soft λ \\lambda -return used to train the critic. It includes the scaled immediate reward and future soft values, but not the current action’s entropy term. Thus G t = 0 G_{t}=0 on an immediate collapse. Define S true ​ ( s , a ) = Pr ⁡ ( χ t = 1 ∣ s t = s , a t = a ) S_{\\mathrm{true}}(s,a)=\\Pr(\\chi_{t}=1\\mid s_{t}=s,a_{t}=a) and Q G ( s , a ) = 𝔼 [ G t ∣ s t = s , a t = a ] Q_{G}(s,a)=\\mathbb{E}[G_{t}\\mid s_{t}=s,a_{t}=a] . Where S true > 0 S_{\\mathrm{true}}>0 , the law of total expectation gives Q G = S true ​ U ¯ G Q_{G}=S_{\\mathrm{true}}\\bar{U}_{G} , with U ¯ G = 𝔼 [ G t ∣ s t = s , a t = a , χ t = 1 ] \\bar{U}_{G}=\\mathbb{E}[G_{t}\\mid s_{t}=s,a_{t}=a,\\chi_{t}=1] . SHORE writes the critic network’s mean as U ϕ U_{\\phi} and forms",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS5.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "f547b040f1413feb",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "Q ⁡ ( s , a ) = U ϕ ​ ( s , a ) ​ ( 1 − w Q + w Q ​ S ​ ( s , a ) ) , Q(s,a)=U_{\\phi}(s,a)\\,\\big(1-w_{Q}+w_{Q}\\,S(s,a)\\big), (6)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E6",
+      "kind": "table"
+    },
+    {
+      "id": "c7d237974b09c051",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "which replaces Q ϕ Q_{\\phi} in the soft value and the actor objective, with no gradient through S S . The strength w Q ∈ [ 0 , 1 ] w_{Q}\\in[0,1] ramps from 0 to 1 (Sec. IV-G ). To move the critic target from the unconditional return toward the return conditional on survival, SHORE uses",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS5.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "5b690fd7e7b7c523",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "ℒ U = \\displaystyle\\mathcal{L}_{U}= ∑ t ∈ ℬ AC ω t CE ( HLG ( G t ) , p ϕ ( ⋅ ∣ s t , a t ) ) max ⁡ { ϵ loss , ∑ t ∈ ℬ AC ω t } \\displaystyle\\frac{\\sum_{t\\in\\mathcal{B}_{\\mathrm{AC}}}\\omega_{t}\\,\\mathrm{CE}\\big(\\mathrm{HLG}(G_{t}),p_{\\phi}(\\cdot\\mid s_{t},a_{t})\\big)}{\\max\\{\\epsilon_{\\mathrm{loss}},\\sum_{t\\in\\mathcal{B}_{\\mathrm{AC}}}\\omega_{t}\\}} (7) + ℒ aux , \\displaystyle+\\mathcal{L}_{\\mathrm{aux}},",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E7",
+      "kind": "table"
+    },
+    {
+      "id": "a69631f1f425f820",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "where ℬ AC \\mathcal{B}_{\\mathrm{AC}} is an actor–critic minibatch of rollout transitions, ϵ loss = 10 − 6 \\epsilon_{\\mathrm{loss}}=10^{-6} guards the denominator, CE \\mathrm{CE} is categorical cross-entropy, ℒ aux \\mathcal{L}_{\\mathrm{aux}} is REPPO’s unchanged latent self-prediction loss, and ω t = 1 \\omega_{t}=1 when χ t = 1 \\chi_{t}=1 and 1 − w Q 1-w_{Q} otherwise. At a fixed ( s , a ) (s,a) , the weighted scalar-target mean is Q G / ( 1 − w Q + w Q ​ S true ) Q_{G}/(1-w_{Q}+w_{Q}S_{\\mathrm{true}}) whenever the denominator is positive. If the critic represents this mean exactly, Eq. ( 6 ) yields",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS5.p1.4",
+      "kind": "p"
+    },
+    {
+      "id": "659e160a06c2bdcb",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "Q ideal ​ ( s , a ) = Q G ​ ( s , a ) ​ 1 − w Q + w Q ​ S ​ ( s , a ) 1 − w Q + w Q ​ S true ​ ( s , a ) . Q_{\\mathrm{ideal}}(s,a)=Q_{G}(s,a)\\,\\frac{1-w_{Q}+w_{Q}\\,S(s,a)}{1-w_{Q}+w_{Q}\\,S_{\\mathrm{true}}(s,a)}. (8)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E8",
+      "kind": "table"
+    },
+    {
+      "id": "d7e644f4e0ab4ec5",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "This equals Q G Q_{G} when S = S true S=S_{\\mathrm{true}} pointwise, or when w Q = 0 w_{Q}=0 . At w Q = 1 w_{Q}=1 , surviving samples train U ϕ U_{\\phi} toward U ¯ G \\bar{U}_{G} , which still includes the risk of later collapses. The identity explains the weighting design under exact mean fitting; finite data, function approximation, auxiliary training and HL-Gauss encoding can introduce additional error. In particular, low aggregate calibration error does not establish pointwise equality. If w Q = 1 w_{Q}=1 and S true = 0 S_{\\mathrm{true}}=0 , all sample weights vanish and this conditional target is undefined.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS5.p1.5",
+      "kind": "p"
+    },
+    {
+      "id": "49253a2568e64932",
+      "section": "IV-E Stability-Factored Critic",
+      "location": "IV-E Stability-Factored Critic",
+      "text": "This is where the per-action critic matters. A standard PPO critic predicts a state value; the per-action critic here permits stability to enter both value estimation and policy learning. Because Q Q is a probability times a value, a slightly risky placement that adds much more volume can be worth more than a safe one, a trade that a hard mask cannot make.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "c7e8a4938dc5c863",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "S S also weights the policy directly. We write π \\pi for the full policy, with dependence on θ , ψ ¯ , w π \\theta,\\bar{\\psi},w_{\\pi} implicit:",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5ac4680559d7d4d2",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "π ⁡ ( a ∣ s ) = m ⁡ ( s , a ) ​ e ℓ θ ​ ( s , a ) ​ S ~ ​ ( s , a ) w π ∑ a ′ m ⁡ ( s , a ′ ) ​ e ℓ θ ​ ( s , a ′ ) ​ S ~ ​ ( s , a ′ ) w π , \\pi(a\\mid s)=\\frac{m(s,a)\\,e^{\\ell_{\\theta}(s,a)}\\,\\widetilde{S}(s,a)^{w_{\\pi}}}{\\sum_{a^{\\prime}}m(s,a^{\\prime})\\,e^{\\ell_{\\theta}(s,a^{\\prime})}\\,\\widetilde{S}(s,a^{\\prime})^{w_{\\pi}}}, (9)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E9",
+      "kind": "table"
+    },
+    {
+      "id": "1545e52088e509c6",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "with a prior strength w π ∈ [ 0 , 1 ] w_{\\pi}\\in[0,1] that ramps like w Q w_{Q} . The prior is soft, unlike a hard mask. A valid placement that S S wrongly rates as unsafe retains nonzero sampling probability and can therefore receive a corrective executed label. When every candidate is risky, the policy renormalizes over the least risky ones instead of emptying the action set. The policy KL is computed on these full, stability-adjusted action probabilities (Sec. IV-G ).",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "85a0f038a2132d80",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "Keeping REPPO-D’s ordinary entropy regularizer would make the actor counteract this prior. The ordinary entropy-regularized objective pulls π \\pi toward exp ⁡ ( Q / α ) \\exp(Q/\\alpha) , so the actor would have to cancel the prior using voxel information it cannot see. SHORE instead regularizes relative to the prior, with sums over a ∈ 𝒜 ⁡ ( s ) a\\in\\mathcal{A}(s) :",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "26c1a21f13b0f0e9",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "𝒥 S ​ ( θ , s ) = ∑ a π ⁡ ( a ∣ s ) ​ [ α ​ log ⁡ π ⁡ ( a ∣ s ) S ~ ​ ( s , a ) w π − Q ⁡ ( s , a ) ] . \\mathcal{J}_{S}(\\theta;s)=\\sum_{a}\\pi(a\\mid s)\\Big[\\alpha\\log\\frac{\\pi(a\\mid s)}{\\widetilde{S}(s,a)^{w_{\\pi}}}-Q(s,a)\\Big]. (10)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E10",
+      "kind": "table"
+    },
+    {
+      "id": "d2a444ae72976142",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "Up to a term that does not depend on θ \\theta , 𝒥 S = α KL ( π ∥ π S ) − 𝔼 π [ Q ] \\mathcal{J}_{S}=\\alpha\\mathrm{KL}(\\pi\\,\\|\\,\\pi_{S})-\\mathbb{E}_{\\pi}[Q] with π S ∝ m ​ S ~ w π \\pi_{S}\\propto m\\,\\widetilde{S}^{w_{\\pi}} . For fixed Q , S , w π Q,S,w_{\\pi} and α > 0 \\alpha>0 , its per-state minimizer over valid-action distributions is π imp ∝ S ~ w π ​ exp ⁡ ( Q / α ) \\pi_{\\mathrm{imp}}\\propto\\widetilde{S}^{w_{\\pi}}\\exp(Q/\\alpha) . Equation ( 9 ) represents this distribution when ℓ θ ​ ( s , a ) = Q ⁡ ( s , a ) / α + κ ⁡ ( s ) \\ell_{\\theta}(s,a)=Q(s,a)/\\alpha+\\kappa(s) , where κ ⁡ ( s ) \\kappa(s) is any action-independent offset. Thus the ideal logits need not cancel the stability prior; neural approximation and the KL gate constrain the actual update. The soft value carries the same regularizer,",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "c76c0f3fedc5ce81",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "V ⁡ ( s ) = ∑ a π ⁡ ( a ∣ s ) ​ [ Q ⁡ ( s , a ) − α ​ log ⁡ π ⁡ ( a ∣ s ) S ~ ​ ( s , a ) w π ] , V(s)=\\sum_{a}\\pi(a\\mid s)\\Big[Q(s,a)-\\alpha\\log\\frac{\\pi(a\\mid s)}{\\widetilde{S}(s,a)^{w_{\\pi}}}\\Big], (11)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E11",
+      "kind": "table"
+    },
+    {
+      "id": "78ec760c840e742f",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "with zero value at terminal states.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "8916ced49af8b0d1",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "Entropy target. We retain REPPO-D’s temperature update, which compares the policy’s Shannon entropy ℋ ( π ) = − ∑ a ∈ 𝒜 ⁡ ( s ) π ( a ∣ s ) log π ( a ∣ s ) \\mathcal{H}(\\pi)=-\\sum_{a\\in\\mathcal{A}(s)}\\pi(a\\mid s)\\log\\pi(a\\mid s) with a target, but set",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee4cee11e7272995",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "ℋ tgt ( s ) = 1 2 ℋ ( π S ( ⋅ ∣ s ) ) . \\mathcal{H}_{\\mathrm{tgt}}(s)=\\tfrac{1}{2}\\mathcal{H}\\big(\\pi_{S}(\\cdot\\mid s)\\big). (12)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E12",
+      "kind": "table"
+    },
+    {
+      "id": "0a3cd5da14935fc7",
+      "section": "IV-F Stability Prior on the Policy",
+      "location": "IV-F Stability Prior on the Policy",
+      "text": "A target based only on the number of geometrically valid actions would demand the same exploration even when most candidates are predicted unstable. This target instead adapts exploration to the concentration of the stability prior. It reduces to 1 2 ​ log ⁡ | 𝒜 ⁡ ( s ) | \\tfrac{1}{2}\\log|\\mathcal{A}(s)| when w π = 0 w_{\\pi}=0 , because the prior is then uniform over valid actions.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS6.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "b3047e72ecce3c05",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "Stability activation gate and ramp. An untrained S S is noise, and as a prior it would bias early exploration. Both strengths therefore follow one schedule, w π = w Q = w w_{\\pi}=w_{Q}=w , with",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9905157c68fd6ae3",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "w ⁡ ( n env ) = clip ⁡ ( ( n env − n gate ) / N ramp , 0 , 1 ) , w(n_{\\mathrm{env}})=\\mathrm{clip}\\big((n_{\\mathrm{env}}-n_{\\mathrm{gate}})/N_{\\mathrm{ramp}},\\;0,\\;1\\big), (13)",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.E13",
+      "kind": "table"
+    },
+    {
+      "id": "dd935fb6838d5d9b",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "where n env n_{\\mathrm{env}} counts total training environment steps, N ramp = 10 5 N_{\\mathrm{ramp}}=10^{5} is the ramp length, and clip ⁡ ( x , 0 , 1 ) \\mathrm{clip}(x,0,1) truncates x x to [ 0 , 1 ] [0,1] . The gate step n gate n_{\\mathrm{gate}} is the first training-iteration boundary at which the updated learning copy 1 − S ψ 1-S_{\\psi} detects collapses among the held-out executed placements with an AUROC of at least 0.8, measured on at least 50 collapses. Once open, the gate stays open. Until it opens, w = 0 w=0 and every equation above reduces to the learner of Sec. IV-B : π ∝ m ​ e ℓ θ \\pi\\propto m\\,e^{\\ell_{\\theta}} , Q = U ϕ Q=U_{\\phi} , all critic samples have weight 1, and ℋ tgt = 1 2 ​ log ⁡ | 𝒜 ⁡ ( s ) | \\mathcal{H}_{\\mathrm{tgt}}=\\tfrac{1}{2}\\log|\\mathcal{A}(s)| .",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS7.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "85c56b82ea0c0238",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "The activation gate protects early exploration from an uninformative stability model. Its AUROC criterion tests discrimination, not probability calibration; ECE is assessed separately in the experiments.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS7.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a7ffc7ae297b4146",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "What the policy KL gate protects. The inherited REPPO-D gate limits actor updates relative to the rollout policy, where the on-policy critic has training support. In SHORE, it evaluates KL ( π old ∥ π ) \\mathrm{KL}(\\pi_{\\mathrm{old}}\\,\\|\\,\\pi) over the full joint policy of Eq. ( 9 ), including the stability prior. The gate is applied per state: when its KL is below ε KL \\varepsilon_{\\mathrm{KL}} , the actor follows 𝒥 S \\mathcal{J}_{S} ; otherwise, only the KL pullback is applied. These statewise losses are averaged over the minibatch. The acting stability model and the strengths w Q , w π w_{Q},w_{\\pi} stay fixed throughout the rollout and its actor–critic updates. This gate controls policy change; it neither tests physical stability nor guarantees that a placement holds.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS7.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "13f43187d177a341",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "Controlling stability-model updates. Updating the acting stability model changes the policy even with the actor fixed, so it needs separate control. After training S ψ S_{\\psi} , we interpolate ψ ¯ ← ψ ¯ + λ S ​ ( ψ − ψ ¯ ) \\bar{\\psi}\\leftarrow\\bar{\\psi}+\\lambda_{S}(\\psi-\\bar{\\psi}) . A bisection search chooses a step λ S ∈ [ 0 , 1 ] \\lambda_{S}\\in[0,1] whose induced policy KL, from the pre-interpolation policy to the candidate policy, stays within the mean bound δ S \\delta_{S} on recent rollout states. The updated actor and the next rollout’s prior strength are fixed during this check. If that strength is zero, the acting copy takes the learned weights directly. This bounds the measured policy drift caused by the model interpolation; it does not bound the separate change from advancing the strength ramp. It complements the actor’s KL gate. The bound and state-sample size are given in Table VII .",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS7.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "0bece4a6dc3e1be8",
+      "section": "IV-G Safeguards for a Learned Stability Model",
+      "location": "IV-G Safeguards for a Learned Stability Model",
+      "text": "Algorithm 1 SHORE: one training iteration",
+      "url": "https://arxiv.org/html/2611.08364v1#alg1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "6727c04ed85a1396",
+      "section": "IV-H Deployment",
+      "location": "IV-H Deployment",
+      "text": "The critic, the label buffer and the simulator are used only during training. At deployment, SHORE computes the geometric mask, one actor pass and the stability network’s passes for the visible items. It then executes arg ⁡ max a ∈ 𝒜 ⁡ ( s ) ​ [ ℓ θ ​ ( s , a ) + w π ​ log ⁡ S ~ ​ ( s , a ) ] \\arg\\max_{a\\in\\mathcal{A}(s)}[\\ell_{\\theta}(s,a)+w_{\\pi}\\log\\widetilde{S}(s,a)] , the mode of Eq. ( 9 ). No search is run and no placement is simulated.",
+      "url": "https://arxiv.org/html/2611.08364v1#S4.SS8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a6abb87e974ce01d",
+      "section": "V Experiments",
+      "location": "V Experiments",
+      "text": "The experiments answer three questions:",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "799915c9f980dea6",
+      "section": "V Experiments",
+      "location": "V Experiments",
+      "text": "Does explicit stability modeling accelerate policy learning and improve the trade-off between packed volume and collapse risk, beyond the benefit of buffer selection and rotation?",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e93600aa02411308",
+      "section": "V Experiments",
+      "location": "V Experiments",
+      "text": "Where must the stability estimate act: in the critic, in the policy, or in both?",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c42e695d08a7ba85",
+      "section": "V Experiments",
+      "location": "V Experiments",
+      "text": "Do simulated stability labels help beyond the labels of executed placements, and is choosing them by uncertainty better than choosing them at random?",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e404e25c1b104fcf",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "All methods share the simulator, box sets, stability criterion (Eq. ( 2 )) and evaluation protocol (Sec. V-C ). The baselines keep their own action spaces and rewards. Except where stated, they place every box in its stored orientation, as in their original implementations, while SHORE and GOPT+ choose among six orientations.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b873b50426cd798f",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "Masked-PPO variants. OL Mask [ 3 ] learns a stability mask online from physics simulations, jointly with a PPO policy. It is the strongest prior method in this setting and the closest to ours, since it also learns stability from physics. Nomask removes masking entirely. Random Selection randomly picks the box from the buffer with only the placement decided by the policy network; Random Placement places at random positions with only box selection determined by the policy.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "94093f7bf49a9cd5",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "Learning-based state of the art. GOPT [ 2 ] is a transformer-based DRL packer using Empty Maximal Spaces (EMSs — the maximal axis-aligned empty boxes remaining in the bin) as placement candidates. We use the official implementation (Packing Transformer, EMS placement generator, and masked PPO) and swap only its geometric environment for ours, so that placements are executed and adjudicated by the same physics: unstable placements terminate episodes exactly as for the other methods. Since GOPT is a strict online packer without buffer selection, it packs the buffer head at each step. GOPT+ extends GOPT to the action space of SHORE. The same Packing Transformer chooses any visible box in any of its six orientations, i.e., a joint (box, orientation, EMS) action, and is trained with GOPT’s masked PPO [ 5 ] , with the clipped ratio applied separately to the (box, orientation) choice and to the EMS choice. Its rollout size, learning rate and number of updates are matched to SHORE − - actor prior − - critic weighting, so GOPT+ has the actor network and the action space of SHORE − - actor prior − - critic weighting and differs from it in the learner.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "e3342ff5f271cc55",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "TABLE I : Box specifications in the simulation environment.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1abb2d9a3bdf4376",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "Dimension (cm) Density (kg/m 3 ) Rigidity Counts 6 × 6 × 4 100 0.5 10 6 × 6 × 6 100 0.5 10 6 × 6 × 6 5000 3 10 8 × 6 × 6 5000 3 10",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T1.4",
+      "kind": "table"
+    },
+    {
+      "id": "98573fd4519f6a0b",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "To assess sensitivity to box geometry, the expanded evaluation uses the 12 geometries in Tab. II , with five boxes per geometry (60 arrivals per episode), alongside the four-type base set. Density is assigned independently of geometry: each odd-numbered geometry contributes three light and two heavy boxes and each even-numbered geometry two light and three heavy, giving 30 light and 30 heavy boxes per episode. Light and heavy boxes use the two materials of the base set (100 kg/m 3 with rigidity 0.5, and 5000 kg/m 3 with rigidity 3; Tab. I ). The 60 boxes fill 86.6% of the bin volume, against 69.1% for the base set, so the expanded set is both more heterogeneous and tighter. Every learned method is retrained from scratch on the expanded set with unchanged hyperparameters, and no policy is transferred between box sets. The training budget of each method is given with its results.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "f3adb3281f498351",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "TABLE II : Box geometries for the FBA [ 19 ] -inspired synthetic benchmark. Each geometry appears five times per episode. Density is assigned separately from geometry.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "68db20f8002f5fb5",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "ID Reference (in) Simulation (cm) Count B01 8 × 8 × 6 8\\times 8\\times 6 4 × 4 × 3 4\\times 4\\times 3 5 B02 10 × 8 × 6 10\\times 8\\times 6 5 × 4 × 3 5\\times 4\\times 3 5 B03 12 × 8 × 6 12\\times 8\\times 6 6 × 4 × 3 6\\times 4\\times 3 5 B04 12 × 10 × 6 12\\times 10\\times 6 6 × 5 × 3 6\\times 5\\times 3 5 B05 12 × 12 × 8 12\\times 12\\times 8 6 × 6 × 4 6\\times 6\\times 4 5 B06 14 × 10 × 8 14\\times 10\\times 8 7 × 5 × 4 7\\times 5\\times 4 5 B07 16 × 10 × 6 16\\times 10\\times 6 8 × 5 × 3 8\\times 5\\times 3 5 B08 16 × 12 × 8 16\\times 12\\times 8 8 × 6 × 4 8\\times 6\\times 4 5 B09 16 × 12 × 12 16\\times 12\\times 12 8 × 6 × 6 8\\times 6\\times 6 5 B10 18 × 12 × 8 18\\times 12\\times 8 9 × 6 × 4 9\\times 6\\times 4 5 B11 18 × 14 × 10 18\\times 14\\times 10 9 × 7 × 5 9\\times 7\\times 5 5 B12 20 × 16 × 12 20\\times 16\\times 12 10 × 8 × 6 10\\times 8\\times 6 5",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T2.4",
+      "kind": "table"
+    },
+    {
+      "id": "95e49b9e6843a50b",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "TABLE III : Performance comparison on the base box set. All methods are evaluated using the 1M trained checkpoint over 50 episodes with randomized arrival order and identical seeds. Episode metrics average over evaluation episodes. Space utilization and termination rates are dimensionless; episode length counts placed boxes and collapses per placement is in percent. Metrics are defined in Sec. V-C . Completion rate is the fraction of episodes in which all boxes are placed.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ba59fbc183fd4c42",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "OL Mask [ 3 ] GOPT [ 2 ] GOPT+ SHORE(Ours) Space utilization( ↑ \\uparrow ) 0.495 0.661 0.683 0.657 Mean Episode Length( ↑ \\uparrow ) 28.68 38.25 39.53 38.18 Unstable Rate( ↓ \\downarrow ) 0.14 0.18 0.05 0.16 Collapses per placement (%)( ↓ \\downarrow ) 0.49 0.48 0.12 0.42 Completion rate( ↑ \\uparrow ) 0.00 0.67 0.95 0.84",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T3.4",
+      "kind": "table"
+    },
+    {
+      "id": "010eb943cd8c8e14",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "TABLE IV : Performance on the expanded box set (12 geometries in Tab. II , 60 arrivals per episode). All methods are evaluated using the 1M trained checkpoint over 50 episodes with randomized arrival order and identical seeds. Learned methods report mean ± \\pm standard deviation over three training seeds. No method completes the 60-box sequence, so the completion rate is 0 and omitted, and every episode that does not end in a collapse ends with no feasible placement (Sec. III-E ). Collapses per placement is in percent (Sec. V-C ).",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "51af84c79a67e913",
+      "section": "V-A Baselines",
+      "location": "V-A Baselines",
+      "text": "OL Mask ‡ [ 3 ] GOPT [ 2 ] GOPT+ SHORE(Ours) Space utilization( ↑ \\uparrow ) 0.242 ± \\pm 0.009 0.588 ± \\pm 0.017 0.715 ± \\pm 0.007 0.734 ± \\pm 0.006 Mean Episode Length( ↑ \\uparrow ) 16.45 ± \\pm 1.07 41.08 ± \\pm 1.06 50.55 ± \\pm 0.69 50.83 ± \\pm 0.53 Unstable Rate( ↓ \\downarrow ) 0.99 ± \\pm 0.01 0.26 ± \\pm 0.06 0.61 ± \\pm 0.08 0.53 ± \\pm 0.05 Collapses per placement (%)( ↓ \\downarrow ) 5.69 ± \\pm 0.30 0.63 ± \\pm 0.15 1.20 ± \\pm 0.17 1.03 ± \\pm 0.10",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T4.4",
+      "kind": "table"
+    },
+    {
+      "id": "d3ed1cdae6301a59",
+      "section": "V-B Simulation Setup",
+      "location": "V-B Simulation Setup",
+      "text": "We run all training and evaluation in Isaac Gym [ 20 ] with the GPU-accelerated PhysX backend. A placement is executed as a release 2 2 mm above the target position in the selected orientation, without a full arm trajectory or added Gaussian position or rotation perturbations. This deliberate simplification keeps the property that matters for the decision problem, whether the stack holds, while abstracting away manipulator dynamics. A single box released on the bin settles onto its target with zero measurable drift.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "94f46e341266a883",
+      "section": "V-B Simulation Setup",
+      "location": "V-B Simulation Setup",
+      "text": "For sim-to-sim transfer, we calibrated Isaac Gym’s PhysX contact behavior against high-fidelity MuJoCo using paired placement replays (Appendix A ). This aligns the faster simulator with MuJoCo’s placement outcomes while retaining Isaac Gym’s GPU-parallel capacity for large-scale RL training. Agreement is high but imperfect, so reported results remain specific to the calibrated Isaac Gym model.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "959291139d027448",
+      "section": "V-B Simulation Setup",
+      "location": "V-B Simulation Setup",
+      "text": "In implementation, the bin is 25 × 25 25\\times 25 cm with a maximum stacking height of 20 20 cm, discretized into 25 × 25 × 20 25\\times 25\\times 20 voxels of 1 1 cm for placement choice. The length of the processing buffer is set to 5. Our box configuration uses light and heavy densities of 100 100 and 5000 5000 kg/m 3 , respectively, following the released implementation of [ 3 ] . This density contrast makes density-aware ordering important. The experimental settings used for our comparisons are listed here rather than assumed to match all settings reported in the original paper. All remaining hyperparameters are listed in Tab. VII (Appendix A ).",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0f4efa10d0bf9a50",
+      "section": "V-B Simulation Setup",
+      "location": "V-B Simulation Setup",
+      "text": "With N = 5 N=5 and K = 80 K=80 , each state has at most 6 ​ N ​ K = 2,400 6NK=2{,}400 joint actions, against 6 ​ N ​ l p ​ w p = 18,750 6Nl_{p}w_{p}=18{,}750 if every cell of the 25 × 25 25\\times 25 grid were a placement choice. This action space is still large enough to make learning challenging.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "8ab2b52e51af3a70",
+      "section": "V-B Simulation Setup",
+      "location": "V-B Simulation Setup",
+      "text": "Four types of boxes with different dimensions (length, width, and height), densities, and rigidities are used. While the density parameter controls how heavy the box is, the rigidity parameter controls the deformation degree of the box under contact forces; both impact placement stability. The detailed box specification is listed in Tab. I . The mixture of light deformable and heavy rigid boxes is what makes stability depend on more than geometry: for example, packing the light 6 × 6 × 4 6\\times 6\\times 4 boxes first produces a soft top surface, and any heavy 8 × 6 × 6 8\\times 6\\times 6 box arriving later must either be placed on that yielding surface (typically unstable) or terminate the episode. A policy that knows which surfaces will hold can choose its boxes and placements to keep rigid support available.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "2da8dcb79d7ff067",
+      "section": "V-B Simulation Setup",
+      "location": "V-B Simulation Setup",
+      "text": "The total volume of all boxes in the base set is 0.691 0.691 of the bin volume, which caps utilization even if every box is packed successfully. This near-saturation ceiling makes the base set a weak test of further packing gains. We therefore also evaluate on the expanded FBA set, whose broader range of 12 carton dimensions better represents varied fulfillment-box sizes and raises the all-boxes-packed ceiling to 0.866 0.866 . The expanded set offers more headroom for comparing packing strategies and makes box choice and orientation more consequential. The base set remains useful for checking whether the method’s behavior transfers to a simpler, nearly saturated inventory.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "e5445cda49642a5a",
+      "section": "V-C Evaluation Metrics",
+      "location": "V-C Evaluation Metrics",
+      "text": "Space utilization is the total stably packed box volume divided by bin volume. Mean episode length counts boxes successfully placed before termination.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "24fdee35f375a41e",
+      "section": "V-C Evaluation Metrics",
+      "location": "V-C Evaluation Metrics",
+      "text": "Completion rate and unstable rate report the fractions of episodes that end with every box placed and with a collapse (Sec. III-E ). We do not report the share of infeasible endings as a metric: what it measures depends on each method’s feasibility filter (Sec. III-E ), so it is not comparable across methods. Collapses per placement is the number of collapses divided by the number of placement attempts (placed boxes plus collapses) over a method’s 50 evaluation episodes, in percent. An episode has at most one collapse. Thus, within a training seed, if f col f_{\\mathrm{col}} is the fraction of episodes ending in collapse and L ¯ \\bar{L} is the mean number of successfully placed boxes, collapses per attempt is f col / ( L ¯ + f col ) f_{\\mathrm{col}}/(\\bar{L}+f_{\\mathrm{col}}) before conversion to percent. This normalizes failures by the number of executed attempts; it is not an independent outcome from episode length and unstable rate. It estimates the observed failure frequency under each policy’s visited states, rather than risk on a common set of stacks. A low per-attempt frequency can still accompany frequent episode failures when many placements must succeed in succession.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "da7dcea87afdb98c",
+      "section": "V-C Evaluation Metrics",
+      "location": "V-C Evaluation Metrics",
+      "text": "Stability-model metrics. The ablations (Sec. V-E ) evaluate the learning copy S ψ S_{\\psi} on held-out executed outcomes. These outcomes are excluded from supervised training, but simulated labels can cover the same state–action pairs (Sec. IV-D ); the evaluation therefore does not establish generalization to entirely unseen placements. It also does not directly assess the acting copy S ψ ¯ S_{\\bar{\\psi}} .",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "a8121027a3698b82",
+      "section": "V-C Evaluation Metrics",
+      "location": "V-C Evaluation Metrics",
+      "text": "AUROC , the area under the receiver operating characteristic curve for 1 − S ψ 1-S_{\\psi} detecting collapses, measures ranking: the probability that a collapsed placement receives a lower prediction than a successful one, with half credit for ties. A score of 0.5 is chance and 1 is perfect ranking. This metric opens the activation gate. Expected calibration error (ECE) groups predictions into ten equal-width bins and averages the absolute difference between each bin’s mean prediction and observed success frequency, weighted by bin size. Zero means perfect agreement at this bin resolution. Probability accuracy matters because the critic uses S ψ ¯ S_{\\bar{\\psi}} multiplicatively, but low ECE does not prove the pointwise accuracy required by Eq. ( 8 ). The metrics are complementary: with rare collapses, a constant high prediction can have low ECE while ranking at chance; good ranking can coexist with pessimistic probabilities. Both metrics use the most recent held-out outcomes after each training iteration: about 4,000, including 37–66 collapses at the reported ablation checkpoint.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "fa5cebaf61e1ba39",
+      "section": "V-C Evaluation Metrics",
+      "location": "V-C Evaluation Metrics",
+      "text": "Although the box type distribution is shared between training and evaluation (a realistic assumption for a warehouse with standardized box sizes), the arrival order is independently randomized in every evaluation episode, so evaluation sequences are almost surely never seen during training; the combinatorial space of arrival orders is ( 40 10 , 10 , 10 , 10 ) ≈ 4.7 × 10 21 \\binom{40}{10,10,10,10}\\approx 4.7\\times 10^{21} . All metrics are averaged over 50 evaluation episodes with the same fixed episode seeds across all methods, using deterministic (argmax) actions and no search for the learned policies.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "7f1835a3a774b7cb",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Separating action flexibility from stability awareness. The base-set comparison is close to its packing ceiling, while the expanded set tests the method in a more demanding regime: varied geometries constrain future fit, and material properties are independent of shape, so geometry alone cannot identify reliable support. At the base-set checkpoint, GOPT+ has higher utilization and completion than the single-seed SHORE run, despite SHORE’s earlier rise in training reward. The curves therefore suggest faster early learning in this run, not a base-set evaluation advantage or a seed-robust difference. The expanded set provides the stronger test of whether modeling stability helps when box choice, orientation, and future fit interact.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "81853e5689dc47e4",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Fig. 3 : Training curves on the base box set for the methods of Table III , up to 1M environment steps, computed from training episodes as in Fig. 4 . (a) Mean reward of training episodes (packed volume fraction). (b) Fraction of training episodes that end in a collapse. (c) Collapses per placement attempt (log scale). The original GOPT runs did not log how training episodes end, so GOPT appears only in (a).",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a79930a4c093ea43",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "The comparison between GOPT and GOPT+ tests the value of broadening decisions beyond the buffer head and its fixed orientation. GOPT+ is our extension of the official GOPT baseline: it can choose a visible box, its orientation, and an EMS placement, so order, orientation, and location all affect the next packing state. Its stronger performance indicates that exposing these choices can improve packing on the expanded set and supports the importance of flexible, coordinated decisions. This is evidence for the value of the expanded decision space, though the comparison does not isolate action flexibility alone: GOPT+ also uses a different PPO update, with clipped ratios applied separately to item-orientation and placement choices.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "27406f1ca29d5744",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Against this stronger diagnostic baseline, SHORE attains higher mean utilization while experiencing fewer collapses both per episode and per placement attempt, despite sharing its action space and actor backbone. The comparison therefore tests what stability-aware valuation and policy guidance add after the joint choices are available. To isolate stability modeling, the relevant control is REPPO-D, which shares the learner but removes both SHORE components. Its eventual utilization matches SHORE within training-seed variation. The evidence thus points to earlier acquisition and a better packing–risk balance, rather than a higher final utilization ceiling.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "69a538ea88c45391",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Why stability supervision helps learning. Figure 4 (a) and the intermediate deterministic checkpoint evaluations show that SHORE reaches its high-utilization regime earlier than the learner without S S . The advantage persists across intermediate checkpoints and appears under both sampled training actions and deterministic evaluation, so it is not merely a consequence of exploration noise in training returns. This pattern supports the hypothesis that separating immediate physical survival from continuation value makes learning easier. Without S S , the critic must infer both effects from returns; a failed placement also removes the opportunity to observe later packing decisions. In SHORE, supervised placement outcomes train a dedicated model with access to the internal density layout, and that information immediately affects the values and probabilities of joint box–orientation–placement choices. The later catch-up of the base learner is consistent with S S supplying useful information sooner, while both ultimately optimize the same packed-volume objective. This learning advantage is measured in rollout environment steps.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "524980f4eb6bd657",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Stability without sacrificing useful packing. Table IV shows that SHORE packs more volume than GOPT+ with fewer failures per attempt, while their episode lengths are comparable. Its lower episode-collapse share thus accompanies a lower observed placement failure frequency, rather than simply fewer opportunities to fail. This supports using S S to guide productive joint actions. The two collapse metrics summarize the same failures at different scales; their agreement clarifies the packing–risk trade-off rather than providing independent statistical evidence.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "1f4b866ac5cbf159",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Figure 4 (c) shows how this trade-off develops during learning. After the initial improvement, SHORE sustains fewer collapses per attempt than the learner without S S , alongside higher packed-volume reward in panel (a). GOPT+ approaches its placement-level failure frequency later, consistent with explicit stability supervision accelerating the acquisition of useful physical constraints. OL Mask reveals why both collapse metrics are needed: its failures per attempt decline while its episode-collapse share stays near saturation. It sustains more successful placements before failure, but still fails before completion. Panel (c) therefore reveals progress that panel (b) obscures. These sampled training trajectories complement the deterministic evaluation comparison; they do not measure deployment-policy performance directly.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "62555a74214eefdc",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Balancing stability against packed volume. The expanded set shows two ways to get this trade-off wrong. GOPT is the conservative extreme. It has the lowest observed collapse frequency, yet packs much less volume than the methods that choose from the whole buffer. Its low collapse share is partly a consequence of stopping early: it places only the buffer head in its stored orientation, so most of its episodes end once that box has no admissible placement, after about 41 boxes, and each episode contains fewer placements that could fail. Its restricted actions also make each placement more conservative: it never turns a box onto a smaller face and never packs the last, tightest part of the bin. The training curves show the same regime throughout learning (Fig. 4 ): about 30% of GOPT’s training episodes end in a collapse, the fewest of any method, while its training reward stays near 0.5. GOPT+ is the aggressive counterpart. With buffer selection and rotation it packs more volume, but incurs a higher collapse rate. Because a collapse ends the episode and forfeits every box not yet packed, neither extreme is optimal: avoiding risk leaves space unused, and ignoring risk lets a single failed placement discard the volume the remaining boxes would have added. SHORE’s action value prices this trade-off directly, as the probability that a placement holds times the return if it holds. With the same action space and backbone as GOPT+, it attains higher utilization while experiencing fewer episode collapses and fewer failures per placement. The aim is thus not the lowest collapse rate, which GOPT shows can be bought by stopping early, but the most packed volume for the risk taken. OL Mask fails on both counts: its hard mask admits placements that do not hold, and 99% of its episodes end in a collapse after about 16 boxes, although its different architecture, orientation restriction and training procedure prevent isolating soft versus hard masking as the cause.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "c95ab7243fb8cb7b",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "No method completes the expanded sequences. For SHORE, fewer collapse endings accompany more geometrically infeasible endings, identifying preservation of usable space and support as a remaining challenge. Its soft prior does not remove geometrically valid actions; earlier choices can nevertheless leave no admissible placement. Infrequent placement failures can still interrupt a long sequence, while avoiding collapse alone does not preserve room for the remaining boxes. Normalization accounts for the number of attempts but not differences in the states visited; establishing lower risk on the same candidate placements would require a separate controlled comparison.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "929fab2f04eb2957",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Fig. 4 : Training curves on the expanded (FBA) box set. (a) Mean reward of training episodes (packed volume fraction), with actions sampled from each method’s training policy. (b) Fraction of training episodes that end in a collapse; the others end with no feasible placement. (c) Collapses per placement attempt during training (log scale), pooled over the training episodes in each window. All three panels are computed from training episodes. A method whose episodes collapse long before the bin fills stays near 1 in (b) even as its collapses per placement fall in (c). The curves end at 1M steps, the checkpoint evaluated in Table IV .",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "721dac2061fd1ef0",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Figure 5 illustrates these distinct failure mechanisms under identical arrivals. We use the final checkpoint from the training seed with the median final score, and select the episode closest to the mean rewards of GOPT and SHORE. GOPT stops because the buffer head has no admissible placement, illustrating the restriction that buffer selection and rotation address. GOPT+ uses that flexibility to continue, but eventually exhausts admissible placements for every visible box. OL Mask instead admits a placement that destabilizes the stack, illustrating that passing a learned filter is not a physical guarantee. SHORE builds a substantially filled stack before a heavy placement fails; the remaining failure makes clear that its soft prior manages risk rather than eliminating it. The scene also shows why box count and utilization can disagree: SHORE packs fewer boxes than GOPT+ here but more volume. Evaluating the joint policy therefore requires the volume objective as well as the failure mode, rather than counting placements alone.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS4.p9.1",
+      "kind": "p"
+    },
+    {
+      "id": "7159d67b43056455",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "(a) OL Mask: 40 boxes left on the table.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F5.sf1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "597c9b6e6820e0b8",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "(b) GOPT: 15 boxes left on the table.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F5.sf2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "903681653023bea9",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "(c) GOPT+: 5 boxes left on the table.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F5.sf3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "30ff7b5a6a18ac91",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "(d) SHORE: 5 boxes left on the table.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F5.sf4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "29f852ad838d34f9",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Fig. 5 : An illustration of the scenes of one evaluation episode on the expanded box set, with the same box arrivals for all four methods, rendered in Isaac Gym after the episode ends. Each panel shows the final stack (left) and the table from above (right) with its stack and the boxes still waiting on the table. Pale boxes are light and dark boxes heavy; the red slab is the bin floor. OL Mask stopped when the last placement ended unstable and its collapse knocked boxes off the stack onto the table beside the bin. GOPT, GOPT stopped when on buffer boxes can find feasible placement. SHORE stopped when the last placement fails the stability test, but the unstability did not leads to stack collapse.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "86a1707f33de9ade",
+      "section": "V-D Results",
+      "location": "V-D Results",
+      "text": "Fig. 6 : Real-robot packing with the UFactory Lite6. Key frames from the right camera view, in temporal order from left to right: the empty bin (yellow) and the stack after each of four successive placements. Boxes are picked from the table on the left of each frame.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "72d01b87c8d53364",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "The ablations change one part of SHORE at a time on the expanded set, with all other settings fixed, and fall into two groups. For the component ablation (Table V ), AP (actor prior only) sets w Q = 0 w_{Q}=0 , CW (critic weighting only) sets w π = 0 w_{\\pi}=0 , and REPPO-D switches off both SHORE components ( w π = w Q = 0 w_{\\pi}=w_{Q}=0 ), leaving the discretized REPPO backbone of Sec. IV-B . The second group tests where the stability labels come from (Table VI ), with both components in place: executed placements only ( B s = B r = 0 B_{s}=B_{r}=0 , no simulator calls beyond the rollout), one simulated label per step ( B s = 1 B_{s}=1 , B r = 0 B_{r}=0 ), eight uniformly random simulated labels ( B s = 0 B_{s}=0 , B r = 8 B_{r}=8 ), or the default eight, six chosen by π γ π ​ ν \\pi^{\\gamma_{\\pi}}\\nu and two at random ( B s = 6 B_{s}=6 , B r = 2 B_{r}=2 ). All variants are compared at the same checkpoint, 901,120 environment steps. Every run that trains a stability model was resumed from this checkpoint, and a resume empties the label buffer, so a later checkpoint would compare variants at different distances from a reset. Each variant is scored with the protocol of Sec. V-C , and its stability model is also scored by AUROC (how well S S separates placements that collapse from placements that hold) and ECE (how closely S S matches the observed rate of holding), both defined in Sec. V-C .",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c6dd4a849f86a44e",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "TABLE V : Ablation of where the stability estimate S S acts, on the expanded box set. Each variant removes the named components from SHORE (Sec. V-E ); the variants that keep S S use the default labels of Table VI . AUROC (higher: S S ranks collapses below placements that hold more often) and expected calibration error (ECE; lower: the values of S S are closer to the observed rate of holding) score the checkpoint’s S S on held-out executed placements (Sec. V-C ); they are n/a for REPPO-D , which has no stability model to score.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1668ddcc905486fc",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "Variant Score Collapse AUROC ECE ( ↑ \\uparrow ) ( ↓ \\downarrow ) ( ↑ \\uparrow ) ( ↓ \\downarrow ) SHORE 0.734 0.53 0.85 0.040 CW 0.708 0.60 0.86 0.051 AP 0.699 0.58 0.82 0.042 REPPO-D ∗ 0.699 0.62 n/a n/a",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T5.5",
+      "kind": "table"
+    },
+    {
+      "id": "a0ca38b3b4287de3",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "TABLE VI : Ablation of the stability label source on the expanded box set, with both the actor prior and the critic weighting in place. B s B_{s} simulated labels per step are chosen by π γ π ​ ν \\pi^{\\gamma_{\\pi}}\\nu and B r B_{r} uniformly at random; executed placements are always labeled.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3996e02eb2b75a08",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "Labels B s B_{s} / B r B_{r} Score Collapse AUROC ECE ( ↑ \\uparrow ) ( ↓ \\downarrow ) ( ↑ \\uparrow ) ( ↓ \\downarrow ) SHORE (default) 6/2 0.734 0.54 0.85 0.040 Executed only 0/0 0.731 0.52 0.77 0.009 1 simulated 1/0 0.716 0.52 0.78 0.004 8 random 0/8 0.732 0.52 0.79 0.035",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.T6.4",
+      "kind": "table"
+    },
+    {
+      "id": "97b3e3be5450be3a",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "The component and label-source variants are exploratory single-seed comparisons, whereas SHORE and SHORE − - actor prior − - critic weighting average multiple training seeds. Their small differences in packing or collapse share should therefore be treated as directional evidence. The reported metrics describe the learning copy, whereas decisions use the interpolated acting copy. Stability-model metrics also fluctuate across training iterations and are measured on each policy’s own held-out executed outcomes, rather than a common candidate set. They diagnose behavior on the actions each policy encounters; they do not establish uniform accuracy across the joint action space.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "8480b1bce4006595",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "Complementary roles of value weighting and the action prior. Table V supports complementary roles for the actor prior and critic weighting: retaining either alone does not recover the full method’s packing performance. Critic weighting makes the value reflect the chance of losing both the current reward and the continuation, but its influence on action selection must pass through actor learning. The prior changes relative action probabilities directly, using voxel information unavailable to the actor, but by itself does not separate survival probability from the critic’s return estimate conditional on survival. Their combination supplies both a physically informed action value and an immediate bias toward actions likely to hold. The observed ordering is consistent with this division of labor, although repeated seeds are needed to establish the interaction reliably.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS5.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "43a5153d1a75e5ba",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "The CW variant is especially informative: its stability model ranks outcomes at least as well as the full model at the reported checkpoint, yet its packing performance is lower. Prediction quality alone therefore does not explain the full method’s advantage; how the estimate enters decision making matters. This is empirical support for the integration of S S into both modules, rather than evidence that a more accurate classifier automatically yields a better packer. The value factorization in Sec. IV-E supplies the mathematical justification under pointwise accurate stability probabilities and exact mean fitting; these ablations test its practical usefulness with an imperfect learned model. They do not independently validate the stability activation gate or stability trust region, which are retained in the tested variants.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS5.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "d8b488e5dcb789cc",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "What additional simulated labels contribute. Table VI shows that executed outcomes alone suffice to reach comparable packing performance at the ablation checkpoint. Together with the earlier checkpoint advantage of the default label scheme, this suggests that simulated alternatives mainly help acquire useful stability information before the rollout has supplied enough examples. They are not required to sustain the observed late-stage packing quality. Uncertainty-directed sampling also gives no demonstrated packing advantage over uniform sampling at this budget. The evidence therefore supports the stability model more strongly than it supports a particular acquisition rule or the necessity of extra simulator calls.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS5.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "f3440758dcd29a8a",
+      "section": "V-E Ablations",
+      "location": "V-E Ablations",
+      "text": "The ranking and calibration results explain why more labels need not improve control. The default simulated-label scheme yields stronger outcome ranking but poorer probability calibration than learning from executed outcomes alone. The recorded copy bias provides a plausible mechanism: simulated copies sometimes report collapse where the executed placement holds, pushing S S toward pessimistic probabilities. A ranking metric can improve despite this shift, while the multiplicative critic weighting depends on the probabilities themselves. Conversely, low ECE on mostly successful executed placements need not imply good discrimination of rare failures (Sec. V-C ). These findings support assessing both properties and caution against using either as a surrogate for packing performance. They also identify a concrete improvement path: reduce copy bias and assess label acquisition at matched simulation budgets, while retaining executed outcomes as the calibration reference.",
+      "url": "https://arxiv.org/html/2611.08364v1#S5.SS5.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "1905463ac8eae841",
+      "section": "VI Real Robot Deployment",
+      "location": "VI Real Robot Deployment",
+      "text": "We demonstrate the packing policy on a UFactory Lite6 arm with a vacuum gripper. The system uses a ZED 2i stereo camera and a hand-mounted camera. Fig. 6 shows one illustrated placement sequence. The yellow area serves as the packing bin. The sequence of cubes arrives in the order from right to left. This demonstration shows that our policy can be easily integrated into a robot packing pipeline.",
+      "url": "https://arxiv.org/html/2611.08364v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5953707e872b86df",
+      "section": "VII Conclusion and Future Work",
+      "location": "VII Conclusion and Future Work",
+      "text": "We presented SHORE, an on-policy reinforcement learning method for physics-aware online 3D bin packing, which incorporates learned stability information through a policy prior and continuous weighting of action-conditioned critic values. The experiments support faster acquisition of high-utilization policies than learning without explicit stability modeling. Against GOPT+, which shares the joint action space and actor backbone, SHORE achieves higher mean utilization with fewer collapses per episode and per placement attempt. The training curves further show that the stability model reduces failures per attempt relative to the same learner without it. These findings support using stability information in both action valuation and selection to improve the packing–risk trade-off; the eventual catch-up of the base learner limits claims of a higher final performance ceiling.",
+      "url": "https://arxiv.org/html/2611.08364v1#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c642218baf64029e",
+      "section": "VII Conclusion and Future Work",
+      "location": "VII Conclusion and Future Work",
+      "text": "Meanwhile, the method is limited by its observation and candidate representations, approximate stability probabilities, and simulator fidelity. A collapse is attributed to the triggering placement even when earlier choices created the fragile structure; those earlier choices receive information only through returns, and the value network cannot see the raw voxel grid of the bin. Collapses per placement account for the number of attempts, but remain specific to the states each policy visits; earlier infeasible termination can prevent exposure to difficult late-stage placements. Stability metrics must therefore be interpreted together with utilization and termination modes. Besides, there are more sim-to-real factors that we did not take into account, such as contact-parameter mismatch, bin wall collisions, and robot reachability.",
+      "url": "https://arxiv.org/html/2611.08364v1#S7.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "505244c7d125a4e0",
+      "section": "VII Conclusion and Future Work",
+      "location": "VII Conclusion and Future Work",
+      "text": "For future work, it is better to specifically distinguish exogenous factors like incoming box distribution from endogenous factors, and tackle the problem from the exogenous MDP perspective [ 21 ] . Techniques can include, but are not limited to, exogenous state decomposition [ 22 ] or training a predictive model of the exogenous factors.",
+      "url": "https://arxiv.org/html/2611.08364v1#S7.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "c25d0e201a0dc0e3",
+      "section": "Appendix A Simulation Calibration and Hyperparameters",
+      "location": "Appendix A Simulation Calibration and Hyperparameters",
+      "text": "Sim-to-sim calibration against MuJoCo. We used a system-identification-style paired-replay method: identical placement sequences were run in MuJoCo and Isaac Gym, and PhysX parameters were tuned to match per-placement stability verdicts. This increased agreement from 67.0% before calibration to 94.8% after calibration. MuJoCo served as the high-fidelity reference for sim-to-sim transfer; large-scale training and evaluation use Isaac Gym.",
+      "url": "https://arxiv.org/html/2611.08364v1#A1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ab60bf3410c3473d",
+      "section": "Appendix A Simulation Calibration and Hyperparameters",
+      "location": "Appendix A Simulation Calibration and Hyperparameters",
+      "text": "Hyperparameters. Tab. VII lists the experiment settings and hyperparameters of SHORE. The upper block covers the environment and discretized REPPO learner (Sec. IV-B ); the lower block covers the stability model and its labels.",
+      "url": "https://arxiv.org/html/2611.08364v1#A1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9b9e8f8c1bc6ff0e",
+      "section": "Appendix A Simulation Calibration and Hyperparameters",
+      "location": "Appendix A Simulation Calibration and Hyperparameters",
+      "text": "TABLE VII : Experiment settings and hyperparameters grouped by function.",
+      "url": "https://arxiv.org/html/2611.08364v1#A1.T7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3c0afeecf87043cf",
+      "section": "Appendix A Simulation Calibration and Hyperparameters",
+      "location": "Appendix A Simulation Calibration and Hyperparameters",
+      "text": "Parameter Value Simulation Buffer size N N 5 5 Bin length and width ( L p , W p ) (L_{p},W_{p}) ( 25 , 25 ) (25,25) cm Maximum stacking height H p H_{p} 20 20 cm Bin voxels ( l p , w p , h p ) (l_{p},w_{p},h_{p}) ( 25 , 25 , 20 ) (25,25,20) (1 cm bins) Added placement noise None Vertical release offset 2 2 mm Simulation timestep / settling time τ \\tau 2 2 / 80 80 ms Stability threshold ϵ s \\epsilon_{s} 2 2 cm PhysX solver iterations (pos. / vel.) 16 16 / 4 4 PhysX contact / rest offset 2 2 mm / 0 0 PhysX maximum depenetration speed 1 1 m/s Simulation pool 288 288 environments Action space and REPPO-D learner EMS candidates K K 80 80 Discount γ \\gamma / λ \\lambda -return λ \\lambda 1 1 / 0.95 0.95 Reward scale c r c_{r} 10 10 KL bound ε KL \\varepsilon_{\\mathrm{KL}} 0.1 0.1 Initial entropy temperature α \\alpha / KL multiplier β \\beta 0.01 0.01 / 0.01 0.01 Entropy target ℋ tgt ​ ( s ) \\mathcal{H}_{\\mathrm{tgt}}(s) 1 2 ​ ℋ ​ ( π S ) \\tfrac{1}{2}\\mathcal{H}(\\pi_{S}) HL-Gauss atoms / support 151 151 / [ − 40 , 40 ] [-40,40] Learning rate (AdamW) / gradient clip 3 × 10 − 4 3\\times 10^{-4} / 0.5 0.5 Rollout (environments × \\times steps) 32 × 128 32\\times 128 Epochs × \\times minibatches (size) 4 × 8 4\\times 8 ( 512 512 ) Stability model and labels Stability heads / U-Net maps, levels 5 5 / 8 8 , 3 3 Simulated labels per step B s + B r B_{s}+B_{r} 6 + 2 6+2 Label selection exponent γ π \\gamma_{\\pi} 0.5 0.5 Label weight (executed / simulated) 2 2 / 1 1 Holdout share of executed labels 0.1 0.1 Label buffer (states) 40,000 40{,}000 Stability updates per iteration (lr; batch) 64 64 ( 10 − 3 10^{-3} ; 256 256 ) Activation gate: AUROC / held-out collapses 0.8 0.8 / 50 50 Stability ramp length N ramp N_{\\mathrm{ramp}} 10 5 10^{5} env steps Stability trust region δ S \\delta_{S} / states 0.02 0.02 / 256 256",
+      "url": "https://arxiv.org/html/2611.08364v1#A1.T7.4",
+      "kind": "table"
+    }
+  ]
+}

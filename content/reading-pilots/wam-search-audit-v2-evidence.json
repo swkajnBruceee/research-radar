@@ -1,0 +1,735 @@
+{
+  "id": "8f79dad30acd1b4e52b1f72a66d3d017d8e464b9e6ca057fdefaeb63eb0f2f8d",
+  "url": "https://arxiv.org/html/2610.41970v2",
+  "format": "html",
+  "passages": [
+    {
+      "id": "37c4565b2b299f9f",
+      "section": "When Does Test-Time Search Help World Action Models? An Empirical Audit of Candidate Selection and Simulator Integrity",
+      "location": "When Does Test-Time Search Help World Action Models? An Empirical Audit of Candidate Selection and Simulator Integrity",
+      "text": "World-action models increasingly apply test-time scaling, spending extra inference computation on candidate selection and adaptive allocation to improve control. Such gains are credible only when candidates carry exploitable signal, nominal compute savings become real speedup, and evaluation stays reliable. We audit all three on Cosmos Policy and RoboCasa with a premise-first, pre-registered methodology. On clean data, a learned value selector is 1.66 pp worse than random; a hindsight oracle gains only 1.40 pp, with an episode-level interval spanning zero; and 82% of states show identical candidate outcomes, leaving little selection headroom. Token pruning cuts per-forward FLOPs by up to 47% but yields at most a measured 1.15 × \\times end-to-end speedup on the deployed path (1.25 × \\times on a decode-excluded path), short of a 1.5 × \\times target, and our adaptive-allocation experiment is inconclusive under a power gate. We further identify and fix a silent rendering corruption whose rate rises sharply along compute-heavy planning paths while leaving the official direct-policy result unaffected, and release a detector, fix, and scripts. These findings show why test-time scaling should be audited as a chain of premises (decision signal, realized efficiency, evaluation integrity) rather than by success rate alone. Conclusions are scoped to the tested configuration.",
+      "url": "https://arxiv.org/html/2610.41970v2#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "91fdb0d0e6d7fb90",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Figure 2 : A premise-first audit of test-time scaling in Cosmos Policy on RoboCasa. (1) Planning selection. Limited variation in candidate outcomes constrains the headroom for selection, and the deployable value selector underperforms random selection, while the hindsight oracle provides only modest evidence of improvement. (2) Adaptive allocation. Substantial nominal FLOPs reductions translate into modest end-to-end latency gains, while the joint allocation effect remains unresolved at the available noise and statistical power. (3) Evaluation reliability. Rendering corruption becomes much more frequent in the compute-intensive planning path than under direct-policy or best-of- N N evaluation, while the official direct-policy result remains essentially unaffected. All findings are scoped to the tested Cosmos Policy–RoboCasa configuration.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "678c9f43a9c83985",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "World-action models (WAMs) such as Cosmos Policy [ 14 ] adapt large pretrained video models into robot policies that jointly generate actions, future states, and values within a shared latent diffusion process. A central promise of this design is test-time scaling : by generating candidate actions, predicting their future consequences, and evaluating them with a value function, WAMs can allocate additional inference-time computation to identify promising actions. Related peer-reviewed work has explored complementary aspects of this problem, including model-based planning with action-conditioned video world models [ 27 ] and efficient diffusion-based robot policies through one-step distillation [ 22 ] , training-free adaptive caching [ 11 ] , and rollout-adaptive pruning and activation reuse [ 12 ] .",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e39fad2370d9078",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Yet whether extra inference-time computation improves control remains insufficiently examined. More computation helps only if it exposes decision-relevant candidate differences, produces practical end-to-end effects, and is evaluated reliably; success rates alone cannot distinguish a weak selection signal, unrealized compute savings, and simulator artifacts [ 17 ] . We therefore audit test-time scaling as a chain of premises rather than a single performance number: is useful signal present, do nominal savings translate into end-to-end gains, and does the evaluation path remain reliable under added computation?",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "10b2a1ae44165aaf",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We instantiate this audit on Cosmos Policy and RoboCasa [ 20 ] . Rather than proposing a planner, we combine paired candidate comparisons and a deployment-conditioned hindsight oracle, pre-registered decision criteria and a power gate, complete-query latency measurements, and a framebuffer-sentinel integrity check.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a4558c55ea37a6c",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "The audit yields three findings.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "5e023fbf3276fcb5",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "(1) Candidate selection is limited by the available signal, not just by the selector. On render-verified clean data, the deployable value selector performs 1.66 1.66 pp worse than random, and even a hindsight oracle (an upper bound) gains only 1.40 1.40 pp with an interval including zero, because in 82 % 82\\% of query states all candidates share an outcome. This does not show selection is generally ineffective; it shows selector quality must be read alongside the separability of the candidates it receives.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "74794d6b2ca580c1",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "(2) Nominal compute reduction is not a reliable proxy for practical acceleration. Directly timing the complete query, token pruning yields at most a measured 1.15 × 1.15\\times end-to-end speedup on the deployed path ( 1.25 × 1.25\\times with future-image decode excluded), below the pre-specified 1.5 × 1.5\\times target, because the gain is bounded by the irreducible autoencoder encode and decode. A separate joint-allocation diagnostic falls below the measurement’s noise resolution and did not clear its power gate, so it is inconclusive rather than evidence of no effect.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "65d945ffda89724e",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "(3) Evaluation integrity can depend on the inference path being evaluated. We identify and fix a silent rendering corruption in the RoboCasa/ robosuite stack whose frequency is small under the official direct-policy protocol but rises sharply in the compute-intensive planning path. It is more than a generic simulator bug: changing inference-time computation changes exposure to a measurement failure, so the compute-intensive paths that realize test-time scaling are the most exposed.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "1291577c0c58c3f8",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Together, these findings make the contribution a testable audit methodology and a configuration-specific case study, not a claim that test-time scaling fails for all WAMs.",
+      "url": "https://arxiv.org/html/2610.41970v2#S1.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "939605d8a8b27b8e",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "World models for control. World models that predict action-conditioned futures have advanced rapidly, spanning diffusion-based video prediction [ 1 , 7 , 4 ] , 3D and persistent representations [ 26 , 19 ] , and manipulation-specific models [ 13 ] . The backbone we study, Cosmos Policy [ 14 ] , follows the joint action-video line in which actions, futures, and values are produced within a single denoising process [ 7 ] . We do not propose a new world model; we audit whether the inference-time computation layered on top of such a model improves control.",
+      "url": "https://arxiv.org/html/2610.41970v2#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa3fcc980891b466",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Efficient world-model inference. Because prediction and planning in these models are costly, a growing body of work reduces their inference cost, through sparse imagination of rollouts [ 4 ] , disentangled dynamics prediction [ 23 ] , efficient on-policy rollout in diffusion world models [ 5 ] , and warm-started prediction that reuses spatiotemporal consistency [ 15 ] . These methods report nominal compute reductions. We audit whether such reductions convert to end-to-end latency on a representative stack, and find that token-level savings are capped by an irreducible encoding fraction rather than realized as speedup, and that the joint allocation effect lies below the measurement noise floor. X-WAM [ 6 ] audit underscores why architectural avenues can be more fruitful than token pruning alone for practical speedups.",
+      "url": "https://arxiv.org/html/2610.41970v2#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "775fe57c3eeb9384",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Test-time scaling and candidate selection. A parallel line scales inference by sampling and selecting candidate actions, through verifier-free scoring [ 9 ] , relative action critics [ 16 ] , and reward-ranked world-model rollouts [ 24 ] ; analogous strategies in text and digital-agent settings use self-verification, process reward models, and execution-free critics [ 25 , 2 , 8 , 21 , 9 ] . These works propose selectors and report positive scaling. We instead audit whether the selection signal exists, and find a learned value selector worse than random on a strong base policy where candidate outcomes rarely differ.",
+      "url": "https://arxiv.org/html/2610.41970v2#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9739211f379b3463",
+      "section": "2 Related Work",
+      "location": "2 Related Work",
+      "text": "Reliability of policy evaluation. Recent work asks whether simulator- and world-model-based evaluation is trustworthy, training learned evaluators to match real rollouts [ 18 ] , testing robustness under real-to-sim translation [ 10 ] , and reducing evaluation cost while preserving rankings [ 3 ] . These address the fidelity of a learned evaluator or a synthesized scene. Our reliability finding is at the level of the evaluation stack itself: a silent rendering corruption in the standard RoboCasa and robosuite pipeline whose rate rises with per-query inference compute, for which we release a detector and a fix.",
+      "url": "https://arxiv.org/html/2610.41970v2#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "12f1da0e4d80bafd",
+      "section": "3 A Diagnostic Methodology for Test-Time Compute",
+      "location": "3 A Diagnostic Methodology for Test-Time Compute",
+      "text": "Because extra inference compute can change outputs without improving control, success-rate movements alone are not evidence of scaling gains. Our pre-registered, falsification-first audit tests for usable candidate signal and reliable evaluation before interpreting success (Section 6 ).",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1af19bce8ebd20e7",
+      "section": "3.1 Verify the Premise Before Measuring the Gain",
+      "location": "3.1 Verify the Premise Before Measuring the Gain",
+      "text": "Before evaluating an inference-time mechanism, we test whether its required signal exists. For best-of- N N planning, candidate outcomes must differ in ways a selector can recover; we test this directly in Section 4 , rather than infer it from downstream success. Supplement Figure 5 summarizes the audit gates.",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1db677ac4bf00bd9",
+      "section": "3.2 Causal Ablation and an Oracle Headroom Estimate",
+      "location": "3.2 Causal Ablation and an Oracle Headroom Estimate",
+      "text": "For each query state, we replay all N N candidates under a fixed continuation policy and let a hindsight oracle select a successful one. This estimates outcome-level selection headroom in the current candidate pool; because it uses unavailable outcome information, it is not deployable. We also probe input importance by leave-one-out patch masking, trusting the probe only if irrelevant background ranks below relevant end-effector and contact regions in a pre-registered sanity check.",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d9d6afdf1c3eaa23",
+      "section": "3.3 Pre-Registration and Statistical Power Control",
+      "location": "3.3 Pre-Registration and Statistical Power Control",
+      "text": "For the selection audit, we fix decision thresholds and the replicate-consistency gate before inspecting the corresponding data and report the gate’s verdict even when it fails. A power gate avoids launching experiments unlikely to yield a verdict: from a smoke sample, we estimate the paired-residual standard deviation σ ^ r \\hat{\\sigma}_{r} and project the two-sided confidence-interval half-width at the planned sample size,",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ba74e52c2ed4abd0",
+      "section": "3.3 Pre-Registration and Statistical Power Control",
+      "location": "3.3 Pre-Registration and Statistical Power Control",
+      "text": "h ⁡ ( N ) = z 0.975 ​ σ ^ r / N , h(N)=z_{0.975}\\,\\hat{\\sigma}_{r}/\\sqrt{N}, (1)",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "517a37452a63df9f",
+      "section": "3.3 Pre-Registration and Statistical Power Control",
+      "location": "3.3 Pre-Registration and Statistical Power Control",
+      "text": "launching the full run only if h ⁡ ( N full ) < Δ prereg h(N_{\\text{full}})<\\Delta_{\\text{prereg}} , the separation between the pre-registered outcomes; otherwise the run is not launched. Every reported comparison states its bootstrap resampling unit and interval, so that an effect whose significance depends on that choice is presented as such rather than as a settled result. Closed-loop success is measured by snapshot replay, in which we restore a state, execute a candidate action chunk, and continue under a fixed dense base policy, rather than inferred from a single-step action deviation.",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.SS3.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "cb96a3509280f227",
+      "section": "3.4 Scope",
+      "location": "3.4 Scope",
+      "text": "Our empirical findings are limited to Cosmos Policy on RoboCasa. The audit components—premise checks, oracle headroom, a power gate, and render-integrity verification—can also inform audits of other diffusion control policies. We release a framebuffer-sentinel detector, a fix for the identified OpenGL-context bug, and reproduction scripts; the detector principle may transfer across backends, but this fix is stack-specific.",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7652e1d63945dd0d",
+      "section": "3.4 Scope",
+      "location": "3.4 Scope",
+      "text": "Figure 3 : Auditing best-of- N N planning selection. (a) Success-rate difference against the random baseline for the deployable value selector and the hindsight oracle, under state-level and episode-level bootstrap, with 95% CIs. The value selector is below zero under both schemes; the oracle estimate crosses zero under episode-level resampling and is an upper bound, not a deployable selector. (b) Only a minority of query states show any outcome variation across candidates and repeated executions, leaving little for a selector to recover in the rest; a stricter decomposition (Supplement Section 13 ) further separates stable between-candidate differences from variation that is not stable across repeats.",
+      "url": "https://arxiv.org/html/2610.41970v2#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "da298e1a344a4486",
+      "section": "4 Auditing Best-of- N N Planning Selection",
+      "location": "4 Auditing Best-of- N N Planning Selection",
+      "text": "We apply the audit to best-of- N N planning, comparing the model’s value-based ordering with random selection and estimating outcome-level headroom using a hindsight oracle.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "90957c15c3552073",
+      "section": "4.1 Setup",
+      "location": "4.1 Setup",
+      "text": "On render-verified clean data, we compare the value selector, random selection, and the deployment-conditioned hindsight oracle on paired sets of N = 8 N{=}8 candidates with common continuation seeds. Differences from random are reported with state-within-task and episode-within-task bootstrap intervals.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bcb64a28fb6bb921",
+      "section": "4.1 Setup",
+      "location": "4.1 Setup",
+      "text": "Continuation protocol. In snapshot replay, each candidate’s first 16 16 steps of a generated 32 32 -step chunk are executed, stopping on success; the episode then replans every 16 16 steps under a fixed base policy until success or the 500 500 -step task limit. The base policy uses one sample, all tokens, 10 10 denoising steps, and no value head; all selectors share the same outcome matrix and continuation seeds ( R = 2 R=2 ). This controls the candidate’s single-switch effect but does not reproduce the full deployment distribution. The selection audit’s 10 10 -step continuation is distinct from the 2 2 -versus- 5 5 -step allocation factorial, whose dense reference is D ⁡ ( 5 , F ) D(5,F) .",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "aa0a04a241972411",
+      "section": "4.2 Weak Selection Signal and a Negative Value Selector",
+      "location": "4.2 Weak Selection Signal and a Negative Value Selector",
+      "text": "The value selector is 1.66 1.66 pp worse than random (95% CIs: state bootstrap [ − 2.97 , − 0.31 ] [-2.97,-0.31] ; episode bootstrap [ − 2.49 , − 0.71 ] [-2.49,-0.71] ), driven largely by TurnOnStove ( − 3.87 -3.87 pp). Excluding that task, the state-weighted estimate remains negative ( − 0.77 -0.77 pp; episode CI [ − 1.27 , − 0.21 ] [-1.27,-0.21] ; state CI [ − 1.54 , − 0.03 ] [-1.54,-0.03] ). Thus, the result is not uniform across tasks, but no task reverses into a measured value-selector benefit.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c55a581e14f5e50d",
+      "section": "4.2 Weak Selection Signal and a Negative Value Selector",
+      "location": "4.2 Weak Selection Signal and a Negative Value Selector",
+      "text": "The hindsight oracle’s gain is + 1.40 +1.40 pp, with a state-bootstrap CI of [ + 0.31 , + 2.60 ] [+0.31,+2.60] pp and an episode-bootstrap CI of [ − 0.25 , + 3.40 ] [-0.25,+3.40] pp. Under the pre-registered rule, the missed replicate-consistency gate and episode-level interval make this weak, inconclusive evidence. With R = 2 R=2 , the reliability estimate is only about 0.33 0.33 (Supplement Section 10 ); we therefore do not infer a definitive ceiling from either the cross-fitted estimate or the in-sample + 7.1 +7.1 pp maximum. More structurally, outcomes vary across candidates and/or repeats in only 48 / 263 48/263 states ( 18 % 18\\% ; Fig. 3 b). The within-state ICC is 0.20 0.20 , which indicates limited repeat agreement under this protocol; the decomposition below distinguishes stable separation from variation not stable across repeats.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "42b49e1e2ad4d1f6",
+      "section": "4.2 Weak Selection Signal and a Negative Value Selector",
+      "location": "4.2 Weak Selection Signal and a Negative Value Selector",
+      "text": "How much of this separability is real? Outcome uniformity is not explained simply by near-identical actions: states with no outcome variation have no smaller action-space dispersion (Supplement Section 13 ), though geometric diversity need not be task-relevant. Of the 48 48 varying states, 20 20 show stable separation (one candidate succeeds in both repeats and another fails in both); the other 28 28 do not meet this criterion. A label-shuffle null expects about 14.8 14.8 stable-separable states, so the observed 20 20 are not 20 20 confirmed opportunities. The descriptive oracle contribution is + 1.85 +1.85 pp for the first group and − 0.44 -0.44 pp for the second; the pooled oracle gain under the null is + 0.01 +0.01 pp. With only two repeats, reproducible selection headroom remains uncertain.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "3903c3f61b5f28b5",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "Under this configuration, the negative value-selector result is clear, whereas reproducible oracle headroom remains uncertain. The oracle measures outcome-level headroom only for the observed candidates and specified single-switch continuation, not general decision relevance. We therefore make no claim that planning is universally ineffective; alternative candidate-generation and continuation policies remain untested.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5418896071e07bc0",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "Figure 4 : Detectability of the joint interaction effect. The decisive comparison is threshold-free: the preliminary systematic component ( 0.0045 0.0045 ) is below the mean per-state noise floor ( 0.0066 0.0066 ) and comparable to the temporal main effect ( 0.0053 0.0053 ) (noise 90 90 th percentile 0.0173 0.0173 ), so the effect cannot be resolved at any threshold. Under the locked threshold θ B \\theta_{B} the minimum detectable effect is 0.0265 0.0265 to 0.0583 0.0583 ( 5 5 to 11 11 times the main effect), shown for reference. Values are from a 16 16 -state smoke sample whose preregistered power gate was not cleared, so the full factorial was not launched.",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "15440c19087ad466",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "Table 1 : Measured per-forward FLOPs (a), measured end-to-end query speedup under whole-frame token pruning (b), and the measured dense-query component breakdown (c), on Cosmos Policy (RoboCasa, batch 1, 5 denoising steps, 11 latent frames × \\times 196 tokens = = 2156; NVIDIA RTX A6000, bf16, eager, N = 30 N=30 ). Panel (b) directly times the complete query, dense against pruned, not a composition of component times: the deployed path is the query as the eval calls it (future-image decode and value extraction included); the decode-excluded path removes future-image decode on both sides and is most favorable to pruning. This is a latency-only measurement (dropped frames receive zero output), so action quality is not assessed; no pruning level on either path reaches the pre-registered 1.5 × 1.5\\times target. Setup, environment and result-file paths are in Supplement Section 9 .",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "3242c4d5bb77206b",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "(a) Per-forward compute (FLOPs, measured via FlopCounterMode: matmul + + SDPA)",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1.12.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e527ceefe139ef4",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "Pruning level Tokens TFLOP Nominal saving of which SDPA (TFLOP) Dense 2156 8.535 — 1.319 Drop 1 future image 1960 7.682 10.0% 1.111 Drop 2 future images 1764 6.846 19.8% 0.921 All future images 1568 6.028 29.4% 0.748 All future frames 1372 5.228 38.7% 0.593 All future frames + + value 1176 4.446 47.9% 0.455",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1.12.2",
+      "kind": "table"
+    },
+    {
+      "id": "9f1dd61a0cd8ab3e",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "(b) End-to-end query speedup (ms / × \\times , measured, N = 30 N=30 )",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1.13.1",
+      "kind": "p"
+    },
+    {
+      "id": "547f41c1bbcd2d90",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "Pruning level Deployed path Decode-excluded ≥ 1.5 × \\geq 1.5\\times ? Dense 1254.9 / — 0 812.7 / — — Drop 1 future image 1232.1 / 1.019 0 791.2 / 1.027 no Drop 2 future images 1171.0 / 1.072 0 728.9 / 1.115 no All future images 1140.5 / 1.100 0 699.8 / 1.161 no All future frames 1096.5 / 1.144 0 654.0 / 1.243 no All future frames + + value 1088.9 / 1.152 0 648.6 / 1.253 no",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1.13.2",
+      "kind": "table"
+    },
+    {
+      "id": "71b2813065c7e5ae",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "(c) Dense component (ms, measured)",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1.14.1",
+      "kind": "p"
+    },
+    {
+      "id": "564fa322f5bcb672",
+      "section": "4.3 Interpretation",
+      "location": "4.3 Interpretation",
+      "text": "Component (per query) ms VAE encode ( 1 × 1\\times ) 238.0 DiT forward ( 5 × 5\\times , summed) 530.7 Future-image VAE decode 434.4 Full query 1241.8",
+      "url": "https://arxiv.org/html/2610.41970v2#S4.T1.14.2",
+      "kind": "table"
+    },
+    {
+      "id": "937833287e31506a",
+      "section": "5 A Feasibility Audit of Adaptive Compute Allocation",
+      "location": "5 A Feasibility Audit of Adaptive Compute Allocation",
+      "text": "We audit whether reducing denoising steps or processing fewer tokens can deliver practical efficiency on this stack. Because the preregistered criteria are end-to-end latency and a resolvable joint interaction effect, and the power gate was not cleared, this is a feasibility diagnostic rather than a confirmatory test of joint allocation.",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "01fc8010a4e6bbb4",
+      "section": "5.1 Nominal FLOPs Savings Do Not Convert to Wall-Clock Savings",
+      "location": "5.1 Nominal FLOPs Savings Do Not Convert to Wall-Clock Savings",
+      "text": "Dropping all future frames plus the value frame removes 47.9 % 47.9\\% of per-forward FLOPs, but direct complete-query timing shows only 1.152 × 1.152\\times speedup on the deployed eager path and 1.253 × 1.253\\times when future-image decode is excluded; neither reaches the preregistered 1.5 × 1.5\\times target (Table 1 ). This fixed whole-frame mask adds no per-token scoring. The five DiT forwards account for 530.7 530.7 ms of the 1241.8 1241.8 ms dense query, while VAE encode ( 238.0 238.0 ms) and future-image decode ( 434.4 434.4 ms) are not reduced by token pruning. This is a latency-only result (dropped frames receive zero output); full settings and per-level latency percentiles are in Supplement Section 9 and Table 3 .",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f0c243066b3adcae",
+      "section": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "location": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "text": "We then ask whether a joint-allocation benefit could be resolved on this stack even if present. Using the pre-registered factorial diagnostic of Section 3 , crossing two denoising schedules with full, key-token, and uniform-token ( U U ) selection, the joint-allocation effect is the uniform-token interaction",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "78da8da3204e3b41",
+      "section": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "location": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "text": "I U = D ⁡ ( 2 , U ) − D ⁡ ( 2 , F ) − D ⁡ ( 5 , U ) + D ⁡ ( 5 , F ) , 𝔼 ⁡ [ I U ] = 0 I_{U}=D(2,U)-D(2,F)-D(5,U)+D(5,F),\\qquad\\mathbb{E}[I_{U}]=0 (2)",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.E2",
+      "kind": "table"
+    },
+    {
+      "id": "9f5fbafcfdc9babc",
+      "section": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "location": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "text": "under exact additivity, where D ⁡ ( k , s ) D(k,s) is the paired closed-loop success at denoising schedule k k under selection s s , relative to the baseline D ⁡ ( 5 , F ) = 0 D(5,F)=0 . Because seed noise largely cancels in this difference-in-differences structure, with a measured effective correlation of ρ = 0.92 \\rho=0.92 , the residual noise is small but structured: per-state noise magnitude has mean 0.0066 0.0066 and 90 90 th percentile 0.0173 0.0173 . The systematic component, estimated after noise-bias removal from a 16 16 -state smoke sample, is about 0.0045 0.0045 .",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.SS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "e1b55e0d98a746fb",
+      "section": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "location": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "text": "The decisive comparison is independent of any chosen threshold: the preliminary systematic component ( 0.0045 0.0045 ) is smaller than the mean noise floor ( 0.0066 0.0066 ) and comparable to the temporal main effect itself ( 0.0053 0.0053 ) in the same states. A joint effect that is smaller than the per-state noise it must be read against cannot be resolved from this measurement, whatever decision threshold is adopted. Figure 4 places these quantities on the same absolute scale. For completeness, under the currently locked threshold θ B \\theta_{B} (Supplement Eq. 3 ) the minimum detectable interaction is 0.0265 0.0265 to 0.0583 0.0583 , that is 5 5 to 11 11 times the temporal main effect; we note that this range depends on the threshold calibration still pending sign-off, and it will be recomputed for the camera-ready version, but the threshold-free comparison above does not depend on it.",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "bd117931bbc913ef",
+      "section": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "location": "5.2 The Preliminary Interaction Effect Is Below the Noise Resolution",
+      "text": "This is inconclusive, not a null result: the full factorial was not launched because the power gate failed. The estimated sample requirement— hundreds to roughly two thousand states, is an extrapolation from the current detection limit (Supplement Section 10 ), not a verified power result. Whether joint allocation helps on this stack remains open.",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "df5fa523113612d9",
+      "section": "5.3 Implications",
+      "location": "5.3 Implications",
+      "text": "Efficiency claims should pair FLOPs with complete-query latency, and allocation claims should be judged against a preregistered detection limit. Here, token-pruning savings miss the latency target and the smoke-scale joint effect is unresolved; this does not establish that adaptive allocation is ineffective in general.",
+      "url": "https://arxiv.org/html/2610.41970v2#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "357d9ef51f7a3c79",
+      "section": "6 Evaluation Reliability: A Silent Rendering Corruption",
+      "location": "6 Evaluation Reliability: A Silent Rendering Corruption",
+      "text": "We identify a third threat to test-time-scaling evaluation: silent, compute-dependent rendering corruption in the RoboCasa/ robosuite stack, to which compute-intensive inference paths are more exposed.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "87606ba0313cd60d",
+      "section": "6.1 Mechanism",
+      "location": "6.1 Mechanism",
+      "text": "The corruption originates in OpenGL context management during environment resets. On a hard reset the stack constructs a new simulation instance while an orphaned instance remains eligible for garbage collection; when the orphan is later collected, its GL context is freed while a different context is active, silently invalidating the framebuffer of the live environment. Subsequent renders return corrupted observations, frozen or noise-like frames, with no error raised. Figure contrasts a corrupted frame with the correct render of the same state. We confirm the mechanism with a framebuffer sentinel that pre-fills each render target with a marker and flags targets left substantially untouched after rendering. 1 1 1 We attribute this corruption to OpenGL context management during hard resets in the tested stack, confirmed by our framebuffer sentinel and eliminated by our fix. We have not sought maintainer confirmation of the root-cause attribution.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5fa997a1819b6635",
+      "section": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "location": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "text": "We first ask whether this corruption materially affects the officially reported RoboCasa numbers. We run the unmodified official evaluation file in two arms, bug-present and render-fixed, paired episode by episode on the four tasks where our baseline run exhibited corruption, over 50 consecutive episodes each (200 paired episodes), with the framebuffer sentinel active throughout.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f1448be24225644e",
+      "section": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "location": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "text": "Task Succ (bug → \\rightarrow fix) Corrupt Flips PnPCounterToMicrowave 16 → 18 16\\rightarrow 18 3 + 2 +2 PnPMicrowaveToCounter 18 → 18 18\\rightarrow 18 3 0 0 PnPStoveToCounter 32 → 33 32\\rightarrow 33 1 + 1 +1 TurnSinkSpout 36 → 36 36\\rightarrow 36 1 0 0 Total 𝟏𝟎𝟐 → 𝟏𝟎𝟓 \\mathbf{102\\rightarrow 105} 8 / 200 8/200 + 3 +3",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.T2.3",
+      "kind": "table"
+    },
+    {
+      "id": "e531407011aed36e",
+      "section": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "location": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "text": "Table 2: Paired bug-vs-fix comparison under the official direct-policy protocol. All three outcome flips are corrupted episodes moving from failure to success; none move the other way. Among the 192 uncorrupted episodes, success is identical in both arms.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5bf6e1b2c7a8919c",
+      "section": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "location": "6.2 Effect on the Official Direct-Policy Benchmark",
+      "text": "As Table 2 shows, under the direct-policy protocol the measured corruption rate is 8 / 1200 8/1200 ( 0.67 % 0.67\\% per episode in the bug arm, and zero in the fixed arm), and the paired effect of fixing it is + 3 +3 successes over 200 episodes. All flips move corrupted episodes from failure to success, so the corruption understates success. Extrapolated to the full 24-task, 50-episode protocol, the effect is about + 0.25 +0.25 pp and never exceeds an upper bound of + 0.6 +0.6 pp. We conclude that the officially reported direct-policy figure of 67.1 % 67.1\\% is not materially affected: the corruption is real and present in the official stack, but its direct-policy impact is small and in the direction of underreporting success.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d034b201bb34a1f6",
+      "section": "6.3 Corruption Scales with Per-Inference Compute",
+      "location": "6.3 Corruption Scales with Per-Inference Compute",
+      "text": "The direct-policy result does not bound the risk for test-time scaling, because corruption frequency depends on how much computation each query allocates. We observe a sharp, monotone dependence:",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "12f292e05153e189",
+      "section": "6.3 Corruption Scales with Per-Inference Compute",
+      "location": "6.3 Corruption Scales with Per-Inference Compute",
+      "text": "Direct policy (one forward pass per query): 0.67 % 0.67\\% of episodes corrupted, paired-verified in Table 2 .",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6acd92a34f312d06",
+      "section": "6.3 Corruption Scales with Per-Inference Compute",
+      "location": "6.3 Corruption Scales with Per-Inference Compute",
+      "text": "Direct-mode best-of- N N ( N = 8 N{=}8 candidates, simple forward passes): 0 / 40 0/40 episodes corrupted, with identical success ( 29 / 40 29/40 ) in both arms. Additional sampling alone does not raise the rate.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f167da084cb05f48",
+      "section": "6.3 Corruption Scales with Per-Inference Compute",
+      "location": "6.3 Corruption Scales with Per-Inference Compute",
+      "text": "Planning mode (separate future-state and value calls per query, substantially more allocation per query): up to 65 % 65\\% of episodes corrupted.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5d6a403a6f909383",
+      "section": "6.3 Corruption Scales with Per-Inference Compute",
+      "location": "6.3 Corruption Scales with Per-Inference Compute",
+      "text": "The 65 % 65\\% figure is observed under a compute-heavy planning configuration and should be read as an upper-bound illustration of the trend, not as the corruption rate of any standard benchmark. RoboCasa provides no native planning-mode evaluation, and this configuration is non-standard; the official repository exposes best-of- N N planning only for a real-robot platform that does not pass through robosuite , so the planning-path corruption touches no number the official benchmark reports. On the LIBERO stack, which on a hard reset explicitly destroys the prior simulation before constructing a new one and so leaves no orphan, the trigger condition is not met; we infer from the source that the reported LIBERO figure is unaffected, though we did not run that environment.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "afe2c85529c424d9",
+      "section": "6.4 Implications",
+      "location": "6.4 Implications",
+      "text": "The official direct-policy result is largely unaffected, but compute-heavy planning is more exposed. Studies using this stack should verify render integrity before attributing gains to inference-time methods.",
+      "url": "https://arxiv.org/html/2610.41970v2#S6.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "86de1290ec5d8d94",
+      "section": "7 Discussion",
+      "location": "7 Discussion",
+      "text": "Our three audits are independent, but they point in the same direction: on the tested Cosmos Policy configuration, the computation added at inference time to realize test-time scaling does not buy what it is assumed to buy, and part of the apparent benefit reported in this setting can arise from evaluation artifacts rather than from the method.",
+      "url": "https://arxiv.org/html/2610.41970v2#S7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "56beb79c974dc88c",
+      "section": "7 Discussion",
+      "location": "7 Discussion",
+      "text": "What the findings do and do not say. None of the three results claims that planning, adaptive allocation, or test-time scaling is useless in general; each is stated at the scope of the tested configuration. The planning result is that the deployable selector is worse than random and that selection headroom is small, not that no selector can ever help. The allocation result is that nominal FLOPs savings do not convert to end-to-end speedup here, together with a detectability statement from a smoke-scale sample whose preregistered power gate was not cleared, not a confirmed null. The reliability result is that a real, compute-dependent corruption exists in the official stack while leaving the reported direct-policy number essentially intact.",
+      "url": "https://arxiv.org/html/2610.41970v2#S7.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "650d66b80c618422",
+      "section": "7 Discussion",
+      "location": "7 Discussion",
+      "text": "A methodology, not only a set of negative results. The value of a negative audit depends on whether its measurements can be trusted, which is why the diagnostic methodology is our primary contribution. Premise-first verification keeps us from building on a signal that does not exist; the oracle bounds the achievable gain before any selector is tuned; the power gate stops an experiment that cannot yield a verdict before it consumes compute; and render-integrity checking protects every closed-loop number. These components are model-agnostic and transfer to any audit of test-time compute in a diffusion-based control policy, even though the specific render fix is tied to the stack we study. We release the detector, fix, scripts, and preregistered protocols so the audits can be repeated. Our strongest limitation is scope: whether these findings generalize to other models, simulators, or real hardware is an open question the methodology is designed to answer rather than presuppose, and we see the audits not as a verdict against inference-time computation but as checks that should precede any claim that test-time scaling improves control.",
+      "url": "https://arxiv.org/html/2610.41970v2#S7.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5054d3cc9b18480c",
+      "section": "8 Conclusion",
+      "location": "8 Conclusion",
+      "text": "We presented an empirical audit of test-time scaling in a representative world-action model, Cosmos Policy on RoboCasa, built around a premise-first, pre-registered methodology with explicit statistical power control and render-integrity verification. The audit yields three independent reasons an apparent gain may not be real: best-of- N N candidate selection carries little usable signal and its deployable selector is worse than random; nominal compute savings from token-level allocation do not convert to practical speedup, and the joint allocation effect lies below the system’s noise resolution; and a silent, compute-dependent rendering corruption inflates the reliability risk of exactly the compute-intensive inference paths that test-time scaling relies on, while leaving the official direct-policy benchmark intact. We release the methodology and tools so that these checks can be applied before performance gains are attributed to test-time scaling rather than to unverified assumptions or evaluation artifacts.",
+      "url": "https://arxiv.org/html/2610.41970v2#S8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "57e692c956701e70",
+      "section": "9 Timing Measurement Details",
+      "location": "9 Timing Measurement Details",
+      "text": "This supplement documents the measurement setup behind Table 1 and the single-forward mechanism that explains why per-forward savings do not carry the whole query. All figures are directly measured; none are composed from component times.",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8669492a1e396b20",
+      "section": "Environment.",
+      "location": "Environment.",
+      "text": "NVIDIA RTX A6000, PyTorch 2.7.0 with CUDA 12.8 and cuDNN 90701, model nvidia/Cosmos-Policy-RoboCasa-Predict2-2B with weights in bf16, latent shape [ 1 , 16 , 11 , 28 , 28 ] [1,16,11,28,28] (11 latent frames × \\times 196 tokens = = 2156), batch 1, and 5 denoising steps per action query (confirmed as exactly 5 DiT forwards per call). The only tracked code modification is a logging patch to run_robocasa_eval.py (commit 18a2acc ).",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4136ef81c9798e7f",
+      "section": "End-to-end protocol (Table 1 b).",
+      "location": "End-to-end protocol (Table 1 b).",
+      "text": "For each pruning level and each of the two paths (deployed, and decode-excluded), we time the complete action-inference query, dense against pruned, under the deployed eager backend. We discard warmup and then record N = 30 N=30 timed queries per cell, reporting the median with the 10 10 th and 90 90 th percentiles; the directory out_e2e_prune/raw.jsonl holds all 420 timed calls. Paired per-state speedups agree with the reported median ratios to within 0.001 0.001 . The decode-excluded dense baseline is directly measured at 812.7 812.7 ms (it is not the decode-subtracted estimate used before this run). The whole-frame prune is applied inside the real query path; because whole-frame pruning is a fixed structural mask, there is no per-token scoring step, and the frame slicing and scatter-back run inside the timed region, so the measured speedups carry full real overhead for this pruning type.",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7f0bcceeb4d9c0fe",
+      "section": "Why the whole query was measured eager.",
+      "location": "Why the whole query was measured eager.",
+      "text": "The complete query contains host-side control flow, host-device copies and array post-processing that cannot be CUDA Graph captured without restructuring the code, so no graph-timed stage is mixed into the end-to-end numbers. Eager is in any case the deployed evaluation backend.",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3c59fc5b5b32d059",
+      "section": "Single-forward mechanism (not an end-to-end result).",
+      "location": "Single-forward mechanism (not an end-to-end result).",
+      "text": "To locate the ceiling of the pruned stage, we separately time the DiT forward in isolation. Under CUDA Graph the single forward speeds up by at most 1.73 × 1.73\\times (dense 102.75 102.75 ms to all-future-frames-plus-value 59.42 59.42 ms), with output bit-identical to eager. This is a single-forward, CUDA-Graph measurement and is not directly comparable to the eager end-to-end speedups in Table 1 b; we report it only to show that even a forward driven nearly to its floor cannot carry the query, because the five DiT forwards are under half of the end-to-end latency (Table 1 c) while VAE encode and future-image decode are not reducible by token pruning.",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f2cb375acc1ba16b",
+      "section": "FLOPs.",
+      "location": "FLOPs.",
+      "text": "Per-forward FLOPs in Table 1 a are measured with FlopCounterMode (matmul + + SDPA).",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.SS0.SSS0.Px5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5f329c7448567335",
+      "section": "Reproduction.",
+      "location": "Reproduction.",
+      "text": "The summary is regenerated from the raw timings by E2E_MODE=summarize python3 probes/ARC_gate_m1/gm1_e2e_prune.py ; out_e2e_prune/ also contains E2E_PRUNE_REPORT.md , summary.json and meta.json .",
+      "url": "https://arxiv.org/html/2610.41970v2#S9.SS0.SSS0.Px6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a24a5fd742a75c58",
+      "section": "Decision threshold.",
+      "location": "Decision threshold.",
+      "text": "The pre-registered interaction threshold is",
+      "url": "https://arxiv.org/html/2610.41970v2#S10.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d014e54769858440",
+      "section": "Decision threshold.",
+      "location": "Decision threshold.",
+      "text": "θ B = max ⁡ ( 2 ​ σ seed , 0.3 ​ D ​ ( 2 , F ) ) , \\theta_{B}=\\max\\!\\big(2\\sigma_{\\text{seed}},\\;0.3\\,D(2,F)\\big), (3)",
+      "url": "https://arxiv.org/html/2610.41970v2#S10.E3",
+      "kind": "table"
+    },
+    {
+      "id": "bb8a24ce65604ec8",
+      "section": "Decision threshold.",
+      "location": "Decision threshold.",
+      "text": "the larger of a seed-noise floor and a fraction of the temporal main effect, so that a declared interaction must exceed both the noise and a meaningful share of the main effect.",
+      "url": "https://arxiv.org/html/2610.41970v2#S10.SS0.SSS0.Px1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "e14f32137df818b8",
+      "section": "Oracle headroom reliability.",
+      "location": "Oracle headroom reliability.",
+      "text": "With R R replicate rollouts per state, the reliability of the mean candidate estimate follows the Spearman–Brown form",
+      "url": "https://arxiv.org/html/2610.41970v2#S10.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "18bbd2b6977c6f78",
+      "section": "Oracle headroom reliability.",
+      "location": "Oracle headroom reliability.",
+      "text": "Rel ⁡ ( R ) = R ​ ρ ICC 1 + ( R − 1 ) ​ ρ ICC . \\mathrm{Rel}(R)=\\frac{R\\,\\rho_{\\text{ICC}}}{1+(R-1)\\,\\rho_{\\text{ICC}}}. (4)",
+      "url": "https://arxiv.org/html/2610.41970v2#S10.E4",
+      "kind": "table"
+    },
+    {
+      "id": "6390bbdae394c554",
+      "section": "Oracle headroom reliability.",
+      "location": "Oracle headroom reliability.",
+      "text": "With the measured intraclass correlation ρ ICC = 0.20 \\rho_{\\text{ICC}}=0.20 and R = 2 R=2 , Rel = 0.33 \\mathrm{Rel}=0.33 , so a single continuation ranks candidates with only about 20 % 20\\% reliability and the cross-fitted oracle estimate is itself noisy.",
+      "url": "https://arxiv.org/html/2610.41970v2#S10.SS0.SSS0.Px2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "7563c1d4b2e13a62",
+      "section": "11 The Premise-First Audit Procedure",
+      "location": "11 The Premise-First Audit Procedure",
+      "text": "Figure 5 : The premise-first methodology as a chain of gates. Each candidate test-time-scaling gain passes three checks in order before it is credited: verify that the decision signal exists (causal ablation and oracle ceiling); a statistical power gate that halts a run which cannot resolve the pre-registered outcome; and closed-loop measurement under framebuffer-sentinel render-integrity checking. A “no” at the first gate reports a negative result and at the second an inconclusive one, separating a genuine negative from an underpowered or invalid measurement.",
+      "url": "https://arxiv.org/html/2610.41970v2#S11.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "aaa31148ddbd6788",
+      "section": "11 The Premise-First Audit Procedure",
+      "location": "11 The Premise-First Audit Procedure",
+      "text": "Figure 5 shows the audit as a single procedure: three gates applied in order before any test-time-scaling gain is credited. Each gate corresponds to one of the three ways an apparent gain can fail, and to one of the paper’s three audits.",
+      "url": "https://arxiv.org/html/2610.41970v2#S11.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0e4a9c9a3a8fabfa",
+      "section": "11 The Premise-First Audit Procedure",
+      "location": "11 The Premise-First Audit Procedure",
+      "text": "The first gate verifies the premise that the added computation exposes a usable decision signal, using the causal ablation and oracle-ceiling construction of Section 6 ; when no signal exists the result is reported as negative rather than pursued further, as in the planning audit of Section 4 . The second gate is statistical: from a smoke sample it projects the confidence-interval width at the full sample size and halts the run when the pre-registered outcome cannot be resolved, so compute is not spent on an experiment that cannot yield a verdict, and the outcome is reported as inconclusive rather than as evidence of absence, as in the allocation audit of Section 5 . The third gate measures closed-loop success under the framebuffer-sentinel render check and routes the verdict by pre-registered thresholds, the render-integrity guard whose necessity the reliability audit of Section 6 establishes.",
+      "url": "https://arxiv.org/html/2610.41970v2#S11.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "22c568f3bbe55d77",
+      "section": "11 The Premise-First Audit Procedure",
+      "location": "11 The Premise-First Audit Procedure",
+      "text": "The value of the procedure is in its two “no” branches: they separate a genuine negative from an underpowered or invalid measurement, a distinction that success rate alone cannot make. The gates are model-agnostic and apply to any audit of test-time compute in a diffusion-based control policy; only the render fix itself is specific to the stack we study.",
+      "url": "https://arxiv.org/html/2610.41970v2#S11.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "e651d1d6b4da52c3",
+      "section": "12 End-to-End Latency Under Token Pruning",
+      "location": "12 End-to-End Latency Under Token Pruning",
+      "text": "Table 3 reports the full measurement behind Table 1 (b): both query paths at all six pruning levels, with the 10th and 90th percentiles over the N = 30 N=30 timed queries per cell. Three observations follow, all from directly measured values.",
+      "url": "https://arxiv.org/html/2610.41970v2#S12.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c86cb0bec5710f7",
+      "section": "12 End-to-End Latency Under Token Pruning",
+      "location": "12 End-to-End Latency Under Token Pruning",
+      "text": "First, the end-to-end speedup grows monotonically but sublinearly with the nominal FLOPs reduction. Cutting 47.9 % 47.9\\% of per-forward FLOPs (all future frames plus value) buys only 15.2 % 15.2\\% of wall-clock on the deployed path and 25.3 % 25.3\\% on the decode-excluded path; the remaining time is dominated by the autoencoder encode and future-image decode, which token pruning does not touch.",
+      "url": "https://arxiv.org/html/2610.41970v2#S12.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "73b5896d4794c5f1",
+      "section": "12 End-to-End Latency Under Token Pruning",
+      "location": "12 End-to-End Latency Under Token Pruning",
+      "text": "Second, the decode-excluded path scales better at every level, reaching 1.253 × 1.253\\times against 1.152 × 1.152\\times on the deployed path at the most aggressive prune. Removing the fixed future-image decode shrinks the denominator and enlarges the share of the query that pruning can act on, yet even this most-favorable configuration stops well short of the 1.5 × 1.5\\times target.",
+      "url": "https://arxiv.org/html/2610.41970v2#S12.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "7de66c88efc65e41",
+      "section": "12 End-to-End Latency Under Token Pruning",
+      "location": "12 End-to-End Latency Under Token Pruning",
+      "text": "Third, the percentile spread is tight: the 10th and 90th percentiles lie within about 1 % 1\\% of the median at every cell, so the medians are stable and the sub- 1.5 × 1.5\\times conclusion is not an artifact of run-to-run variance. No pruning level on either path reaches 1.5 × 1.5\\times .",
+      "url": "https://arxiv.org/html/2610.41970v2#S12.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "59f27e96cc98ffe7",
+      "section": "12 End-to-End Latency Under Token Pruning",
+      "location": "12 End-to-End Latency Under Token Pruning",
+      "text": "Table 3 : Full end-to-end query latency under whole-frame token pruning, both paths, all levels (Cosmos Policy, RoboCasa, batch 1, 5 denoising steps; NVIDIA RTX A6000, bf16, eager). Every value is directly measured over N = 30 N=30 timed queries per cell; median with the 10th and 90th percentiles. The deployed path is the query as the eval calls it (future-image decode and value extraction included); the decode-excluded path removes future-image decode on both sides. Speedup is dense median divided by pruned median. No pruning level on either path reaches the pre-registered 1.5 × 1.5\\times target. This expands the medians and speedups of main-body Table 1 (b).",
+      "url": "https://arxiv.org/html/2610.41970v2#S12.T3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "64354ebcd5c0729d",
+      "section": "12 End-to-End Latency Under Token Pruning",
+      "location": "12 End-to-End Latency Under Token Pruning",
+      "text": "Deployed path Decode-excluded path Pruning level Tokens Median (ms) p10–p90 (ms) × \\times Median (ms) p10–p90 (ms) × \\times Dense 2156 1254.9 1248.9–1257.1 1.000 812.7 808.6–814.5 1.000 Drop 1 future image 1960 1232.1 1226.7–1233.8 1.019 791.2 786.7–792.5 1.027 Drop 2 future images 1764 1171.0 1168.7–1172.6 1.072 728.9 727.0–730.6 1.115 All future images 1568 1140.5 1136.6–1142.8 1.100 699.8 697.0–703.2 1.161 All future frames 1372 1096.5 1093.9–1099.3 1.144 654.0 652.0–656.5 1.243 All future frames + + value 1176 1088.9 1086.4–1092.2 1.152 648.6 647.0–651.9 1.253",
+      "url": "https://arxiv.org/html/2610.41970v2#S12.T3.10",
+      "kind": "table"
+    },
+    {
+      "id": "81d27afef6c315de",
+      "section": "13 Candidate Diversity and Outcome Separability",
+      "location": "13 Candidate Diversity and Outcome Separability",
+      "text": "These diagnostics address whether the limited selection headroom in Section 4 is an artifact of near-identical candidates or of replicate noise. They are descriptive and read only saved files (candidate actions, per-candidate closed outcomes with two repeats, and value scores); they do not run inference, and they do not claim that greater diversity would improve success.",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5da3d3331fcf4848",
+      "section": "Candidates are diverse, not degenerate.",
+      "location": "Candidates are diverse, not degenerate.",
+      "text": "For each state we z-score the seven action dimensions across the dataset, flatten each candidate’s executed 16-step chunk to a 112-vector, and take the mean pairwise Euclidean distance among the eight candidates. No state has identical candidates (minimum dispersion 0.18 0.18 ). States without outcome variation show greater absolute dispersion than states with it (pooled median 0.78 0.78 vs 0.48 0.48 ; Mann–Whitney p = 5 × 10 − 5 p=5\\times 10^{-5} ; Spearman ρ = − 0.25 \\rho=-0.25 against outcome degree), a pattern driven mainly by TurnOnStove. Scale-free coefficient-of- variation metrics show no significant group difference ( p = 0.07 p=0.07 – 0.10 0.10 ), so the difference is largely one of absolute action magnitude. Value-score dispersion is uniformly tiny (median standard deviation ≈ 3 × 10 − 4 \\approx 3\\times 10^{-4} ) and unrelated to outcome variation in the pooled analysis ( p = 0.62 p=0.62 ), consistent with a value selector that carries little usable ranking signal; TurnOnStove, where the value selector is worst, is the only task with larger value dispersion on varying states.",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "56f487a8ce3cc407",
+      "section": "Decomposing outcome variation.",
+      "location": "Decomposing outcome variation.",
+      "text": "The 48 48 of 263 263 states with any variation (across eight candidates and two repeats) split into those with a stable between-candidate difference and those without one. We call a state stably separable when some candidate succeeds in both repeats while another fails in both.",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "241d90790223babb",
+      "section": "Decomposing outcome variation.",
+      "location": "Decomposing outcome variation.",
+      "text": "Task States Varying Stably sep. No stable sep. No variation OpenSingleDoor 37 0 0 0 37 PnPCounterToCab 78 10 6 4 68 TurnOnStove 76 33 14 19 43 TurnOffStove 72 5 0 5 67 Pooled 263 48 20 28 215",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.T4.3",
+      "kind": "table"
+    },
+    {
+      "id": "1842c0102c9f44e4",
+      "section": "Decomposing outcome variation.",
+      "location": "Decomposing outcome variation.",
+      "text": "Table 4: Of 48 48 varying states, only 20 20 ( 7.6 % 7.6\\% ) have a stable between-candidate outcome difference; the other 28 28 exhibit variation without satisfying the stable-separation criterion. All 28 28 are graded ( 0.5 0.5 vs 0 0 or 0.5 0.5 vs 1 1 ); none is a full-repeat flip. Repeat disagreement concentrates in TurnOnStove (per-candidate repeat agreement 0.83 0.83 vs 0.97 0.97 – 1.00 1.00 elsewhere).",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.T4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4b9514380d68df4a",
+      "section": "Even the stable states are near chance.",
+      "location": "Even the stable states are near chance.",
+      "text": "A within-state null that independently shuffles the candidate labels in each repeat (preserving each repeat’s success count but breaking candidate identity across repeats, 2000 2000 draws) expects ≈ 14.8 \\approx 14.8 stably separable states by chance, against the observed 20 20 ; the excess is about 5 5 states, mostly PnPCounterToCab. The cross-fitted hindsight oracle (same estimator as the main text) gains + 1.40 +1.40 pp pooled, decomposing as + 1.85 +1.85 pp from the 20 20 stably separable states and − 0.44 -0.44 pp from the 28 28 states without stable separation (on which the cross-fitted oracle never beats random). Under this specific label-shuffle null the pooled cross-fitted oracle has a near-zero mean gain ( + 0.01 +0.01 pp), providing no indication of upward inflation under the null; with only two repeats per candidate, the amount of reproducible selection headroom remains uncertain. This contribution split is exploratory: the grouping is itself defined from the two repeats and is subject to sampling randomness.",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "47773e8ef31bdb91",
+      "section": "Limitations.",
+      "location": "Limitations.",
+      "text": "Actions cover only the executed first 16 16 of the 32 32 generated steps. With two repeats per candidate we cannot adjudicate per state whether a stable separation is real or coincidental; the graded ( 0.5 0.5 -valued) states are indistinguishable from noise at this sample size. States within an episode are not independent and the reported p p -values are not corrected for multiple comparisons, so they are exploratory rather than confirmatory. The diagnostics cover four tasks and three episodes and do not speak to other candidate counts, sampling temperatures, or continuation policies. Full numbers and reproducible scripts are in probes/P5_oracle/ ( p5_diversity.py , p5_noise_decomp.py ).",
+      "url": "https://arxiv.org/html/2610.41970v2#S13.SS0.SSS0.Px4.p1.1",
+      "kind": "p"
+    }
+  ]
+}

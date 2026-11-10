@@ -1,0 +1,329 @@
+{
+  "item_id": "arxiv:2611.07712",
+  "document_id": "de0258d9de6dbd81301051df2c98e944a95a120467ddfa024799c1505622efaa",
+  "source_url": "https://arxiv.org/html/2611.07712v1",
+  "paper_version": "2611.07712v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-07T05:07:10.191805+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.07712",
+    "title": "AffectiveVLA: Safe and Intent-Aware VLA Control for Human-Humanoid Social Interaction",
+    "url": "https://arxiv.org/abs/2611.07712v1",
+    "published": "2026-11-05",
+    "updated": "2026-11-05",
+    "topics": [
+      "vla",
+      "control",
+      "data"
+    ],
+    "summary": "Social touch interactions, such as handshakes, fist bumps, and hugs, require humanoid robots to infer human intent, generate contact-rich motions, and maintain safe physical contact. We present AffectiveVLA, an intent-gated Vision-Language-Action (VLA) pipeline deployed on a Unitree G1 humanoid with dexterous hands. A lightweight RGB-based model recognizes interaction intent from two onboard cameras and converts it into a language prompt for the VLA policy. Low-confidence predictions suppress motion execution, reducing unintended activations. During physical contact, interaction-specific compliance profiles adjust arm impedance, while an independent voice-triggered mechanism initiates a latched safe-stop procedure. Using VR teleoperation, we collected approximately 1,300 multimodal interaction episodes and fine-tuned four VLA models: GR00T, RLDX-1, Being-H0.5, and UnifoLM-VLA-0. On-robot evaluation identifies GR00T as the best-performing standalone model. Integrating intent recognition increases its macro-F1 score from 0.75 to 0.90, while the intent model achieves a p95 inference latency of 6.27 ms. These results demonstrate that explicit intent gating improves the reliability of VLA-based social interaction without compromising real-time operation."
+  },
+  "overview": "具体改动是把“选择哪一种互动”和动作执行分开：双视角视频先分类并经过置信度/连续帧确认，再产生语言提示和放行VLA；关节顺应及语音锁存停止独立于生成策略。小规模真机比较支持互动选择F1提高，尚不能将其解释为接触力有界、舒适度已验证或连续运行误触发已经解决。",
+  "coverage": {
+    "read": 42,
+    "total": 42,
+    "evidence_ids": [
+      "79bd0e171e34ad7d",
+      "66b53a64b1460616",
+      "c6d688924bf980aa",
+      "5abff60032b447e1",
+      "b296b2a0caa0867d",
+      "916aa89f7ed88334",
+      "eacc9822b9bb5b08",
+      "ca014b59039fb271",
+      "1fbfaed18856373a",
+      "652f6d3a9ba19fcc",
+      "4e39a543a40a44c3",
+      "f9fa3dc7a97c50e1",
+      "82be73e0d2f17fb9",
+      "76862866d5179f24",
+      "b263145dbf7c9dc3",
+      "9cc3b698a1253d60",
+      "14171855886b1388",
+      "ed30920c2c4e040e",
+      "da9ed423aa1a57f0",
+      "e5b52f1072b057ec",
+      "228f1d8ad39d9d11",
+      "58fd36f2063af373",
+      "9da13cede5f6ccdd",
+      "9cec1cc3168cf67d",
+      "b7d167e5bc941647",
+      "81537359fd450925",
+      "53d68b87dccd33d3",
+      "e685d9b1cd32a72a",
+      "7fcbfa17cc7e8613",
+      "52e0f1006d08db7c",
+      "5ade2b0cf25d82c7",
+      "5413520318ed9ba2",
+      "f1e66c9c98f5a31d",
+      "8673a79efc66c120",
+      "e55990ee5a1d8091",
+      "c974c9a36119fb7b",
+      "0678c005e7dd4c08",
+      "5ad986ff6df316f1",
+      "db7b25867422ee28",
+      "e951ad9756b9c7d2",
+      "fae50ed9cb365d11",
+      "750859c62d1a93de"
+    ],
+    "pdf_pages_visually_checked": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "pdf_sha256": "c976c2e86e48924698ef4c5f0ceb7e0c2298dc719cd07e6805edd4e5acec2f39"
+  },
+  "notice": "完整阅读42个提取片段与固定版本5页PDF的技术内容，目视核对物理页2–5的数据划分、公式1、表1–3、图2和限制。PDF无附录；正文提及的意图分类器逐模型补充结果未在此版本PDF/HTML或公开TeX源包中找到，未宣称已读。未逐篇核查参考文献、执行代码、观看视频、接触机器人或复现实验。图2动作块50与正文/表2的40步不一致，已保留证据缺口。",
+  "findings": [
+    {
+      "title": "研究范围：三类互动选择，不是开放式情感理解",
+      "kind": "problem",
+      "text": "系统处理握手、碰拳、拥抱三种预定义互动，并以no_interaction作为第四类。增量是让独立识别器确认动作类型后再提示VLA，而不是训练一个更大的端到端底座。主在线评测要求完成参与者发起的正确类型，不量化开放式意图、情感状态、长期无互动误触发或接触力，因此名称中的Affective不能直接读成通用情感理解。",
+      "evidence_ids": [
+        "b296b2a0caa0867d",
+        "1fbfaed18856373a",
+        "76862866d5179f24",
+        "e5b52f1072b057ec",
+        "228f1d8ad39d9d11",
+        "58fd36f2063af373",
+        "e55990ee5a1d8091",
+        "750859c62d1a93de"
+      ],
+      "quote": "no_interaction"
+    },
+    {
+      "title": "门控：16帧双视角视频，加0.6阈值与三次确认",
+      "kind": "method",
+      "text": "两路机载RGB分别覆盖身体和手部，15Hz采样最近16帧对、约1秒历史，letterbox到224×224。共享TinyViT提取特征，两个因果VideoLightFormer聚合，再attention融合分类。只有类别概率超过0.6连续三次推理才commit为语言提示，在此之前禁用运动。它是显式阈值与时间确认，未给概率校准或误触发统计保证；6.27ms网络计算也不等于完整意图确认延迟。",
+      "evidence_ids": [
+        "e5b52f1072b057ec",
+        "228f1d8ad39d9d11",
+        "58fd36f2063af373",
+        "db7b25867422ee28"
+      ],
+      "quote": "probability exceeds"
+    },
+    {
+      "title": "动作桥：提示换代清空旧块，手指闭合另有保护",
+      "kind": "method",
+      "text": "接受意图后选择提示及顺应profile。VLA以5Hz输出76维动作：64维SONIC上身motion token，加每手6个BrainCo驱动命令；执行以50Hz交给全身控制器和手部控制器。按驱动器限速；命令与实测手指位置的差异用于接触判定，接触后阻止继续闭合但保留张开。提示变化时丢弃排队动作，等待匹配新提示的块。顺应profile以10Hz心跳维护，失联保持最后增益，而不是本文已证明的故障停机保证。",
+      "evidence_ids": [
+        "b263145dbf7c9dc3",
+        "14171855886b1388",
+        "9da13cede5f6ccdd",
+        "9cec1cc3168cf67d",
+        "b7d167e5bc941647"
+      ],
+      "quote": "motion tokens"
+    },
+    {
+      "title": "顺应：按互动切换14臂关节增益，数值仍是pilot配置",
+      "kind": "method",
+      "text": "公式1按α/β缩放14个臂关节的Kp/Kd，躯干与腿不变，约束β≥sqrt(α)。表1握手只将肘缩为(0.60,0.83)，拥抱肩/肘/腕均用该缩放，碰拳肩/肘同样变软而腕保持(1,1)；SOFT为(0.25,0.50)。用minimum-jerk在0.3秒变软、1.0秒变硬。表注明确这些是pilot选的暂定值，不能当已通过偏好实验的最终最优参数，也不构成完整接触稳定性/力上界证明。",
+      "evidence_ids": [
+        "81537359fd450925",
+        "53d68b87dccd33d3",
+        "e685d9b1cd32a72a",
+        "7fcbfa17cc7e8613",
+        "52e0f1006d08db7c",
+        "e951ad9756b9c7d2",
+        "750859c62d1a93de"
+      ],
+      "quote": "minimum-jerk"
+    },
+    {
+      "title": "停止通路：语音触发锁存，需人工解除",
+      "kind": "method",
+      "text": "离线Vosk用受限词表识别stop/hold on，触发后忽略操作者及VLA命令，步行置idle，手臂转SOFT并下放；拥抱先向外释放，手指张开，仅人工解除才恢复。它独立于VLA生成结果，但仍是本文软件系统内的确定性处理；不能据此宣称存在独立硬件安全认证或已测得最坏机械停止时间。",
+      "evidence_ids": [
+        "da9ed423aa1a57f0",
+        "5ade2b0cf25d82c7",
+        "c974c9a36119fb7b",
+        "750859c62d1a93de"
+      ],
+      "quote": "deterministic"
+    },
+    {
+      "title": "主在线证据：macro-F1 0.75→0.90，碰拳提升最大",
+      "kind": "evidence",
+      "text": "表3每策略5名参与者×3互动×10次=150次，正确的定义是机器人执行人发起的互动类型。GR00T N1.6单独运行的握手/碰拳/拥抱F1为0.86/0.50/0.89；接意图模块后0.92/0.78/1.00，macro-F1从0.75到0.90，绝对+0.15，碰拳+0.28。这不是90%任务成功率、接触安全率或力降低15%。对照把外部分类、语言提示和门控一起加上，未拆开“正确提示”与“三次确认”的独立效果，未给参与者配对区间/混淆矩阵及拒绝率。",
+      "evidence_ids": [
+        "14171855886b1388",
+        "e55990ee5a1d8091",
+        "c974c9a36119fb7b",
+        "0678c005e7dd4c08",
+        "5ad986ff6df316f1",
+        "fae50ed9cb365d11"
+      ],
+      "quote": "macro-F1 0.75"
+    },
+    {
+      "title": "离线低误差不能直接给在线互动选型",
+      "kind": "evidence",
+      "text": "表2在288条留出episode评40步开环动作误差：Being-H0.5/GR00T/RLDX-1总体RMSE0.135/0.135/0.133，但表3在线macro-F1为0.12/0.75/0.53；UnifoLM离线0.148最差、在线0.63却第二。GR00T首/末步RMSE0.085/0.156最好，且5Hz查询/50Hz执行主要消耗块前部。RMSE描述的是SONIC潜token和手指命令的开环匹配，不是毫米、角度或接触力精度；四底座的不同冻结策略也限制因果解释。",
+      "evidence_ids": [
+        "14171855886b1388",
+        "5413520318ed9ba2",
+        "f1e66c9c98f5a31d",
+        "8673a79efc66c120",
+        "e55990ee5a1d8091",
+        "5ad986ff6df316f1",
+        "fae50ed9cb365d11"
+      ],
+      "quote": "teleoperated"
+    },
+    {
+      "title": "意图模型：0.76是三类测试F1，6.27ms只是模块p95",
+      "kind": "evidence",
+      "text": "六种分类器由TinyViT/MobileViT/EfficientFormer与VTN/VideoLightFormer组合，冻结图像编码器、训练时间模块/融合/分类头。意图开发集另行清洗后790条，632训练/158验证，测试288条无no_interaction，只算三类macro-F1。最佳TinyViT+VideoLightFormer测试F1=0.76、accuracy0.736、p95=6.27ms；其余只给F1 0.51–0.76与p95 5.31–6.73ms范围，缺少可获取逐项补充表。论文按最高测试成绩选集成模型，未报告选择后独立锁定测试；也未充分披露计时硬件、端到端感知/确认/执行延迟，不能等同一次互动响应6.27ms。",
+      "evidence_ids": [
+        "e5b52f1072b057ec",
+        "228f1d8ad39d9d11",
+        "58fd36f2063af373",
+        "db7b25867422ee28",
+        "fae50ed9cb365d11"
+      ],
+      "quote": "configurations"
+    },
+    {
+      "title": "误触发证据只来自验证集54条无互动",
+      "kind": "limitation",
+      "text": "验证集54条no_interaction中观察到0次假激活，77%的互动意图在接触前commit，中位提前量2.1秒；这些不是未见长时连续部署的误报率或保证。测试集无no_interaction，未提供每小时假激活、连续等待总时长、置信区间及拒绝/延迟权衡。不能从0/54写成无意外动作，三个连续置信度判断也不是统计独立试验。",
+      "evidence_ids": [
+        "58fd36f2063af373",
+        "db7b25867422ee28",
+        "750859c62d1a93de"
+      ],
+      "quote": "no_interaction"
+    },
+    {
+      "title": "数据和训练：清洗与底座recipe要算入比较",
+      "kind": "limitation",
+      "text": "最终1270条、19名参与者；extended982条/15人，test288条/4未见人，二者无人重叠。丢弃跟踪丢失、安全停止、非预期接触和异常时长episode，不能用清洗后的分布估计真实部署的异常/安全事件发生率。意图开发集另清洗为790条，不应和982条VLA扩展集混为一数；在线5参与者是否与训练人重叠未明确。四VLA均单张A10080GB训练30k步，但GR00T仅更新projector/动作专家，其他还更新ViT；相同步数不是相同可训练参数或总计算量，batch/总工时等复现信息未充分给出。",
+      "evidence_ids": [
+        "b263145dbf7c9dc3",
+        "9cc3b698a1253d60",
+        "14171855886b1388",
+        "e55990ee5a1d8091",
+        "db7b25867422ee28"
+      ],
+      "quote": "participants"
+    },
+    {
+      "title": "舒适度研究仍在收集，尚未回答各互动的最佳顺应",
+      "kind": "limitation",
+      "text": "5.4节设计肩/肘/腕2×2×2刚软组合、balanced Latin square和7点安全/舒适/自然评分；只完成两次pilot，明确数据收集ongoing。因而RQ2尚无正式偏好结果。不能将贡献段的user studies措辞或表1profile理解为已证实某一互动更舒适、风险更低；相关数值应当作初步实现配置。",
+      "evidence_ids": [
+        "ca014b59039fb271",
+        "4e39a543a40a44c3",
+        "7fcbfa17cc7e8613",
+        "52e0f1006d08db7c",
+        "e951ad9756b9c7d2"
+      ],
+      "quote": "within-subject"
+    },
+    {
+      "title": "物理停止与力界：10/10口令不是系统安全率",
+      "kind": "limitation",
+      "text": "两词在近距离机载麦克风测试被报告10/10检出，正文未明确是每词各10次还是合计，也未给噪声条件、对话暴露时长、声学检出到机械释放时间。没有接触力/压力峰值或伤害指标；作者明确降低Kp不提供形式接触力界，且无重力补偿会下垂。现有证据支持停止流程能触发的有限案例，不支持普遍安全、无漏检或舒适度已验证。",
+      "evidence_ids": [
+        "7fcbfa17cc7e8613",
+        "5ade2b0cf25d82c7",
+        "c974c9a36119fb7b",
+        "e951ad9756b9c7d2",
+        "750859c62d1a93de"
+      ],
+      "quote": "contact forces"
+    },
+    {
+      "title": "配置与材料缺口：图2的50步和正文40步未统一",
+      "kind": "limitation",
+      "text": "正文3.3、5.1和表2为40步动作块；目视固定PDF页4图2，Action Chunk框标成50×[motion token R64,finger joints]。两者不一致，本轮以正文和表2解释离线评测，并保留实现配置待核对，未擅改图片或用50Hz执行频率代替块长。正文称六分类器逐模型结果在supplement，但固定版本5页PDF/HTML和只读源包均未发现附加材料；因此只报告正文明确给出的最佳值与范围，未编造补充结果。",
+      "evidence_ids": [
+        "14171855886b1388",
+        "da9ed423aa1a57f0",
+        "9cec1cc3168cf67d",
+        "5413520318ed9ba2",
+        "f1e66c9c98f5a31d",
+        "db7b25867422ee28"
+      ],
+      "quote": "chunked over 40 steps"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：三次确认在同样提示下是否真正改善连续无互动误触发？",
+      "text": "待验证假设：在保持意图分类器与提示相同的前提下，三次置信确认能降低连续无互动场景的假动作放行，同时保留足够的接触前提前量。先做离线双视角视频回放：使用同一冻结分类器，比较直接argmax提示、仅概率大于0.6、概率大于0.6连续三次三组；均明确no_interaction映射为空动作，其他VLA/控制配置相同，不进行人体接触实验。阈值及确认长度只在开发参与者上选择，最终测试使用独立未见参与者的长时无互动、相似抬手/转身及三类真实互动视频；记录累计时长、每小时假放行、每参与者事件率、拒绝/漏检、相对approach/contact标注的确认延迟与提前量分位数，报告按参与者聚类的区间。另以oracle类别提示估计分类错误上限，避免把提示纠正全部算作门控效果。若三次确认相对同提示单阈值不降低假放行，或多数接受事件已晚于可干预时刻，就推翻其能兼顾误触发与及时性的假设；若仅验证人群有效则缩小适用范围。实验未运行，未全面检索相关工作，不能称为已发现研究空白。",
+      "evidence_ids": [
+        "9cc3b698a1253d60",
+        "e5b52f1072b057ec",
+        "228f1d8ad39d9d11",
+        "58fd36f2063af373",
+        "e55990ee5a1d8091",
+        "db7b25867422ee28",
+        "750859c62d1a93de"
+      ],
+      "quote": "no_interaction"
+    }
+  ],
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.07712v1",
+      "checked": "网页PDF工具缓存缺失后直接下载固定版本PDF（11,623,583字节），渲染页2–5；额外以原分辨率查看页4确认图2的Action Chunk框为50×，正文和表2均为40步。"
+    },
+    {
+      "url": "https://arxiv.org/src/2611.07712v1",
+      "checked": "只读列出源包并检查arxiv.tex相关文字；源包仅00README.json、acmart.cls、arxiv.tex及两张PNG，无额外supplement/appendix文件。未执行TeX、脚本或包内指令；没有据此补造六模型逐项分数。"
+    }
+  ],
+  "frontier_brief": {
+    "title": "AffectiveVLA：先确认互动意图，再发语言提示并放行VLA动作",
+    "change_type": "控制集成 · 意图门控",
+    "delta": "把握手/碰拳/拥抱类型交给独立双视角视频分类器；概率超过0.6连续三次才转换为提示并放行VLA。提示切换清空旧动作块，顺应profile与语音锁存停止另走执行通路。",
+    "before": "同一VLA直接依赖视觉观测判断人发起的是哪一种互动；开环动作误差接近，也可能在真机选错动作。",
+    "after": "用TinyViT与因果VideoLightFormer处理16帧双视角历史，显式做置信度/时间确认再提示GR00T N1.6；执行层另管块更新、手指接触、14臂关节顺应与锁存停止。",
+    "relevance": "在有限已知互动类别中，值得先区分“选对技能”和“动作拟合得准”。复现应固定同样类别提示，再消融阈值与连续确认，并增加长时无互动回放；把互动F1、误放行和接触物理量分开评估。",
+    "caveat": "在线仅5人、每策略150次三类互动；0.90是macro-F1，非安全或成功率。0/54假激活来自验证集，测试无no_interaction；舒适度用户研究仍在收集，接触力无形式界，图2块长与正文不一致。作者结果未复现。",
+    "question": "在同样预测提示下，连续三次确认还会降低长时无互动的假动作放行吗？",
+    "evidence": [
+      {
+        "label": "真机互动选择的整模块收益",
+        "value": "GR00T macro-F1：0.75→0.90",
+        "context": "表3，5人×3互动×10次=150次/策略；握手0.86→0.92、碰拳0.50→0.78、拥抱0.89→1.00。外部分类/提示/门控一起加入，未分离三次确认的贡献。"
+      },
+      {
+        "label": "低开环误差没有选出所有在线好模型",
+        "value": "Being与GR00T RMSE均0.135；在线F1为0.12/0.75",
+        "context": "表2/3，离线288条留出episode、40步块；误差是潜动作/手部命令量，不是接触力或末端毫米精度。底座微调recipe也不同。"
+      },
+      {
+        "label": "确认误触发证据的真实范围",
+        "value": "验证集0/54假激活；77%在接触前确认",
+        "context": "5.3节，no_interaction验证episode为54条，中位提前2.1秒；独立测试无no_interaction，因此不能据此推算连续运行每小时误触发。"
+      },
+      {
+        "label": "意图网络计算成本",
+        "value": "p95 6.27ms；测试三类F1 0.76",
+        "context": "TinyViT+VideoLightFormer，16帧/约1秒历史与三次确认另计；未提供充分硬件和完整响应延迟，也未找到正文所称逐模型supplement。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "分类与放行分成两步",
+        "text": "双机载RGB的历史先被编码、因果聚合与融合；只有满足概率和连续确认规则，才生成类别提示及允许运动，未确认时保持禁止执行。"
+      },
+      {
+        "title": "语义更新约束动作缓存",
+        "text": "VLA5Hz预测、50Hz执行；提示变化清掉旧块，等待相同提示的新版结果，手指接触用命令/实测差异阻止继续闭合。"
+      },
+      {
+        "title": "物理执行单独受限",
+        "text": "14臂关节采用互动相关的暂定顺应profile；语音停止锁存并要求人工解除。这是实现机制，力界、长期误触发与舒适度仍需独立证据。"
+      }
+    ]
+  }
+}

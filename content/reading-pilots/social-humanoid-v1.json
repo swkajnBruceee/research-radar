@@ -1,0 +1,450 @@
+{
+  "item_id": "arxiv:2611.08407",
+  "document_id": "0931473c45fcf64e624e0a54509c39d03c4e29a9ad4f145c2e9d8e2d0fffdf43",
+  "source_url": "https://arxiv.org/html/2611.08407v1",
+  "paper_version": "2611.08407v1",
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-07T14:12:48.680776+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "paper": {
+    "id": "arxiv:2611.08407",
+    "title": "Social Humanoid: Socially Responsive Human-Humanoid Interaction",
+    "url": "https://arxiv.org/abs/2611.08407v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "control",
+      "data",
+      "sim"
+    ],
+    "summary": "arXiv:2611.08407v1 Announce Type: new Abstract: Humanoid robots are typically trained as solitary agents, leaving them unable to coordinate physically with human partners who naturally anticipate and adjust to one another. To bridge this gap, we present Social Humanoid, a hierarchical system that generates and executes socially responsive whole-body motion on a 29-DoF Unitree G1 conditioned on a human partner's motion. Its high-level policy performs flexible sequence modeling of human and humanoid motion through a shared tokenized representation, generating reactive humanoid motion and anticipating the partner's motion when they are occluded, while a low-level whole-body tracking controller executes the generated motion on the robot. To train the system, we introduce a two-phase adaptive retargeting procedure that retargets one interaction partner to the robot while morphing the other partner to preserve contact dynamics, reachability, and relative body scale. We apply this procedure across five motion-capture datasets to produce a new Human-Humanoid Interaction (HHI) benchmark of 260 hours of human-humanoid interactions. Our results demonstrate that Social Humanoid produces coordinated, human-aligned behavior across diverse interaction types in simulation and the real world. Project page: https://von31.github.io/social-humanoid/"
+  },
+  "overview": "Social Humanoid的可复用选择是离线重定向时同时适配伙伴姿态、在分离的人/机器人编码器之间用共享码本加双重对齐，再让DFoT在联合时序中生成G1反应。最清楚的机制证据是同样共享码本下，加对齐使跨形态翻译12.52→2.79cm，而各自重建本来已较好。系统在六类互动上有真机执行，但轨迹指标、执行成功与社交质量不同；3张4090加4060Mobile的部署、308/541ms两种缓冲配置及无主动接触力调节必须一并考虑。",
+  "coverage": {
+    "read": 120,
+    "total": 120,
+    "evidence_ids": [
+      "18fab84a6ea32421",
+      "80750f0385fe33fc",
+      "032054da0ca3b0aa",
+      "0a0220890878e0d1",
+      "6588f23999dafa7d",
+      "3e934cd2ded8bf8a",
+      "502f97630db5fd3e",
+      "51dcddf7fea5e40e",
+      "0d5c31f5fc77e791",
+      "d95fd64a64d51120",
+      "3eef853411312b37",
+      "ef971954e6620d07",
+      "c8829f83c2a18e50",
+      "f5a0576229799526",
+      "ac935dd90f65ccf1",
+      "f8ecfe526ebda7be",
+      "8db469fc78ae8cdc",
+      "5fce51d738981b86",
+      "06ea095fb75fe3cc",
+      "0668a44d7783aa70",
+      "2adc199352773554",
+      "b4dc60fb6579fce5",
+      "74134a240fba522b",
+      "96bcad4be82afda1",
+      "345808ad3baeb564",
+      "baf2502ab2da0cf1",
+      "fc1d3eb54ec9fde3",
+      "5b04e3ae33617dbf",
+      "56dfb4ad967b7082",
+      "65e82bdbcb79d8d2",
+      "d0e26596bc6d9504",
+      "33ea2af5059ae109",
+      "995eceed8bf611c9",
+      "7488fe9ed0feb4df",
+      "c5be6699eb0ca647",
+      "a61740120d3e2a5d",
+      "59bbdae577c0c150",
+      "30b909484140f4f1",
+      "52683b32d0fade49",
+      "c1cb4c59a5869daa",
+      "5788781271950d01",
+      "6419ce5b33ab0aa4",
+      "0e7c6c746cf034c1",
+      "b80c685a81004cc1",
+      "d36d697d5dd4d191",
+      "c176888eef4fa71a",
+      "102e29ed4cccb5e6",
+      "fbd0c5ed972857bb",
+      "2374d7d2b1582021",
+      "d1505d8ae3635485",
+      "0608c054b2f01db4",
+      "1a9486aa0798aa54",
+      "83eecdb658fbbc74",
+      "387feed735e65ccf",
+      "36b043f71f121865",
+      "f74407728d0825ad",
+      "904ede3826375285",
+      "68597aa391b0f98c",
+      "c60cdaa678d324e0",
+      "7d69a4be48fd4f2f",
+      "6d50a1fa1eb7373b",
+      "87559e622f7a2d44",
+      "ad3282458c978a38",
+      "e35102dc2cb5396f",
+      "819887b330e0b8cd",
+      "75d8d2e7b561c376",
+      "5799c37d9e762897",
+      "02a1bb6496b4c4ac",
+      "c729d15bb46b3911",
+      "d7affd4cef93a4a9",
+      "3ea5dbd22d7011d9",
+      "fe901b6006dcc2f7",
+      "4fb15eb538f2987f",
+      "f46814fe162e1504",
+      "8e8f70a4890e2173",
+      "ea355ad2d9e35da7",
+      "5250ea4cbc92de85",
+      "6cf11a674591a61b",
+      "c2ab7b5d8c32e487",
+      "bdc587628399a42a",
+      "c9ec4315589af9f6",
+      "d5f1b38730a3f0e1",
+      "d6dc4b5e8fd7ac59",
+      "dfa0a9e06ef68030",
+      "d79b1eab3d3e3014",
+      "66356d77a96ffe09",
+      "817e5a5a43c0bcef",
+      "d4774533118890b4",
+      "4243f913589f993d",
+      "58afe68362c377eb",
+      "813a5c256088e700",
+      "9b082b550873c978",
+      "3f168cbe780de99e",
+      "968b4ba4858fe227",
+      "34d346f152c5a2d7",
+      "c541ab943f4505a1",
+      "c2ffeb70ad65fb19",
+      "f90ddee0a9a816bd",
+      "5b69f58ecec61ae0",
+      "73f52a0aad9978f0",
+      "f18e755f32472ef2",
+      "65476c92d000a87f",
+      "873d253157cd0036",
+      "31d50b292df8bd5f",
+      "0515b7b8afc6ae22",
+      "5e36b32dd46fe45c",
+      "2071bd40723a4c8a",
+      "b18d0da8dbe9f28a",
+      "116646a31421d730",
+      "39169ce3522a9a28",
+      "e6aa1319eaa5fe5d",
+      "9042e6f8e660548f",
+      "d7f038f37693c4a5",
+      "0c86b94e43c75e2d",
+      "d65d6ef836a3fced",
+      "0e5154c53f014b10",
+      "77f678f1f0203f9a",
+      "268aaef1d939cd27",
+      "b3ff616d8e805a99",
+      "c07046d89c4adc03"
+    ],
+    "pdf_pages_visually_checked": [
+      7,
+      8,
+      9,
+      18,
+      21,
+      23,
+      24
+    ],
+    "pdf_sha256": "ca3cfe3e1d840cd43cd86b4179a05b84e3b506872cd0720633814123832fcc19"
+  },
+  "notice": "完整阅读120个原文提取片段，覆盖正文、方法、全部实验及附录A.1–A.6.6。固定版本PDF25页；目视核对物理页7/8/9/18/21/23/24的主表1–4、消融表A.3/A.5、配置A.6、延迟A.7与部署图。其他图像未逐张目视核查，未独立审计数据划分、源码、项目视频或复现作者实验。表1/2的部分指标未标单位，延迟total的分位估计方法和若干采样/训练细节留作缺口。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "形态差异需要进入离线配对数据，而不是只在生成后修机器人",
+      "text": "独立把一个人重定向为矮小G1会破坏双方接触和可达关系；统一缩小两个人又会改变真实人类尺度。该方法先改ego为29DoF G1，再在保留partner人体比例的前提下调整partner姿态，生成配对训练数据；高层直接生成人形机器人运动，SONIC负责跟踪。此处“社会响应”主要来自人体运动条件，不包括语言意图或情绪识别。",
+      "evidence_ids": [
+        "6588f23999dafa7d",
+        "3e934cd2ded8bf8a",
+        "502f97630db5fd3e",
+        "c8829f83c2a18e50",
+        "a61740120d3e2a5d",
+        "30b909484140f4f1",
+        "52683b32d0fade49",
+        "e35102dc2cb5396f"
+      ],
+      "quote": "morphology gap"
+    },
+    {
+      "kind": "method",
+      "title": "两遍重定向：腕肘距离约束后，按接触对伙伴做IK/QP",
+      "text": "Pass I逐帧SQP在关节限制、trust region和足部粘滞约束下，联合匹配按身高缩放的Laplacian局部形状、ego/机器人到partner的腕肘距离，另加时序平滑和姿态先验。Pass II在接触帧对partner肩肘腕做arm-chain IK，高接触段再对腕/胸/颈簇的body-pose QP调整髋、脊柱与膝；不是在线把现实伙伴强行变形。每clip交换角色处理两次。附录接触阈值源mesh5cm、腕/肘距离权重50/25，足部还有按支撑/腾空分段的高度修正。",
+      "evidence_ids": [
+        "a61740120d3e2a5d",
+        "59bbdae577c0c150",
+        "30b909484140f4f1",
+        "52683b32d0fade49",
+        "c1cb4c59a5869daa",
+        "f46814fe162e1504",
+        "8e8f70a4890e2173",
+        "ea355ad2d9e35da7",
+        "bdc587628399a42a",
+        "d6dc4b5e8fd7ac59"
+      ],
+      "quote": "regularization"
+    },
+    {
+      "kind": "evidence",
+      "title": "接触消融：只加权重会增脚滑，距离保真组合才更稳",
+      "text": "CHI3D表A.3：OmniRetarget腕误差1.379±0.550cm、接触保留0.915±0.160、脚滑0.009±0.015；加接触自适应权重后0.976±0.534、0.933±0.131、0.014±0.018；完整接触/可达保真组合为0.501±0.290、0.936±0.119、0.0034±0.010，腕误差约降64%。这支持围绕互动距离设计目标，且提示简单加权的副作用。表中是clip均值±std而非配对置信区间，未单独隔离partner co-morphing每个子模块贡献。",
+      "evidence_ids": [
+        "5250ea4cbc92de85",
+        "6cf11a674591a61b",
+        "c2ab7b5d8c32e487",
+        "52683b32d0fade49"
+      ],
+      "quote": "contact-adaptive"
+    },
+    {
+      "kind": "evidence",
+      "title": "三数据集重定向改善几何指标，RL执行成功不总有提升空间",
+      "text": "表3相对OmniRetarget，CHI3D腕误差1.379→0.501cm、Hi4D1.729→0.804、Harmony4D2.981→1.909；对应接触保留0.915→0.936、0.827→0.881、0.676→0.775。Harmony4D下游RL成功81→97%，但CHI3D/Hi4D两者均100%，不能写为所有数据集执行率都提高。机器人没有真实参考mocap，pose distortion是对按G1身高缩放的源人示范进行比较，partner又被调整；几何吻合不是接触力或人类舒适度真值。",
+      "evidence_ids": [
+        "6419ce5b33ab0aa4",
+        "2374d7d2b1582021",
+        "d1505d8ae3635485",
+        "0608c054b2f01db4",
+        "e35102dc2cb5396f"
+      ],
+      "quote": "contact preservation"
+    },
+    {
+      "kind": "method",
+      "title": "共享的是码本，跨形态编码器/解码器仍分开",
+      "text": "人用21×6关节旋转，G1用29关节角；canonical根变换和跨agent相对位姿保留空间关系。各自1D Conv/ResNet时间压缩4倍，512维latent量化到同一个512-entry EMA码本，解码器也各自独立。除码本外并不共享tokenizer权重。连续对齐拉近配对encoder输出，离散对齐用距离logits的对称CE和stop-gradient目标约束码分配；仅共享参数表并不保证同姿态同码。",
+      "evidence_ids": [
+        "f5a0576229799526",
+        "ac935dd90f65ccf1",
+        "f8ecfe526ebda7be",
+        "5fce51d738981b86",
+        "06ea095fb75fe3cc",
+        "0668a44d7783aa70",
+        "2adc199352773554",
+        "74134a240fba522b",
+        "96bcad4be82afda1",
+        "345808ad3baeb564",
+        "baf2502ab2da0cf1",
+        "5e36b32dd46fe45c",
+        "116646a31421d730"
+      ],
+      "quote": "embodiment-specific"
+    },
+    {
+      "kind": "evidence",
+      "title": "最强机制对照：自重建好不代表跨形态可用",
+      "text": "表A.5固定共享码本，无对齐时人/机器人自重建3.665/2.809cm，但人→机器人12.520cm、FD0.2062、配对同码率0。双对齐后人→机器人2.793cm、FD0.0028、同码率0.780；自重建3.556/2.613cm，改变小得多。连续单独/离散单独翻译3.240/3.063cm、同码率0.508/0.634，双项最好。此为held-out HHI配对clip、root-relative MPJPE，机器人“真值”来自离线重定向；不等于现实接触定位误差。",
+      "evidence_ids": [
+        "7d69a4be48fd4f2f",
+        "dfa0a9e06ef68030",
+        "d79b1eab3d3e3014",
+        "66356d77a96ffe09",
+        "817e5a5a43c0bcef",
+        "58afe68362c377eb"
+      ],
+      "quote": "No alignment"
+    },
+    {
+      "kind": "method",
+      "title": "DFoT在人与机器人token上独立加噪，采样表控制补全方式",
+      "text": "高层把VQ latent与跨agent相对变换一起输入6层、8头、宽512的Transformer，加agent embedding、逐token noise embedding及RoPE。训练future各frame/agent独立noise level，history保持干净，预测干净latent并辅以解码运动与自重建损失（权重1/0.5/0.5）；推理确定性DDIM30步。改变agent×time采样噪声表可做反应、共同预测或partner补全，不需为每种日程重训。没有单独遮挡长度/丢帧强度的定量扫参，不能把架构支持补全写成任意遮挡下稳定。",
+      "evidence_ids": [
+        "fc1d3eb54ec9fde3",
+        "5b04e3ae33617dbf",
+        "56dfb4ad967b7082",
+        "65e82bdbcb79d8d2",
+        "d0e26596bc6d9504",
+        "33ea2af5059ae109",
+        "995eceed8bf611c9",
+        "968b4ba4858fe227",
+        "65476c92d000a87f",
+        "873d253157cd0036",
+        "2071bd40723a4c8a",
+        "116646a31421d730",
+        "d65d6ef836a3fced"
+      ],
+      "quote": "independently"
+    },
+    {
+      "kind": "limitation",
+      "title": "260小时来自重定向mocap，划分与泛化需按来源解释",
+      "text": "HHI把五个人–人mocap源重定向为人–G1并统一30FPS，表A.1约260小时，其中Embody3D220.97h、Inter-X37.50h，另外三源合计不足2h；不是260小时真实人机互动采集。作者给80/10/10划分，但未明确到可核查的subject/session/source-clip分组协议，交换双角色是否同组也需数据清单确认，不断言存在泄漏。VQ100k、DFoT300k steps、batch256，AdamW2e-4，单A6000 48GB上DFoT约1天；验证loss选checkpoint。没有同等长尾来源与未见参与者的全面分层统计。",
+      "evidence_ids": [
+        "c1cb4c59a5869daa",
+        "5799c37d9e762897",
+        "02a1bb6496b4c4ac",
+        "c729d15bb46b3911",
+        "65476c92d000a87f",
+        "873d253157cd0036",
+        "31d50b292df8bd5f"
+      ],
+      "quote": "train/validation/test"
+    },
+    {
+      "kind": "evidence",
+      "title": "高层预测更准，但检索的分布距离和脚接触仍更好",
+      "text": "表1对R2R：W-MPJPE0.545→0.128、MPJVE0.019→0.007、IP0.088→0.051、MI0.088→0.002。NN的FD0.053优于本方法0.118，脚滑NN0.138、RS0.134也远低于本方法0.876；不能称所有物理/生成指标最佳。NN/RS重放训练运动，既可保持脚接触，又难对齐当前伙伴，因此需要同时看互动与分布指标。主表未为所有列标明单位，本卡不把0.128擅自转换成cm或与A.5的root-relative cm直接混比。",
+      "evidence_ids": [
+        "5788781271950d01",
+        "6419ce5b33ab0aa4",
+        "0e7c6c746cf034c1",
+        "b80c685a81004cc1",
+        "d36d697d5dd4d191",
+        "fbd0c5ed972857bb",
+        "387feed735e65ccf"
+      ],
+      "quote": "Foot Skating"
+    },
+    {
+      "kind": "evidence",
+      "title": "高层消融支持组合收益，未单独识别共享码本的因果贡献",
+      "text": "HHI-Chi3D表2：No VQ / Sep VQ /完整模型的FD0.253/0.181/0.072、W-MPJPE0.075/0.085/0.057、MPJVE0.007/0.007/0.005。完整模型脚滑0.845不如Sep0.833，MI0.019略差No VQ0.018。Sep同时改变“独立码本+无对齐”，故这一对照不能完全区分码本共享与显式alignment；A.5固定共享码本再去对齐更能解释迁移机制。表2是Chi3D子集，与表1全HHI不可当同一个测试统计相减。",
+      "evidence_ids": [
+        "c176888eef4fa71a",
+        "102e29ed4cccb5e6",
+        "36b043f71f121865",
+        "dfa0a9e06ef68030",
+        "66356d77a96ffe09"
+      ],
+      "quote": "codebook sharing"
+    },
+    {
+      "kind": "evidence",
+      "title": "六场景有真机执行，90–100%不是参与者研究结论",
+      "text": "表4六场景（握手、挥手、击掌、拥抱、弯身、挽臂）sim与real均为100/100/90/100/100/100%。每场景sim30条生成motion，real总30次试验覆盖4位参与者，不是每人30次；真机成功定义适当反应并完成、无摔倒或操作员干预。表格未报告参与者分层、置信区间或独立多次训练；90%有限试验不等于普遍稳定性。执行与tracking指标不是及时性、自然度、舒适度或社会适宜性评估，作者明确需要HRI study。",
+      "evidence_ids": [
+        "83eecdb658fbbc74",
+        "f74407728d0825ad",
+        "904ede3826375285",
+        "68597aa391b0f98c",
+        "e35102dc2cb5396f"
+      ],
+      "quote": "operator intervention"
+    },
+    {
+      "kind": "method",
+      "title": "部署频率分层：15Hz感知、7.5Hz运动块、50Hz底层",
+      "text": "外置ZED2i RGB-D1280×720、15Hz；YOLO+FastSAM3DBody估计人体，用深度/MAD/Kabsch/Kalman恢复并跟踪全局姿态，AprilTag初始化机器人坐标后接Unitree本体状态估计。启动时只选最近的人作为单一伙伴，丢失时可切共同预测。WiFi向远程server传JPEG+zstd；两张4090做人体估计，一张4090跑高层，一张4060Mobile跑SONIC。高层输入插值到30Hz并以7.5Hz发30Hz运动块，SONIC插值50Hz再供PD；50Hz是跟踪频率，不能当相机到动作的新信息响应率或机载单GPU性能。",
+      "evidence_ids": [
+        "7488fe9ed0feb4df",
+        "e6aa1319eaa5fe5d",
+        "0c86b94e43c75e2d",
+        "d65d6ef836a3fced",
+        "0e5154c53f014b10",
+        "77f678f1f0203f9a"
+      ],
+      "quote": "interpolates"
+    },
+    {
+      "kind": "limitation",
+      "title": "延迟308ms对应少缓冲配置，表中的max也非最坏时延保证",
+      "text": "A.7 n=200列total(min) p50/p95为308.1/376.2ms，total(max)541.1/609.2ms；增加一次chunk连续性缓冲约133ms与SONIC100ms后差233ms，因此min/max是可选缓冲组合的表述，不宜理解成观测最小/绝对最坏值。DFoT本身50.4/58.5ms只是子阶段，不能当端到端；高层103.2/118.2ms还含插值及VQ等。各主阶段p50和p95分别恰好相加等于total（本轮算术核查），但正文未明确联合端到端样本分位还是阶段分位加总；不能据此额外保证联合p95。也未给每项互动采用何种缓冲配置的配对成功率。",
+      "evidence_ids": [
+        "7488fe9ed0feb4df",
+        "9042e6f8e660548f",
+        "d7f038f37693c4a5",
+        "77f678f1f0203f9a",
+        "268aaef1d939cd27",
+        "b3ff616d8e805a99"
+      ],
+      "quote": "motion continuity"
+    },
+    {
+      "kind": "limitation",
+      "title": "接触执行边界：运动学可跟踪，不是力顺应或开放环境安全证明",
+      "text": "系统不建模手指、脸、物体位姿，也不建模互动接触力、人类舒适度或安全约束；依赖外部人体估计和SONIC。附录有独立操作员启用、yaw变化限45度/s、相邻HLP差超过0.7rad回站立及人工停止；5次60秒rollout未见不安全生成只是有限观察。低层明确非force-adaptive、非force-compliant，不能把拥抱成功率当已调节接触力的证据。多人数数据来源也不等于已部署多伙伴策略，当前仍双人互动。影子遥操作可Eh→码本→Dr单次前向，无在线优化，但精度参考仍来自重定向配对。",
+      "evidence_ids": [
+        "c60cdaa678d324e0",
+        "6d50a1fa1eb7373b",
+        "87559e622f7a2d44",
+        "e35102dc2cb5396f",
+        "817e5a5a43c0bcef",
+        "4243f913589f993d",
+        "d65d6ef836a3fced",
+        "c07046d89c4adc03"
+      ],
+      "quote": "force-compliant"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：给定共享码本后，对齐收益能否迁移到未见伙伴条件？",
+      "text": "待验证假设：配对显式对齐带来的收益不止是同一重定向轨迹上的姿态翻译，还能在未见伙伴姿态和感知缺失时改善互动响应。先在公开HHI内固定同一分组划分、重定向数据、512码本容量和训练步数，比较无对齐、连续单项、离散单项、双项四组，并分别用相同高层DFoT配置训练；分组按原始source clip和双角色副本绑定，若有subject/session标签再按其隔离。用held-out伙伴体型/接触动作及受控0/133/267ms丢帧测试，每组至少3训练seed；报告H→R root-relative MPJPE、同码率、反应时差、腕距离误差、脚滑、生成穿透及SONIC仿真跟踪失败率，分开给干净/扰动条件和各来源。保持动作块缓冲及底层相同，并单列端到端延迟；全部为离线/仿真验证，不安排真人接触实验。若双项只降低翻译误差却不能改善未见伙伴互动指标，或收益在source分组后消失，则推翻其可泛化到互动响应的解释；若脚滑明显恶化，也不能只凭位置精度宣称更优。该实验尚未运行，未全面检索相关工作，不能称为已证明机制或研究空白。",
+      "evidence_ids": [
+        "74134a240fba522b",
+        "c176888eef4fa71a",
+        "36b043f71f121865",
+        "e35102dc2cb5396f",
+        "c729d15bb46b3911",
+        "dfa0a9e06ef68030",
+        "66356d77a96ffe09",
+        "58afe68362c377eb",
+        "d65d6ef836a3fced",
+        "268aaef1d939cd27"
+      ],
+      "quote": "Code agreement"
+    }
+  ],
+  "frontier_brief": {
+    "title": "Social Humanoid：共享动作码本加配对对齐，直接生成人机互动反应",
+    "change_type": "人形控制 · 跨形态表示",
+    "delta": "离线将ego重定向为G1并调整partner姿态保住互动几何；人/机器人独立tokenizer共享一个码本并显式对齐，再由DFoT联合生成运动、SONIC跟踪。",
+    "before": "独立重定向会丢接触关系；仅把不同形态量化到同一词表，也可能各自重建良好却无法跨形态解码。",
+    "after": "固定共享码本后，加入连续+离散配对对齐使H→R翻译MPJPE12.52→2.79cm、同码率0→0.78；高层直接输出G1运动，不必每次生成后再在线做优化重定向。",
+    "relevance": "需要把人体互动mocap迁移到G1时，应把接触距离、partner适配和token对齐纳入数据/表示设计；用跨解码消融检验共享词表是否真正可迁移。",
+    "caveat": "260小时为重定向人–人数据；姿态误差真值同样来自重定向。真机六场景每场景30次、4参与者，未做社交质量研究或主动接触力调节。部署用3张4090加4060Mobile，308ms仅低延迟配置。",
+    "question": "把原始clip与双角色副本绑定划分后，对齐收益能否保留到未见伙伴与受控感知缺失下的互动响应？",
+    "evidence": [
+      {
+        "label": "共享不等于对齐",
+        "value": "H→R 12.520→2.793cm；同码率0→0.780",
+        "context": "表A.5同一共享码本框架，无对齐vs双对齐；held-out HHI配对clip，root-relative MPJPE，参考是重定向G1。"
+      },
+      {
+        "label": "互动距离消融",
+        "value": "腕误差1.379→0.976→0.501cm",
+        "context": "CHI3D OmniRetarget→加接触权重→完整接触/可达保真；只加权重脚滑0.009→0.014，完整为0.0034。"
+      },
+      {
+        "label": "保留反例",
+        "value": "脚滑本方法0.876，NN0.138",
+        "context": "表1高层HHI；本方法W-MPJPE优于R2R，但检索FD和脚接触更好，不能称全部物理指标占优。"
+      },
+      {
+        "label": "部署配置",
+        "value": "p50 308.1→541.1ms；表列p95 376.2→609.2ms",
+        "context": "n=200，后一配置含133+100ms可选缓冲；相机到命令口径，非DFoT50.4ms子模块耗时或绝对最坏时延。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "双遍互动重定向",
+        "text": "先约束G1局部形状和腕肘距离，再按接触对伙伴IK/QP；伙伴保持真实人体尺度，换角色覆盖两种角色。"
+      },
+      {
+        "title": "共享词表与配对约束",
+        "text": "人/机器人的编码器、解码器分离，时间压缩4倍到512维并共享512-entry EMA码本；连续距离与对称离散CE共同对齐。"
+      },
+      {
+        "title": "按agent和时间独立去噪",
+        "text": "DFoT用相对空间关系和历史生成未来motion token；不同采样日程支持反应/共同预测，30步DDIM生成后交SONIC执行。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08407v1",
+      "checked": "固定版本PDF25页、14151468字节，本机下载并渲染；目视核对页7/8/9/18/21/23/24的主表、消融、部署帧、网络配置与延迟。主表若干指标单位与total延迟分位估计方法未明确，未自行补足；项目视频、源代码与数据划分未独立验证。"
+    }
+  ]
+}

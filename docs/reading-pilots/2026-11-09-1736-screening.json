@@ -1,0 +1,170 @@
+[
+  {
+    "item_id": "arxiv:2611.09684",
+    "source_signature": "e65423b16ff799f706391ae0a1ecb4b10b10d4ccd7f7bf504f77b2210bf18b52",
+    "level": 2,
+    "reason": "用空间概率解码与Soft-DTW放宽逐点标签约束，十分之一示范或五分之一步数的比较提示训练成本改变；需核匹配骨干和独立组件贡献。",
+    "quote": "SURE:Spatiotemporal "
+  },
+  {
+    "item_id": "arxiv:2611.09041",
+    "source_signature": "a5223c53d6c19b3bc8c12d0054917659b4d8d08f35d1cc23e2d7949723350c6d",
+    "level": 1,
+    "reason": "多种辅助监督筛选和目标历史压缩改善人物跟随，0.8B与三任务对照具体，但增量主要限追踪且标注数据成本较高。",
+    "quote": "DobotTrack: Target-G"
+  },
+  {
+    "item_id": "arxiv:2611.08987",
+    "source_signature": "7ded2dbc85acdf4c0bb2d95304fd7e06b26985be8f7628842d8b8e31696eaa28",
+    "level": 1,
+    "reason": "失败预测按需调用大模型在成功与服务器请求数间权衡，适合边云部署，但目前只模拟三套LIBERO，网络假设需核。",
+    "quote": "VLA Handover: Failur"
+  },
+  {
+    "item_id": "arxiv:2611.08827",
+    "source_signature": "ab1ab0b15aa3e9dabd6154bbb2981685f61cf77b02aca2b31aebc6d1a2a60d83",
+    "level": 1,
+    "reason": "将动作几何先验用于视觉编码前剪枝有明确计算节省和实机证据，复用受相机标定、执行偏差和视角约束，先按推理专门增量处理。",
+    "quote": "ActPrune: Action-Gro"
+  },
+  {
+    "item_id": "arxiv:2611.09892",
+    "source_signature": "db9c5d2b3f7620060f95a8afcaf8cfc70019ca23d25a074b3bbe9a6972eef358",
+    "level": 2,
+    "reason": "无示范通用代理直接操控与专用VLA/WAM比较可改变数据训练路线，跨本体和108次实机提供具体依据；需核控制接口、反馈与推理预算公平。",
+    "quote": "On Agentic Manipulat"
+  },
+  {
+    "item_id": "arxiv:2611.09864",
+    "source_signature": "925bdd07490e7bd2e9f35eefc308f3cda46eeb7b9f547e87da98089eae080281",
+    "level": 1,
+    "reason": "用PPO critic蒸馏给接触前抓握排序，89.84对79.87明确连接抓点与下游任务，但集中大物重排和候选抓握范围。",
+    "quote": "Grasp-TAGS: Task-Awa"
+  },
+  {
+    "item_id": "arxiv:2611.09679",
+    "source_signature": "9034ea7da868ee3ba2318861f184981bd0cbb47ee7f318869687c71bd01986a1",
+    "level": 1,
+    "reason": "从速度场不确定性控制相机提高水洞PIV采集效率，模拟到实物有成本对照，适用科学仪器主动感知较窄。",
+    "quote": "Autonomous Particle "
+  },
+  {
+    "item_id": "arxiv:2611.09672",
+    "source_signature": "d42c918d09d11a3c7784417de94c85ad7823503e632ba42e1b059cfb7990d96f",
+    "level": 2,
+    "reason": "连续动作演化场替代分块输出可能改变通用动作头与轨迹边界，多模拟及实机匹配分块对照值得优先核；仍须查积分调用成本和控制频率。",
+    "quote": "ODEAction: From Pred"
+  },
+  {
+    "item_id": "arxiv:2611.05377",
+    "source_signature": "8aca6d8f6f011d75ed3f8aa2b5f7dce08b2a74963c83b2b696f450b0b193b88f",
+    "level": 2,
+    "reason": "把预训视频模型转为紧凑跨本体潜动作接口，300倍token压缩和跨环境迁移提示广泛复用与计算门槛改变，需区分表示压缩与总算力。",
+    "quote": "DreamX: Video Diffus"
+  },
+  {
+    "item_id": "arxiv:2611.05448",
+    "source_signature": "b05a928bdf19cbb2f8f736a1824c52a04e01efe5e3747fc9497aefbc275fe489",
+    "level": 1,
+    "reason": "同决策模型加入后果预测显著降碰撞，模拟及重放有量化对照；限高速合流且重放不等于交互实车，安全与延迟边界需核。",
+    "quote": "Jev with Foresight: "
+  },
+  {
+    "item_id": "arxiv:2611.05507",
+    "source_signature": "8ddd565beb1da7e1e986188dc21ce0a462da3c03683aa539e785606fb808732b",
+    "level": 2,
+    "reason": "显式三维力作为运动跟踪与物体交互通道，手足任务及20kg实机反例支持可复用全身控制接口，需核是否测力、负载与规划观测。",
+    "quote": "Ctrl-F: Force as an "
+  },
+  {
+    "item_id": "arxiv:2611.05567",
+    "source_signature": "90a665d8a376599451178a5dcec38ff5008963f0c14e39030303a551ad63617c",
+    "level": 2,
+    "reason": "五套受控泛化评测隔离空间实例类别组合，双臂资源与七模型低饱和结果可改变模型诊断，需核数据生成和现实相关性的证据。",
+    "quote": "MESA: An Evaluation "
+  },
+  {
+    "item_id": "arxiv:2611.05571",
+    "source_signature": "3d5361b988e0f40ad6568040c5704486b19b541cfc518b50c91252075b1750ad",
+    "level": 1,
+    "reason": "联训潜动作模型策略与轻量解码器更接近下游控制目标，支持少量动作标签，但摘要缺标签预算及隔离量化，暂按视频学习配方增量。",
+    "quote": "ELA: End-to-End Late"
+  },
+  {
+    "item_id": "arxiv:2611.05667",
+    "source_signature": "1bfcc2c14783727107a38ac1b672301ef669646018b6bbd033694219386d8510",
+    "level": 1,
+    "reason": "同状态同时间范围配对拒绝轨迹与纠正，四实机任务五纠正段比较有清晰监督价值；依赖XR操作员和小任务范围。",
+    "quote": "Correct Robots Befor"
+  },
+  {
+    "item_id": "arxiv:2611.05738",
+    "source_signature": "865f6814617505ddf2184360caaa77643a756d880d611fc8caf933fe3ed6fdb9",
+    "level": 1,
+    "reason": "Habitat加物理气味输运提供多模态导航资源，但摘要缺规模和强量化隔离，当前偏气源定位专门方向。",
+    "quote": "OdorSpaces: Visual-O"
+  },
+  {
+    "item_id": "arxiv:2611.05754",
+    "source_signature": "33047513eb8f0e64c31aaa61741d1dddc201cf2dd1f29b51fb406dc43c143e76",
+    "level": 2,
+    "reason": "从归档采样恢复局部梯度避开可微模拟要求，1352双手示范及人形实机支持接触重定向复用，需核采样预算与长时MPC代价。",
+    "quote": "GRASP: Gradient-Guid"
+  },
+  {
+    "item_id": "arxiv:2611.09605",
+    "source_signature": "2fcc1c5730fd4c0b39d0cc92e28f8d88436a25c1c93accaca2e21b659e903a69",
+    "level": 1,
+    "reason": "逆动力学跟踪加学习平衡残差将动态需求显式分离，跨动作与负载实机有依据，但摘要未量化相对统一策略或算力优势。",
+    "quote": "DKWBC: Decoupling Mo"
+  },
+  {
+    "item_id": "arxiv:2610.40748",
+    "source_signature": "7a7e1dd9df65580882a0b86716d55dd7d92972354a62a70ed1071bcde49b8763",
+    "level": 2,
+    "reason": "分别控制新任务视频与动作监督给25.07到55.90再70.70的对照，可能改变WAM数据投入路线；大资源管线与额外标注需核。",
+    "quote": "WorldBridge: Bridgin"
+  },
+  {
+    "item_id": "arxiv:2611.09266",
+    "source_signature": "245d0ad9b2cfa634417615bde87acf79a71db7a9313112492d4d209f07acee82",
+    "level": 1,
+    "reason": "任务模板合成机器人物体参考并复用模仿奖励降低人形任务设计负担，五任务模拟与实机有价值，但模板人工和任务泛化尚待量化。",
+    "quote": "SUGARv2: Learning Di"
+  },
+  {
+    "item_id": "arxiv:2611.08857",
+    "source_signature": "b4754e8532bd365f26e9e733167e8209d7684903edbb1fbef07e0d431c8b0d2a",
+    "level": 1,
+    "reason": "加速度IMU奖励降低速度估计依赖，14分钟样本与跌倒对照有成本意义，但摘要只模拟，不把样本时间当实际人形在线训练完成。",
+    "quote": "STRIDE: Learning Hum"
+  },
+  {
+    "item_id": "arxiv:2611.09124",
+    "source_signature": "9fdf5bbf2576f4d335ee57f4e4ddf9cad15c335185495d49641f52e179a4b1b1",
+    "level": 1,
+    "reason": "纠正代码与世界历史组合有长期任务证据，但跨BEHAVIOR版本的2.21倍不可归因算法，模块及资源多处捆绑，需先核独立对照。",
+    "quote": "Toward the Era of Ag"
+  },
+  {
+    "item_id": "arxiv:2611.09340",
+    "source_signature": "7132168009e61bdf0b4496d0edb971b6202c8e938c55658e5f2a2bd6db5843b0",
+    "level": 2,
+    "reason": "相对动作累计轨迹将避障梯度传播到贡献增量，不重训且140次实机75%对5.7%提示可复用推理控制选择，需核表示与障碍模型的公平拆分。",
+    "quote": "Horizon-Coupled Obst"
+  },
+  {
+    "item_id": "arxiv:2611.09036",
+    "source_signature": "581de9873dcadbcfc96540ee57c3b762c5708a128636cf0c9b0321954e5a0a4b",
+    "level": 1,
+    "reason": "多视角工具使用数据含手物和变形标注，有资源复用潜力；摘要未给样本规模、公开文件或下游定量对照，不能据规模形容词判重大。",
+    "quote": "ToolDex: An Ego-Exo "
+  },
+  {
+    "item_id": "arxiv:2611.09145",
+    "source_signature": "c98a074021a0385aebc145bb1ca0db276914b2ef59e3102999e8f5366507ee5b",
+    "level": 1,
+    "reason": "复用几何场景渲染实现时间多视角一致增强，三实机任务和其他增强比较有依据；尚需核构建成本与是否固定真实样本量。",
+    "quote": "Augmentron: Scalable"
+  }
+]

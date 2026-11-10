@@ -1,0 +1,86 @@
+{
+  "as_of": "2026-11-10T11:21:33+00:00",
+  "candidate_count": 1982,
+  "assessed_candidates": 115,
+  "unassessed_candidates": 1867,
+  "pending_levels": {
+    "2": 24,
+    "1": 81,
+    "unassessed": 1867,
+    "0": 10
+  },
+  "oldest_waiting_since": "2026-11-05T08:02:58+00:00",
+  "oldest_priority_waiting_since": "2026-11-05T08:49:04+00:00",
+  "priority_lane_count": 2,
+  "open_batch": null,
+  "published_count": 34,
+  "publication_blocks": {
+    "等待全文精读": 1980,
+    "已有精读，当前来源版本尚未匹配": 2
+  },
+  "latest_report_at": "2026-11-09T12:46:14+00:00",
+  "reports_last_24h": 1,
+  "sources": [
+    {
+      "id": "arxiv",
+      "enabled": 1,
+      "last_success": "2026-11-10T10:34:10+00:00",
+      "error": "",
+      "count": 301
+    },
+    {
+      "id": "lerobot",
+      "enabled": 1,
+      "last_success": "2026-11-10T10:34:15+00:00",
+      "error": "",
+      "count": 5
+    },
+    {
+      "id": "isaaclab",
+      "enabled": 1,
+      "last_success": "2026-11-10T10:34:17+00:00",
+      "error": "",
+      "count": 5
+    },
+    {
+      "id": "huggingface",
+      "enabled": 1,
+      "last_success": "2026-11-10T10:34:46+00:00",
+      "error": "",
+      "count": 10
+    },
+    {
+      "id": "pi",
+      "enabled": 1,
+      "last_success": "2026-11-10T10:35:14+00:00",
+      "error": "",
+      "count": 12
+    },
+    {
+      "id": "corl",
+      "enabled": 0,
+      "last_success": null,
+      "error": "",
+      "count": 0
+    },
+    {
+      "id": "intern",
+      "enabled": 0,
+      "last_success": null,
+      "error": "",
+      "count": 0
+    },
+    {
+      "id": "huggingface-datasets",
+      "enabled": 1,
+      "last_success": "2026-11-10T10:35:03+00:00",
+      "error": "",
+      "count": 10
+    }
+  ],
+  "limits": [
+    "当前采集覆盖带具身关键词的 cs.RO/LG/AI/CV 及已配置官方发布；不是全行业覆盖。",
+    "定时任务在40分钟预算内最多精读两项；入库成功不代表及时发现、发布或送达手机。",
+    "摘要初筛和全文优先级都是研究编辑判断，不能保证发现所有重大工作。"
+  ]
+}

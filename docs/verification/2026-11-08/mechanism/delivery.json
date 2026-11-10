@@ -1,0 +1,12 @@
+{
+  "https_url": "https://ashley-diy-headquarters-punch.trycloudflare.com",
+  "https_authenticated": true,
+  "published_count": 29,
+  "same_version_as_local": true,
+  "version": "bba4724de947275c1da968ed7c9f39acb188d389b6c111eaf93785d3a820ddfc",
+  "supermimic_level": "priority",
+  "supermimic_position": 3,
+  "all_publication_gates_passed": true,
+  "phone_received": null,
+  "phone_note": "真实手机收件状态未远程验证；服务端可下载不等于已经送达手机。"
+}

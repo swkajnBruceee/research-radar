@@ -1,0 +1,575 @@
+{
+  "id": "5d10993940d73e3d7ad40439b18c3b04e2081feb8acf7e1d3399f6c56e8c3144",
+  "url": "https://arxiv.org/html/2611.08462v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "56d26f2c53b3239f",
+      "section": "OopsieRecover : Learning Transferable VLA Corrections from Semantic Interventions",
+      "location": "OopsieRecover : Learning Transferable VLA Corrections from Semantic Interventions",
+      "text": "Vision-Language-Action (VLA) models can perform a wide range of robotic manipulation tasks, but often fail during deployment. Teaching them to recover from these failures requires substantial corrective data: existing approaches learn to recover from failures by directly associating corrective actions with the observations in which they were demonstrated. For instance, DAgger-like fine-tuning can require tens to hundreds of interactions, yet the resulting policy may still fail to generalize the learned corrections beyond the demonstrated scenarios. We hypothesize that semantics can capture the underlying reasons for failures and their corrections, enabling policies to learn from only a handful of corrective demonstrations and generalize those corrections to novel objects, and scene variations. We propose OopsieRecover , a framework that uses abduction to infer the intent behind a small set of corrective demonstrations and encodes the inferred knowledge as dense spatial representations and conditional costs. These costs capture when a behavior is undesirable and steer the policy toward more desirable action regions. We experiment across 6 tasks and variations in object poses, scenes, and related tasks, and find that only a handful of corrective demonstrations can enable a VLA to overcome failures across a broad range of novel situations, without requiring new corrective data for each variation. Please refer to our Project Page for videos.",
+      "url": "https://arxiv.org/html/2611.08462v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b48b2777fe52786b",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Vision-language-action models (VLAs) provide broad manipulation capabilities [ 1 , 2 , 3 ] , but can still exhibit systematic failures during deployment [ 4 ] , such as collisions, dropping objects, etc. Human interventions offer a natural source of corrective data [ 5 , 6 , 7 , 8 ] , yet existing interactive imitation methods generally treat corrections as additional state-action supervision [ 5 , 6 ] , making generalization depend on collecting enough corrections in similar states. Humans can instead infer a reusable principle from only a few corrections. We ask whether a robot can likewise infer what prompted an intervention, how its behavior should be steered to avoid it, and when the same correction should apply again.",
+      "url": "https://arxiv.org/html/2611.08462v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b968cdbf8d0184d1",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "An intervention provides only partial evidence about this principle. Before takeover, the robot executes the VLA actions; afterward, the human provides a preferred continuation. Instead, the takeover time localizes the context that prompted the intervention and that generalizes to other similar situations, while the subsequent human-controlled segment provides a preferred continuation from the reached state towards a more optimal situation. A description such as “keep the mug upright when placing it on the plate” identifies the semantic property motivating the takeover, which may remain valid despite changes in object(s) poses, robot configuration, background, or even task. Trajectories alone leave ambiguous which property mattered; language alone lacks the sensorimotor grounding needed for visuomotor control. Together, they constrain a reusable correction.",
+      "url": "https://arxiv.org/html/2611.08462v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2c8ebd12a18dc47f",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Fig. 1: Learning reusable corrections from human interventions with OopsieRecover . A human corrects a lid-closure failure and describes the intended behavior. OopsieRecover grounds this feedback in semantic point sets, and uses abduction – finding a simple explanation consistent with the observed intervention – to synthesize a gated correction cost that steers a frozen VLA. ( Right ) The synthesized correction programs generalize: they can be reused under changed object poses and scene layouts, broadening the successful applicability of the VLA.",
+      "url": "https://arxiv.org/html/2611.08462v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2e4509f2fb5a7f89",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "This ambiguity motivates OopsieRecover , which formulates correction inference as abduction [ 9 ] : finding a simple explanation consistent with the observed interventions despite missing or imperfect information. A vision-language model (VLM) leverages its visual-language priors, together with the scene, robot-controlled initial demonstration, human intervention, and language annotation, to propose candidate explanations. Since several explanations may fit one intervention, OopsieRecover evaluates each hypothesis across all available interventions and selects explanations that capture the underlying corrective behavior without being overly narrow or permissive. In this formal-methods inspired procedure, the VLM proposes plausible semantic hypotheses, and the corrective evidence determines whether they are retained or refined.",
+      "url": "https://arxiv.org/html/2611.08462v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d9b44b3e634474a8",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We represent the selected explanation as one or more gated costs . Each combines a logical predicate specifying when the correction applies with a continuous cost specifying how the behavior should optimize/change. E.g., a gate may activate during placement, while its cost penalizes tilting the mug away from upright. This separation keeps corrections local rather globally biasing the policy. To execute these costs, OopsieRecover grounds task-relevant robot parts, object parts, and spatial locations and regions as semantic point sets. At test time, the VLA samples candidate action chunks, and OopsieRecover predicts how each candidate would move these point sets, how they evaluate on the gated costs, and which candidate would lead to the lowest cost overall. The frozen VLA supplies plausible behaviors, while the inferred correction steers its choices whenever the same semantic situation reappears.",
+      "url": "https://arxiv.org/html/2611.08462v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "e097b4a3662eb430",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We evaluate OopsieRecover on 3 tasks in both sim and real using pi0 in RoboCasa and DROID, with only 5-8 corrections per task. OopsieRecover improves real-world task-progress from 35.1% to 61.0%, a 74% relative improvement over the next-best baseline, and transfers corrections to unseen poses, objects and scenes. We show that our gated costs generalize to novel variations in object poses and scenes zero-shot, and successfully steer the base policy. Our contributions are: i) a semantic, abductive formulation of few-shot VLA correction from human-in-the-loop interventions; ii) a generate-and-test procedure that synthesizes and verifies gated costs; and iii) a test-time steering mechanism that applies and generalizes them without retraining the VLA.",
+      "url": "https://arxiv.org/html/2611.08462v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "1882e72de11dac05",
+      "section": "II Related Works",
+      "location": "II Related Works",
+      "text": "Interactive Imitation Learning. Having a human intervene when a robot is about to fail and retraining on the resulting corrective segments is a common approach for improving control policies. DAgger [ 5 ] aggregates on-policy states labeled by an expert, while HG-DAgger [ 6 ] and IWR [ 10 ] improve sample efficiency by intervening only when the policy is likely to fail and up-weighting the resulting corrective segments during retraining. SIRIUS [ 7 ] extends this paradigm to continual learning. Expert Intervention Learning [ 11 ] additionally treats pre-intervention behavior as implicit negative evidence. YAY Robot [ 12 ] incorporates semantics by training a high-level policy that produces language embeddings for a low-level policy, while OLAF [ 13 ] relabels intervened states with actions generated by a VLM conditioned on semantics to improve the base policy, requiring several dozen human corrections [ 14 ] .",
+      "url": "https://arxiv.org/html/2611.08462v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "afb617d3a67e0bf1",
+      "section": "II Related Works",
+      "location": "II Related Works",
+      "text": "However, these approaches primarily use interventions to relabel the actions and update the policy, limiting the ability of the corrections to generalize beyond the specific situations in which they were collected. In contrast, we focus on extracting a structured representation from the intervention and its associated semantics, allowing the correction to be applied to novel situations in a zero-shot manner.",
+      "url": "https://arxiv.org/html/2611.08462v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "48b361512e660698",
+      "section": "II Related Works",
+      "location": "II Related Works",
+      "text": "Failure Detection for VLAs. Detecting failures is a key first step toward recovery. To this end, SAFE [ 15 ] trains a multitask failure detector on VLA latent representations to flag anomalous or unsafe executions. FailSafe [ 16 ] similarly focuses on failure reasoning and recovery signals, identifying failure modes that can trigger intervention. Failure detection is also a central component of OopsieRecover , however, like most existing methods for failure detection [ 17 , 18 , 19 , 20 , 21 , 15 ] these approaches require additional training or fine-tuning, whereas we target the extreme data-scarce regime of learning from only a handful of corrections. We instead leverage point-sets as structured representations and guarded costs to detect when the policy is failing and steer it without requiring any additional training.",
+      "url": "https://arxiv.org/html/2611.08462v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "190f832e77ba5843",
+      "section": "II Related Works",
+      "location": "II Related Works",
+      "text": "Inferring objectives/constraints from semantics. Another line of work is that of inverse reinforcement learning (IRL), where given a (correction induced) demonstration, the goal is to infer the reward function that defines it. One-at-a-time [ 22 ] extracts the reward by weighting predefined features, and use Bayesian IRL [ 23 , 24 ] to maintain posterior over rewards. Physical-correction methods [ 25 , 26 ] similarly infer underlying objectives rather than directly imitating corrected actions. Other work uses VLMs to infer rewards [ 27 , 28 , 29 , 30 ] or constraints from observations [ 31 ] or demonstrations [ 32 ] . ReKep [ 33 ] and VoxPoser [ 34 ] further synthesize grounded spatial objectives from VLMs. Programmatic imitation learning (PRL) [ 35 , 36 ] is another data-efficient approach for representing policies as programs from few demonstrations [ 37 ] . Code as policies [ 38 ] relaxes the demonstration assumption and entirely generates the policy code using an LLM. While these works represent policies as explicit, human-interpretable programs learned from demonstrations, they typically synthesize a new policy or program de novo for each task rather than preserving a base policy. In contrast, OopsieRecover extracts a local, guarded correction that supplements a frozen, general-purpose VLA only when the relevant semantic context arises, preserving the base policy’s broader capabilities.",
+      "url": "https://arxiv.org/html/2611.08462v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "34d8934a082744b0",
+      "section": "II Related Works",
+      "location": "II Related Works",
+      "text": "Steering-based methods. One line of research focuses on steering generative policies using RL, either by autonomously steering the latent space [ 39 , 40 ] or through human-in-the-loop interventions [ 41 , 8 ] . These methods remain relatively sample-inefficient, often requiring several successful trajectories to learn an accurate Q Q -function for effectively steering the base policy. Works like RecoveryChaining [ 42 ] show direct sim2real transfer of recovery behaviors, however, they require re-training of recovery skills for every new scenario. In contrast, we focus on steering policies with as few corrections as possible, on the order of only a handful of interventions, while being able to transfer to new task instances zero-shot.",
+      "url": "https://arxiv.org/html/2611.08462v1#S2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "0b3ef6d5e8db9bfe",
+      "section": "II Related Works",
+      "location": "II Related Works",
+      "text": "An alternative to RL-based steering is to steer the base policy with a verifier in the loop. FOREWARN [ 43 ] steers the policy by training a latent dynamics model and fine-tuning a VLM to align with it, enabling the VLM to predict the outcomes of imagined trajectories in language and select the most promising one. Do What You Say [ 44 ] generates multiple candidate trajectories using a simulator and employs a VLM as a verifier to rank them against the VLA’s task-level intermediate plan. Most closely related to our work is VLS [ 45 ] , which uses a VLM to extract reward functions for each task sub-stage, then generates diverse trajectories through gradient-based guidance and ranks them according to the extracted reward functions before executing the best action sequence. V-GPS [ 46 ] , Inference-Time Policy Steering [ 47 ] , and DynaGuide [ 48 ] similarly steer pretrained policies at inference time. Unlike these approaches, OopsieRecover synthesizes, calibrates, and verifies reusable, context-gated costs from very few human interventions to steer frozen VLAs across tasks and scenes.",
+      "url": "https://arxiv.org/html/2611.08462v1#S2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "ad8f60e1eaafdc50",
+      "section": "III OopsieRecover",
+      "location": "III OopsieRecover",
+      "text": "Fig. 2: OopsieRecover : From semantic interventions to reusable VLA corrections. In OopsieRecover , a human monitors VLA execution and intervenes to provide semantic corrections: a corrective trajectory and a language description for some type of correction, c i c_{i} , ( orange ). We then synthesize the collected set of interventions for each correction type into a Semantically Grounded Gated Cost by i) parsing the sensorimotor demonstration as temporal point sets tracked on semantic scene entities, ii) generating gated costs from the motion of the point sets, and iii) verifying these costs by evaluating their capability to explain all human corrections of the same type ( blue ). During deployment ( green ), these costs determine when steering is needed and rank candidate actions using the learned corrective programs. This separates the intended correction from its demonstrated trajectory, allowing correction programs to be used in the environment where they are collected and to generalize to new situations, while the base VLA remains frozen.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "abf1a261b87f6cdb",
+      "section": "III OopsieRecover",
+      "location": "III OopsieRecover",
+      "text": "OopsieRecover learns reusable correction objectives from human interventions and uses them to steer a pretrained VLA. Figure 2 summarizes our method. A base policy π base \\pi_{\\mathrm{base}} executes a task instruction T T , while a human monitors and intervenes to provide a semantic correction: a corrective trajectory and correction semantics expressed as a free-form language description of the cause of the correction (Sec. III-A ). OopsieRecover uses these semantic corrections to synthesize programmatic spatiotemporal objectives over semantically grounded scene entities (Sec. III-C ) in the form of gated correction costs (Sec. III-B ). During subsequent execution, OopsieRecover uses the learned gated correction costs to determine when policy steering is necessary and ranks candidate actions by their predicted costs under a learned dynamics model (Sec. III-D ). Further interventions provide additional evidence for refining an existing correction when specified by the human, or introducing a new one. Throughout this process, the base VLA remains frozen, adaptation occurs through the learned correction objectives; generalization to other domains is thus achieved by using the generalization of the unaltered VLA with the transferrable nature of OopsieRecover ’s gated correction costs.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ac84a4c410baf523",
+      "section": "III-A Collecting Semantic Corrections",
+      "location": "III-A Collecting Semantic Corrections",
+      "text": "During VLA execution, a human can intervene, taking control when the robot’s behavior requires correction, providing a corrective action sequence and the correction semantics ℓ i H \\ell_{i}^{H} , and returning control to the VLA when the situation has been corrected [ 6 ] . For intervention episode i i , we record all observations and actions as an intervention record ℐ i \\mathcal{I}_{i} , which also includes, when the episode continues after the human returns control, the base-policy window W π base i W^{i}_{\\pi_{\\text{base}}} : the K K VLA-controlled steps immediately following the correction. Within an intervention, we distinguish the human-controlled window, W human i W_{\\mathrm{human}}^{i} , from a pre-intervention window, W pre i W_{\\mathrm{pre}}^{i} , the K K steps immediately preceding human takeover [ 11 , 13 , 7 ] . The pre-intervention window, though part of autonomous execution, provides evidence for the failing behavior that prompted the intervention, while the human-controlled window provides a preferred continuation from the reached state.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8ae6280fb841ea56",
+      "section": "III-A Collecting Semantic Corrections",
+      "location": "III-A Collecting Semantic Corrections",
+      "text": "After n n interventions, the accumulated intervention dataset is 𝒟 n = { ( ℐ i , ℓ i H , c i , T ) } i = 1 n \\mathcal{D}_{n}=\\left\\{(\\mathcal{I}_{i},\\ell_{i}^{H},c_{i},T)\\right\\}_{i=1}^{n} . where c i c_{i} denotes the human-provided correction type, a semantic category capturing the underlying corrective behavior. For each correction type c c , we group the corresponding records as",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "7aaf055586fda594",
+      "section": "III-A Collecting Semantic Corrections",
+      "location": "III-A Collecting Semantic Corrections",
+      "text": "𝒟 c = { ( ℐ i , ℓ i H ) : ( ℐ i , ℓ i H , c i ) ∈ 𝒟 n , c i = c } . \\mathcal{D}_{c}=\\left\\{(\\mathcal{I}_{i},\\ell_{i}^{H}):(\\mathcal{I}_{i},\\ell_{i}^{H},c_{i})\\in\\mathcal{D}_{n},\\;c_{i}=c\\right\\}. (1)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "e26e68a0ae81a926",
+      "section": "III-A Collecting Semantic Corrections",
+      "location": "III-A Collecting Semantic Corrections",
+      "text": "OopsieRecover synthesizes a unifying correction objective from each type-based group of corrective interventions. To do so, we first define a representation capable of capturing transferable intent.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "ee19236ec2fb4185",
+      "section": "III-B Corrections as Semantically Grounded Gated Costs",
+      "location": "III-B Corrections as Semantically Grounded Gated Costs",
+      "text": "Human corrections can be expressed as spatiotemporal conditions among correction-relevant entities like objects, parts, and regions. For example, when a mug collides with a coffee machine during placement, the human’s corrective action trajectory is specific to the current configuration but the intended correction is more general: maintain clearance from the machine while moving the mug toward the tray. Representing this underlying objective captures the transferable intent rather than the specific trajectory used in that single intervention, reducing the need to collect action trajectories in many situations to generalize. We formalize this idea using costs: functions over geometric relations between semantically grounded entities, rather than raw states or actions, enabling transfer across object poses and scenes. Unlike general-purpose task-objectives in prior works [ 27 , 45 , 43 ] , our costs capture behavior associated with a particular correction and should only influence execution when that correction is relevant; e.g., keeping the bottom of the mug higher than the base of the coffee machine is only necessary near placement.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d6924e7637e33480",
+      "section": "III-B Corrections as Semantically Grounded Gated Costs",
+      "location": "III-B Corrections as Semantically Grounded Gated Costs",
+      "text": "We therefore represent each correction type as a semantically-grounded gated cost (also termed a corrective program ) consisting of entity labels e e (e.g., ‘‘mug’’ and ‘‘bottom panel’’ ) and three terms: a gate, a correction term, and a task term. The gate term, C gate c ∈ 0 , 1 C^{c}_{\\mathrm{gate}}\\in{0,1} , specifies when the correction is relevant. The correction term, C correction c C^{c}_{\\mathrm{correction}} , captures the spatiotemporal relations characterizing the human’s resolution of the targeted failure, while the task term guides the policy toward actions that preserve task progress, with λ \\lambda controlling this trade-off.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "951ac7c549b38ace",
+      "section": "III-B Corrections as Semantically Grounded Gated Costs",
+      "location": "III-B Corrections as Semantically Grounded Gated Costs",
+      "text": "To ground and make such spatiotemporal costs computable from raw observations, we represent the correction-relevant entities as a tuple of entity semantic label and its associated 3D point set: ℰ i = ( e i , P i ( j ) ) \\mathcal{E}_{i}=(e_{i},P^{(j)}_{i}) , where P ( j ) ⊂ ℝ 3 P^{(j)}\\subset\\mathbb{R}^{3} . An entity can correspond to an object, a selected part, a region, or a single location. Semantic association specifies which entities participate in the correction, while their point sets provide the geometry needed to ground it and evaluate spatiotemporal relations in the current scene. Unlike an object label or a single location, a point set retains the observed spatial extent of a region, allowing costs to depend on geometry rather than only a location. Singleton sets also accommodate individual locations within the same representation, such as the nozzle of the coffee machine. The total gate cost is computed as:",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "be9e400d17e59aa6",
+      "section": "III-B Corrections as Semantically Grounded Gated Costs",
+      "location": "III-B Corrections as Semantically Grounded Gated Costs",
+      "text": "C c ​ ( ℰ ) = C gate c ​ ( ℰ ) ​ ( C correction c ​ ( ℰ ) + λ ​ C task c ​ ( ℰ ) ) . \\begin{split}C^{c}(\\mathcal{E})={}&C^{c}_{\\mathrm{gate}}(\\mathcal{E})\\Big(C^{c}_{\\mathrm{correction}}(\\mathcal{E})+\\lambda C^{c}_{\\mathrm{task}}(\\mathcal{E})\\Big).\\end{split} (2)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "fc3b4cfd99d64c4d",
+      "section": "III-C Corrective Program Synthesis and Refinement",
+      "location": "III-C Corrective Program Synthesis and Refinement",
+      "text": "For a correction identifier c c , let 𝒟 c \\mathcal{D}_{c} contain the n c ≥ 1 n_{c}\\geq 1 interventions associated with that correction. Our inference problem is to obtain an executable corrective program that captures their shared intent. We organize synthesis into four stages: i) grounding the correction-relevant scene entities, ii) proposing a gated cost, iii) calibrating a threshold for the gate score, and iv) verifying and refining that proposal using intervention evidence.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "2edd5c3fb77561c4",
+      "section": "III-C 1 Grounding relevant scene entities",
+      "location": "III-C 1 Grounding relevant scene entities",
+      "text": "The first step is to identify the entities involved in the correction and ground them with geometry in the recorded observations. For PlaceMug , these may include the mug, the obstructing machine region, and the target tray. We use the task instruction and correction description to localize these entities, then construct and track their 3D point-set representations.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0e2fd7168f44ccb3",
+      "section": "III-C 1 Grounding relevant scene entities",
+      "location": "III-C 1 Grounding relevant scene entities",
+      "text": "We prompt a VLM with the task language instruction T T , the correction semantic description ℓ H \\ell_{H} , and the visual observations at the start of the pre-intervention window ( 𝒪 W pre 0 \\mathcal{O}_{W_{\\mathrm{pre}_{0}}} ) to identify the correction-relevant scene entities ( e e ). For each entity, the VLM specifies a unique seed point 𝒦 ∈ ℝ 2 \\mathcal{K}\\in\\mathbb{R}^{2} in the image and determines whether the entity should be represented as a point set or a singleton. For entities requiring a point-set representation, we use the corresponding seed point to prompt a segmentation model [ 49 ] , obtaining a 2D region from which we sample pixels and lift them into 3D using depth maps to construct grounded 3D point sets ( 𝒫 \\mathcal{P} ). Singleton entites are instead lifted directly from their seed points and represented as individual 3D points.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d956599d64bcd8f1",
+      "section": "III-C 2 Proposing a gated cost",
+      "location": "III-C 2 Proposing a gated cost",
+      "text": "Given the grounded scene entities, we now want to generate a gated cost. In order to generate a reasonable gate and correction cost, we need the VLM to understand how the correction-relevant entities evolved over time during the pre-intervention and human-correction windows. To obtain grounded point sets throughout the pre-intervention and human correction trajectories, we track the identified regions across frames and resample pixels before projecting them into 3D at each timestep. This avoids computationally expensive and noisy tracking of individual 3D points while preserving correspondence with semantic regions identified by the VLM.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "37118fc62f1c1010",
+      "section": "III-C 2 Proposing a gated cost",
+      "location": "III-C 2 Proposing a gated cost",
+      "text": "Let 𝒫 t ( j ) \\mathcal{P}_{t}^{(j)} denote the point set corresponding to entity j j at timestep t t . Rather than providing the full sequence of point sets to the VLM, we summarize their temporal evolution using all their centroids 𝐱 t ( j ) = centroid ⁡ ( 𝒫 t ( j ) ) \\mathbf{x}_{t}^{(j)}=\\operatorname{centroid}\\!\\left(\\mathcal{P}_{t}^{(j)}\\right) over time 𝒳 pre ( j ) = { 𝐱 t ( j ) } t = t 0 t 1 \\mathcal{X}_{\\mathrm{pre}}^{(j)}=\\left\\{\\mathbf{x}_{t}^{(j)}\\right\\}_{t=t_{0}}^{t_{1}} . We denote the collection of these trajectories by 𝒳 pre \\mathcal{X}_{\\mathrm{pre}} . They provide a compact representation of the temporal evolution of the relevant scene entities while retaining their semantic correspondence across time.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3a893bb675d6c7fe",
+      "section": "III-C 2 Proposing a gated cost",
+      "location": "III-C 2 Proposing a gated cost",
+      "text": "We prompt the VLM with the task instruction T T , correction description ℓ H \\ell_{H} , the semantic entity labels e e and pre-intervention & human-correction centroid trajectories 𝒳 pre \\mathcal{X}_{\\mathrm{pre}} . The VLM synthesizes a grounded, executable cost C c C^{c} with the gate, correction, and task-specific terms in Eq. ( 2 ). The resulting corrective program is treated as an abductive interpretation of the intervention.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "8e9f5bcb330dff43",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "The proposed gated-cost specifies when and what to measure but not how much violation should count as triggering the correction; this threshold must be grounded in the evidence that motivated the intervention itself, rather than left to the VLM’s guess. We therefore calibrate the gate against the recorded pre-intervention window before using it both to verify the proposal and, later, to detect when the correction applies and steer the policy at deployment ( section III-D ).",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "65de21501045e383",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "To measure whether a state exhibits the condition addressed by correction c c , we combine its gate and correction terms into a gate score:",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a099970fcdce3fef",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "s gate c ​ ( 𝒫 ) = C gate c ​ ( 𝒫 ) ​ C correction c ​ ( 𝒫 ) . s_{\\mathrm{gate}}^{c}(\\mathcal{P})=C_{\\mathrm{gate}}^{c}(\\mathcal{P})C_{\\mathrm{correction}}^{c}(\\mathcal{P}). (3)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "2a88484a65285e61",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "For a recorded trajectory, we write s gate c , ( t ) = s gate c ​ ( 𝒫 t ) s_{\\mathrm{gate}}^{c,(t)}=s_{\\mathrm{gate}}^{c}(\\mathcal{P}_{t}) .",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "d7a880f5b948733e",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "We calibrate a threshold from a recorded pre-intervention window W pre W_{\\mathrm{pre}} :",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "26e3a185d4ca72be",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "τ gate c \\displaystyle\\tau^{c}_{\\text{gate}} = min i ∈ 𝒟 c ⁡ min t ∈ 𝒜 i c ​ s gate , i c , ( t ) , \\displaystyle=\\min_{i\\in\\mathcal{D}_{c}}\\;\\min_{t\\in\\mathcal{A}^{c}_{i}}\\;s^{c,(t)}_{\\text{gate},i}, (4) 𝒜 i c \\displaystyle\\mathcal{A}^{c}_{i} = { t ∈ W pre i : C gate c ​ ( 𝒫 t ) = 1 } . \\displaystyle=\\left\\{\\,t\\in W^{i}_{\\text{pre}}:C^{c}_{\\text{gate}}\\!\\left(\\mathcal{P}_{t}\\right)=1\\,\\right\\}.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "a5c72fb526b806e4",
+      "section": "III-C 3 Intervention-based calibration",
+      "location": "III-C 3 Intervention-based calibration",
+      "text": "This sets the threshold to the lowest gate score observed in the calibration window immediately preceding the human intervention, assuming that reaching this level of cost violation triggered the human intervention. When synthesizing a gated cost from more than one corrections ( n c > 1 n_{c}>1 ), we take the minimum over episodes Equation 4 , so the detector fires on every recorded intervention.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS3.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "0f75a34eb53820ba",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "The initial gated-cost proposal is synthesized before it is checked against the actual intervention actions and may therefore fail to capture the intended correction. The human’s recorded intervention offers a natural test for the original proposal: a correct C gate C_{\\mathrm{gate}} and C correction c C_{\\mathrm{correction}}^{c} should agree with what the human actually did. The task terms C task c C^{c}_{\\mathrm{task}} are excluded from refinement, as our verification checks target the evidence for the human correction. Given the grounded 3D point sets, we formalize this as two empirical consistency checks:",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c0fec05b531f2e5",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "Ranking check. First, we check whether the gate score ranks the human correction as an improvement over the pre-intervention behavior. We divide the recorded trajectory into equal-length windows for the pre-intervention segment, the human correction, and VLA controlled segments. For each window W W , we compute its mean gate score:",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5cd5b5f3cf87414c",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "s ¯ c ​ ( W ) = 1 | W | ​ ∑ t ∈ W s gate c , ( t ) . \\bar{s}^{c}(W)=\\frac{1}{|W|}\\sum_{t\\in W}s_{\\mathrm{gate}}^{c,(t)}. (5)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E5",
+      "kind": "table"
+    },
+    {
+      "id": "7a1e8edfe4cb35b9",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "We require s ¯ c ​ ( W pre ) > s ¯ c ​ ( W human ) \\bar{s}^{c}(W_{\\mathrm{pre}})>\\bar{s}^{c}(W_{\\mathrm{human}})",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "7ea0ab59e400b075",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "and, when the corresponding base policy’s execution window is available, s ¯ c ​ ( W pre ) > s ¯ c ​ ( W π base ) \\bar{s}^{c}(W_{\\mathrm{pre}})>\\bar{s}^{c}(W_{\\pi_{\\mathrm{base}}}) . These inequalities test whether the synthesized score assigns larger costs to the pre-intervention behavior than to the comparison segments (human correction and π base \\pi_{\\mathrm{base}} ’s execution window). Passing this check indicates that the synthesized cost is consistent with the observed correction direction, assigning lower cost to behaviors that follow or reflect the correction.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "7f8acbcbcac2e5be",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "Trigger check. Second, we require the gate score to exceed the calibrated threshold at least once within the pre-intervention segment:",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "d85d0f64618d9119",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "max t ∈ W pre ⁡ s gate c , ( t ) > τ gate c . \\max_{t\\in W_{\\mathrm{pre}}}s_{\\mathrm{gate}}^{c,(t)}>\\tau_{\\mathrm{gate}}^{c}. (6)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E6",
+      "kind": "table"
+    },
+    {
+      "id": "3905eb8516443331",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "This checks whether the calibrated trigger would activate on at least one state preceding the human intervention. Both checks concern consistency with recorded behavior; they do not guarantee that the program captures the intended correction in every possible situation.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "2de3a4517d8bd660",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "If the verification criteria are satisfied, the gated cost is accepted. Otherwise, we refine it using ( T , ℓ H , 𝒳 fail , C c , 𝒱 ) \\left(T,\\ell_{H},\\mathcal{X}_{\\mathrm{fail}},C^{c},\\mathcal{V}\\right) , where 𝒳 fail \\mathcal{X}_{\\mathrm{fail}} is the motion of the point sets in the failed segment, and 𝒱 \\mathcal{V} contains the verification evidence, including ranking failures, trigger failures, and gate-calibration failures.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "2ea129eb429a033d",
+      "section": "III-C 4 Gated cost verification and refinement",
+      "location": "III-C 4 Gated cost verification and refinement",
+      "text": "Refinement. An unsuccessful verification doesn’t mean starting over, it signals which part of the proposal could be wrong. We decompose refinement into two decisions, made sequentially within a single VLM pass: which terms need fixing, and what kind of fix each needs. First, the VLM determines which cost terms require refinement: C gate C_{\\mathrm{gate}} , C correction C_{\\mathrm{correction}} , or both. Second, for each selected term, it determines whether to modify its parameters, its logical structure, or both. The VLM then generates a revised gated-cost based on these decisions and the available evidence. We repeat verification and refinement until all criteria are satisfied or a maximum refinement budget B B is exhausted. If the budget is exhausted without passing both checks, we retain the parameters and logic from the final round. When multiple corrections share the same type, verification is performed jointly across correction episodes: the ranking and trigger checks are evaluated for each episode and combined using a logical AND ( ∧ \\land ), such that failure on any episode causes the verification round to fail and triggers further refinement. The gating threshold is calibrated jointly across episodes via Equation 4 , yielding a single threshold that must satisfy the trigger check Equation 6 for every correction of that type.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS3.SSS4.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "3f67fc4c49de71cc",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "Transferring corrections. At test time, when π b ​ a ​ s ​ e \\pi_{base} encounters a previously seen failure, we cannot simply replay the recorded correction recorded correction — it was tied to that one scene, and the new one differs. What transfers is not the trajectory but the semantics: the entities the correction referred to, such as a mug or a machine’s obstructing edge What transfers is the semantics, not the trajectory. We therefore task the VLM with re-finding these same correction-relevant entities in the new scene. To do so, the VLM predicts new seed points conditioned on the reference images with their seed points overlaid, jointly across all correction types. Each transferred seed is then expanded into a 3D point set (or singleton) and tracked as described in section III-B . For correction type c c , we compute s gate c ​ ( 𝒫 t ) s_{\\mathrm{gate}}^{c}(\\mathcal{P}_{t}) and trigger correction-based steering when s gate c ​ ( 𝒫 t ) > τ gate c s_{\\mathrm{gate}}^{c}(\\mathcal{P}_{t})>\\tau_{\\mathrm{gate}}^{c} .",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ba149646161ef3de",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "Policy Steering. When steering, we first sample K K candidate action chunks of horizon H H : { a 1 : H ( k ) } k = 1 K ∼ π base \\{a_{1:H}^{(k)}\\}_{k=1}^{K}\\sim\\pi_{\\mathrm{base}} , and roll each chunk out using a point-based dynamics model.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6b6045147b547fb5",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "𝒫 ^ 1 : H ( k ) = f dyn ( 𝒫 0 , a 1 : H ( k ) ) , J ( k ) = ∑ h = 1 H γ h − 1 C guard c ( 𝒫 ^ h ( k ) ) . \\widehat{\\mathcal{P}}_{1:H}^{(k)}=f_{\\mathrm{dyn}}\\left(\\mathcal{P}_{0},a_{1:H}^{(k)}\\right),J^{(k)}=\\sum_{h=1}^{H}\\gamma^{h-1}C_{\\mathrm{guard}}^{c}\\left(\\widehat{\\mathcal{P}}_{h}^{(k)}\\right). (7)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E7",
+      "kind": "table"
+    },
+    {
+      "id": "b86f5c6b0c601c24",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "Here, 𝒫 0 \\mathcal{P}_{0} denotes the current point sets, f dyn f_{\\mathrm{dyn}} is the dynamics model, and γ ∈ [ 0 , 1 ) \\gamma\\in[0,1) is the discount factor which places greater weight on cost violations occurring earlier in the rollout.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "3160bdd543a40888",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "Given these predictions 𝒫 ^ \\widehat{\\mathcal{P}} , we rank the candidate action chunks according to their predicted gated costs and select the lowest-cost candidate for execution:",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS4.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "0a81bdd2aa029d0c",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "k ⋆ = arg ​ min k ∈ { 1 , … , K } J ( k ) , a 1 : H ⋆ = a 1 : H ( k ⋆ ) . k^{\\star}=\\operatorname*{arg\\,min}_{k\\in\\{1,\\ldots,K\\}}J^{(k)},\\qquad a_{1:H}^{\\star}=a_{1:H}^{(k^{\\star})}. (8)",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.E8",
+      "kind": "table"
+    },
+    {
+      "id": "105c8f0cc2b56f36",
+      "section": "III-D Correction-Guided Policy Steering",
+      "location": "III-D Correction-Guided Policy Steering",
+      "text": "To increase action diversity, we optionally augment the candidate set with cardinal actions [ 41 ] . While other approaches can be used to generate diverse candidate chunks [ 40 , 45 ] , we use cardinal actions for their simplicity. Further, if multiple corrections are triggered simultaneously, we rank candidate chunks using the weighted sum of their active steering costs, allowing all triggered corrections to jointly influence action selection. We use the physics from the simulator as f dyn f_{\\mathrm{dyn}} for our simulation experiments, and a grasp-based dynamics model for real world experiments.",
+      "url": "https://arxiv.org/html/2611.08462v1#S3.SS4.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "09f48fc914a7f0e7",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Fig. 3: Simulation and real-world tasks. We evaluate a diverse set of tasks that elicit different types of corrections; avoiding collisions, improving placement precision, and correctly articulating objects.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "bca30a346eaee0e3",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Fig. 4: Distribution of success/task-progress across difficulty levels ℒ 0 \\mathcal{L}_{0} – ℒ 2 \\mathcal{L}_{2} (left–right), pooled over three tasks. Top (Sim) : zero-shot success rates; CLD letters (STEP, 95% confidence) mark statistical separation, shared letters indicate no significant difference; OopsieRecover leads or ties for best at every level. Bottom (Real) : real-world task-progress scores; OopsieRecover outperforms the next-best baseline by at least 60 % 60\\% and is statistically separated at ℒ 0 \\mathcal{L}_{0} and ℒ 2 \\mathcal{L}_{2} .",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "ec0f1705bd85689d",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "We aim to answer three questions with our experiments:",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "64a5686d0b9e5618",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Q1. Can OopsieRecover learn from a small number of human corrections and generalize to new scenarios? Simulation Experiments: We first evaluate the zero-shot generalization of OopsieRecover in simulation using the RoboCasa benchmark [ 50 ] . We consider three tasks: CoffeeMugSetup , BlenderLid , and StartKettle , as illustrated in Figure 3 . For all experiments, we use a π 0.5 \\pi_{0.5} [ 1 ] VLA policy finetuned on the full RoboCasa dataset [ 51 ] . For each task, we evaluate all methods under three levels of scene and object-pose variation to assess generalization: ℒ 0 \\mathcal{L}_{0} uses the same reset state in which the correction was collected; ℒ 1 \\mathcal{L}_{1} uses different initial object poses within the same scene; and ℒ 2 \\mathcal{L}_{2} uses different initial object poses in unseen scenes. We collect 5 5 – 8 8 corrections per task sequentially, one per round, with policy execution in each round steered by all corrections collected in previous rounds. All correction-based baselines are trained on this same data. The baselines are:",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2422ce84d6a01e13",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "π 0.5 \\pi_{0.5} : The base π 0 \\pi_{0} policy finetuned on the full RoboCasa dataset, without inference-time steering.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3e73647484c73d21",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "HG-DAgger ∗ : A variant of human-gated DAgger [ 6 ] that uses the same human intervention data collected for OopsieRecover . We LoRA-finetune π 0.5 \\pi_{0.5} on the full set of collected interventions for 20K iterations.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c366b3e7be7da387",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "OLAF : A re-implementation of OLAF [ 13 ] , where π 0.5 \\pi_{0.5} is finetuned on intervention data in which the pre-intervention actions are relabeled by a VLM.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d815d09ffbdf9fae",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "VLS [ 45 ] : An inference-time steering method that extracts a differentiable reward function. Unlike OopsieRecover , it relies solely on the task description to generate the reward function, whereas we use human corrections to learn correction programs.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.I1.i4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "68969e7c1482b24d",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Results. Figure 4 (top) shows zero-shot generalization across the three simulation tasks. Statistical significance is determined using the STEP test [ 52 ] , with compact letter displays (CLD) [ 53 ] denoting significantly different groups at a global confidence level of 95%. Each method is evaluated over 50 episodes, with 5–8 corrections collected per task. The base policy, π 0.5 \\pi_{0.5} , performs poorly across. Finetuning with the collected interventions ( HG-DAgger ∗ * ) improves ℒ 0 \\mathcal{L}_{0} success by 40%, but fails to generalize to ℒ 1 \\mathcal{L}_{1} and ℒ 2 \\mathcal{L}_{2} , where the initial state differs from the correction scenarios. OLAF generally underperforms HG-DAgger ∗ * , as the raw actions selected by the VLM are often inaccurate. Similarly, VLS fails to generalize, as the task rewards provide insufficient signal to effectively steer the policy, resulting in failures such as collisions. These failures highlight where additional correction supervision is needed to learn more informative costs. In contrast, OopsieRecover achieves strong performance in ℒ 0 \\mathcal{L}_{0} while also generalizing to ℒ 1 \\mathcal{L}_{1} and ℒ 2 \\mathcal{L}_{2} zero-shot. The CLD analysis confirms this generalization, with OopsieRecover forming its own statistically separated top-performing group at both difficulty levels. This demonstrates that OopsieRecover learns transferable corrective behaviors rather than overfitting to the correction scenarios.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "86fa59f50fe943d1",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Real World Experiments: We use the DROID hardware setup [ 54 ] and the official DROID checkpoint of OpenPI ( π 0 ​ .5 \\pi_{0}.5 ). We consider three tasks, Put Croffle , Load Coffee Pod , and Shelve item ( Figure 3 ). Each of these tasks introduces diverse failure modes like misalignment on grasps and placements, being unable to close the lid, toppling fragile objects, etc. In total, we use 3 − 6 3-6 semantic corrections for each task across all correction types. We again evaluate on the three levels of ℒ 0 \\mathcal{L}_{0} , ℒ 1 \\mathcal{L}_{1} and ℒ 2 \\mathcal{L}_{2} . Each evaluation is done for 20 rollouts. We consider two baselines: π 0.5 \\pi_{0.5} and HG-DAgger ∗ . We report task progress rather than only binary task success.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "ba21d93ee4cade1d",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Figure 4 (bottom) shows the real-world task-progress results. Since real-world evaluation uses partial task-progress (fraction of stages completed) rather than binary success, statistical significance is instead determined based on the NSCORE sequential test [ 55 ] , again reported via CLD at a global confidence level of 95%. We find that OopsieRecover outperforms HG-DAgger ∗ by at least 60 % 60\\% on task progress at every difficulty level tested and is statistically separated as the sole best method at ℒ 0 \\mathcal{L}_{0} and ℒ 2 \\mathcal{L}_{2} , tying with π 0 ​ .5 \\pi_{0}.5 at ℒ 1 \\mathcal{L}_{1} .",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "0351ce66014420ad",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Fig. 5: Scaling with number of corrections . On CoffeeMug , OopsieRecover rapidly reaches an 84 % 84\\% success rate with as few as 8 corrections , while HG-DAgger ∗ achieves only 28 % 28\\% despite using three times as many corrections.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c7339eba88c2ac9d",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Q2. How does the performance of OopsieRecover scale with the number of corrections provided? We conduct the experiment over multiple rounds, following the standard iterative setup of DAgger on the CoffeeMug task. In each round, OopsieRecover receives only one semantically annotated correction, while HG-DAgger ∗ receives ten. We report OopsieRecover after each round up to round 10, followed by two additional batches of ten corrections, for a total of 20 and 30 corrections. This enables comparison with HG-DAgger ∗ at matched correction counts of 10, 20, and 30. At every checkpoint, OopsieRecover updates its behavior by steering with the accumulated corrections, whereas HG-DAgger ∗ is fine-tuned according to the procedure outlined in the previous section. We collect corrections in randomly sampled scenes from ℒ 1 \\mathcal{L}_{1} and evaluate both methods on a held-out test set of 25 scenes with ℒ 1 \\mathcal{L}_{1} randomization. We find that OopsieRecover rapidly improves performance, reaching 84% success with just 8 corrections before saturating without degradation as additional corrections are added. In contrast, HG-DAgger ∗ improves much more slowly, reaching only 28% success with the same number of corrections.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "04e5098bfd0e9e6c",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Q3. Can learned correction programs generalize across scenes to detect and prevent the same failure mode?",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "41f32d01849959d3",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "To evaluate generalization of learned correction programs, we conduct a controlled experiment using the correction type “avoid colliding with the steam handle” from the CoffeeMug task. We learn the corrective program from a single correction episode and test its performance across 10 novel scenes. In each trial, we induce the targeted failure by teleoperating the robot toward the steam handle, and then evaluate whether (a) the correction detector triggers, and (b) whether correction-guided steering prevents the failure over 100 environment steps. In all 10 trials, the correction detector successfully triggers, and correction-guided steering prevents the targeted failure, resulting in a 100% failure-prevention rate. These results demonstrate that the learned correction program generalizes to novel scenes and enables effective failure prevention beyond the training environment.",
+      "url": "https://arxiv.org/html/2611.08462v1#S4.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "bf2848f0b182e44f",
+      "section": "V Limitations",
+      "location": "V Limitations",
+      "text": "OopsieRecover targets corrections expressible as spatial conditions over semantically grounded point sets; its correction representation does not explicitly encode contact forces or unobserved physical properties. Its effectiveness depends on reliable scene grounding, point-set tracking, and motion prediction, so perception and dynamics errors can affect both when steering is triggered and which actions are selected. However, our results with HG-DAgger indicates a promising avenue: distill the corrective behaviors from OopsieRecover into a image-to-action policy refinement. Steering selects among a finite set of sampled action chunks and cannot guarantee recovery when this set lacks an effective corrective behavior. Finally, the ranking and trigger checks assess consistency with recorded interventions rather than guaranteeing that the inferred program captures the intended correction in every situation.",
+      "url": "https://arxiv.org/html/2611.08462v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6b89e59fd4f7a410",
+      "section": "VI Conclusion",
+      "location": "VI Conclusion",
+      "text": "We presented OopsieRecover , a framework that learns transferable corrections for frozen VLAs from a handful of semantically annotated human interventions. It uses abduction to synthesize context-gated costs over semantically grounded 3D point sets, which determine when steering is needed and rank candidate actions by their predicted consequences. Experiments in simulation and the real world show improved execution and transfer across object-pose and scene variations without additional corrective data. Compared to HG-DAgger ∗ , OopsieRecover achieves higher success with fewer interventions, supporting reusable corrective intent as a data-efficient alternative to directly imitating corrective actions.",
+      "url": "https://arxiv.org/html/2611.08462v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7bb465d5967e516d",
+      "section": "VII Acknowledgments",
+      "location": "VII Acknowledgments",
+      "text": "This work was conducted in the Robot Interactive Intelligence (RobIn) Lab at The University of Texas at Austin and was supported in part by TRI (R-YFR-04-Martin-Martin), the National Science Foundation (CAREER FAIN 2543745), the NVIDIA Academic Grant Program, Amazon, and DARPA TIAMAT program (HR0011-24-9-0428). The views and conclusions contained herein are those of the authors and should not be interpreted as necessarily representing the official policies or endorsements, either expressed or implied, of the U.S. Government, or any sponsor.",
+      "url": "https://arxiv.org/html/2611.08462v1#S7.p1.1",
+      "kind": "p"
+    }
+  ]
+}

@@ -1,0 +1,503 @@
+{
+  "id": "191be1a7ece1ed2af4661bd09df4726898794e54cdc7c444a139ffeedcc3cd44",
+  "url": "https://arxiv.org/html/2611.07463v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "6430700b6bfb58e2",
+      "section": "FREE-LIVO: Physically Decoupled Yet Tightly Coupled LiDAR-Inertial-Visual Odometry",
+      "location": "FREE-LIVO: Physically Decoupled Yet Tightly Coupled LiDAR-Inertial-Visual Odometry",
+      "text": "LiDAR-Inertial-Visual Odometry (LIVO) integrates complementary LiDAR, camera, and IMU measurements to achieve robust state estimation. However, most existing methods assume a fixed relative pose and accurate time synchronization between sensors. Toward modular and heterogeneous robotic systems, this paper presents FREE-LIVO, a tightly coupled odometry method that requires neither a rigid LiDAR–camera rig nor LiDAR–camera time synchronization. The proposed method uses a pretrained image feature matcher to establish correspondences between a camera image and a dense LiDAR intensity image generated from a single LiDAR scan using a generative model. From the resulting 3D point-to-pixel correspondences, we construct reprojection factors that directly constrain LiDAR and camera poses at different acquisition times. These factors are jointly optimized in a single factor graph together with constraints from point cloud registration, visual feature tracking, and the IMU measurements associated with each sensor. On six sequences from the public M3DGR dataset, FREE-LIVO achieves an average absolute trajectory error (ATE) RMSE of 0.45 m without provided LiDAR–camera extrinsic parameters and exhibits minimal accuracy degradation under time synchronization errors of up to 0.5 s. Furthermore, experiments with the LiDAR and camera mounted on separate robots demonstrate that the method can jointly estimate the trajectories of independently moving sensors.",
+      "url": "https://arxiv.org/html/2611.07463v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "69aaea650fce7620",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Robust localization and mapping are important for autonomous systems. LiDARs and cameras are among the most commonly used sensors for this purpose. LiDAR directly measures 3D geometry, but geometric degeneracy can limit localization accuracy. Cameras provide rich appearance information and long-range visual observations, but visual localization is sensitive to illumination changes and low-texture conditions. LiDAR-Inertial-Visual Odometry (LIVO) integrates complementary LiDAR, camera, and IMU measurements to achieve robust state estimation in various environments.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "105157fad91d384f",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "However, most existing LIVO systems assume that the LiDAR, camera, and IMU are rigidly mounted on a common platform with known extrinsic parameters and accurate time synchronization. As robotic systems become increasingly modular and heterogeneous, sensors can instead be mounted on independently moving actuators or mobile sensing units, or even distributed across separate robots. In these configurations, the LiDAR–camera relative pose changes over time and strict synchronization may not be available, invalidating the assumptions of conventional LIVO. Although several methods use cross-modal LiDAR–camera matching for global localization or place recognition [ 1 , 2 , 3 , 4 ] , using such matching to continuously connect independently moving sensor trajectories for odometry remains challenging.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "9f9766a5c95c4a68",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "In this work, we propose FREE-LIVO, a robust, tightly coupled LIVO method that does not require a fixed LiDAR–camera rig or LiDAR–camera time synchronization. To make LiDAR–camera matching easier, we use the generative-model-based LiDAR intensity image upsampling method [ 5 ] . The proposed method introduces a LiDAR–camera reprojection factor that computes the reprojection error between a projected 3D LiDAR point and its corresponding pixel in the camera image. This factor jointly constrains the LiDAR and camera poses directly from point-to-pixel correspondences. While the system allows the LiDAR and camera to be physically decoupled and unsynchronized, the proposed system is based on a tight coupling of LiDAR, camera, and IMU constraints, meaning that the raw observations from these sensors are fused in a single factor graph.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "f07d524bc8224969",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Through experiments, we show that the proposed method can flexibly integrate observations from physically decoupled and unsynchronized LiDAR and camera setups to achieve stable trajectory estimation. On public datasets, we show that the proposed method achieves accuracy comparable to state-of-the-art LIVO methods without using known LiDAR–camera transformations and does not require LiDAR–camera time synchronization. We also demonstrate that the method can estimate the sensor trajectories even when the LiDAR and camera are mounted on separate robots and their relative pose changes continuously.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "05a5bd1d50b08028",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Fig. 1: FREE-LIVO estimation results with a physically decoupled LiDAR and camera. (a) The LiDAR and camera are held in separate hands. (b) A colored point cloud generated using the estimated sensor poses. (c) Jointly estimated trajectories of the independently moving LiDAR and camera.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d4783bf424214a1d",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "The main contributions of this work are three-fold:",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "99a7871feddf02ee",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We propose a tightly coupled LiDAR-inertial-visual odometry method that does not require a fixed rig or LiDAR–camera time synchronization. This enables operation without accurate LiDAR–camera extrinsic calibration and even with only software-level time synchronization, allowing the LiDAR and camera to be placed and moved independently, including on separate robots.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b928d599c9a098d6",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We propose a factor graph architecture that uses LiDAR–camera correspondences obtained by matching an upsampled dense intensity image from a single LiDAR scan with an RGB image using a pretrained feature matcher.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "898984f85de120d7",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We demonstrate through experiments that the proposed method achieves accuracy comparable to that of other methods with externally provided parameters, suffers minimal degradation even when LiDAR–camera time synchronization is not available, and provides stable trajectory estimation even when the LiDAR and camera are mounted on completely independent robots.",
+      "url": "https://arxiv.org/html/2611.07463v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0e62a7ff82e17788",
+      "section": "II-A LiDAR-Inertial and Visual-Inertial Odometry",
+      "location": "II-A LiDAR-Inertial and Visual-Inertial Odometry",
+      "text": "Most LiDAR-Inertial Odometry (LIO) and Visual-Inertial Odometry (VIO) methods are either filtering-based or optimization-based. Filtering-based methods sequentially update the state using sensor measurements. Representative examples include FAST-LIO2 [ 6 ] for LIO and OpenVINS [ 7 ] for VIO. Optimization-based methods jointly estimate multiple states in a sliding window or factor graph. FORM [ 8 ] and GLIM [ 9 ] use this approach for LIO, while VINS-Mono [ 10 ] and Kimera [ 11 ] use it for VIO. Both LIO and VIO depend on constraints obtained from their main sensor. LIO can lose accuracy in environments with limited geometric constraints, such as long corridors and tunnels. VIO can become unstable in dark or low-texture environments, under lighting changes, or during motion blur. Either system can fail when its main sensor measurements provide insufficient constraints, and thus the complementary fusion of different sensor modalities has been studied to enhance the robustness of these systems.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "be259432a40435fd",
+      "section": "II-B LiDAR-Inertial-Visual Odometry",
+      "location": "II-B LiDAR-Inertial-Visual Odometry",
+      "text": "LIVO combines LiDAR, camera, and IMU measurements to improve robustness when LiDAR geometry or image texture is insufficient. LIC-Fusion 2.0 [ 12 ] tracks LiDAR plane features in a sliding window and combines them with camera and IMU measurements. LVI-SAM [ 13 ] combines LIO and VIO subsystems through a factor graph, while FAST-LIVO2 [ 14 ] , R3LIVE [ 15 ] , and LVIO-Fusion [ 16 ] fuse LiDAR, camera, and IMU measurements for robust state estimation. Recent methods also use Gaussian Splatting [ 17 , 18 ] or adjust sensor weights according to the environment [ 19 , 20 ] . CLIC [ 21 ] uses a continuous-time trajectory to combine LiDAR, camera, and IMU measurements with different sampling rates.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c4d96cd7feb765c3",
+      "section": "II-B LiDAR-Inertial-Visual Odometry",
+      "location": "II-B LiDAR-Inertial-Visual Odometry",
+      "text": "Although these LIVO methods achieve robust state estimation across diverse environments and situations, most of them assume accurate calibration of LiDAR–camera extrinsic parameters and time synchronization. Even small errors in these parameters can misalign LiDAR measurements and image pixels, weakening the cross-modal constraints and degrading state estimation accuracy [ 14 , 21 ] . However, these assumptions do not hold for systems that use only approximate extrinsic calibration and software-level time synchronization. R3LIVE [ 15 ] estimates the relative pose and time offset between the LiDAR and camera but assumes that both remain constant. In contrast, our method introduces robust cross-modal LiDAR–camera data association based on generative sensor modality conversion and does not assume a fixed sensor rig or accurate time synchronization.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "db1880c0b9d21d82",
+      "section": "II-C Cross-Modal LiDAR-Visual Matching",
+      "location": "II-C Cross-Modal LiDAR-Visual Matching",
+      "text": "Global Localization and Place Recognition LiDAR point cloud and camera image matching has been studied for global localization and place recognition. These tasks estimate the current location by matching a camera image with a prebuilt LiDAR map. Because camera images and LiDAR point clouds have very different data representations, many methods use deep learning to map both into a common feature space. Cattaneo et al. [ 1 ] use separate networks for 2D images and 3D point clouds. They learn a shared embedding in which features from the same place are close to each other. ( L ​ C ) 2 (LC)^{2} [ 2 ] generates a disparity image from a camera image and converts a LiDAR scan into a range image. It extracts localization descriptors from both images and adds the best match to a pose graph as a loop factor. LIP-Loc [ 3 ] trains image and LiDAR encoders using contrastive learning. It retrieves the place in a LiDAR map that corresponds to a camera image. C2L-PR [ 4 ] generates a semantic point cloud from a camera image to reduce the modality gap. It then retrieves the corresponding place from a prebuilt LiDAR database.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "38d9b655a410bcca",
+      "section": "II-C Cross-Modal LiDAR-Visual Matching",
+      "location": "II-C Cross-Modal LiDAR-Visual Matching",
+      "text": "These methods compare global features from images and point clouds to retrieve corresponding places or detect loop closure candidates. Therefore, they do not perform continuous pose estimation based on point or pixel-level correspondences. In contrast, our method finds fine-grained correspondences between individual LiDAR and camera features and estimates the LiDAR and camera poses through factor graph optimization, enabling accurate odometry estimation.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d7c6ff9875059299",
+      "section": "II-C Cross-Modal LiDAR-Visual Matching",
+      "location": "II-C Cross-Modal LiDAR-Visual Matching",
+      "text": "Fig. 2: Overview of FREE-LIVO. Upsampled LiDAR intensity images are matched with camera images to obtain 2D–3D correspondences. These are integrated with LiDAR, visual, and IMU constraints in a single factor graph to jointly estimate sensor trajectories without a fixed LiDAR–camera rig or time synchronization.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7c01b2247b09c3d3",
+      "section": "II-C Cross-Modal LiDAR-Visual Matching",
+      "location": "II-C Cross-Modal LiDAR-Visual Matching",
+      "text": "Image-to-Point Cloud Matching DeepI2P [ 22 ] , CorrI2P [ 23 ] , and 2D3D-MATR [ 24 ] match LiDAR point clouds with camera images. Using deep learning, these methods can establish correspondences between LiDAR point clouds and camera images. These methods require training on large datasets with ground-truth LiDAR–camera correspondences.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2269f2d51cf867fd",
+      "section": "II-C Cross-Modal LiDAR-Visual Matching",
+      "location": "II-C Cross-Modal LiDAR-Visual Matching",
+      "text": "Tabata et al. [ 5 ] proposed a method for matching LiDAR point clouds with camera images using LiDAR intensity upsampling. This method establishes correspondences between LiDAR point clouds and camera images using a pretrained image feature matcher. Because it employs self-supervised pretraining on camera image datasets, this method does not require training on large LiDAR datasets.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "1e9ea48e3d9cbd6e",
+      "section": "II-C Cross-Modal LiDAR-Visual Matching",
+      "location": "II-C Cross-Modal LiDAR-Visual Matching",
+      "text": "We propose a method that uses the correspondences obtained from Tabata et al. [ 5 ] in a tightly coupled LIVO system. This enables sensor fusion based on accurate LiDAR–camera matching without requiring large amounts of costly-to-collect LiDAR training data.",
+      "url": "https://arxiv.org/html/2611.07463v1#S2.SS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "b38f5f7905a9ec09",
+      "section": "III-A Proposed Pipeline",
+      "location": "III-A Proposed Pipeline",
+      "text": "The pipeline of the proposed FREE-LIVO framework is shown in Fig. 2 . The pipeline mainly consists of LiDAR-IMU preprocessing, camera-IMU preprocessing, image-to-point-cloud matching, and factor graph optimization. The LiDAR frame L L and the camera frame C C do not need to be fixed to the same rigid body. They can move independently, and they do not need to be synchronized.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "90bd75b725f31572",
+      "section": "III-A Proposed Pipeline",
+      "location": "III-A Proposed Pipeline",
+      "text": "In LiDAR-IMU preprocessing, the LiDAR scan 𝒫 i = { ( 𝒑 i ​ k L , ℓ i ​ k ) } k = 1 N i \\mathcal{P}_{i}=\\{({}^{L}\\boldsymbol{p}_{ik},\\ell_{ik})\\}_{k=1}^{N_{i}} is downsampled and deskewed using IMU data, where 𝒑 i ​ k L ∈ ℝ 3 {}^{L}\\boldsymbol{p}_{ik}\\in\\mathbb{R}^{3} and ℓ i ​ k ∈ ℝ \\ell_{ik}\\in\\mathbb{R} are a 3D point in L L and its intensity, respectively. In camera-IMU preprocessing, the motion of image features in the camera image ℐ j \\mathcal{I}_{j} is estimated using optical flow. The LiDAR and camera preprocessing modules respectively generate LiDAR-to-LiDAR and camera-to-camera correspondences, which are later fused on a factor graph. Image-to-point-cloud matching first projects the sparse LiDAR scan 𝒫 i \\mathcal{P}_{i} into a sparse LiDAR intensity image ℐ i L \\mathcal{I}_{i}^{L} , then upsamples it to a dense LiDAR intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} , and finally matches the dense image with the camera image ℐ j \\mathcal{I}_{j} . The resulting 2D–3D LiDAR–camera correspondences ℳ i ​ j = { ( 𝒑 i ​ k L , 𝒛 j ​ k ) } k = 1 K i ​ j \\mathcal{M}_{ij}=\\{({}^{L}\\boldsymbol{p}_{ik},\\boldsymbol{z}_{jk})\\}_{k=1}^{K_{ij}} , where 𝒛 j ​ k ∈ ℝ 2 \\boldsymbol{z}_{jk}\\in\\mathbb{R}^{2} is a pixel in ℐ j \\mathcal{I}_{j} , are incorporated into the same factor graph. The factor graph optimization jointly minimizes errors from LiDAR-to-LiDAR, camera-to-camera, camera-to-LiDAR and IMU constraints to estimate the LiDAR pose 𝑻 L i W {}^{W}\\boldsymbol{T}_{L_{i}} and camera pose 𝑻 C j W {}^{W}\\boldsymbol{T}_{C_{j}} in the common world frame W W .",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "1352c176c69fa002",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "(a) Sparse LiDAR intensity (b) Dense LiDAR intensity (c) Matching result",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.F3.1",
+      "kind": "table"
+    },
+    {
+      "id": "1d35bb3d3bbcc893",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "Fig. 3: LiDAR–camera matching. (a) Sparse intensity image from a single LiDAR scan. (b) Dense intensity image generated by Conditional Rectified Flow. (c) Feature correspondences between the dense intensity image and the camera image.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "8215b7df1c924807",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "The LiDAR intensity image ℐ i L \\mathcal{I}_{i}^{L} and the camera image ℐ j \\mathcal{I}_{j} exhibit different appearance patterns, but they share geometric structures such as edges and corners. These structures allow us to find correspondences using image feature matching [ 25 ] . However, direct matching is difficult because the intensity image ℐ i L \\mathcal{I}_{i}^{L} from a single LiDAR scan is sparse. Therefore, we first apply a generative-model-based upsampling method [ 5 ] to the sparse LiDAR intensity image ℐ i L \\mathcal{I}_{i}^{L} shown in Fig. 3 (a) and obtain the dense intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} shown in Fig. 3 (b). As shown in Fig. 3 (c), we then match the dense intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} with the camera image ℐ j \\mathcal{I}_{j} using a pretrained feature matcher. We obtain the 2D–3D correspondences ℳ i ​ j \\mathcal{M}_{ij} by associating the matched pixels with the available LiDAR depth.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "1167a1dacdfaeb74",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "LiDAR Intensity Image Upsampling We use Conditional Rectified Flow [ 26 ] to generate the dense intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} from the sparse intensity image ℐ i L \\mathcal{I}_{i}^{L} . Conditional Rectified Flow represents the process from Gaussian noise to the dense intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} as a velocity field generated by a neural network. We project the LiDAR scan 𝒫 i \\mathcal{P}_{i} into the sparse intensity image ℐ i L \\mathcal{I}_{i}^{L} using virtual camera parameters, and use ℐ i L \\mathcal{I}_{i}^{L} as the condition. The neural network 𝑽 θ \\boldsymbol{V}_{\\theta} with parameters θ \\theta predicts the velocity from the current image state 𝑿 k \\boldsymbol{X}_{k} , the sparse condition image ℐ i L \\mathcal{I}_{i}^{L} , and the time t k t_{k} . We integrate the predicted velocity over time with the Euler method at each generation step to generate the dense intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} .",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "03e9e0fb185b897b",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "𝑿 k + 1 = 𝑿 k + 𝑽 θ ​ ( 𝑿 k , ℐ i L , t k ) ​ Δ ​ t , t k = k ​ Δ ​ t . \\boldsymbol{X}_{k+1}=\\boldsymbol{X}_{k}+\\boldsymbol{V}_{\\theta}\\!\\bigl(\\boldsymbol{X}_{k},\\,\\mathcal{I}_{i}^{L},\\,t_{k}\\bigr)\\,\\Delta t,\\quad t_{k}=k\\,\\Delta t. (1)",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "b8162e0207248523",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "Training the network requires pairs of intensity images from one LiDAR scan and dense LiDAR intensity images. Collecting such paired data at scale is challenging due to their limited availability. Therefore, we train the network in two stages: pretraining and fine-tuning. In pretraining, we apply online masking to a large RGB image dataset and train the network to restore the original images. This pretraining gives the network a general ability to reconstruct missing image content from sparse inputs. We then fine-tune the network with a small number of paired sparse and dense LiDAR intensity images. This allows it to learn the features of LiDAR intensity images. As a result, the network can generate dense LiDAR intensity images without overfitting, even with very little real LiDAR data. The pretraining dataset contains 2.4 million images from GSV-Cities [ 27 ] , Places365 [ 28 ] , and MIT Indoor67 [ 29 ] . The in-house fine-tuning dataset consists of 80 outdoor and indoor point clouds collected using a Livox AVIA.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "72418db0bafd8109",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "Fig. 4: Sliding-window factor graph of FREE-LIVO. LiDAR–camera reprojection factors connect the LiDAR and camera state sequences. States outside the optimization window are marginalized. For clarity, only factors involving the latest LiDAR or camera state are shown.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "74cf3f23dff2868f",
+      "section": "III-B Image-to-Point Cloud Matching",
+      "location": "III-B Image-to-Point Cloud Matching",
+      "text": "Feature Matching We estimate 2D-2D correspondences between the dense intensity image ℐ ^ i L \\hat{\\mathcal{I}}_{i}^{L} and the camera image ℐ j \\mathcal{I}_{j} using a pretrained feature matcher. Our method is agnostic to image matching algorithms, so any matching algorithm can be used. In this work, we employ SuperPoint [ 30 ] and LightGlue [ 31 ] to balance matching accuracy and computational efficiency. For LightGlue, we use the MINIMA weights [ 32 ] , which were fine-tuned for multi-modal matching. We found that this setting performed better at matching RGB camera images with LiDAR intensity images than the other tested matchers, including LightGlue with its standard weights, SuperGlue [ 33 ] , and XoFTR [ 34 ] . We use the resulting 2D-2D correspondences to estimate the 2D–3D correspondences ℳ i ​ j \\mathcal{M}_{ij} between the LiDAR scan 𝒫 i \\mathcal{P}_{i} and the camera image ℐ j \\mathcal{I}_{j} . The correspondences ℳ i ​ j \\mathcal{M}_{ij} are obtained from the 2D-2D correspondences and the LiDAR depth data. However, only the intensity image ℐ i L \\mathcal{I}_{i}^{L} is upsampled, so depth data is not available at every matched pixel. Therefore, we use only matches with depth data within 5 pixels and discard the other matches.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "3fbdb0fb037c6f68",
+      "section": "III-C 1 Factor Graph Structure",
+      "location": "III-C 1 Factor Graph Structure",
+      "text": "Figs. 4 and 5 show the overall factor graph structure and the factor graph during operation, respectively. The factor graph consists of three parts: one for standard LiDAR–IMU odometry, one for visual–IMU odometry, and one connecting the two. The consecutive LiDAR states are connected by point cloud registration factors and IMU preintegration factors [ 35 ] from LiDAR–inertial odometry. The consecutive camera states are connected by structure-less visual reprojection factors (smart factors) [ 36 ] and IMU preintegration factors from visual–inertial odometry. The LiDAR and camera state sequences are created independently, but they are connected by LiDAR–camera reprojection factors based on the correspondences ℳ i ​ j \\mathcal{M}_{ij} from image-to-point cloud matching. These factors couple the matched poses 𝑻 L i W {}^{W}\\boldsymbol{T}_{L_{i}} and 𝑻 C j W {}^{W}\\boldsymbol{T}_{C_{j}} even when they have different timestamps, and one pose can have multiple matches. Therefore, the method does not need to include a fixed LiDAR–camera relative pose or a constant time offset as a state.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cc30b2270afd8509",
+      "section": "III-C 1 Factor Graph Structure",
+      "location": "III-C 1 Factor Graph Structure",
+      "text": "Fig. 5: Factor graph during operation. LiDAR–camera reprojection factors connect the LiDAR and camera trajectories. The colored point clouds show the reprojection points used by these factors.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f46350baea8cdd89",
+      "section": "III-C 2 LiDAR-Inertial Odometry",
+      "location": "III-C 2 LiDAR-Inertial Odometry",
+      "text": "We use the odometry estimation module of GLIM [ 9 ] as the LIO part. For each LiDAR frame, we estimate the pose, velocity, and IMU bias. In preprocessing, we integrate the IMU measurements between two LiDAR frames and compensate for the sensor motion during the LiDAR scan. We add an IMU preintegration factor between consecutive LiDAR states and a random-walk factor between their IMU bias states [ 35 ] . We add point cloud registration factors [ 37 ] that directly evaluate the VGICP matching cost [ 38 ] between the current LiDAR scan 𝒫 i \\mathcal{P}_{i} and previous LiDAR scans as a function of their poses. For the current scan 𝒫 i \\mathcal{P}_{i} and a previous scan 𝒫 i ′ \\mathcal{P}_{i^{\\prime}} , the error is written as",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8ef3ad75d3b81b5a",
+      "section": "III-C 2 LiDAR-Inertial Odometry",
+      "location": "III-C 2 LiDAR-Inertial Odometry",
+      "text": "E i ​ i ′ pc = E VGICP ​ ( 𝒫 i ′ , 𝒫 i , ( 𝑻 L i ′ W ) − 1 ​ 𝑻 L i W ) , E_{ii^{\\prime}}^{\\mathrm{pc}}=E_{\\mathrm{VGICP}}\\!\\left(\\mathcal{P}_{i^{\\prime}},\\mathcal{P}_{i},({}^{W}\\boldsymbol{T}_{L_{i^{\\prime}}})^{-1}{}^{W}\\boldsymbol{T}_{L_{i}}\\right), (2)",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "6a853d12255f516a",
+      "section": "III-C 2 LiDAR-Inertial Odometry",
+      "location": "III-C 2 LiDAR-Inertial Odometry",
+      "text": "where E VGICP E_{\\mathrm{VGICP}} denotes the VGICP matching cost for aligning the current scan 𝒫 i \\mathcal{P}_{i} to the previous scan 𝒫 i ′ \\mathcal{P}_{i^{\\prime}} . We denote the sums of the point cloud registration errors E i ​ i ′ pc E_{ii^{\\prime}}^{\\mathrm{pc}} , IMU preintegration errors, and bias random-walk errors in the optimization window by E pc LIO E_{\\mathrm{pc}}^{\\mathrm{LIO}} , E imu LIO E_{\\mathrm{imu}}^{\\mathrm{LIO}} , and E bias LIO E_{\\mathrm{bias}}^{\\mathrm{LIO}} , respectively. The deskewed LiDAR scan 𝒫 i \\mathcal{P}_{i} is also used to generate the sparse intensity image ℐ i L \\mathcal{I}_{i}^{L} .",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "1e5f7c9ff280faeb",
+      "section": "III-C 3 Visual-Inertial Odometry",
+      "location": "III-C 3 Visual-Inertial Odometry",
+      "text": "Our VIO module follows the general system design of VINS-Mono [ 10 ] and Kimera-VIO [ 11 ] . For each camera image ℐ j \\mathcal{I}_{j} , we estimate the camera pose 𝑻 C j W {}^{W}\\boldsymbol{T}_{C_{j}} , velocity, and IMU bias. We track image features in the camera image ℐ j \\mathcal{I}_{j} using the KLT tracker [ 39 , 40 ] and check the tracks with a forward–backward check. The camera rotation predicted from the IMU is used as the initial estimate for KLT tracking. This improves feature tracking when the camera rotates greatly. We remove incorrect tracks using RANSAC with the rotation from the IMU. We select keyframes based on the image parallax, elapsed time, and number of tracked features. We add smart visual projection factors [ 36 ] from observations of the same features across camera poses 𝑻 C j W {}^{W}\\boldsymbol{T}_{C_{j}} . We also add IMU preintegration factors between consecutive camera states. Smart visual projection factors constrain multiple camera poses using image feature observations. We also add random-walk factors between consecutive camera bias states. We denote the sums of the visual reprojection, IMU preintegration, and bias random-walk errors in the optimization window by E vis VIO E_{\\mathrm{vis}}^{\\mathrm{VIO}} , E imu VIO E_{\\mathrm{imu}}^{\\mathrm{VIO}} , and E bias VIO E_{\\mathrm{bias}}^{\\mathrm{VIO}} , respectively.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7f81db20dac5c2bd",
+      "section": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "location": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "text": "Fig. 6: LiDAR–camera reprojection factor. The reprojection error between a projected 3D LiDAR point and its corresponding image feature jointly constrains the LiDAR and camera poses.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0a1f764dea7748ba",
+      "section": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "location": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "text": "The LiDAR–camera reprojection factor uses the 2D–3D correspondences ℳ i ​ j \\mathcal{M}_{ij} obtained by image-to-point cloud matching. It directly constrains the LiDAR pose 𝑻 L i W {}^{W}\\boldsymbol{T}_{L_{i}} and the camera pose 𝑻 C j W {}^{W}\\boldsymbol{T}_{C_{j}} without assuming time synchronization or a fixed LiDAR–camera extrinsic transformation. Its inputs are the correspondences ℳ i ​ j \\mathcal{M}_{ij} , the LiDAR pose 𝑻 L i W {}^{W}\\boldsymbol{T}_{L_{i}} , the camera pose 𝑻 C j W {}^{W}\\boldsymbol{T}_{C_{j}} , and the known camera intrinsics. For efficient computation, all correspondences in ℳ i ​ j \\mathcal{M}_{ij} are grouped into one LiDAR–camera reprojection factor.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "61522249f6060d1f",
+      "section": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "location": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "text": "For a correspondence ( 𝒑 i ​ k L , 𝒛 j ​ k ) ∈ ℳ i ​ j ({}^{L}\\boldsymbol{p}_{ik},\\boldsymbol{z}_{jk})\\in\\mathcal{M}_{ij} , the relative transformation from L L at scan i i to C C at image j j is ( 𝑻 C j W ) − 1 ​ 𝑻 L i W ({}^{W}\\boldsymbol{T}_{C_{j}})^{-1}{}^{W}\\boldsymbol{T}_{L_{i}} . We denote the camera projection function using the known camera intrinsics by π ⁡ ( ⋅ ) \\pi(\\cdot) . The pixel 𝒛 j ​ k \\boldsymbol{z}_{jk} in ℐ j \\mathcal{I}_{j} corresponds to the 3D point 𝒑 i ​ k L {}^{L}\\boldsymbol{p}_{ik} in 𝒫 i \\mathcal{P}_{i} . The reprojection error is defined as the difference between the projected pixel and the observed pixel:",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "87321009e0f9fb61",
+      "section": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "location": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "text": "𝒓 i ​ j ​ k = π ⁡ ( ( 𝑻 C j W ) − 1 ​ 𝑻 L i W ​ 𝒑 i ​ k L ) − 𝒛 j ​ k . \\boldsymbol{r}_{ijk}=\\pi\\!\\left(({}^{W}\\boldsymbol{T}_{C_{j}})^{-1}{}^{W}\\boldsymbol{T}_{L_{i}}{}^{L}\\boldsymbol{p}_{ik}\\right)-\\boldsymbol{z}_{jk}. (3)",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "c0095d6bfa5e7e3b",
+      "section": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "location": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "text": "Minimizing this error constrains the relative position and orientation of the LiDAR and camera poses. The LiDAR scan 𝒫 i \\mathcal{P}_{i} and the camera image ℐ j \\mathcal{I}_{j} may be acquired at different times. Thus, the factor can connect any frame pair without time synchronization.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS4.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "7a7afa7187da05de",
+      "section": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "location": "III-C 4 LiDAR–Camera Reprojection Factor",
+      "text": "For robustness, we apply the Huber loss to each correspondence to reduce the effect of a small number of incorrect matches. We also apply Dynamic Covariance Scaling (DCS) [ 41 ] to all correspondences in each LiDAR–camera frame pair. If many correspondences are incorrect, DCS smoothly reduces the weight of the whole factor. The combination of point-level Huber loss and factor-level DCS handles both individual outliers and incorrect frame pairs. We denote the sum of these robust LiDAR–camera reprojection errors in the optimization window by E LC E_{\\mathrm{LC}} .",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e82617c0bc8298a",
+      "section": "III-C 5 Joint Factor Graph Optimization",
+      "location": "III-C 5 Joint Factor Graph Optimization",
+      "text": "Let 𝒳 \\mathcal{X} denote all LiDAR and camera poses, velocities, and IMU biases in the current optimization window. The complete objective is",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS5.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "e94b2d199478fc39",
+      "section": "III-C 5 Joint Factor Graph Optimization",
+      "location": "III-C 5 Joint Factor Graph Optimization",
+      "text": "𝒳 ∗ = arg ⁡ min 𝒳 \\displaystyle\\mathcal{X}^{*}=\\arg\\min_{\\mathcal{X}} E pc LIO + E vis VIO + E LC + E prior \\displaystyle E_{\\mathrm{pc}}^{\\mathrm{LIO}}+E_{\\mathrm{vis}}^{\\mathrm{VIO}}+E_{\\mathrm{LC}}+E_{\\mathrm{prior}} (4) + ∑ s ∈ { LIO , VIO } ( E imu s + E bias s ) , \\displaystyle+\\sum_{s\\in\\{\\mathrm{LIO},\\mathrm{VIO}\\}}\\left(E_{\\mathrm{imu}}^{s}+E_{\\mathrm{bias}}^{s}\\right),",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.E4",
+      "kind": "table"
+    },
+    {
+      "id": "b3f35ccf5814eb75",
+      "section": "III-C 5 Joint Factor Graph Optimization",
+      "location": "III-C 5 Joint Factor Graph Optimization",
+      "text": "where E prior E_{\\mathrm{prior}} collects initialization priors, marginalization priors, and numerical regularization terms. Thus, all constraints from the LiDAR, camera, and IMU measurements and the LiDAR–camera matches are optimized together in one tightly coupled factor graph. We solve Eq. ( 4 ) incrementally using iSAM2 [ 42 ] implemented in GTSAM [ 43 ] . To bound the computation cost, we use fixed-lag smoothing with a 5-second window and marginalize states that leave the window.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS3.SSS5.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "bbe12ba7e70ba6c7",
+      "section": "III-D Implementation Details",
+      "location": "III-D Implementation Details",
+      "text": "In all experiments described below, the system runs in real time on a laptop with an AMD Ryzen 9 7940HS CPU, an NVIDIA GeForce RTX 4080 GPU, and 32 GB of memory. Both Conditional Rectified Flow for LiDAR intensity image upsampling and SuperPoint with LightGlue for image feature matching are accelerated using TensorRT with FP16 precision. Matches with a LightGlue confidence score below 0.01 are removed, and a LiDAR–camera reprojection factor is added only when at least 50 valid 2D–3D correspondences remain.",
+      "url": "https://arxiv.org/html/2611.07463v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "025e84aea49ee0ae",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "TABLE I: Evaluation results on M3DGR.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c999cccf9a9915c3",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Sequence Metric VINS-Mono GLIM LVI-SAM R3LIVE FAST-LIVO2 FREE-LIVO FREE-LIVO FREE-LIVO (Loose) (NN) Outdoor01 ATE [m] 3.23 0.21 4.94 0.85 0.15 0.18 1.28 0.20 Outdoor04 ATE [m] 5.04 0.39 15.74 5.10 0.58 0.40 5.13 0.54 Dynamic01 ATE [m] 0.33 1.72 0.50 4.43 7018.72 † \\dagger 0.98 1.21 1.19 Dynamic02 ATE [m] 0.34 1.31 0.27 1.21 1746.95 † \\dagger 0.56 0.41 0.56 Dynamic03 ATE [m] 1.34 0.26 4.94 0.39 0.14 0.25 2.22 0.33 Dynamic04 ATE [m] 2.53 0.39 10.44 2.02 0.22 0.32 2.37 0.29",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.T1.1",
+      "kind": "table"
+    },
+    {
+      "id": "4c483c8c9c5d70d1",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "All methods were evaluated using Livox AVIA and Intel RealSense D435i measurements with the parameter settings provided by M3DGR.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.T1.2",
+      "kind": "p"
+    },
+    {
+      "id": "e798140a0713f9c8",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "TABLE II: ATE [m] on M3DGR for selected delay offsets (pair-averaged by sequence groups).",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a53b3866119c2eed",
+      "section": "IV Experiments",
+      "location": "IV Experiments",
+      "text": "Sequence LVI-SAM R3LIVE FAST-LIVO2 FREE-LIVO 0.0 s 0.1 s 0.3 s 0.5 s 0.0 s 0.1 s 0.3 s 0.5 s 0.0 s 0.1 s 0.3 s 0.5 s 0.0 s 0.1 s 0.3 s 0.5 s Outdoor01+04 10.34 10.80 11.72 28.18 2.98 1.73 8.72 2.28 0.36 0.39 0.36 0.40 0.29 0.24 0.29 0.29 Dynamic01+02 0.38 1.06 2.04 2.53 2.82 9.80 4.92 1.37 – – – – 0.77 1.23 1.39 1.83 Dynamic03+04 7.69 8.32 15.47 25.80 1.20 1.34 1.83 0.89 0.18 0.17 0.20 0.28 0.29 0.29 0.29 0.31",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.T2.1",
+      "kind": "table"
+    },
+    {
+      "id": "deb35c1720accc9e",
+      "section": "IV-A 1 Dataset",
+      "location": "IV-A 1 Dataset",
+      "text": "We use the M3DGR dataset [ 44 ] , the FAST-LIVO2 dataset [ 14 ] , and an in-house dataset for evaluation. The FAST-LIVO2 dataset and in-house dataset do not provide ground truth and are therefore used only for qualitative evaluation. In the M3DGR dataset, Outdoor01, Outdoor04, Dynamic03, and Dynamic04 are outdoor sequences, whereas Dynamic01 and Dynamic02 are indoor sequences.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS1.SSS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "73b34fc1ab878305",
+      "section": "IV-A 2 Baseline Methods",
+      "location": "IV-A 2 Baseline Methods",
+      "text": "We compare the proposed method with the following LIO, VIO, and LIVO baselines. We use the following baselines: GLIM [ 9 ] as the LIO, VINS-Mono [ 10 ] as the VIO, and LVI-SAM [ 13 ] , R3LIVE [ 15 ] , and FAST-LIVO2 [ 14 ] as the LIVO baselines. Although GLIM, VINS-Mono, and LVI-SAM provide loop closure, we disable it and evaluate them only as odometry estimation methods. The LIVO baselines use the LiDAR–camera extrinsic parameters and time synchronization provided by each dataset. The M3DGR dataset uses software-level rather than strict hardware time synchronization, which poses challenges for accurate LiDAR–camera fusion. We evaluate the proposed method without explicit LiDAR–camera extrinsic parameters.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS1.SSS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7de93ea10b1ffecc",
+      "section": "IV-A 2 Baseline Methods",
+      "location": "IV-A 2 Baseline Methods",
+      "text": "We evaluate trajectory accuracy using the evo toolkit and report the root mean square error (RMSE) of the translational absolute trajectory error (ATE) after SE(3) alignment with the ground-truth trajectory.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS1.SSS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "dcbaf93b475ffa9d",
+      "section": "IV-B Trajectory Estimation Accuracy on M3DGR",
+      "location": "IV-B Trajectory Estimation Accuracy on M3DGR",
+      "text": "We compare the proposed method with VINS-Mono, GLIM, LVI-SAM, R3LIVE, and FAST-LIVO2 using ATE on six M3DGR sequences. Table I shows the errors for all sequences. Although the proposed method does not use explicit LiDAR–camera extrinsic parameters, it remains competitive with the baseline methods. Across the six sequences, the average errors of GLIM and the proposed method are 0.71 m and 0.45 m, respectively. This result shows that adding camera information improves the accuracy of the GLIM odometry module used in the proposed method. Dynamic01 and Dynamic02 are narrow indoor sequences with moving objects. FAST-LIVO2 fails on these sequences, as indicated by the dagger symbols. These failures may be caused by errors in the software-level time synchronization and LiDAR–camera extrinsic calibration provided by M3DGR.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7d362a474f92812c",
+      "section": "IV-C Robustness to LiDAR–Camera Synchronization Errors",
+      "location": "IV-C Robustness to LiDAR–Camera Synchronization Errors",
+      "text": "Fig. 7: Colored point clouds generated by R3LIVE, FAST-LIVO2, and FREE-LIVO on the FAST-LIVO2 dataset, with and without an added 0.3 s camera delay. FREE-LIVO maintains alignment between image colors and LiDAR geometry under the delay.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2a770898714621a1",
+      "section": "IV-C Robustness to LiDAR–Camera Synchronization Errors",
+      "location": "IV-C Robustness to LiDAR–Camera Synchronization Errors",
+      "text": "To evaluate robustness to inaccurate LiDAR–camera time synchronization, we add delays of 0.1, 0.3, and 0.5 s to the camera data and compare LVI-SAM, R3LIVE, FAST-LIVO2, and the proposed method. Table II shows the ATE for each time offset on M3DGR, and Fig. 7 qualitatively compares colored point clouds generated using the estimated trajectories on the FAST-LIVO2 dataset. For LVI-SAM, the synchronization errors degrade the estimated trajectories and increase the ATE, while the proposed method maintains relatively stable trajectory estimation. For R3LIVE and FAST-LIVO2, the ATE shows no consistent trend with increasing time offsets, making the effects of synchronization errors difficult to assess from Table II alone. Their LIO components may strongly constrain the trajectories on M3DGR, potentially masking the effects of inaccurate camera data fusion. In the colored point clouds from R3LIVE and FAST-LIVO2, the colors are misaligned with object boundaries and become blurred when a time offset is added. In contrast, the proposed method maintains the correspondence between the camera image and LiDAR point cloud and generates a well-aligned colored point cloud even with a 0.3 s offset. These results show that the proposed method not only maintains trajectory accuracy but also correctly integrates LiDAR and camera observations despite synchronization errors.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "50ff147854f1e062",
+      "section": "IV-D Ablation Study",
+      "location": "IV-D Ablation Study",
+      "text": "To evaluate the effects of tightly coupling LiDAR, camera, and IMU data and upsampling LiDAR intensity images with Conditional Rectified Flow, we compare FREE-LIVO, FREE-LIVO (Loose), and FREE-LIVO (NN). FREE-LIVO (Loose) is a loosely coupled version of the proposed method. It optimizes LIO and VIO in separate factor graphs, connects the resulting poses using LiDAR–camera reprojection factors, and estimates the fused states in a sliding-window factor graph. To validate the contribution of the generative-model-based LiDAR upsampling, FREE-LIVO (NN) replaces Conditional Rectified Flow-based upsampling with nearest-neighbor interpolation while keeping the other parts unchanged. As shown in Table I , the average ATE over the six sequences is 0.45 m for FREE-LIVO, 2.10 m for FREE-LIVO (Loose), and 0.52 m for FREE-LIVO (NN). FREE-LIVO (Loose) is less accurate than the proposed method on all outdoor sequences, possibly due to accumulated odometry drift in the loosely coupled architecture. This effect may become more pronounced over longer sequences. Improving dense intensity image quality with Conditional Rectified Flow may be more beneficial in challenging scenarios, such as independently moving sensors, although the gains on the M3DGR dataset are modest.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "c810df44c2078a94",
+      "section": "IV-E Evaluation with Physically Decoupled Sensors",
+      "location": "IV-E Evaluation with Physically Decoupled Sensors",
+      "text": "Fig. 8: Colored point clouds generated by FREE-LIVO with the LiDAR and camera held in separate hands, as in Fig. 1 (a).",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "0582cb6aa4c5d128",
+      "section": "IV-E Evaluation with Physically Decoupled Sensors",
+      "location": "IV-E Evaluation with Physically Decoupled Sensors",
+      "text": "Fig. 9: FREE-LIVO estimation with two independently moving robots. (a) LiDAR and camera units mounted on separate robots. (b) Online estimation during operation. (c) Final estimated trajectories.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "a4d67dbdb6118fa0",
+      "section": "IV-E Evaluation with Physically Decoupled Sensors",
+      "location": "IV-E Evaluation with Physically Decoupled Sensors",
+      "text": "We evaluate FREE-LIVO using data collected with the LiDAR and camera held in separate hands, as shown in Fig. 1 (a). Figure 8 shows the colored point clouds and corresponding estimated sensor trajectories obtained with this handheld setup. In both outdoor and indoor environments, FREE-LIVO jointly estimates the separate LiDAR and camera trajectories, coupled by LiDAR–camera reprojection factors, and produces consistently colored point clouds.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f82eb1b9046bc8bd",
+      "section": "IV-E Evaluation with Physically Decoupled Sensors",
+      "location": "IV-E Evaluation with Physically Decoupled Sensors",
+      "text": "We also conducted an experiment with the LiDAR and camera mounted on separate mobile robots moving independently, as shown in Fig. 9 . The LiDAR and camera are mounted on a rover and a legged robot, and FREE-LIVO runs in real time on a laptop carried by the rover. The results show that both trajectories can be estimated despite continuous changes in the relative pose between the sensors and different vibration characteristics of the two robots.",
+      "url": "https://arxiv.org/html/2611.07463v1#S4.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "cee2b4316232f814",
+      "section": "V Conclusion",
+      "location": "V Conclusion",
+      "text": "This paper presented FREE-LIVO, a tightly coupled LIVO method that does not require a fixed LiDAR–camera rig or time synchronization. The method constructs LiDAR–camera reprojection factors and optimizes them with all other constraints in a single factor graph. Our experiments demonstrated high estimation accuracy and robustness to synchronization errors and also confirmed that the method can operate with sensors mounted on separate robots. Future work will extend the proposed framework to long-term state estimation that fuses LiDAR and camera data collected across multiple sessions and to multi-robot SLAM.",
+      "url": "https://arxiv.org/html/2611.07463v1#S5.p1.1",
+      "kind": "p"
+    }
+  ]
+}

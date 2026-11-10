@@ -1,0 +1,276 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2E9BDC907A27CBDCC72220A2 /* Sources/DeepReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EAC708025ADC281BF8B52A /* Sources/DeepReadingView.swift */; };
+		381B37B4D2D4C0EAF4033A30 /* Sources/SettingsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944447DDE066A08DBCC4BF63 /* Sources/SettingsViews.swift */; };
+		47048167B98BEFEC83693C71 /* Sources/FrontierViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CB394E598E3862C2F19DD7 /* Sources/FrontierViews.swift */; };
+		4D05A9FB7D992B7176B40F0D /* Sources/Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71923D45A08450CF1CA2E547 /* Sources/Models.swift */; };
+		5BBB82BF5BA3D71E6DFE8C72 /* Sources/RadarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF1FC2C975408E681A77318 /* Sources/RadarStore.swift */; };
+		627BBC9C62B0C159B656E415 /* Resources/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4545F5318A0046043187F2EB /* Resources/Assets.xcassets */; };
+		71A9CE21F1CD151D8C81BDC8 /* Sources/ReadingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E945D957637B5FC90EA4D7 /* Sources/ReadingViews.swift */; };
+		75451E55B97E539BB8D3C87F /* Sources/DiscoveryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151EF35679B8E2477C993E5B /* Sources/DiscoveryViews.swift */; };
+		8264A2212CCDC0DE16D6CBD9 /* Sources/WorkspaceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96F8CACC00C6450AEDBC676 /* Sources/WorkspaceViews.swift */; };
+		83945987B9FFF0A7DEDAB9CF /* Sources/ReadingQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA0A5FE725399D479E87362 /* Sources/ReadingQueueView.swift */; };
+		C44C6BADFE9AC61433914A13 /* Sources/TechnologyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2685FD5765312542172F68 /* Sources/TechnologyViews.swift */; };
+		CF0D4172155FD7F8282E3EF5 /* Resources/ReadingShelf.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DB7DD8B6534BA77833E2AAB /* Resources/ReadingShelf.json */; };
+		EB779018D136E950A999C6E8 /* Sources/ResearchRadarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5DD1547340E7276F04B17ED /* Sources/ResearchRadarApp.swift */; };
+		FC0CB21E6ADF24E540AC513C /* Resources/PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EAAAAEC84AAE203874A82FCF /* Resources/PrivacyInfo.xcprivacy */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0A2685FD5765312542172F68 /* Sources/TechnologyViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/TechnologyViews.swift; sourceTree = "<group>"; };
+		151EF35679B8E2477C993E5B /* Sources/DiscoveryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/DiscoveryViews.swift; sourceTree = "<group>"; };
+		34EAC708025ADC281BF8B52A /* Sources/DeepReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/DeepReadingView.swift; sourceTree = "<group>"; };
+		38A007151ABE87CC01A5B6E9 /* ResearchRadar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResearchRadar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BF1FC2C975408E681A77318 /* Sources/RadarStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/RadarStore.swift; sourceTree = "<group>"; };
+		4545F5318A0046043187F2EB /* Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+		59CB394E598E3862C2F19DD7 /* Sources/FrontierViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/FrontierViews.swift; sourceTree = "<group>"; };
+		5EA0A5FE725399D479E87362 /* Sources/ReadingQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/ReadingQueueView.swift; sourceTree = "<group>"; };
+		71923D45A08450CF1CA2E547 /* Sources/Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Models.swift; sourceTree = "<group>"; };
+		8DB7DD8B6534BA77833E2AAB /* Resources/ReadingShelf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/ReadingShelf.json; sourceTree = "<group>"; };
+		944447DDE066A08DBCC4BF63 /* Sources/SettingsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/SettingsViews.swift; sourceTree = "<group>"; };
+		94E945D957637B5FC90EA4D7 /* Sources/ReadingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/ReadingViews.swift; sourceTree = "<group>"; };
+		B96F8CACC00C6450AEDBC676 /* Sources/WorkspaceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/WorkspaceViews.swift; sourceTree = "<group>"; };
+		C5DD1547340E7276F04B17ED /* Sources/ResearchRadarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/ResearchRadarApp.swift; sourceTree = "<group>"; };
+		EAAAAEC84AAE203874A82FCF /* Resources/PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7561BFB015D8F536760CB671 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3A2A88DEEFF3D1D23E496597 /* ResearchRadar */ = {
+			isa = PBXGroup;
+			children = (
+				34EAC708025ADC281BF8B52A /* Sources/DeepReadingView.swift */,
+				151EF35679B8E2477C993E5B /* Sources/DiscoveryViews.swift */,
+				59CB394E598E3862C2F19DD7 /* Sources/FrontierViews.swift */,
+				71923D45A08450CF1CA2E547 /* Sources/Models.swift */,
+				3BF1FC2C975408E681A77318 /* Sources/RadarStore.swift */,
+				5EA0A5FE725399D479E87362 /* Sources/ReadingQueueView.swift */,
+				94E945D957637B5FC90EA4D7 /* Sources/ReadingViews.swift */,
+				C5DD1547340E7276F04B17ED /* Sources/ResearchRadarApp.swift */,
+				944447DDE066A08DBCC4BF63 /* Sources/SettingsViews.swift */,
+				0A2685FD5765312542172F68 /* Sources/TechnologyViews.swift */,
+				B96F8CACC00C6450AEDBC676 /* Sources/WorkspaceViews.swift */,
+				4545F5318A0046043187F2EB /* Resources/Assets.xcassets */,
+				8DB7DD8B6534BA77833E2AAB /* Resources/ReadingShelf.json */,
+				EAAAAEC84AAE203874A82FCF /* Resources/PrivacyInfo.xcprivacy */,
+			);
+			path = ResearchRadar;
+			sourceTree = "<group>";
+		};
+		B28B7AF69320201D1CF206EB = {
+			isa = PBXGroup;
+			children = (
+				3A2A88DEEFF3D1D23E496597 /* ResearchRadar */,
+				FBDC4F23F93125BBEEAE800C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FBDC4F23F93125BBEEAE800C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38A007151ABE87CC01A5B6E9 /* ResearchRadar.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0E8A3AD980EC179856012B7E /* ResearchRadar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F37922C48DA5978D02C9E50E /* Build configuration list for PBXNativeTarget "ResearchRadar" */;
+			buildPhases = (
+				BCE16DD0260827ECF338C787 /* Sources */,
+				7561BFB015D8F536760CB671 /* Frameworks */,
+				0189424A5A60FED329FA868E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ResearchRadar;
+			productName = ResearchRadar;
+			productReference = 38A007151ABE87CC01A5B6E9 /* ResearchRadar.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98F54143AB4E86B28C3AFEE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					0E8A3AD980EC179856012B7E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = 862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "ResearchRadar" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				"zh-Hans",
+				en,
+				Base,
+			);
+			mainGroup = B28B7AF69320201D1CF206EB;
+			productRefGroup = FBDC4F23F93125BBEEAE800C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0E8A3AD980EC179856012B7E /* ResearchRadar */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0189424A5A60FED329FA868E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				627BBC9C62B0C159B656E415 /* Resources/Assets.xcassets in Resources */,
+				CF0D4172155FD7F8282E3EF5 /* Resources/ReadingShelf.json in Resources */,
+				FC0CB21E6ADF24E540AC513C /* Resources/PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BCE16DD0260827ECF338C787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E9BDC907A27CBDCC72220A2 /* Sources/DeepReadingView.swift in Sources */,
+				75451E55B97E539BB8D3C87F /* Sources/DiscoveryViews.swift in Sources */,
+				47048167B98BEFEC83693C71 /* Sources/FrontierViews.swift in Sources */,
+				4D05A9FB7D992B7176B40F0D /* Sources/Models.swift in Sources */,
+				5BBB82BF5BA3D71E6DFE8C72 /* Sources/RadarStore.swift in Sources */,
+				83945987B9FFF0A7DEDAB9CF /* Sources/ReadingQueueView.swift in Sources */,
+				71A9CE21F1CD151D8C81BDC8 /* Sources/ReadingViews.swift in Sources */,
+				EB779018D136E950A999C6E8 /* Sources/ResearchRadarApp.swift in Sources */,
+				381B37B4D2D4C0EAF4033A30 /* Sources/SettingsViews.swift in Sources */,
+				C44C6BADFE9AC61433914A13 /* Sources/TechnologyViews.swift in Sources */,
+				8264A2212CCDC0DE16D6CBD9 /* Sources/WorkspaceViews.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5A8C91857F674E16E2724F47 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = SW4BR87Y5R;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ResearchRadar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bruce.EmbodiedResearchRadar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		89E1FD6268CC0F221A2BE178 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E6DE6C99132752C914FEF632 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E9B2E96ABC5F6856F2BE79CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = SW4BR87Y5R;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ResearchRadar/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bruce.EmbodiedResearchRadar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		862894B703A6DEDF96A9DD6C /* Build configuration list for PBXProject "ResearchRadar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89E1FD6268CC0F221A2BE178 /* Debug */,
+				E6DE6C99132752C914FEF632 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F37922C48DA5978D02C9E50E /* Build configuration list for PBXNativeTarget "ResearchRadar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9B2E96ABC5F6856F2BE79CF /* Debug */,
+				5A8C91857F674E16E2724F47 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+}

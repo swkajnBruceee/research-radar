@@ -1,0 +1,855 @@
+{
+  "id": "fe9cdfd05be7db5693e081f9f2a8d5e58ced0c0e065160cbd1baea90b22a4cf3",
+  "url": "https://arxiv.org/html/2611.08139v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "2ed05370950bd2fc",
+      "section": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration Thanks: This work has been supported by Ankara Yildirim Beyazit University Scientific Research Projects Coordination Unit under Multidisciplinary Research Project No. 3225. The source code is available at https://github.com/ozaslan/htrip .",
+      "location": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration Thanks: This work has been supported by Ankara Yildirim Beyazit University Scientific Research Projects Coordination Unit under Multidisciplinary Research Project No. 3225. The source code is available at https://github.com/ozaslan/htrip .",
+      "text": "Frontier-based exploration systems repeatedly evaluate geodesic travel costs between robot poses and candidate viewpoints, and tour-based planners consume the full pairwise distance matrix built from them. Recomputing these matrices with one graph search per source scales with the explored map size, whereas distance caches that refresh only locally affected or newly created frontiers can retain stale costs between surviving pairs when newly discovered free space creates a global shortcut. We present H-TRIP (Hierarchical Tropical Rank-one Incremental Propagation), an exact distance index grounded in Kleene algebra over the min-plus semiring for monotonically growing occupancy grids. H-TRIP partitions the known map into a spatial hierarchy with fixed boundary ports. Each unknown-to-free revelation is decomposed into efficient rank-one min-plus edge insertions at the affected leaf, and only decreased port-to-port summaries are propagated along its ancestor chain. A shared hierarchical lift evaluates the dense many-to-many matrix of shortest distances for all active query points on the occupancy map. We prove that sequential insertions preserve exact shortest-path distances on the grid. Benchmark experiments confirm exact agreement with reference searches on fully built maps and show that dense many-to-many queries at a few dozen viewpoints are up to two orders of magnitude faster than sequential k × k\\times BFS. On exploration runs with sixteen robots, in-loop queries on the growing occupancy graph are 2.21 × 2.21\\times – 8.59 × 8.59\\times faster than co-scheduled k × k\\times BFS on maps with side 256 256 , 512 512 , and 1024 1024 cells.",
+      "url": "https://arxiv.org/html/2611.08139v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a75cc0884a3065a1",
+      "section": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration Thanks: This work has been supported by Ankara Yildirim Beyazit University Scientific Research Projects Coordination Unit under Multidisciplinary Research Project No. 3225. The source code is available at https://github.com/ozaslan/htrip .",
+      "location": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration Thanks: This work has been supported by Ankara Yildirim Beyazit University Scientific Research Projects Coordination Unit under Multidisciplinary Research Project No. 3225. The source code is available at https://github.com/ozaslan/htrip .",
+      "text": "Index Terms —Multi-robot exploration, APSP, distance indexes, min-plus algebra, occupancy grids.",
+      "url": "https://arxiv.org/html/2611.08139v1#p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0953ce9990c6e2b6",
+      "section": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration Thanks: This work has been supported by Ankara Yildirim Beyazit University Scientific Research Projects Coordination Unit under Multidisciplinary Research Project No. 3225. The source code is available at https://github.com/ozaslan/htrip .",
+      "location": "H-TRIP: Exact Many-to-Many Distance Index for Multi-Robot Exploration Thanks: This work has been supported by Ankara Yildirim Beyazit University Scientific Research Projects Coordination Unit under Multidisciplinary Research Project No. 3225. The source code is available at https://github.com/ozaslan/htrip .",
+      "text": "Fig. 1: We tested H-TRIP in simulation, where lidar-equipped robot teams of different sizes explored occupancy grids of different side lengths. The panels show three representative frames from these runs. The yellow lattice is the leaf-tile partition, cyan markers are active frontiers, and colored polylines are assigned open tours.",
+      "url": "https://arxiv.org/html/2611.08139v1#S0.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "60b247e9702053b6",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "Autonomous exploration is foundational in search and rescue, inspection, and reconnaissance. Mobile robot teams iteratively map free space, extract candidate frontier viewpoints, and coordinate assignments using travel cost, information gain, or both [ 1 ] . Tour-based planners repeatedly evaluate pairwise travel costs among candidate goals using geodesic distance as their spatial backbone, which can be combined with planner-specific kinematic or utility terms [ 2 , 3 , 4 ] . These geodesics are shortest paths on the free-space graph G τ = ( V τ , E τ ) G_{\\tau}=(V_{\\tau},E_{\\tau}) of an occupancy representation or an exploration roadmap. Under undirected traversal the geodesic distance matrix is symmetric, so filling D ∈ ℝ ¯ ≥ 0 k × k D\\in\\overline{\\mathbb{R}}_{\\geq 0}^{k\\times k} among k k robot poses and candidate viewpoints with the k ⁡ ( k − 1 ) / 2 k(k-1)/2 distinct pairwise distances of G τ G_{\\tau} requires substantial computational effort as maps and candidate sets grow.",
+      "url": "https://arxiv.org/html/2611.08139v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "076850736105d564",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "As sensors reveal free space, the traversable graph G τ G_{\\tau} grows monotonically. Recomputing D D from scratch with one graph search per source scales with both k k and | V τ | |V_{\\tau}| , and competes with the planning cycle. Newly revealed free cells can complete a doorway or corridor that shortens the true geodesic between two persisting viewpoints, making a previously cached distance stale. The challenge is to keep the geodesic distance matrix D D exact without recomputing shortest paths over the full graph after every occupancy-map update. We therefore ask how a multi-robot system can maintain exact all-pairs geodesic distances among surviving viewpoints under online monotonic map growth while keeping many-to-many queries within a planning-cycle budget.",
+      "url": "https://arxiv.org/html/2611.08139v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2c3c893821f38771",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "We present H-TRIP (Hierarchical Tropical Rank-one Incremental Propagation), an exact hierarchical distance index grounded in Kleene algebra over the min-plus semiring [ 5 , 6 ] that maintains pairwise geodesic distances as occupancy grows and answers many-to-many queries for assignment and tour planners on online occupancy grids. H-TRIP organizes the workspace into a balanced spatial hierarchy over fixed leaf tiles whose boundary-port sets remain fixed throughout exploration. Sensor measurements that reveal previously unknown cells as free insert local edges in G τ G_{\\tau} , including newly passable cross-tile seams, and only decreased boundary-distance summaries propagate upward along the affected ancestor chain.",
+      "url": "https://arxiv.org/html/2611.08139v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4d2034362eb89188",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "H-TRIP builds this hierarchy so that many-to-many geodesic distances can be evaluated by lifting each of the k k viewpoints all at once onto the boundary ports of their ancestor tiles and resolving pairwise distances as tropical products against stored boundary metrics. H-TRIP realizes its query advantage by amortizing each hierarchical lift across the entire k × k k\\times k matrix. An isolated pair lookup pays that lift without sharing it, so batched many-to-many evaluation is the regime that reuses the work. Hence H-TRIP can serve as a metric backend for multi-robot assignment and tour planners that require geodesic distance.",
+      "url": "https://arxiv.org/html/2611.08139v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "f76e471931c7ba54",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "In simulation, H-TRIP consistently preserved exact geodesic distances while reducing the cost of repeated many-to-many evaluation relative to conventional graph-search baselines. The advantage was most pronounced when multiple robot poses and frontier viewpoints were queried together, allowing hierarchical computations to be shared across the complete distance matrix.",
+      "url": "https://arxiv.org/html/2611.08139v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "a83fd3c5794e14e9",
+      "section": "I Introduction",
+      "location": "I Introduction",
+      "text": "The main contributions of this paper are: (i) an exact hierarchical distance index for monotonically growing occupancy grids based on fixed geometric interfaces and min-plus closure; (ii) a localized insertion-only maintenance procedure based on rank-one min-plus updates, with exactness established by Lemma 1 and Theorem 1; and (iii) a batched hierarchical query that recovers the complete k × k k\\times k geodesic distance matrix, with exactness established by Theorem 2.",
+      "url": "https://arxiv.org/html/2611.08139v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "a4923764aa0ac187",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "The literature most relevant to H-TRIP spans four areas: exploration planning and travel-cost maintenance, incremental replanning, hierarchical distance indexes, and dynamic shortest-path maintenance.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9c2569c4f7d3c1fd",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Exploration planners and travel-cost maintenance: Frontier exploration guides robots toward boundaries between mapped free space and unmapped terrain, balancing travel distance against information gain [ 1 ] . Tour-based planners such as FUEL [ 2 ] , TARE [ 3 ] , and RACER [ 4 ] consume pairwise travel costs over robot poses and candidate goals (frontiers), which makes geodesic path length their spatial backbone. When a new frontier cluster appears, FUEL [ 2 ] searches paths from that cluster’s candidate viewpoints and reuses cached costs for frontier clusters that did not change, so a pair of robot poses or frontier viewpoints that survive the update can retain a pre-opening length. TARE [ 3 ] localizes traveling salesperson (TSP) work through spatial partitions. As the map grows, a newly opened doorway or corridor can shorten the true geodesic between surviving viewpoints, which can cause cached surviving-pair geodesics to become stale. H-TRIP does not replace those assignment or tour layers. It supplies the geodesic distance matrix they consume and keeps that matrix exact as the map grows, so a surviving-pair shortcut is reflected without a global graph search at every update.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "da05fcb1e25f1987",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Incremental single-source replanning: In partially known environments, D ∗ Lite [ 7 ] and LPA ∗ [ 8 ] incrementally repair a single-source or goal-rooted search tree as edge costs change. A straightforward use of these single-source methods for k k viewpoints requires maintaining or repairing multiple search states, typically one per source. H-TRIP is not a path replanner and does not maintain a previously found tree. It maintains one hierarchical metric shared by all queried viewpoints and fills the dense k × k k\\times k distance matrix by batched coordinate lifts and tropical products, leaving path construction to the tour layer that consumes those distances.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4a4dbd3de7825ce6",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Hierarchical distance indexes: Spatial hierarchies compress distance computation by storing summaries on region boundaries. HPA ∗ [ 9 ] partitions a grid into clusters, identifies data-dependent border entrances on traversable boundaries, and caches intra-cluster entrance distances for search on an abstract graph, which returns a near-optimal path rather than an exact stored distance. HiTi [ 10 ] is closer to H-TRIP because it recursively partitions road graphs, stores precomputed minimum-cost paths among boundary nodes, and supports optimal shortest-path queries, with updates confined to ancestor path-view sets. However, in the online occupancy setting H-TRIP fixes ports geometrically before exploration, applies rank-one min-plus insertions on leaf and interface closures when cells open, propagates only decreased ancestor metrics, and evaluates the dense k × k k\\times k matrix with one batched hierarchical lift shared by all viewpoints.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "8c97bc7f606160be",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "On road networks and static graphs, Contraction Hierarchies [ 11 ] add vertex shortcuts, whereas Customizable Route Planning (CRP) [ 12 ] and Customizable Contraction Hierarchies [ 13 ] customize metric overlays on separator cliques or nested-dissection orders. Dynamic shortest-path indexes also admit streaming maintenance under weight updates [ 14 ] . Those methods assume a known topology whose weights change. Exploration instead changes topology: newly revealed free cells insert vertices and edges that were absent from the occupancy graph. H-TRIP still keeps the tile partition and port universe geometrically fixed, independent of current passability, so an opening does not resize overlays or churn entrances.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "7ec8cc004b667171",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Dense distance graphs on recursive r r -divisions support exact distances among all boundary vertices of a region inside static planar algorithms [ 15 ] . On a static preprocessed road network whose topology is already known, many-to-many tables share hierarchical search work across a source set and a target set, so filling an | S | × | T | |S|\\times|T| table is cheaper than a separate query per pair [ 16 , 17 ] . H-TRIP stores tile-local port summaries and lifts only the k k active viewpoints, such that k ≪ | V τ | k\\ll|V_{\\tau}| , and the planner consumes a k × k k\\times k geodesic distance matrix produced by one batched hierarchical lift.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "e13cf2dc42121dee",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Dynamic APSP and closed-semiring algebra: Demetrescu and Italiano [ 18 ] maintain fully dynamic exact all-pairs shortest paths on general directed graphs with non-negative edge weights, covering both insertions and deletions. H-TRIP applies the same rank-one decrease [ 5 , 19 , 6 ] to leaf and interface closures along the affected ancestor chain. Its exactness theorem is insertion-only occupancy growth rather than fully dynamic APSP, and its query is a batched k × k k\\times k hierarchical lift rather than an O ⁡ ( 1 ) O(1) pair lookup.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "8432928faae8408d",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Ramalingam and Reps [ 20 ] repair incremental shortest paths on the affected region, and Górkiewicz and Karczmarz [ 21 ] study approximate incremental APSP on sparse directed graphs. In its insertion-only occupancy-grid setting, H-TRIP remains exact by confining dense min-plus updates to the affected ancestor chain, rather than an affected-region search or an approximate APSP.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "68bb60f0231d7ad3",
+      "section": "II Related Work",
+      "location": "II Related Work",
+      "text": "Collectively, prior work provides incremental frontier-cost caching, single-source replanning, hierarchical shortest-path representations, and general dynamic distance maintenance. H-TRIP combines (i) fixed geometric interfaces, (ii) insertion-only exact min-plus updates, and (iii) localized hierarchical propagation into one index, and evaluates the k × k k\\times k geodesic distance matrix from that index, with k ≪ | V τ | k\\ll|V_{\\tau}| for medium-to-large maps.",
+      "url": "https://arxiv.org/html/2611.08139v1#S2.p9.1",
+      "kind": "p"
+    },
+    {
+      "id": "675733c14fb6b0de",
+      "section": "III-A Occupancy Grid and Monotonic Map Growth",
+      "location": "III-A Occupancy Grid and Monotonic Map Growth",
+      "text": "Let 𝒲 ⊂ ℝ 2 \\mathcal{W}\\subset\\mathbb{R}^{2} be a planar workspace discretized into a uniform occupancy grid M M . Each cell is labeled unknown , free , or obstacle . Confirmed free cells induce an undirected graph G τ = ( V τ , E τ ) G_{\\tau}=(V_{\\tau},E_{\\tau}) , where V τ V_{\\tau} is the set of currently free cells and τ \\tau is a discrete time index of successive occupancy graphs. By default E τ E_{\\tau} joins 4 4 -adjacent free cells with unit weight, so geodesics are integers. Non-unit nonnegative cell costs, when present, become incident edge weights, and the reference search is Dijkstra’s algorithm rather than BFS. Let d G τ ​ ( u , v ) d_{G_{\\tau}}(u,v) denote shortest-path length on G τ G_{\\tau} , and ∞ \\infty if v v is unreachable from u u . Unknown cells retain geometric slots with infinite incident weight until they are revealed free, and obstacle cells remain blocked.",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "884623e022645b8d",
+      "section": "III-A Occupancy Grid and Monotonic Map Growth",
+      "location": "III-A Occupancy Grid and Monotonic Map Growth",
+      "text": "An opening is a set Δ ​ V \\Delta V of cells that become free, together with the finite incident edges Δ ​ E \\Delta E that those cells insert. Hence V τ + 1 = V τ ∪ Δ ​ V V_{\\tau+1}=V_{\\tau}\\cup\\Delta V and E τ + 1 = E τ ∪ Δ ​ E E_{\\tau+1}=E_{\\tau}\\cup\\Delta E , and distances can only decrease or stay the same. We consider exploration of a static workspace in which sensing monotonically reveals previously unknown space.",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "6e6057e45b52d6e2",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "A frontier cell is free and adjacent to unknown . Connected 4 4 -adjacent frontier cells form clusters ℱ τ = { F 1 , … , F K } \\mathcal{F}_{\\tau}=\\{F_{1},\\dots,F_{K}\\} , each represented by a medoid cell m ⁡ ( F i ) m(F_{i}) [ 2 , 3 ] . Each robot contributes a planar position r i ∈ 𝒲 r_{i}\\in\\mathcal{W} , which Section VI snaps onto a free cell r ~ i ∈ V τ \\tilde{r}_{i}\\in V_{\\tau} , so every finite entry of D τ D_{\\tau} is a grid geodesic among cells of G τ G_{\\tau} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f84e6ec6695a1bda",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "A planning cycle assembles the viewpoint list",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "a3a6442b6d22e740",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "P τ = ( r ~ 1 , … , r ~ N , m ⁡ ( F 1 ) , … , m ⁡ ( F K ) ) , P_{\\tau}=\\bigl(\\tilde{r}_{1},\\dots,\\tilde{r}_{N},\\;m(F_{1}),\\dots,m(F_{K})\\bigr), (1)",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "132d418079249e62",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "with k = | P τ | = N + K k=|P_{\\tau}|=N+K , which may change between cycles as clusters appear, vanish, or move. The geodesic distance matrix D τ ∈ ℝ ¯ ≥ 0 k × k D_{\\tau}\\in\\overline{\\mathbb{R}}_{\\geq 0}^{k\\times k} is",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "d8c0814765cbb4e4",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "( D τ ) i ​ j = d G τ ​ ( P τ , i , P τ , j ) , (D_{\\tau})_{ij}=d_{G_{\\tau}}(P_{\\tau,i},P_{\\tau,j}), (2)",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "cbc680c5864db633",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "D τ = [ D τ , R ​ R D τ , R ​ F D τ , F ​ R D τ , F ​ F ] D_{\\tau}=\\begin{bmatrix}D_{\\tau,RR}&D_{\\tau,RF}\\\\ D_{\\tau,FR}&D_{\\tau,FF}\\end{bmatrix} (3)",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.E3",
+      "kind": "table"
+    },
+    {
+      "id": "f36cb0e14825699a",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "for robot–robot, robot–frontier, and frontier–frontier distances. Traversal is undirected, so D τ D_{\\tau} is symmetric. Without a distance index, filling D τ D_{\\tau} requires k k single-source searches on G τ G_{\\tau} (BFS if unweighted, Dijkstra if weighted), or k ⁡ ( k − 1 ) / 2 k(k-1)/2 independent point-to-point A ∗ \\mathrm{A}^{*} searches.",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS2.p2.4",
+      "kind": "p"
+    },
+    {
+      "id": "cf27a2447991824a",
+      "section": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "location": "III-B Robots, Frontiers, and the Geodesic Distance Matrix",
+      "text": "In a typical multi-robot exploration system, assignment looks up robot–frontier costs in D τ , R ​ F D_{\\tau,RF} , and an open tour looks up frontier–frontier costs in D τ , F ​ F D_{\\tau,FF} . Together those stages consume the D τ , R ​ F D_{\\tau,RF} and D τ , F ​ F D_{\\tau,FF} blocks of the geodesic matrix. The same query returns the full symmetric k × k k\\times k matrix, so D τ , R ​ R D_{\\tau,RR} is filled with the robot–robot geodesics. If an entry of D τ , R ​ F D_{\\tau,RF} or D τ , F ​ F D_{\\tau,FF} is stale, assignment or visit order can change after a doorway opens, which is why planner-facing entries of D τ D_{\\tau} must remain exact on the occupancy graph after each absorbed opening .",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "41356da5ffaa442a",
+      "section": "III-C The Surviving-Pair Shortcut Problem",
+      "location": "III-C The Surviving-Pair Shortcut Problem",
+      "text": "After an opening that produces G τ + 1 G_{\\tau+1} , the true geodesic between two query cells that remain in the planning list can become strictly shorter than the length that used to be correct on G τ G_{\\tau} . A viewpoint persists in the cache only when its grid coordinate is unchanged. An incremental new-cluster-only cache recomputes pairwise distances only for newly appeared clusters and, for speed, leaves the remaining entries unchanged, which can leave those lengths stale after an opening [ 2 ] .",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "69d37ce524ce5a52",
+      "section": "III-C The Surviving-Pair Shortcut Problem",
+      "location": "III-C The Surviving-Pair Shortcut Problem",
+      "text": "A surviving-pair shortcut occurs when two viewpoints occupy the same cells in P τ P_{\\tau} and in P τ + 1 P_{\\tau+1} and, after the edges Δ ​ E = E τ + 1 ∖ E τ \\Delta E=E_{\\tau+1}\\setminus E_{\\tau} of the opening, G τ + 1 G_{\\tau+1} contains a path between them that is strictly shorter than the distance stored for that pair in D τ D_{\\tau} .",
+      "url": "https://arxiv.org/html/2611.08139v1#Thmdefinition1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cc317632cba744ee",
+      "section": "III-C The Surviving-Pair Shortcut Problem",
+      "location": "III-C The Surviving-Pair Shortcut Problem",
+      "text": "Such a caching mechanism is the failure mode under study, because a retained entry of its matrix D ^ τ + 1 \\widehat{D}_{\\tau+1} can satisfy ( D ^ τ + 1 ) i ​ j = ( D τ ) i ​ j > ( D τ + 1 ) i ​ j (\\widehat{D}_{\\tau+1})_{ij}=(D_{\\tau})_{ij}>(D_{\\tau+1})_{ij} even when both cells lie far from the newly free vertices Δ ​ V \\Delta V .",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d854b9f8c495a45d",
+      "section": "III-D Problem Statement",
+      "location": "III-D Problem Statement",
+      "text": "A distance index is a map ℐ : V τ κ → ℝ ¯ ≥ 0 κ × κ \\mathcal{I}:V_{\\tau}^{\\kappa}\\to\\overline{\\mathbb{R}}_{\\geq 0}^{\\kappa\\times\\kappa} whose input is an ordered list of κ \\kappa cells of G τ G_{\\tau} and whose output is the geodesic distance matrix on that list. Given a monotonically expanding occupancy graph G τ → G τ + 1 G_{\\tau}\\to G_{\\tau+1} and a viewpoint list P τ + 1 ∈ V τ + 1 k P_{\\tau+1}\\in V_{\\tau+1}^{k} , we ask for an index ℐ \\mathcal{I} that meets one mathematical contract and two computational objectives: (1) exactness: after newly free cells have been absorbed, ℐ ⁡ ( P τ + 1 ) \\mathcal{I}(P_{\\tau+1}) equals D τ + 1 D_{\\tau+1} entrywise on that graph; (2) update locality: the work that absorbs an opening is confined to the affected leaf tiles and the union of their ancestor chains; (3) many-to-many output: a single query returns D τ + 1 D_{\\tau+1} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "03b0bcbc481108d5",
+      "section": "III-D Problem Statement",
+      "location": "III-D Problem Statement",
+      "text": "Fig. 2: Fixed-boundary spatial hierarchy. ( a ) Base tile T T ( b = 5 b=5 ) stores intra-tile closure C T C_{T} on all cells and exposes summary S T S_{T} on perimeter B T B_{T} . ( b ) Super-tile U U ( g = 2 g=2 ) aggregates child boundaries into V U V_{U} : interior cells are condensed into summaries S T i S_{T_{i}} , dark blue perimeter cells form exposed parent ports B U B_{U} , and light blue cells are interior seams where gold arrows mark passable cross-child edges.",
+      "url": "https://arxiv.org/html/2611.08139v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "4f85d9594fb90edb",
+      "section": "IV Min-Plus Shortest Paths",
+      "location": "IV Min-Plus Shortest Paths",
+      "text": "Shortest-path computation is expressed over the min-plus semiring ( ℝ ¯ ≥ 0 , min , + , ∞ , 0 ) (\\overline{\\mathbb{R}}_{\\geq 0},\\min,+,\\infty,0) , where a ⊕ b = min ⁡ ( a , b ) a\\oplus b=\\min(a,b) selects the shorter alternative and a ⊗ b = a + b a\\otimes b=a+b concatenates consecutive path segments [ 5 , 19 , 6 ] . For matrices,",
+      "url": "https://arxiv.org/html/2611.08139v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "483b8bfa08897506",
+      "section": "IV Min-Plus Shortest Paths",
+      "location": "IV Min-Plus Shortest Paths",
+      "text": "( A ⊗ B ) i ​ j = min h ⁡ ( A i ​ h + B h ​ j ) . (A\\otimes B)_{ij}=\\min_{h}\\bigl(A_{ih}+B_{hj}\\bigr). (4)",
+      "url": "https://arxiv.org/html/2611.08139v1#S4.E4",
+      "kind": "table"
+    },
+    {
+      "id": "ead7a6ac810cfd99",
+      "section": "IV Min-Plus Shortest Paths",
+      "location": "IV Min-Plus Shortest Paths",
+      "text": "If A A is the weighted adjacency matrix of a graph ( V , E ) (V,E) with nonnegative edge weights, and I | V | I_{|V|} is the | V | × | V | |V|\\times|V| min-plus identity with zeros on the diagonal and ∞ \\infty off it, then",
+      "url": "https://arxiv.org/html/2611.08139v1#S4.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "67dd38f2bc7315df",
+      "section": "IV Min-Plus Shortest Paths",
+      "location": "IV Min-Plus Shortest Paths",
+      "text": "A ∗ = I | V | ⊕ A ⊕ A ⊗ 2 ⊕ ⋯ ⊕ A ⊗ ( | V | − 1 ) A^{*}=I_{|V|}\\oplus A\\oplus A^{\\otimes 2}\\oplus\\cdots\\oplus A^{\\otimes(|V|-1)} (5)",
+      "url": "https://arxiv.org/html/2611.08139v1#S4.E5",
+      "kind": "table"
+    },
+    {
+      "id": "e12c16f2d22f2f8c",
+      "section": "IV Min-Plus Shortest Paths",
+      "location": "IV Min-Plus Shortest Paths",
+      "text": "is its all-pairs shortest-path matrix, since a shortest path can be chosen simple and therefore contains at most | V | − 1 |V|-1 edges. The carrier of that algebra is ℝ ¯ ≥ 0 = ℝ ≥ 0 ∪ { ∞ } \\overline{\\mathbb{R}}_{\\geq 0}=\\mathbb{R}_{\\geq 0}\\cup\\{\\infty\\} . H-TRIP applies this algebra locally: tile closures, incremental decreases, hierarchical lifts, and boundary-to-boundary composition are min-plus operations on these matrices.",
+      "url": "https://arxiv.org/html/2611.08139v1#S4.p1.3",
+      "kind": "p"
+    },
+    {
+      "id": "b500d748b2fec250",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "The occupancy grid M M is a square n × n n\\times n array of cells, partitioned recursively into square base tiles of side b ≥ 2 b\\geq 2 and super-tiles of tile aggregation degree g ≥ 2 g\\geq 2 whose children form a g × g g\\times g block. The independent parameters are n n , b b , and g g , from which the depth and the root side follow,",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f29af1966e148426",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "H = ⌈ log g ⁡ ( n / b ) ⌉ , b H = b ​ g H ≥ n , H=\\lceil\\log_{g}(n/b)\\rceil,\\qquad b_{H}=bg^{H}\\geq n, (6)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E6",
+      "kind": "table"
+    },
+    {
+      "id": "cd18d48f5d0c0e0f",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "and every cell of G τ G_{\\tau} lies inside that root, so | V τ | ≤ b H 2 |V_{\\tau}|\\leq b_{H}^{2} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "d408ceda4b4099e6",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "For a level- ℓ \\ell tile T T of side b ℓ = b ​ g ℓ b_{\\ell}=bg^{\\ell} , the boundary-cell set B T B_{T} is the 4 ​ b ℓ − 4 4b_{\\ell}-4 perimeter cells of its geometric boundary, whether those cells are currently passable or not.",
+      "url": "https://arxiv.org/html/2611.08139v1#Thmdefinition2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a291da2fe9410dcb",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "Because the boundary geometry is fixed, occupancy updates modify only stored metric values, and interface dimensions, matrix offsets, and child-to-parent index mappings remain unchanged.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "de478658c9abc7c5",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "Write T T for a tile of any kind, whether a base tile of side b b , a super-tile assembled from g 2 g^{2} children, or the root that spans the workspace. A parent super-tile is denoted U U and one of its children is denoted Q Q whenever both must be named together.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d04248dbc93c4a7a",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "The matrix stored at a tile begins as an adjacency. On a base tile T T , A T A_{T} is the weighted adjacency on the vertex set V T V_{T} of all b 2 b^{2} geometric cells of T T , including currently unknown or occupied slots, so a missing or blocked step is an infinite entry and a free adjacent step is a finite weight. On a super-tile U U , every path that leaves a child does so through that child’s boundary, and A U A_{U} is the weighted adjacency of the interface graph Γ U = ( V U , E U ) \\Gamma_{U}=(V_{U},E_{U}) , whose vertices V U V_{U} are those children’s boundary cells placed side by side. The Kleene star of Section IV then turns either adjacency into pairwise distances on that same vertex set,",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee9b23daabd1e79c",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "C T = A T ∗ , S T = C T | ( B T ) × ( B T ) , C_{T}=A_{T}^{*},\\qquad S_{T}=C_{T}\\big|_{(B_{T})\\times(B_{T})}, (7)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E7",
+      "kind": "table"
+    },
+    {
+      "id": "03ee65e6fbe7fbad",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "so A A is a local adjacency and C C is its Kleene-star closure at every level, while the vertex set of the matrix is V T V_{T} on a base tile and V U V_{U} on a super-tile.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "f67fbd7e1c9db781",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "A base tile therefore carries two cell sets (Fig. 2 ( a )). The closure C T C_{T} lives on V T V_{T} and answers tile-confined questions: each entry C T ​ ( i , j ) C_{T}(i,j) is the length of a shortest path that stays inside T T , which can exceed the planner geodesic on G τ G_{\\tau} when a globally shorter route leaves T T and re-enters. The second set is the boundary B T B_{T} , the 4 ​ b − 4 4b-4 perimeter cells. The parent of T T reads only that perimeter, so the object sent upward is the summary S T S_{T} , the restriction of C T C_{T} to the Cartesian product ( B T ) × ( B T ) (B_{T})\\times(B_{T}) of those perimeter indices. The stored tile matrices change with occupancy and would therefore carry the same index τ \\tau as G τ G_{\\tau} . We omit that subscript on C T C_{T} and S T S_{T} , keeping τ \\tau on G τ G_{\\tau} and D τ D_{\\tau} , so the tile symbols stay uncluttered.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "41400bb9f716a1a3",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "A super-tile U U has three cell sets (Fig. 2 ( b )). The first set is every geometric cell of the square of U U , and interior distances on that square are recovered from the two stored sets that follow. The second set is the interface vertex set",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "405b98333028caa4",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "V U = ⨆ Q B Q → U , B Q → U := φ Q → U ​ ( B Q ) , V_{U}=\\bigsqcup_{Q}B_{Q\\to U},\\qquad B_{Q\\to U}:=\\varphi_{Q\\to U}(B_{Q}), (8)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E8",
+      "kind": "table"
+    },
+    {
+      "id": "5e83dbed8cb058fc",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "formed by the fixed map φ Q → U \\varphi_{Q\\to U} that plants each child’s boundary B Q B_{Q} at a contiguous offset B Q → U B_{Q\\to U} inside U U . In other words, V U V_{U} is the concatenated list of all child boundary cells used as the row and column indices of A U A_{U} and C U C_{U} , and storing the closure C U C_{U} on that list is the compression that makes the hierarchy possible. The interface Γ U = ( V U , E U ) \\Gamma_{U}=(V_{U},E_{U}) puts a weighted edge between every pair in B Q → U B_{Q\\to U} whose weight is the matching entry of the child’s summary, and seam edges join spatially adjacent perimeter cells of neighboring children when both cells are free. The closure on that interface is C U = A U ∗ C_{U}=A_{U}^{*} . The third set is B U ⊂ V U B_{U}\\subset V_{U} , the geometric perimeter of U U . The cells where two children meet, the interior seams, stay in V U V_{U} so that C U C_{U} can route across children, and they stay out of B U B_{U} , so the summary S U S_{U} that a further parent would read lives only on the outer boundary. Thus C U C_{U} lives on V U V_{U} , and the parent-visible summary S U S_{U} lives only on B U ⊂ V U B_{U}\\subset V_{U} . The geometric cells that fill the square of U U are never stored at U U , neither as an adjacency nor as a closure making the hierarchy and compression possible. Fig. 2 takes b = 5 b=5 and g = 2 g=2 . A base tile then stores C T C_{T} as a 25 × 25 25\\times 25 matrix on its 25 cells and exposes S T S_{T} as a 16 × 16 16\\times 16 matrix on B T B_{T} . The parent concatenates the four 16-cell child boundaries into the 64-index list V U V_{U} , stores C U C_{U} as a 64 × 64 64\\times 64 matrix on that list, and exposes the 36-cell outer boundary B U B_{U} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p6.2",
+      "kind": "p"
+    },
+    {
+      "id": "df4ffe0311e9ea41",
+      "section": "V-A Fixed-Boundary Spatial Hierarchy",
+      "location": "V-A Fixed-Boundary Spatial Hierarchy",
+      "text": "The root is a super-tile U U with an interface adjacency A U A_{U} on the children’s boundaries and a closure C U C_{U} on that interface. The root stores C U C_{U} on V U V_{U} , and a query that is not finalized lower in the tree meets there. At initialization, each base-tile closure is the Kleene star Eq. ( 5 ) of the currently known occupancy adjacency, after which parent interface graphs are formed bottom-up from child summaries and seam edges and their closures are computed recursively until the root is reached.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS1.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "9b42b97ce05752fb",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "An opening ( Δ ​ V , Δ ​ E ) (\\Delta V,\\Delta E) of Section III is converted into local adjacency decreases, with Δ ​ V = V τ + 1 ∖ V τ \\Delta V=V_{\\tau+1}\\setminus V_{\\tau} the newly free cells and Δ ​ E \\Delta E the incident pairs that become finite when those cells are revealed. Each such pair is written into the decrease set Δ ​ A T \\Delta A_{T} of the tile that owns it: an intra-tile edge into its base tile, a seam into the super-tile whose immediate children first separate the endpoints. We represent Δ ​ A T \\Delta A_{T} as the set of those local edge-weight decreases ( a , b , w ¯ ) (a,b,\\bar{w}) , where a a and b b are the two endpoint cells and w ¯ \\bar{w} is the new finite weight. At a base tile, the decreases are physical grid edges revealed by sensing. At a super-tile U U , the same opening appears as decreased child summaries Δ ​ S Q \\Delta S_{Q} together with newly enabled seam edges, which together form Δ ​ A U \\Delta A_{U} . Whether T T is a base tile or a super-tile, a local adjacency decrease Δ ​ A T \\Delta A_{T} first updates that tile’s closure C T C_{T} . If this changes any boundary-to-boundary distance, only those changed distances are written into Δ ​ S T \\Delta S_{T} and mapped into the parent as Δ ​ A U \\Delta A_{U} , so that every tile follows Δ ​ A T → C T → Δ ​ S T → Δ ​ A U \\Delta A_{T}\\to C_{T}\\to\\Delta S_{T}\\to\\Delta A_{U} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "804c0b53aa7918d3",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "H-TRIP restores the exactness of the stored closure after those decreases. The procedure that does this work is RepairClosure ( C , Δ ​ A ) (C,\\Delta A) . That procedure takes an already exact closure C C and returns the exact closure of the updated graph. A T A_{T} is the conceptual local adjacency of the tile. Δ ​ A T \\Delta A_{T} names the direct-edge decreases of that adjacency, and RepairClosure applies those decreases to the stored closure C T C_{T} . RepairClosure first seeds every decreased undirected edge into C C by",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "5a71b5684b92db6f",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "C ⁡ ( a , b ) \\displaystyle C(a,b) ← min ⁡ { C ⁡ ( a , b ) , w ¯ } , \\displaystyle\\leftarrow\\min\\bigl\\{C(a,b),\\bar{w}\\bigr\\}, C ⁡ ( b , a ) \\displaystyle C(b,a) ← min ⁡ { C ⁡ ( b , a ) , w ¯ } , \\displaystyle\\leftarrow\\min\\bigl\\{C(b,a),\\bar{w}\\bigr\\},",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "cd95bb985a87370b",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "and collects those endpoints into an internal set Π \\Pi . It then performs the min-plus pivot update",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "f7787fa2291c1dc4",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "C ⁡ ( i , j ) ← min ⁡ { C ⁡ ( i , j ) , C ⁡ ( i , π ) + C ⁡ ( π , j ) } C(i,j)\\leftarrow\\min\\bigl\\{C(i,j),\\,C(i,\\pi)+C(\\pi,j)\\bigr\\}",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.Ex2",
+      "kind": "table"
+    },
+    {
+      "id": "dedff6b75e88295c",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "for every π ∈ Π \\pi\\in\\Pi , writing the result back into C C . A dirty tile is one whose local decrease set Δ ​ A T \\Delta A_{T} is nonempty. Algorithm 1 repairs every dirty base tile, then every dirty super-tile bottom-up. All decreases received by the same super-tile from its children, whether those children are base tiles or super-tiles, are first coalesced into one Δ ​ A U \\Delta A_{U} , after which that dirty parent is repaired once.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "3a4957bc8ecf0c5f",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "Fig. 3: One occupancy opening climbs the hierarchy of Fig. 2 , whose leaves have side b = 5 b=5 and whose super-tiles aggregate g = 2 g=2 children. ( a ) On child T 2 T_{2} , a newly free cell decreases occupancy adjacency at its neighbors, and RepairClosure shortens paths to the perimeter so that those decreases leave as Δ ​ S T 2 \\Delta S_{T_{2}} on B T 2 B_{T_{2}} . ( b ) Super-tile U 1 U_{1} receives that summary through φ T 2 → U 1 \\varphi_{T_{2}\\to U_{1}} together with a newly passable seam, after which RepairClosure writes Δ ​ S U 1 \\Delta S_{U_{1}} on B U 1 B_{U_{1}} . ( c ) Super-tile U 5 U_{5} applies the same interface step to its 10 × 10 10\\times 10 children U 1 , … , U 4 U_{1},\\ldots,U_{4} , where φ U 1 → U 5 \\varphi_{U_{1}\\to U_{5}} plants Δ ​ S U 1 \\Delta S_{U_{1}} and RepairClosure writes Δ ​ S U 5 \\Delta S_{U_{5}} on B U 5 B_{U_{5}} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d140f58c7ca1a761",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "Algorithm 1 absorbs the opening by that assignment, and the single-cell case is | Δ ​ V | = 1 |\\Delta V|=1 (Fig. 3 ). If an exposed summary entry S T ​ ( p , q ) S_{T}(p,q) decreases to a finite weight w w , the parent receives the edge decrease ( φ T → U ​ ( p ) , φ T → U ​ ( q ) , w ) (\\varphi_{T\\to U}(p),\\varphi_{T\\to U}(q),w) in Δ ​ A U \\Delta A_{U} . A seam edge is stored at the first super-tile at which its two endpoint cells belong to different immediate children. For neighboring base tiles this is their first common parent (Fig. 2 ( b )), so a seam and a child-summary decrease are both adjacency decreases of that parent. The root is repaired like every other super-tile, but propagation ends there because the root has no parent.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6abc90cb44a85a4a",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "The stored closure C C is the Kleene star of the local adjacency. That star can be rebuilt from the updated adjacency by unfolding Eq. ( 5 ), by a Floyd–Warshall pass over every cell, or by a shortest-path search from every cell of the tile. Each of those reconstructions starts from the adjacency rather than from the already exact C C . Instead, one decreased edge updates the existing closure by the following rank-one identity,",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "70e704a9033f1e18",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "C ′ ( i , j ) = min { \\displaystyle C^{\\prime}(i,j)=\\min\\big\\{ C ⁡ ( i , j ) , \\displaystyle C(i,j), (9) C ⁡ ( i , a ) + w ¯ + C ⁡ ( b , j ) , \\displaystyle C(i,a)+\\bar{w}+C(b,j), C ( i , b ) + w ¯ + C ( a , j ) } . \\displaystyle C(i,b)+\\bar{w}+C(a,j)\\big\\}.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E9",
+      "kind": "table"
+    },
+    {
+      "id": "c9697a47847ca27a",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "The first term keeps the old distance, and the other two terms test paths that use the decreased undirected edge once in either direction. That identity restores one decreased edge, and a batch of decreased edges is restored by the equivalent endpoint-pivot sweep over Π \\Pi that RepairClosure applies. A cubic all-pairs pass would treat every cell of a leaf as an intermediate vertex and would cost O ⁡ ( b 6 ) O(b^{6}) . A leaf has b 2 b^{2} vertices, so that cubic cost is ( b 2 ) 3 (b^{2})^{3} , whereas | Π T | \\lvert\\Pi_{T}\\rvert restricted pivots cost | Π T | ​ ( b 2 ) 2 \\lvert\\Pi_{T}\\rvert(b^{2})^{2} . The sweep uses only the endpoints in Π T \\Pi_{T} , so the live kernel costs O ⁡ ( | Π T | ​ b 4 ) O(|\\Pi_{T}|\\,b^{4}) on a leaf. On a 4 4 -connected grid | Π T | = O ⁡ ( m T ) |\\Pi_{T}|=O(m_{T}) with m T = | Δ ​ V ∩ V T | m_{T}=\\lvert\\Delta V\\cap V_{T}\\rvert , so that cost is O ⁡ ( m T ​ b 4 ) O(m_{T}b^{4}) . The same restriction at an ancestor replaces a cubic pass of cost O ⁡ ( | V U | 3 ) O(|V_{U}|^{3}) by O ⁡ ( | Π U | ​ | V U | 2 ) O(|\\Pi_{U}|\\,|V_{U}|^{2}) on dirty interfaces only.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p4.3",
+      "kind": "p"
+    },
+    {
+      "id": "dab06c01afdb65f5",
+      "section": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "location": "V-B Min-Plus Updates on Leaves and Ancestors",
+      "text": "Blockages. Free-to-obstacle changes can increase distances and therefore require rebuilding the affected leaf and ancestor interfaces, which places them outside the insertion-only update considered here.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS2.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "fc4646e9c707fc4d",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "A shortest path may leave a leaf and re-enter, so even two viewpoints in the same tile can require ancestor meets. A queried cell p p first records its distances to the boundary of its base tile, a lift converts those distances into distances to the boundary of a parent, and two queried cells meet when their lifted distances are joined through the stored closure of a common ancestor.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4c16f32013256d38",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "Write x p → T x_{p\\to T} for the row of distances from p p to B T B_{T} , with",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "f6b4285fc52c7ab4",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "x p → T = C T ​ ( p , B T ) x_{p\\to T}=C_{T}(p,B_{T}) (10)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E10",
+      "kind": "table"
+    },
+    {
+      "id": "41d6f68da557677d",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "on the leaf that contains p p , and write s s and t t only when a pair is formed. On Fig. 2 ( a ) that row has 16 entries, and a lift through Fig. 2 ( b ) produces a 36-entry row on B U B_{U} . Suppose p p currently lies in child Q Q of super-tile U U . If Q Q has | B Q | |B_{Q}| boundary cells and U U has | B U | |B_{U}| exterior boundary cells, then x p → Q x_{p\\to Q} is a 1 × | B Q | 1\\times|B_{Q}| row, the restriction of C U C_{U} to ( B Q → U ) × ( B U ) (B_{Q\\to U})\\times(B_{U}) is a | B Q | × | B U | |B_{Q}|\\times|B_{U}| matrix, and the product x p → U x_{p\\to U} is a 1 × | B U | 1\\times|B_{U}| row. The corresponding rows of C U C_{U} tell how to continue from the embedded child boundary B Q → U B_{Q\\to U} to the outer boundary B U B_{U} ,",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "cd78b37e231c75ad",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "x p → U = ( x p → Q ) ⊗ ( C U | ( B Q → U ) × ( B U ) ) . x_{p\\to U}=\\bigl(x_{p\\to Q}\\bigr)\\otimes\\Bigl(C_{U}\\big|_{(B_{Q\\to U})\\times(B_{U})}\\Bigr). (11)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E11",
+      "kind": "table"
+    },
+    {
+      "id": "065e204b5fb4f578",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "The entries of x p → Q x_{p\\to Q} are read in the same order after the fixed mapping φ Q → U \\varphi_{Q\\to U} , so they align with the rows indexed by B Q → U B_{Q\\to U} . Because every stored closure is symmetric, the distances from B T B_{T} to p p are the transpose x p → T ⊤ x_{p\\to T}^{\\top} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p2.3",
+      "kind": "p"
+    },
+    {
+      "id": "e5a3517528589a05",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "For an enclosing super-tile U U , let Q s Q_{s} and Q t Q_{t} be the children that contain s s and t t . The meet",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "62865d676fdb8ed4",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "d U ​ ( s , t ) = ( x s → Q s ) ⊗ ( C U | ( B Q s → U ) × ( B Q t → U ) ) ⊗ ( x t → Q t ⊤ ) d_{U}(s,t)=\\bigl(x_{s\\to Q_{s}}\\bigr)\\otimes\\Bigl(C_{U}\\big|_{(B_{Q_{s}\\to U})\\times(B_{Q_{t}\\to U})}\\Bigr)\\otimes\\bigl(x_{t\\to Q_{t}}^{\\top}\\bigr) (12)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E12",
+      "kind": "table"
+    },
+    {
+      "id": "e31006bddcb89351",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "has three factors that respectively represent travel from s s to the boundary of its child, travel across the parent interface, and travel from the target-child boundary to t t . It is the shortest path constrained to that envelope. At the root the same meet uses the two embedded child boundaries of V U V_{U} . If s s and t t lie in different leaves T s T_{s} and T t T_{t} , the first possible meet is their lowest common ancestor. If they lie in the same leaf, C T s ​ ( s , t ) C_{T_{s}}(s,t) is also a candidate, and a shorter path may still leave the leaf and meet at a higher ancestor. The query therefore takes",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "097e7654fb6470cf",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "d ⁡ ( s , t ) = { min U ⁡ d U ​ ( s , t ) , T s ≠ T t , min ⁡ ( C T s ​ ( s , t ) , min U ⁡ d U ​ ( s , t ) ) , T s = T t , d(s,t)=\\begin{cases}\\min_{U}d_{U}(s,t),&T_{s}\\neq T_{t},\\\\[2.0pt] \\min\\bigl(C_{T_{s}}(s,t),\\min_{U}d_{U}(s,t)\\bigr),&T_{s}=T_{t},\\end{cases} (13)",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.E13",
+      "kind": "table"
+    },
+    {
+      "id": "2eec70469789cee9",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "where the first minimum runs over every super-tile that contains both leaves and the inner minimum runs over every super-tile that strictly contains T s T_{s} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p3.3",
+      "kind": "p"
+    },
+    {
+      "id": "a9ddc773896bb3e8",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "An isolated pair query may be slower than a single BFS because the hierarchical lift cannot be amortized, and H-TRIP’s query advantage therefore comes from amortizing shared lifts over the complete k × k k\\times k matrix. A single pair costs O ⁡ ( H ⋅ | B max | 2 ) O(H\\cdot|B_{\\max}|^{2}) with | B max | |B_{\\max}| the largest boundary encountered by either query attachment. At a given level the children that contain query viewpoints share a uniform boundary size | B Q | |B_{Q}| , and batched work at that level is O ⁡ ( k ​ | B Q | 2 + k 2 ​ | B Q | ) O(k|B_{Q}|^{2}+k^{2}|B_{Q}|) , of which the first term is the shared lifting work and the second is the pairwise meet work.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "1d6a52cda1f98ecc",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "Batched matrix. Algorithm 2 fills D τ ∈ ℝ ¯ ≥ 0 k × k D_{\\tau}\\in\\overline{\\mathbb{R}}_{\\geq 0}^{k\\times k} from P τ = ( P τ , 1 , … , P τ , k ) P_{\\tau}=(P_{\\tau,1},\\dots,P_{\\tau,k}) in one bottom-up sweep. Cross-child meets share projections. Every level contributes additional path candidates, and no candidate is assumed final until all relevant ancestors have been considered. Each meet therefore improves the stored entry by taking the minimum of the incumbent value and the new candidate. Pairs in different children meet at a parent for the first time, and same-child pairs are reconsidered at that parent because they may leave the child and re-enter it. At every non-root super-tile the attachments are lifted onto the parent boundary before those meets. At the root U U every still-relevant pair meets on the interface V U V_{U} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS3.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "e0c1849b3c3702e2",
+      "section": "V-C Batched k × k k\\times k Query",
+      "location": "V-C Batched k × k k\\times k Query",
+      "text": "Algorithm 2 Batched k × k k\\times k query",
+      "url": "https://arxiv.org/html/2611.08139v1#algorithm2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "b77ebd78bc4fd3d7",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "Let G = ( V , E , ω ) G=(V,E,\\omega) be undirected with nonnegative weights, and let C = A ∗ C=A^{*} be its metric closure. Inserting an undirected edge e = { u , v } e=\\{u,v\\} of weight w ¯ ≥ 0 \\bar{w}\\geq 0 , or decreasing an existing edge to w ¯ \\bar{w} , produces the new closure Eq. ( 9 ) for every pair of vertices. Sequential application of the rank-one update to every inserted or decreased edge yields the metric closure of the final graph, independent of insertion order. Equivalently, after seeding all decreased edges, a min-plus pivot sweep over their endpoint set Π \\Pi yields the same updated closure.",
+      "url": "https://arxiv.org/html/2611.08139v1#Thmlemma1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f1772cf4e6014816",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "Justification. An optimal simple path either avoids the decreased edge or uses it once, in which case the old closure already contains the prefix and suffix of Eq. ( 9 ). Every new shortest path decomposes into old shortest subpaths joined at vertices in Π \\Pi , so the endpoint-pivot sweep yields the same closure.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b4ef72c55c3efaa2",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "After Algorithm 1 absorbs an insertion-only opening, every stored tile closure remains exact.",
+      "url": "https://arxiv.org/html/2611.08139v1#Thmtheorem1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "d3cb899f951dad6c",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "Justification. Every dirty tile absorbs all decreases in its local Δ ​ A T \\Delta A_{T} by Lemma 1 , so that tile’s stored closure remains exact. If the tile is not the root and the exterior summary S T S_{T} strictly decreases, those entries are written into the parent as Δ ​ A U \\Delta A_{U} together with new seams, while internal entries that do not change the exterior summary stay local. Induction along each touched ancestor chain, stopping at the root or at an empty Δ ​ S U \\Delta S_{U} , extends the claim to the tree.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b2526ff17651d09f",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "Given vertices s , t ∈ V τ s,t\\in V_{\\tau} , the hierarchical query of Algorithm 2 returns the exact grid geodesic d G τ ​ ( s , t ) d_{G_{\\tau}}(s,t) .",
+      "url": "https://arxiv.org/html/2611.08139v1#Thmtheorem2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ae5dac1c2d2dfc76",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "Justification. The attachment of a queried cell to the boundary of its leaf and of every non-root ancestor equals the geodesic on the occupancy subgraph induced by that tile, because every exit is a perimeter cell and every child-summary edge of the interface adjacency A T A_{T} realizes a child-internal path. Every true grid path compresses to an equal-length walk on the interface of the smallest ancestor region that contains the complete path, and every interface walk expands through stored child summaries to a realizable grid path, so the minimum of Eq. ( 13 ) is the geodesic and Algorithm 2 records d G τ ​ ( s , t ) d_{G_{\\tau}}(s,t) for every queried pair. Consequently, any surviving-pair shortcut introduced by an opening is reflected in the next query after Algorithm 1 propagates the corresponding decreases.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS4.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "4efbc4c3a4c61b9e",
+      "section": "V-D Exactness",
+      "location": "V-D Exactness",
+      "text": "Memory. A base tile stores b 4 b^{4} closure entries and a boundary summary of ( 4 ​ b − 4 ) 2 (4b-4)^{2} entries. A level- ℓ \\ell tile T T has side b ℓ = b ​ g ℓ b_{\\ell}=bg^{\\ell} and | B T | = 4 ​ b ℓ − 4 |B_{T}|=4b_{\\ell}-4 , so the parent interface has | V U | = g 2 ​ | B Q | |V_{U}|=g^{2}|B_{Q}| when each child Q Q is a level- ℓ \\ell tile. The corresponding super-tile closure therefore stores | V U | 2 |V_{U}|^{2} entries.",
+      "url": "https://arxiv.org/html/2611.08139v1#S5.SS4.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "9d7013cc84589f64",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "This section evaluates H-TRIP on two-dimensional occupancy maps from the MovingAI benchmark [ 22 ] . The evaluation covers numerical exactness, batched query performance, incremental update cost, and multi-robot exploration, which together characterize the regime in which the hierarchy is beneficial and the cost of maintaining it as free space is revealed.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b3e11fe61d1f721a",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "A. Setup and Exactness: The evaluation uses two settings. To assess batched query performance, every ground-truth passable cell of each map is marked observed free, so those queries include all traversable cells. The second setting places sixteen unicycle robots with onboard two-dimensional lidars, which explore occupancy grids with 5 ​ cm 5\\,\\mathrm{cm} cells in the frontier-based explorer of Fig. 1 . At each planning cycle the occupancy graph G τ G_{\\tau} consists of the cells the fleet has explored, frontiers are extracted from that occupancy, and robot poses and frontier representatives snap onto free cells of G τ G_{\\tau} . Each query is exact. Indexing uses a double buffer so that an update does not block queries. Table I names the maps used in both settings.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "796da7bca9eb701e",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Table I: Evaluation maps from the MovingAI open-source set [ 22 ]",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "27baceb130bbc948",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "M 1 M_{1} M 2 M_{2} M 3 M_{3} M 4 M_{4} M 5 M_{5} M 6 M_{6}",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T1.1.1",
+      "kind": "table"
+    },
+    {
+      "id": "83f97f8ba16f0b99",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Map Name b , g b,g | V | \\lvert V\\rvert Map Name b , g b,g | V | \\lvert V\\rvert M 1 M_{1} Boston_0_256 16 , 2 16,2 47,768 47{,}768 M 4 M_{4} maze512-16-0 16 , 2 16,2 246,016 246{,}016 M 2 M_{2} Boston_0_1024 32 , 2 32,2 796,896 796{,}896 M 5 M_{5} Paris_0_512 8 , 2 8,2 196,567 196{,}567 M 3 M_{3} maze512-1-0 16 , 2 16,2 131,071 131{,}071 M 6 M_{6} Berlin_0_1024 8 , 2 8,2 794,748 794{,}748",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T1.2.1",
+      "kind": "table"
+    },
+    {
+      "id": "fdf150723d092cb8",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "In that first setting, query points are selected homogeneously across each map. The timed k = 25 k=25 batch uses twenty-five of those points, and each reported query time is the median of ten timed repeats after three cache warm-ups. Min-plus kernels use AVX2 on an Intel Core i7-8650U, and k × k\\times BFS is a scalar, single-threaded search on the same graph. Pairwise A ∗ \\mathrm{A}^{*} at k = 25 k=25 is 7.3 × 7.3\\times – 9.9 × 9.9\\times slower than that k × k\\times BFS fill on M 1 M_{1} , M 2 M_{2} , and M 3 M_{3} , and the query tables report k × k\\times BFS as the sequential-search baseline. Distances in the index are uint16 with sentinel INF = 60000 \\texttt{INF}=60000 , which is sufficient for the maps in this evaluation. Tables II and V time Algorithm 2 on those fully revealed maps, and Table V times the same k × k k\\times k fill on the occupancy graph G τ G_{\\tau} as the robots explore. Across 178,708 178{,}708 logged matrix entries compared against BFS or Dijkstra, H-TRIP produced zero mismatches.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "98c1a27b98db710f",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Table II: Median query time for 25 25 viewpoints on a fully revealed map. Index is the size of the H-TRIP index. Break-even is the number of batches that recover the full-build cost against k × k\\times BFS.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2e83b89b6fc4610f",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Map Index Full build k × k\\times BFS H-TRIP vs BFS Break-even M 1 M_{1} 87 ​ MB 87\\,\\mathrm{MB} 0.71 ​ s 0.71\\,\\mathrm{s} 32.7 ​ ms 32.7\\,\\mathrm{ms} 3.3 ​ ms 3.3\\,\\mathrm{ms} 9.9 × 9.9\\times 24 24 M 2 M_{2} 3175 ​ MB 3175\\,\\mathrm{MB} 79.9 ​ s 79.9\\,\\mathrm{s} 554.2 ​ ms 554.2\\,\\mathrm{ms} 49.8 ​ ms 49.8\\,\\mathrm{ms} 11.1 × 11.1\\times 158 158 M 3 M_{3} 404 ​ MB 404\\,\\mathrm{MB} 1.07 ​ s 1.07\\,\\mathrm{s} 149.4 ​ ms 149.4\\,\\mathrm{ms} 1.81 ​ ms 1.81\\,\\mathrm{ms} 82.6 × 82.6\\times 7 7 M 4 M_{4} 404 ​ MB 404\\,\\mathrm{MB} 3.40 ​ s 3.40\\,\\mathrm{s} 207 ​ ms 207\\,\\mathrm{ms} 18.0 ​ ms 18.0\\,\\mathrm{ms} 11.5 × 11.5\\times 18 18 M 5 M_{5} 351 ​ MB 351\\,\\mathrm{MB} 6.33 ​ s 6.33\\,\\mathrm{s} 166 ​ ms 166\\,\\mathrm{ms} 17.0 ​ ms 17.0\\,\\mathrm{ms} 9.77 × 9.77\\times 42 42 M 6 M_{6} 1629 ​ MB 1629\\,\\mathrm{MB} 63.0 ​ s 63.0\\,\\mathrm{s} 744 ​ ms 744\\,\\mathrm{ms} 102 ​ ms 102\\,\\mathrm{ms} 7.28 × 7.28\\times 98 98",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T2.1",
+      "kind": "table"
+    },
+    {
+      "id": "d6bbec6f0693fcc7",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Table III: Speedup of H-TRIP versus k × k\\times BFS on fully revealed maps for various k k values. The large ratios on M 3 M_{3} come from one-cell corridors.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T5.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d893b19113d8ff36",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Map k = 2 k{=}2 k = 4 k{=}4 k = 16 k{=}16 k = 32 k{=}32 k = 64 k{=}64 k = 256 k{=}256 M 1 M_{1} 0.67 × 0.67\\times 1.70 × 1.70\\times 8.87 × 8.87\\times 8.38 × 8.38\\times 7.04 × 7.04\\times 1.79 × 1.79\\times M 2 M_{2} 0.51 × 0.51\\times 2.41 × 2.41\\times 13.7 × 13.7\\times 8.97 × 8.97\\times 7.41 × 7.41\\times 2.00 × 2.00\\times M 3 M_{3} 120 × 120\\times 89.2 × 89.2\\times 235 × 235\\times 67.2 × 67.2\\times 54.6 × 54.6\\times 11.4 × 11.4\\times M 4 M_{4} 1.50 × 1.50\\times 3.98 × 3.98\\times 24.6 × 24.6\\times 8.26 × 8.26\\times 13.0 × 13.0\\times 2.92 × 2.92\\times M 5 M_{5} 0.12 × 0.12\\times 0.70 × 0.70\\times 6.71 × 6.71\\times 8.48 × 8.48\\times 7.52 × 7.52\\times 2.56 × 2.56\\times M 6 M_{6} 0.10 × 0.10\\times 0.66 × 0.66\\times 5.94 × 5.94\\times 7.24 × 7.24\\times 2.31 × 2.31\\times 1.82 × 1.82\\times",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T5.fig1.6.1",
+      "kind": "table"
+    },
+    {
+      "id": "6e8d74e12e534bfe",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Table IV: Index update after occupancy openings. Upd. is Algorithm 1 , Upd.+query adds Algorithm 2 , and k × k\\times BFS D τ D_{\\tau} is a refill.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T5.fig2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "f2731e5424370d3a",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Map Pattern m m Upd. Upd.+query k × k\\times BFS D τ D_{\\tau} M 1 M_{1} same-leaf 1 1 0.042 ​ ms 0.042\\,\\mathrm{ms} 3.34 ​ ms 3.34\\,\\mathrm{ms} 34.6 ​ ms 34.6\\,\\mathrm{ms} same-leaf 16 16 74.8 ​ ms 74.8\\,\\mathrm{ms} 78.1 ​ ms 78.1\\,\\mathrm{ms} 33.3 ​ ms 33.3\\,\\mathrm{ms} multi-leaf 64 64 242 ​ ms 242\\,\\mathrm{ms} 245 ​ ms 245\\,\\mathrm{ms} 36.2 ​ ms 36.2\\,\\mathrm{ms} M 3 M_{3} multi-leaf 64 64 154 ​ ms 154\\,\\mathrm{ms} 156 ​ ms 156\\,\\mathrm{ms} 174 ​ ms 174\\,\\mathrm{ms} M 4 M_{4} same-leaf 1 1 0.185 ​ ms 0.185\\,\\mathrm{ms} 18.2 ​ ms 18.2\\,\\mathrm{ms} 252 ​ ms 252\\,\\mathrm{ms} same-leaf 16 16 3.44 ​ ms 3.44\\,\\mathrm{ms} 21.4 ​ ms 21.4\\,\\mathrm{ms} 258 ​ ms 258\\,\\mathrm{ms}",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T5.fig2.7.1",
+      "kind": "table"
+    },
+    {
+      "id": "04a671756d2b66cb",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Table V: Query times during exploration ( N = 16 N{=}16 , K = 50 K{=}50 , ≤ 500 \\leq 500 sim. steps) on map revealed so far. LiDAR is range, span, and ray count.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T5.fig3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "941bcdc4da5ce004",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Map LiDAR b b Cov. H-TRIP k × k\\times BFS vs BFS M 1 M_{1} 6 ​ m / 180 ∘ / 45 6\\,\\mathrm{m}/180^{\\circ}/45 16 16 93.3 % 93.3\\% 14.2 ​ ms 14.2\\,\\mathrm{ms} 122 ​ ms 122\\,\\mathrm{ms} 8.59 × 8.59\\times M 4 M_{4} 4 ​ m / 90 ∘ / 30 4\\,\\mathrm{m}/90^{\\circ}/30 16 16 27.1 % 27.1\\% 6.08 ​ ms 6.08\\,\\mathrm{ms} 16.7 ​ ms 16.7\\,\\mathrm{ms} 2.75 × 2.75\\times M 4 M_{4} 8 ​ m / 180 ∘ / 60 8\\,\\mathrm{m}/180^{\\circ}/60 16 16 39.1 % 39.1\\% 6.37 ​ ms 6.37\\,\\mathrm{ms} 23.0 ​ ms 23.0\\,\\mathrm{ms} 3.61 × 3.61\\times M 5 M_{5} 5 ​ m / 90 ∘ / 30 5\\,\\mathrm{m}/90^{\\circ}/30 8 8 68.7 % 68.7\\% 56.9 ​ ms 56.9\\,\\mathrm{ms} 239 ​ ms 239\\,\\mathrm{ms} 4.20 × 4.20\\times M 5 M_{5} 5 ​ m / 90 ∘ / 30 5\\,\\mathrm{m}/90^{\\circ}/30 32 32 69.5 % 69.5\\% 63.2 ​ ms 63.2\\,\\mathrm{ms} 212 ​ ms 212\\,\\mathrm{ms} 3.35 × 3.35\\times M 6 M_{6} 5 ​ m / 90 ∘ / 30 5\\,\\mathrm{m}/90^{\\circ}/30 8 8 50.2 % 50.2\\% 216 ​ ms 216\\,\\mathrm{ms} 478 ​ ms 478\\,\\mathrm{ms} 2.21 × 2.21\\times",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.T5.fig3.6.1",
+      "kind": "table"
+    },
+    {
+      "id": "4e77f49d8306bfc2",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Fig. 4: Free-cell coverage versus paired query time during exploration. Across the traces, k × k\\times BFS query time generally grows faster with coverage than H-TRIP.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.F5.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "68da8aa162385d9a",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "Fig. 5: H-TRIP update time versus cells revealed in the same exploration step, grouped by native map side. Markers are changed-step telemetry samples, and curves are log-spaced bin medians.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.F5.fig2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5d8ebf8ed6105769",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "H-TRIP is 7.28 × 7.28\\times – 11.5 × 11.5\\times faster than k × k\\times BFS at k = 25 k=25 on M 1 M_{1} , M 2 M_{2} , M 4 M_{4} , M 5 M_{5} , and M 6 M_{6} . M 3 M_{3} is a one-cell-wide corridor maze whose query points lie thousands of cells apart, so each BFS walks a long unique path and the paired median ratio reaches 82.6 × 82.6\\times . The full-build cost is amortized after twenty-four batches on M 1 M_{1} and seven on M 3 M_{3} .",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "7544914204257c23",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "On M 3 M_{3} the one-cell corridors keep each BFS on a long unique path, so the ratios stay large across the sweep (Table V ). On the street maps H-TRIP overtakes k × k\\times BFS once the batch shares hierarchical lifts, and the advantage then declines at very large k k because the k × k k\\times k lift has quadratic meet cost. The benefit is therefore workload dependent, because H-TRIP reuses hierarchical lifts when viewpoints are spatially distributed.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "eaefaf3e15f10dbd",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "C. Incremental Update Performance: Local openings are cheap when propagation stops near the leaf, and they become expensive when decreases dirty several ancestors, which is map dependent (Table V ). A broad multi-leaf batch can exceed a BFS refill of D τ D_{\\tau} , so the exploration experiment tests whether the cheap local regime occurs often enough as the fleet opens cells.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p7.1",
+      "kind": "p"
+    },
+    {
+      "id": "730b7ffe1c4457e0",
+      "section": "VI Experimental Evaluation",
+      "location": "VI Experimental Evaluation",
+      "text": "D. Multi-Robot Exploration: The runs in Table V place sixteen robots on the occupancy graph G τ G_{\\tau} that the fleet has explored so far, and each paired sample fills D τ D_{\\tau} at those viewpoints. A run stops earlier when free-cell coverage reaches 95 % 95\\% . When coverage is still partial, k × k\\times BFS searches a smaller graph than the fully revealed maps of Table II , so the exploration speedup is smaller than the full-map figure. On M 1 M_{1} coverage is nearly complete, so the ratio stays near that full-map speedup. On M 4 M_{4} a wider lidar raises coverage, so k × k\\times BFS takes longer, and H-TRIP stays cheap because most of the maze is still unknown (Fig. 5 ). On M 5 M_{5} a larger leaf reduces the paired speedup, and on M 6 M_{6} occupancy is still partial while H-TRIP remains faster than k × k\\times BFS. Fig. 5 plots Algorithm 1 times against cells revealed in the same step, grouped by map side, and each curve pools in-loop updates at that resolution.",
+      "url": "https://arxiv.org/html/2611.08139v1#S6.p8.1",
+      "kind": "p"
+    },
+    {
+      "id": "17426a3afd394e9c",
+      "section": "VII Conclusion",
+      "location": "VII Conclusion",
+      "text": "This paper introduced H-TRIP, an exact hierarchical distance index for multi-robot exploration on monotonically growing occupancy grids. By combining fixed boundary ports, min-plus closure, and localized rank-one updates, H-TRIP maintains exact geodesic distances while supporting repeated many-to-many evaluation as the map expands. During multi-robot exploration, batched queries were 2.21 × 2.21\\times – 8.59 × 8.59\\times faster than co-scheduled k × k\\times BFS while preserving exact agreement with reference searches. Update cost remains workload dependent, however, and openings that propagate through several hierarchy levels can exceed the cost of a BFS refill. The current formulation is limited to insertion-only changes in two-dimensional occupancy grids; future work will consider non-monotonic updates, lower-memory representations, and physical multi-robot validation.",
+      "url": "https://arxiv.org/html/2611.08139v1#S7.p1.1",
+      "kind": "p"
+    }
+  ]
+}

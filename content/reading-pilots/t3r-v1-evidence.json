@@ -1,0 +1,487 @@
+{
+  "id": "df0a24d993019e0929d7a4c29a80412ffeb65d38bb819f5dad189414cd1439ef",
+  "url": "https://arxiv.org/html/2611.08413v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "572de3e39d2757dd",
+      "section": "T3R: Training-Free Two-Stage Token Refinement Towards Efficient and Robust VLA Models",
+      "location": "T3R: Training-Free Two-Stage Token Refinement Towards Efficient and Robust VLA Models",
+      "text": "Vision-Language-Action (VLA) models enable end-to-end robot control, but inference is increasingly expensive: each decision processes hundreds of visual tokens, often across multiple cameras, leading to substantial computation while allowing irrelevant background content to distract action prediction under distribution shift. We argue that these issues stem from two complementary forms of redundancy: many visual tokens are spatially irrelevant, while attention over the remaining tokens is often misallocated. Based on this observation, we propose T3R, a Training-Free Two-Stage Token Refinement framework. In the first stage, segmentation-guided token pruning removes irrelevant visual patches to reduce computation and eliminate distracting context. In the second stage, saliency-guided attention biasing reallocates attention toward action-critical visual regions and language instructions within the retained tokens. Together, pruning produces a cleaner candidate set, while attention biasing further emphasizes the most decision-relevant evidence, yielding a better accuracy-efficiency frontier than either stage alone. On LIBERO-Spatial, T3R removes 85% of scene-camera visual tokens while essentially matching the unpruned success rate, and improves success by up to 7 percentage points under out-of-distribution object-placement perturbations. The timing comparison attributes 7.8 ms per inference call to pruning and attention-bias application. As input resolution increases, LLM-forward profiling shows up to a 3.3 × 3.3\\times speedup over the unpruned baseline. Evaluations across LIBERO, SIMPLER, and RoboTwin with three VLA backbones show the strongest accuracy-efficiency benefits in multi-camera settings. These results demonstrate that training-free token refinement is a practical approach to efficient and robust VLA inference.",
+      "url": "https://arxiv.org/html/2611.08413v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "781363b5933b93a4",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "Vision-Language-Action (VLA) models ( Brohan et al., 2023a ; Black et al., 2024 ; Kim et al., 2024 ) provide a unified interface from pixels and language to robot actions, but this generality carries a substantial inference burden. At every decision step, the model propagates a long visual sequence through a large language backbone. In a typical OpenVLA-style setup, a 224 × 224 224\\times 224 image produces 256 256 visual patches ( Zhai et al., 2023 ) , and multi-camera inputs multiply this token load before any action token is predicted. Attending over such long sequences at every control step is expensive and increases latency, which is detrimental to real-time control and can further induce observation–action distribution shift through stale observations and delayed actuation ( Arachchige et al., 2025 ) .",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0bf262649ee2f791",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "Figure 1. Two-stage T3R pipeline. Stage 1 (pruning): POS-weighted SigLIP text–patch similarity localizes the target; the top-scoring patch positions (with SigLIP/DINOv2 features) prompt EfficientTAM to produce an object mask, which is converted to a patch-level pruning decision while preserving original RoPE positions, so only the “interested tokens” enter the LLM. Stage 2 (biasing): Integrated Gradients over the instruction identifies salient words; an additive attention bias ( β = 2.0 \\beta{=}2.0 ) is injected into the middle decoder layers for action-token queries, steering attention toward salient text tokens and retained visual patches before the action chunk is decoded. A closed-loop robot-control diagram. Camera observations and the instruction feed image and text encoders. In the first stage, similarity-selected image patches and DINOv2 features guide EfficientTAM to generate a mask; only selected visual tokens enter the language model. In the second stage, Integrated Gradients assigns importance to instruction words, illustrated by bowl and plate, and attention biases emphasize those words and selected visual tokens. The model outputs action tokens, the robot executes the actions, and a new observation starts the next iteration.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "19676b3ccbffb790",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "Many visual tokens are weakly coupled to the language instruction ( Chen et al., 2024 ; Shang et al., 2024 ) . These tokens can diffuse attention and distract action prediction, especially under viewpoint or object-placement shifts. Effective refinement must both remove irrelevant tokens and reinforce instruction-relevant evidence among those retained.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "21c2f2ace8d0ee6a",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "Redundancy acts at two coupled stages: token-set construction and attention allocation . Pruning can discard critical cues, while attention steering retains the full token cost and noisy input. We therefore prune first and refine attention only over the retained sequence.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "8611325c46f2c263",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "Building on this view, we introduce T3R, a training-free two-stage token refinement framework. Stage 1 performs segmentation-guided token pruning with position preservation, so compression happens before the VLA decoder and every transformer layer benefits from a shorter input. Stage 2 compensates for pruning-induced information loss by injecting task relevance into the retained sequence: saliency-guided attention biasing in intermediate layers steers action-token queries toward instruction-salient words and retained task-relevant regions.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "d05c0b3b029cb598",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "We evaluate T3R on OpenVLA-OFT ( Kim et al., 2025 ) , CogACT ( Li et al., 2024b ) , and π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) across LIBERO ( Liu et al., 2023 ) , SIMPLER ( Li et al., 2024a ) , and RoboTwin ( Mu et al., 2025 ) . Across these systems, multi-camera settings show greater pruning headroom than the single-camera zero-shot setting. This trend suggests that overlapping visual evidence creates opportunities for token reduction.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "6955e55788481246",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "We propose T3R, a training-free two-stage framework that couples segmentation-guided, position-preserving token pruning with saliency-guided attention biasing, jointly optimizing token selection and attention allocation in a single inference pass.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a6d7d86b6f3bfb04",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "On LIBERO-Spatial with OpenVLA-OFT, T3R removes 85% of scene-camera tokens while retaining 96% success, reduces VLA inference latency by 14%, and improves OOD success by up to 7 pp. Resolution-scaling profiling shows up to a 3.3 × 3.3\\times LLM-forward speedup over the unpruned baseline.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6340b0d8cee55745",
+      "section": "1. Introduction",
+      "location": "1. Introduction",
+      "text": "We evaluate T3R across VLA backbones and camera setups. The observed accuracy-efficiency trends are consistent with greater sensor redundancy providing more headroom for token pruning.",
+      "url": "https://arxiv.org/html/2611.08413v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9377ffbaff9d52d5",
+      "section": "2. Related Work",
+      "location": "2. Related Work",
+      "text": "Vision-Language-Action models. VLA methods cast robot control as conditional sequence modeling over observations, instructions, and actions. RT-1/RT-2 ( Brohan et al., 2023b ; Brohan et al., 2023a ) established large-scale vision-language pretraining for manipulation, while OpenVLA and OpenVLA-OFT ( Kim et al., 2024 ; Kim et al., 2025 ) improved openness and adaptation efficiency. Parallel efforts including π 0 \\pi_{0} / π 0.5 \\pi_{0.5} ( Black et al., 2024 ; Physical Intelligence et al., 2025 ) , CogACT ( Li et al., 2024b ) , and GR00T ( NVIDIA et al., 2025 ) scale model capacity and control fidelity. Inference still relies on propagating long visual token sequences through heavy backbones, leaving efficiency and robustness under perturbation as open bottlenecks.",
+      "url": "https://arxiv.org/html/2611.08413v1#S2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "5cc99066617d794d",
+      "section": "2. Related Work",
+      "location": "2. Related Work",
+      "text": "Token-efficient inference. Token reduction has been studied in vision transformers and multimodal LLMs via pruning, merging, and routing ( Bolya et al., 2023 ; Rao et al., 2021 ; Chen et al., 2024 ; Shang et al., 2024 ) . In embodied settings, EfficientVLA, LightVLA, and TeamVLA ( Yang et al., 2025 ; Jiang et al., 2025 ; Ye et al., 2025 ) adapt these ideas with task-aware scoring and runtime compression; FastV ( Chen et al., 2024 ) prunes visual tokens after an early decoder layer; ADP ( Pei et al., 2025 ) performs action-aware dynamic pruning; and VLA-Cache ( Xu et al., 2025 ) reuses KV-cache entries across frames. T3R targets the harder decoder-entry regime: tokens are removed before any decoder layer, benefiting all layers, but selection is irreversible and lacks internal attention guidance. T3R addresses this by coupling external vision-language grounding with post-pruning attention repair. T3R and VLA-Cache are complementary (spatial vs. temporal redundancy).",
+      "url": "https://arxiv.org/html/2611.08413v1#S2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e4037f27b71b4506",
+      "section": "2. Related Work",
+      "location": "2. Related Work",
+      "text": "Segmentation priors and attribution steering. Promptable segmentation models such as SAM/SAM2 and efficient variants ( Kirillov et al., 2023 ; Ravi et al., 2024 ; Xiong et al., 2024 ) provide a strong prior for locating instruction-relevant regions; we use segmentation as an intermediate computational prior rather than a perception output. Attribution methods, especially Integrated Gradients ( Sundararajan et al., 2017 ) , estimate token contribution without parameter updates; since raw attention is not always a faithful importance indicator ( Jain and Wallace, 2019 ; Patro et al., 2022 ) , we use external relevance signals to bias middle-layer action-token attention, following the spirit of inference-time intervention ( Nguyen and Le, 2026 ) .",
+      "url": "https://arxiv.org/html/2611.08413v1#S2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "6c995f27f8efcbf1",
+      "section": "2. Related Work",
+      "location": "2. Related Work",
+      "text": "Positioning. To our knowledge, T3R is the first training-free approach to prune 85% of scene-camera tokens before decoder entry while retaining success within 1 pp of the unpruned baseline on LIBERO-Spatial. External grounding and attention repair benefit every decoder layer without retraining.",
+      "url": "https://arxiv.org/html/2611.08413v1#S2.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "7e678388481f5053",
+      "section": "3. Method",
+      "location": "3. Method",
+      "text": "T3R follows a two-stage pipeline (Fig. 1 ): segmentation-guided token pruning (Sec. 3.1 ) removes spatially redundant tokens, then saliency-guided attention biasing (Sec. 3.2 ) sharpens attention on the most important tokens that remain.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "074197a022280cc1",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "We remove visually irrelevant patches before they reach the VLA backbone, reducing effective sequence length while preserving tokens that carry task-relevant evidence. We first estimate patch-level relevance with the SigLIP vision-language encoder, which yields a text–patch similarity map, then refine it into an object mask with a SAM-based segmenter.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8df9a2dc9d052944",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "Task-guided patch scoring. Given an instruction ℓ \\ell and an image I ∈ ℝ 224 × 224 × 3 I\\in\\mathbb{R}^{224\\times 224\\times 3} , SigLIP partitions the image into N = 256 N{=}256 patches with features V ∈ ℝ N × d V\\in\\mathbb{R}^{N\\times d} and tokenizes the instruction into T ∈ ℝ M × d T\\in\\mathbb{R}^{M\\times d} . Natural-language instructions mix nouns, spatial relations, and function words that are not equally informative for grounding. We therefore compute a part-of-speech (POS)-weighted patch-relevance score",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2841326c3235cd13",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "(1) s i = ∑ j = 1 M w j cos ( v i , t j ) ∑ j = 1 M w j , s_{i}=\\frac{\\sum_{j=1}^{M}w_{j}\\,\\cos(v_{i},t_{j})}{\\sum_{j=1}^{M}w_{j}},",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "712aa68c77d3b543",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "where t j t_{j} is the embedding of token j j , w j w_{j} its POS-dependent weight, and cos ⁡ ( ⋅ , ⋅ ) \\cos(\\cdot,\\cdot) cosine similarity. This softly emphasizes object nouns and descriptive adjectives while down-weighting verbs and prepositions, without supervision or architectural changes.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "79d91144e9ba5a6d",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "Segmentation-based mask generation. Relevance scores localize the target coarsely but lack precise boundaries. We refine them with EfficientTAM-S ( Xiong et al., 2024 ) , which generates masks from sparse point prompts. Because nearly uniform similarity scores make top- K K prompt selection unstable, we adopt an oversample-cluster-refine strategy: select the K init = 50 K_{\\text{init}}{=}50 highest-scoring patches, apply DBSCAN ( ϵ = 2.0 \\epsilon{=}2.0 in patch units) on their 2D grid coordinates, retain the largest spatial cluster, and take its K = 8 K{=}8 top-scoring patches as positive prompts plus K neg = 3 K_{\\text{neg}}{=}3 lowest-scoring patches as negative prompts. This spatial coherence reduces mask flicker across frames. A patch is retained if the mask covers more than 30% of its pixels ( τ = 0.3 \\tau{=}0.3 ). SigLIP text embeddings are cached per instruction; masks are updated asynchronously every five VLA calls.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "74f54a1fe7bfdc25",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "Figure 2. Qualitative pruning on a sparse LIBERO-Spatial scene (“pick up the bowl between the plate and the ramekin”). Top: input, POS-weighted SigLIP similarity, and the EfficientTAM mask with its point prompts. Middle: T3R keeps only 13/256 patches (95% pruned), tightly localized on the target. Bottom: TeamVLA’s similarity+expansion+merge retains 226/256 (12% pruned), leaving most of the background in the sequence through the early decoder layers. A three-by-three panel comparison of patch selection in a tabletop scene containing a robot gripper, bowls, a plate, and a ramekin. The top row shows the original image, a colored similarity heatmap, and a green segmentation mask with positive and negative point prompts. The middle row shows a small retained region around the target, the image with discarded regions darkened, and the original image for comparison. The bottom row shows TeamVLA's similarity, expansion, and final merging masks, which retain much more background. Green patches are retained and red patches are discarded.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c719c7732bc6b91f",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "Position-preserving pruning. The input layout is",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "2855e1388b11d2cd",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "[ bos , v 1 : 256 , v 1 : 256 ′ , q proprio , t 1 : L ] [\\textsc{bos},\\,v_{1:256},\\,v^{\\prime}_{1:256},\\,q_{\\text{proprio}},\\,t_{1:L}]",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "c95e2327342ba5fc",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "with sequential RoPE positions ( Su et al., 2024 ) . Naively re-indexing after pruning shifts downstream tokens to positions never seen in pretraining and collapses success to near zero in our tests. We instead assign each retained patch its original position ID: for the retained index set S S the sequence becomes",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p4.2",
+      "kind": "p"
+    },
+    {
+      "id": "47ee770b74bdde46",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "[ 0 , { i + 1 } i ∈ S , 257 ​ – ​ 512,513,514 , … ] , [0,\\{i{+}1\\}_{i\\in S},257\\text{--}512,513,514,\\dots],",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.Ex2",
+      "kind": "table"
+    },
+    {
+      "id": "bf3a2ab1cde62111",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "preserving the pretrained positional structure and visual–language relationships.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p4.3",
+      "kind": "p"
+    },
+    {
+      "id": "905161f1cdd8823b",
+      "section": "3.1. Segmentation-Guided Token Pruning",
+      "location": "3.1. Segmentation-Guided Token Pruning",
+      "text": "Scheduling. Segmentation runs asynchronously , with updates scheduled every five VLA inference calls. Action inference reuses the latest completed mask without waiting for an update. On suites where segmentation is ambiguous, an optional similarity-union rule additionally retains patches above the 75th percentile of the similarity scores, trading a little compression for recall.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "3650218cb655429c",
+      "section": "3.2. Saliency-Guided Attention Biasing",
+      "location": "3.2. Saliency-Guided Attention Biasing",
+      "text": "Pruning inevitably removes scene information. To mitigate the loss of task-relevant signal, we steer attention toward salient instruction tokens and retained task-relevant patches within the reduced sequence.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e6f22f38c9b87b40",
+      "section": "3.2. Saliency-Guided Attention Biasing",
+      "location": "3.2. Saliency-Guided Attention Biasing",
+      "text": "Attribution via Integrated Gradients. We adopt Integrated Gradients (IG) ( Sundararajan et al., 2017 ) , which attributes a prediction to input tokens by integrating gradients along a straight-line path from a neutral baseline to the actual input and satisfies the completeness axiom. At the start of each task we compute token-level IG on the embedding layer, interpolating between a pad-token baseline and the input in n steps = 5 n_{\\text{steps}}{=}5 steps; the normalized attribution α ∈ ℝ L \\alpha\\in\\mathbb{R}^{L} designates the top 30% of tokens as salient. The attributions are cached and reused across all evaluation episodes of that task.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "d13652f49ff6b5fd",
+      "section": "3.2. Saliency-Guided Attention Biasing",
+      "location": "3.2. Saliency-Guided Attention Biasing",
+      "text": "Attention-bias injection. We add the attribution as an additive bias to the attention logits of the middle decoder layers:",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS2.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "100160a45a75e4c6",
+      "section": "3.2. Saliency-Guided Attention Biasing",
+      "location": "3.2. Saliency-Guided Attention Biasing",
+      "text": "(2) a i ​ j = q i ⋅ k j d + β w j 1 [ j ∈ S bias ] 1 [ i ∈ Q action ] , a_{ij}=\\frac{q_{i}\\!\\cdot\\!k_{j}}{\\sqrt{d}}+\\beta\\,w_{j}\\,\\mathbf{1}[j\\in S_{\\text{bias}}]\\,\\mathbf{1}[i\\in Q_{\\text{action}}],",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "4146ee1e510785b4",
+      "section": "3.2. Saliency-Guided Attention Biasing",
+      "location": "3.2. Saliency-Guided Attention Biasing",
+      "text": "where β \\beta is a scalar strength, w j w_{j} the bias weight at key position j j , S bias S_{\\text{bias}} the union of salient text positions and retained visual patch positions, and Q action Q_{\\text{action}} the action-prediction queries. The bias is applied only to action-token queries and restricted to middle layers (8–23), preserving early feature extraction and late output formatting. Biased positions are drawn from (i) salient text tokens weighted by their IG scores and (ii) retained visual patches weighted by SigLIP similarity scaled by 0.5 0.5 . This forms a two-level funnel: pruning removes clearly irrelevant tokens; biasing further differentiates among those that remain.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.SS2.p3.2",
+      "kind": "p"
+    },
+    {
+      "id": "5c465a831d61ca54",
+      "section": "3.2. Saliency-Guided Attention Biasing",
+      "location": "3.2. Saliency-Guided Attention Biasing",
+      "text": "Figure 3. Most visual tokens are near-inert. (a) Across all 32 decoder layers, 93.9% of visual tokens receive < < 0.2% of the action queries’ attention each. (b) Per-patch action-query attention concentrates on a few task-relevant patches (here the gripper and target bowls), while the background receives negligible weight. Two panels summarize visual-token attention. The left bar chart shows that 30.7 percent of tokens receive less than 0.1 percent attention each, 63.2 percent receive 0.1 to 0.2 percent, and 6.1 percent receive more than 0.2 percent. The right panel overlays a patch-grid heatmap on the scene. Most patches have low attention, with a few high-attention regions near the gripper and target bowls. The color scale runs from blue for low attention to red for high attention.",
+      "url": "https://arxiv.org/html/2611.08413v1#S3.F3",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c9cc184fb9cc7e32",
+      "section": "4. Experiments",
+      "location": "4. Experiments",
+      "text": "We test three hypotheses: (H1) segmentation-guided pruning substantially reduces scene-camera tokens while maintaining success; (H2) fewer tokens lower inference cost; and (H3) the full T3R pipeline improves robustness under out-of-distribution object-placement shifts. We then examine cross-backbone generalization and sensor redundancy.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "71517466317a5624",
+      "section": "4. Experiments",
+      "location": "4. Experiments",
+      "text": "Setup. Our primary study uses OpenVLA-OFT ( Kim et al., 2025 ) (SigLIP ViT-SO400M + LLaMA-2-7B, LoRA rank 32, chunk size 8, dual camera ⇒ \\Rightarrow 512 visual tokens/call) on LIBERO ( Liu et al., 2023 ) , a MuJoCo tabletop-manipulation suite of four task families (Spatial, Object, Goal, Long). Spatial uses a 220-step horizon. Saliency uses IG with n steps = 5 n_{\\text{steps}}{=}5 , top- k k ratio 0.3 0.3 , β = 2.0 \\beta{=}2.0 , layers 8–23, and a 0.5 0.5 visual scaling. Unless noted we evaluate 10 episodes/task (seed 7 nominal, seed 42 OOD) on a single NVIDIA L40S (48 GB). For generalization we additionally port T3R to CogACT ( Li et al., 2024b ) on SIMPLER ( Li et al., 2024a ) (single third-person camera) and to π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) on RoboTwin ( Mu et al., 2025 ) (three cameras), covering a 1 × 1\\times / 2 × 2\\times / 3 × 3\\times spread in camera count. Baselines are the unpruned model, TeamVLA ( Ye et al., 2025 ) , ADP ( Pei et al., 2025 ) , and FastV ( Chen et al., 2024 ) ; each baseline runs at its native operating point, and we additionally force ADP/FastV into T3R’s high-reduction regime where noted. Reported reductions refer to scene-camera tokens removed before decoder entry.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "38d20058a05cf4fe",
+      "section": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "location": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "text": "Table 1. LIBERO-Spatial (OpenVLA-OFT). “Reduction” is scene-camera tokens pruned before decoder execution; latency is per VLA inference call. ∗ ADP native operating point (67% of steps × \\times 50%/step ≈ \\approx 33.5% reduction).",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.T1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "361fb286b3f09bad",
+      "section": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "location": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "text": "Method Reduction SR (%) Latency (ms) Baseline (no pruning) 0% 97 107.5 TeamVLA ( Ye et al., 2025 ) ∼ \\sim 15% 94 102.6 FastV ( Chen et al., 2024 ) ( k = 1 k{=}1 , r = 0.85 r{=}0.85 ) 85% 14 – ADP ( Pei et al., 2025 ) 85% 66 – ADP ( Pei et al., 2025 ) ∗ 33.5% 97 – T3R (ours) 85% 96 92.5",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.T1.4",
+      "kind": "table"
+    },
+    {
+      "id": "4c104090aed31144",
+      "section": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "location": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "text": "Table 1 shows that T3R achieves approximately 5.7 × 5.7\\times the scene-camera token-reduction rate of TeamVLA (85% vs. ∼ \\sim 15%), while achieving a higher success rate (96% vs. 94%). At the same 85% reduction, ADP and FastV fall to 66% and 14%; native ADP preserves accuracy at only 33.5% reduction. The retained budget adapts to task difficulty: T3R keeps 9–15 patches in sparse scenes and up to 121 in clutter, versus TeamVLA’s fixed ∼ \\sim 203–233, avoiding a worst-case token count.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "05b4224a7b990848",
+      "section": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "location": "4.1. T3R Prunes Aggressively While Maintaining Success (H1)",
+      "text": "Across all four LIBERO suites (10 tasks × \\times 10 episodes each), T3R matches or beats TeamVLA on latency everywhere and on success on 3/4 suites, matching the unpruned baseline within 1 pp on Spatial (96 vs. 97) and Goal (98 vs. 99) at roughly 88–93 ms/call vs. the baseline’s 105–108 ms. The Object suite is the exception (82% vs. TeamVLA’s 86%), reflecting segmentation failures discussed in the failure analysis.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "4afbaa2461f68bf0",
+      "section": "4.2. Most Visual Tokens Are Negligible",
+      "location": "4.2. Most Visual Tokens Are Negligible",
+      "text": "For each decoder layer we sum attention mass from every action-token query to every visual key and express each token’s share as a percentage of the total, averaging over 32 layers, 10 LIBERO-Spatial tasks, and 3 timesteps/task. 93.9% of visual tokens receive less than 0.2% of action-query attention each . In late layers (24–31), 50–75% of tokens fall below 0.1%. This shows most tokens are near-inert, but safe pre-decoder removal still depends on selecting the retained set well.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b01e8e67cc457af8",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "Profiling on an L40S across 11 token counts (8–256 patches) reveals an approximately linear trend, 0.040 ​ ms/token + 53.3 ​ ms 0.040\\,\\text{ms/token}+53.3\\,\\text{ms} ( r = 0.97 r{=}0.97 ). At 224 224 px, 85% scene-camera token reduction lowers VLA inference latency from 107.5 to 92.5 ms per call: a 14% reduction or 1.16 × 1.16\\times speedup. Each call produces an eight-action chunk, not one environment step.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6dd017ddc686d690",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "Comparing LLM-only savings ( 58.9 − 36.1 58.9-36.1 ms) with reported VLA-call savings ( 107.5 − 92.5 107.5-92.5 ms) yields a 7.8 ms residual per call, attributed to pruning and attention-bias application and already included in 92.5 ms. This accounting assumes comparable timing conditions; it does not isolate individual components. Segmentation (54 ms per update, every five VLA calls) runs asynchronously. IG is computed once per task and reused across its episodes; a 1 s cost corresponds to approximately 0.45 ms per environment step over ten full 220-step episodes.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS3.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e641acfc985a236e",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "Resolution scaling and hardware implications. The effective per-token marginal cost rises from 0.040 0.040 ms at sequence length ∼ \\sim 200 to 0.064 0.064 ms at ∼ \\sim 500, marking the transition from a bandwidth-bound to a compute-bound attention regime. Because T3R fixes the pruning ratio rather than an absolute token count, its retained sequence stays in the cheaper bandwidth-bound regime as resolution grows, while the unpruned baseline enters the quadratic compute-bound regime. LLM-forward profiling shows up to a 3.3 × 3.3\\times speedup at 768 px. For accelerator co-design the implication is concrete: pre-decoder pruning shifts the operating point back toward the memory-bound regime that current LLM inference hardware handles most efficiently. Using the measured LLM cost on an L40S and adding a fixed 48.6 ms non-LLM cost, we project end-to-end inference latencies of 100 / 115 / 132 100/115/132 ms at 384 / 512 / 768 384/512/768 px for T3R, versus the baseline’s 144 / 182 / 327 144/182/327 ms and ADP’s 109 / 145 / 238 109/145/238 ms, a 2.47 × 2.47\\times projected speedup over baseline at 768 px, versus ADP’s 1.37 × 1.37\\times . These projections do not independently measure refinement overhead at each resolution.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS3.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "78b1119e35c95a70",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "A line chart plots success rate against placement perturbation from zero to five centimeters. Blue circles represent the unpruned baseline, green squares represent the full T3R pipeline, and red triangles represent TeamVLA. The curves begin close together at high success rates and generally decline as perturbation increases. Beyond about two centimeters, the green curve is above or equal to the blue curve, while the red curve declines most strongly.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.F4.g1",
+      "kind": "p"
+    },
+    {
+      "id": "84c64fc9317318ca",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "Figure 4. OOD robustness under object-placement perturbation (21 noise levels, 10 episodes/task). T3R (Full Pipeline) tracks the unpruned baseline for small shifts and pulls ahead beyond ∼ 2 {\\sim}2 cm, leading by up to 7 pp at 4 cm, while TeamVLA degrades fastest. The crossover is consistent with pruning reducing misleading background context. A line chart plots success rate against placement perturbation from zero to five centimeters. Blue circles represent the unpruned baseline, green squares represent the full T3R pipeline, and red triangles represent TeamVLA. The curves begin close together at high success rates and generally decline as perturbation increases. Beyond about two centimeters, the green curve is above or equal to the blue curve, while the red curve declines most strongly.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "7dad273e4d0b11a5",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "Table 2. Cross-backbone generalization. Left: CogACT on SIMPLER (single camera), average SR (%); each keep ratio corresponds to the respective method’s native operating point. Right: π 0.5 \\pi_{0.5} on RoboTwin (three cameras), SR (%) vs. per-camera token budget (base = 33.3 =33.3 ). Best per column/row in bold.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.T2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "d41aea01268755de",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "Method (keep ratio) Google Robot WidowX/Bridge Baseline (100%) 73.2 10.4 ADP ( Pei et al., 2025 ) (75% / ∼ \\sim 87%) 71.0 16.7 FastV ( Chen et al., 2024 ) ( ∼ \\sim 60%) 73.3 15.6 TeamVLA ( Ye et al., 2025 ) (31.25%) 69.5 12.5 T3R (ours, 60%) 67.7 10.4",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.T2.6",
+      "kind": "table"
+    },
+    {
+      "id": "d859b51177985c0d",
+      "section": "4.3. T3R Reduces Computational Cost (H2)",
+      "location": "4.3. T3R Reduces Computational Cost (H2)",
+      "text": "tok/cam keep T3R ADP FastV TeamVLA 64 25% 13.3 13.3 11.7 3.3 96 37.5% 25.0 13.3 23.3 11.7 128 50% 33.3 21.7 18.3 15.0 160 62.5% 38.3 25.0 28.3 15.0",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.T2.7",
+      "kind": "table"
+    },
+    {
+      "id": "cc66b43eb700df9e",
+      "section": "4.4. T3R Improves OOD Robustness (H3)",
+      "location": "4.4. T3R Improves OOD Robustness (H3)",
+      "text": "We apply Gaussian positional noise to object placements (0–5 cm; 21 levels, 10 ep/task). T3R tracks the baseline within 1–2 pp for small perturbations, matches or exceeds it at ≥ 2 {\\geq}2 cm, and leads by up to 7 pp at 4 cm ( + 4.8 +4.8 pp average at ≥ 4 {\\geq}4 cm); TeamVLA degrades fastest (35% at 5 cm vs. our 48%). These full-pipeline gains are consistent with pruning reducing misleading background context and attention refinement emphasizing task-relevant evidence.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "487bfe58cf1fcf2f",
+      "section": "4.5. Generalization and Sensor Redundancy",
+      "location": "4.5. Generalization and Sensor Redundancy",
+      "text": "To test whether T3R’s benefit transfers across backbones and sensor suites, we port it to CogACT on SIMPLER (single third-person camera) and to π 0.5 \\pi_{0.5} on RoboTwin (three cameras). Both evaluations are zero-shot with no fine-tuned checkpoint, so absolute success is low; we focus on relative behavior versus the unpruned base and competing pruners at matched budgets.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4685fd9f1fad467e",
+      "section": "4.5. Generalization and Sensor Redundancy",
+      "location": "4.5. Generalization and Sensor Redundancy",
+      "text": "Single-camera (CogACT / SIMPLER). Table 2 (left) reports CogACT on the SIMPLER Google-Robot (11 tasks, 189 episodes per method) and WidowX/Bridge (4 tasks, 96 episodes per method) suites, each using one third-person view. Here T3R with a 60% keep ratio matches base on Bridge and trails by 5.5 pp on Google-Robot, while methods retaining more tokens (ADP, FastV) fare better. With one view, little cross-sensor redundancy remains, so aggressive pruning removes tokens the policy still needs.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS5.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "243d48e9cf6333cc",
+      "section": "4.5. Generalization and Sensor Redundancy",
+      "location": "4.5. Generalization and Sensor Redundancy",
+      "text": "Multi-camera ( π 0.5 \\pi_{0.5} / RoboTwin). For π 0.5 \\pi_{0.5} on RoboTwin (three cameras), we evaluate each method/budget on five tasks with 12 episodes each (60 total; Table 2 , right). Success rates are computed from pooled counts and rounded once. T3R achieves the highest or joint-highest success among the evaluated pruners across the reported budgets. At a 50% keep ratio it matches baseline (both 33.3%); at 62.5% it reaches 38.3%, exceeding baseline by 5.0 pp and the best competing pruner by 10 pp. ADP, FastV, and TeamVLA remain below baseline at these two budgets.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS5.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "5d7277fa5320f0f6",
+      "section": "4.5. Generalization and Sensor Redundancy",
+      "location": "4.5. Generalization and Sensor Redundancy",
+      "text": "Takeaway. Across the evaluated backbones and benchmarks, T3R shows greater pruning headroom in multi-camera settings. This cross-system trend suggests that overlapping visual evidence provides opportunities for token reduction.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS5.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "84a3fde92606f93c",
+      "section": "4.6. Ablations",
+      "location": "4.6. Ablations",
+      "text": "We isolate each component on LIBERO-Spatial (10 tasks × \\times 10 episodes). Prune-only reaches 90% at 85% scene-camera token reduction, bias-only 98%, and full T3R 96%, versus a 97% baseline. Biasing recovers 6 pp of pruning loss; bias-only exceeding baseline indicates diffuse unpruned attention. In the bias-only layer sweep (no pruning), middle-layer biasing (8–23) reaches 98%, versus 95% for early, 92% for late, and 93% for all layers, consistent with early feature distortion and late output disruption.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "de93dc89ae004aab",
+      "section": "4.6. Ablations",
+      "location": "4.6. Ablations",
+      "text": "Why T3R outperforms prior pruners. T3R prunes before all 32 decoder layers ( ∼ \\sim 37 scene tokens retained), while TeamVLA carries 512 tokens through layers 0–15, allowing irrelevant context into representations before merging. Segmentation preserves coherent object regions and RoPE geometry rather than disjoint similarity samples; IG-guided attention repair then offsets pruning loss.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS6.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "cee399987e12d269",
+      "section": "4.6. Ablations",
+      "location": "4.6. Ablations",
+      "text": "Hyperparameter robustness. One hyperparameter set served all 10 LIBERO-Spatial tasks and all four suites, without per-task tuning. Sweeping bias strength, active layers, saliency top- k k , and pruning threshold changed SR by 1–6 pp; DBSCAN ϵ \\epsilon and SAM point counts follow the fixed patch-grid geometry.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS6.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "8a585f5f7a2cf13c",
+      "section": "4.7. Design Study: When and How to Steer Attention",
+      "location": "4.7. Design Study: When and How to Steer Attention",
+      "text": "A pilot on ECoT-OpenVLA-7B ( Zawalski et al., 2025 ) (30 offline LIBERO-Spatial demos, L2 action error) crossed text-token IG with image-token Grad-CAM ( Selvaraju et al., 2017 ) , reasoning with action phases, and positive with negative biasing. Action-phase biasing cuts error by 5.4% ( p = 0.062 p{=}0.062 ), while reasoning-phase biasing raises it by 9.3% ( p = 0.018 p{=}0.018 ). Text IG outperforms image Grad-CAM, and negative biasing never helps. These results support positive text-IG steering during action generation: the policy under-attends relevant tokens, so biasing can recover pruning loss.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS7.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a10a7a0211952394",
+      "section": "4.8. Failure Analysis and Limitations",
+      "location": "4.8. Failure Analysis and Limitations",
+      "text": "T3R underperforms TeamVLA on LIBERO-Object (82% vs. 86%). These tasks place a source object into a visually dominant destination (e.g., a basket), so SigLIP similarity splits between the two and EfficientTAM segments the wrong region or produces an overly narrow mask. Multi-phase LIBERO-Long tasks (e.g., “put the bowl in the drawer and close it”) pose a related issue: the relevant region shifts mid-episode, but similarity is computed from the full instruction and does not adapt to the current phase, so pruning may mask regions that become critical later. More broadly, (i) Stage 1 depends on promptable segmentation as an intermediate prior and inherits its failure modes on merged or coarse boundaries; (ii) IG adds a one-time per-task cost that may not amortize over short task runs or meet strict initialization deadlines; and (iii) our single-camera zero-shot results (Sec. 4.5 ) show the method offers little benefit when the sensor suite carries little redundancy. Phase-aware re-prompting and camera-adaptive budgets are natural extensions.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS8.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8a193ed9be08e8eb",
+      "section": "4.8. Failure Analysis and Limitations",
+      "location": "4.8. Failure Analysis and Limitations",
+      "text": "All evaluations use simulation; physical-robot control and asynchronous execution with real sensor and actuation delays remain unvalidated. Hardware profiling uses only an NVIDIA L40S, with no energy measurements or edge-device tests. Latency improvements alone therefore do not establish energy savings or edge performance. Occlusion and lighting changes may degrade segmentation and discard task-relevant patches. We have not isolated these effects on task success or compared alternative segmenters.",
+      "url": "https://arxiv.org/html/2611.08413v1#S4.SS8.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "3c7fccfa744637e1",
+      "section": "5. Conclusion",
+      "location": "5. Conclusion",
+      "text": "We presented T3R, a training-free two-stage framework that couples segmentation-guided token pruning with saliency-guided attention biasing. On LIBERO-Spatial with OpenVLA-OFT, it removes 85% of scene-camera visual tokens while retaining success within 1 pp of baseline, reduces VLA inference latency, and improves OOD robustness by up to 7 pp. Evaluations on CogACT and π 0.5 \\pi_{0.5} across SIMPLER and RoboTwin suggest that overlapping multi-camera evidence provides more headroom for token pruning. From a design perspective, the value of T3R lies in where it acts. By discarding irrelevant tokens before decoder entry, every transformer layer operates on the shorter sequence, so the retained tokens stay in the cheaper bandwidth-bound regime even as resolution grows, yielding a projected speedup of up to 2.47 × 2.47\\times at 768 768 px. Mask updates run asynchronously, while IG computation is amortized across each task’s episodes. Because the pipeline is training-free and leaves the underlying VLA weights unchanged, it applies directly to existing pretrained policies. Together, these properties make task-conditioned, pre-decoder sparsification a practical, first-class knob for co-designing efficient embodied inference systems. Across scenes, its adaptive budget retains 9–15 patches in sparse cases and up to 121 in clutter, while middle-layer biasing recovers 6 pp of the prune-only accuracy loss. Together with the 93.9% attention-sparsity result, these measurements explain why aggressive pruning remains viable and when additional evidence must be retained.",
+      "url": "https://arxiv.org/html/2611.08413v1#S5.p1.1",
+      "kind": "p"
+    }
+  ]
+}

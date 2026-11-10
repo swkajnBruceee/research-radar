@@ -1,0 +1,42 @@
+{
+  "running": false,
+  "started": "2026-11-10T10:33:52+00:00",
+  "finished": "2026-11-10T10:35:14+00:00",
+  "result": {
+    "new": 112,
+    "updated": 1,
+    "unchanged": 230,
+    "sources": [
+      {
+        "id": "arxiv",
+        "status": "ok",
+        "count": 301
+      },
+      {
+        "id": "lerobot",
+        "status": "ok",
+        "count": 5
+      },
+      {
+        "id": "isaaclab",
+        "status": "ok",
+        "count": 5
+      },
+      {
+        "id": "huggingface",
+        "status": "ok",
+        "count": 10
+      },
+      {
+        "id": "huggingface-datasets",
+        "status": "ok",
+        "count": 10
+      },
+      {
+        "id": "pi",
+        "status": "ok",
+        "count": 12
+      }
+    ]
+  }
+}

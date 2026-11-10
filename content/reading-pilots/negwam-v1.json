@@ -1,0 +1,490 @@
+{
+  "item_id": "arxiv:2611.08111",
+  "document_id": "f8cc56fad6809154d01e8e36d71c91ee70ae1356ea9a0bd744a44495b72edc24",
+  "source_url": "https://arxiv.org/html/2611.08111v1",
+  "paper_version": "2611.08111v1",
+  "paper": {
+    "id": "arxiv:2611.08111",
+    "title": "Reinforcing End-to-End Autonomous Driving Safety via Negative-Aware Planning in a Unified World-Action Model",
+    "url": "https://arxiv.org/abs/2611.08111v1",
+    "published": "2026-11-06",
+    "updated": "2026-11-06",
+    "topics": [
+      "evaluation"
+    ],
+    "summary": "arXiv:2611.08111v1 Announce Type: new Abstract: World-action models (WAMs) jointly model future traffic states and driving actions for end-to-end autonomous driving in intelligent transportation systems. However, their action learning remains dominated by expert-trajectory imitation, leaving unsafe alternatives close to expert trajectories insufficiently constrained. To improve WAM robustness in safety-critical scenarios, we propose NegWAM, a safety post-training framework for unified WAMs that learns explicit safety boundaries from near-expert failure trajectories. NegWAM constructs negative trajectories that are geometrically close to the expert trajectory yet carry safety risks, uses them as repulsive anchors to steer predictions away from dangerous behavior, and encodes them as scene-conditioned rider tokens to learn scene--trajectory compatibility. During training, NegWAM jointly optimizes the flow-matching and near-expert negative objectives, while the auxiliary rider branch is discarded at inference, incurring no additional overhead. On NAVSIM v2, NegWAM achieves 40.4 EPDMS on navhard, a 4.1% relative improvement over the strongest compared scorer-free WAM baseline, and achieves 93.3 EPDMS on navtest. These results demonstrate that NegWAM achieves strong performance in safety-critical scenarios while preserving routine-driving performance. Zero-shot closed-loop evaluation on HUGSIM further demonstrates cross-benchmark generalization. The code is available at https://github.com/Zizizi-hao/NegWAM."
+  },
+  "mode": "agent_pilot",
+  "review_status": "needs_review",
+  "model": "Codex会话代理",
+  "created": "2026-11-08T14:22:14.015121+08:00",
+  "prompt_version": "research-reading-pilot-v1",
+  "coverage": {
+    "read": 128,
+    "total": 128,
+    "evidence_ids": [
+      "6b117827ddf193f0",
+      "c328cae8aed433a9",
+      "7b90bc1d060556df",
+      "eeab2db6c33f3535",
+      "6efa72e76aa8a1a8",
+      "7717055b85be29c5",
+      "b93c20590a6a8de2",
+      "bfc838c6c75ca3ed",
+      "b3407cd5894aa871",
+      "ef21e41251156694",
+      "aa8f288c01a0d4dd",
+      "81db2f54107d786d",
+      "e538dc886d7bb512",
+      "da424707a0436bb3",
+      "5ef44e9f94aed6da",
+      "5ece792c372b7d6a",
+      "aa5e68e5107f303d",
+      "275b451ec9391068",
+      "90b9f2f04a04de1b",
+      "ba1468d1fc3d4f38",
+      "dfed78e767493cf8",
+      "aeb9598e822b012a",
+      "5d69bcd51c735da0",
+      "83c3d6eb991d6901",
+      "0f4d5de16c0a083e",
+      "8a67f9cbb76b54cb",
+      "95a73367634820e6",
+      "d0c69bab3894b6b8",
+      "8757da054068aad6",
+      "1c263bc116c3a481",
+      "6a223c14ee9112fe",
+      "d0dd9646ef1a84ef",
+      "6c293bf5c9174c99",
+      "3a72c4add09d2da6",
+      "a6a4f9ca6b7f5434",
+      "fdd5b89705f2bcaa",
+      "e0fc7cec7de6486a",
+      "7812306e9106114e",
+      "7333de15f89cb6a9",
+      "55d8d69fc30542f9",
+      "1da86e42b4593c74",
+      "ead4ab0475b582bc",
+      "7ce5931f46efe4d3",
+      "4a8ef4809052039b",
+      "14fee8e8168a5666",
+      "77508b3cc5fea59b",
+      "ddbffd0ac9654ba7",
+      "5f7ae0debc39f3bc",
+      "7eb790306c08a9a2",
+      "587e2d5f7e33c18d",
+      "9525d5e6bbf3cd11",
+      "d4cb53ac92fad71f",
+      "76cdf27df0012cb5",
+      "c08712125974cbff",
+      "2662b3add5bbd81a",
+      "c4c2d61f121e38de",
+      "f09ac978e3ba6c16",
+      "50b2ac1d186b09fd",
+      "588b1b2f510f19c9",
+      "fde04f8fa292c539",
+      "1989c6214481f92e",
+      "eb26005fe2ca54c3",
+      "e24705150a0686cb",
+      "314c281c18376e5d",
+      "e14362fcb424d534",
+      "25e78eef79efa799",
+      "81e7211030a37d4e",
+      "e2d79bc4689a6e77",
+      "ec09621d490c7345",
+      "486aa812b43e69bd",
+      "b5a8c681a69bfc1a",
+      "5bb85d97b38e4fa8",
+      "13e96cfb34dc8edc",
+      "5a8e0c22a4afac68",
+      "8e4eab667eb3ac12",
+      "98244f93844d0ab1",
+      "a08deceed8fe0e31",
+      "262dc5a321eee072",
+      "1ca6f47211d37d9d",
+      "c446f26e3ad153bf",
+      "a8add857ebe06f03",
+      "3504fa027c6dfd28",
+      "19a26a5b9e765b60",
+      "1abd4362ee187b9e",
+      "b95ca1804a3d78bf",
+      "3d0a90530af29889",
+      "d4245a912c5f302f",
+      "4532f3f1998116cf",
+      "a2c0ca36a56b4bc1",
+      "c68837ab9c7e4640",
+      "b6c75a9e59c6c6bf",
+      "0ddee26da385cb51",
+      "7dea1f19d291f684",
+      "46194216638e51dd",
+      "6be05b1a13839997",
+      "40f89ff081492df1",
+      "5c8876871f4ee1e6",
+      "9549a93c9e78eabe",
+      "797d936a3f7b0cd7",
+      "2bc4323c305dc7ad",
+      "c9601114b494153b",
+      "bf4b630efdaa63a1",
+      "5d58eae24079a94b",
+      "12495768f46e0c2d",
+      "28edbf877c58b64b",
+      "6d278501dd565569",
+      "f76d537be6f2be90",
+      "2e657277ef0e85c7",
+      "d4180490bf1c5b11",
+      "8e04d94c5d3fe9f1",
+      "8118f51840a5c3c3",
+      "41ca20d909285d09",
+      "ace0d7d89401f0cd",
+      "54fcb6721af1b251",
+      "c9f4f89a16771072",
+      "79fd65de68b8bca7",
+      "c638187434829d0d",
+      "dfebffc776d2bd40",
+      "b8d6d4159576f332",
+      "149f00d4783659c0",
+      "1f7585a31632e62e",
+      "d89c42469f18e77f",
+      "31ee76c80deac29c",
+      "666eb9dfbf96adff",
+      "84b5bf4496b0445f",
+      "748230c2eb3296ba",
+      "be43966f67435081",
+      "1c5ae783098ea9c5"
+    ],
+    "pdf_pages_visually_checked": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13,
+      14
+    ],
+    "pdf_sha256": "103de0db9f371f9a2cdf66b244921e31a7ca40643afcbaa7782b76090bde652d"
+  },
+  "overview": "NegWAM在统一世界–动作流匹配模型上增加两路离线负监督：近专家失败轨迹作为输出排斥锚点，另作为只读当前观测的辅助rider token学习场景–轨迹排序，梯度更新共享骨干，部署移除rider与打分头。同checkpoint同预算消融支持组合优于仅继续训练和单项机制。值得复用的是训练期单向注意力辅助监督，不是免评估器的安全学习；负标签仍由离线NAVSIM规则产生。NAVSIM总分提升未伴随NC全面改善，HUGSIM总体收益集中Easy，其余三个难度RC/HD均下降；无真实道路或形式安全保证。",
+  "notice": "当前会话代理完整阅读128/128固定HTML证据片段，含正文与附录实现、额外结果、失败案例和负监督范围。固定PDF14页、9347639字节，目视物理页4/5/6/7/8/9/12/13/14，核算法1、掩码/损失公式、表I–VIII、曲线和成功/失败图。未执行训练、仿真或作者代码，未独立审计缓存标签、评测脚本和原始计时日志；全部实验结果为作者报告，未复现。",
+  "findings": [
+    {
+      "kind": "problem",
+      "title": "把近专家失败同时用于输出监督与共享表征监督",
+      "text": "统一WAM原本主要模仿专家，不能仅靠更强未来建模获得专家附近不安全动作的反例。NegWAM保留视频/动作流匹配，增加轨迹空间排斥和场景–轨迹兼容性排序两项；近专家负样本与排斥已有BeyondDrive等工作，本文差异在同一失败还进入共享WAM注意力进行训练期表征监督。没有在线训练环境交互，不等于无规则评估器：NAVSIM EPDMS仍决定离线失败标签。",
+      "evidence_ids": [
+        "c328cae8aed433a9",
+        "eeab2db6c33f3535",
+        "6efa72e76aa8a1a8",
+        "7717055b85be29c5",
+        "da424707a0436bb3",
+        "5ece792c372b7d6a",
+        "275b451ec9391068",
+        "90b9f2f04a04de1b",
+        "ba1468d1fc3d4f38",
+        "fdd5b89705f2bcaa",
+        "2662b3add5bbd81a",
+        "c4c2d61f121e38de"
+      ],
+      "quote": "near-expert alternatives"
+    },
+    {
+      "kind": "method",
+      "title": "沿用统一WAM与因果流匹配，未来目标不作推理观测",
+      "text": "Wan2.2-TI2V-5B初始化，冻结因果视频VAE，训练样本含当前256×448单相机、四历史ego pose、未来视觉目标和4秒8步Δ-pose动作。视频/动作分别加噪、预测速度场；原流与teacher-forcing条件流共享DiT，保留原block-causal掩码和损失mask。单步干净动作估计x0_hat=x_t−t v_hat，经反归一化和累积积分解码；这是排斥使用的训练估计，不等同完整多步推理轨迹。附录未来视觉索引1/3/5/7、负轨迹索引4/9/…/39分别对齐各自缓存，不可混淆为看到了未来观测。",
+      "evidence_ids": [
+        "dfed78e767493cf8",
+        "aeb9598e822b012a",
+        "5d69bcd51c735da0",
+        "83c3d6eb991d6901",
+        "0f4d5de16c0a083e",
+        "8a67f9cbb76b54cb",
+        "95a73367634820e6",
+        "d0c69bab3894b6b8",
+        "8757da054068aad6",
+        "1c263bc116c3a481",
+        "6a223c14ee9112fe",
+        "d0dd9646ef1a84ef",
+        "6c293bf5c9174c99",
+        "5d58eae24079a94b",
+        "28edbf877c58b64b",
+        "2e657277ef0e85c7",
+        "d4180490bf1c5b11",
+        "8e04d94c5d3fe9f1",
+        "8118f51840a5c3c3",
+        "41ca20d909285d09",
+        "ace0d7d89401f0cd",
+        "54fcb6721af1b251",
+        "c9f4f89a16771072"
+      ],
+      "quote": "teacher-forcing"
+    },
+    {
+      "kind": "method",
+      "title": "负样本是固定词表中被评估器判零分的近邻",
+      "text": "从GTRS 16K词表取4秒40pose候选，以每五点抽样的8步平面ADE筛专家距离<1m，再用原40步轨迹、NAVSIM metric cache与log-replay交通离线评估，EPDMS=0的全部缓存。训练读取再筛ADE≥0.3m，得到[0.3,1.0)m，每场景无放回随机取至多16条并mask补零；两项损失用同一子集，无有效负样本只算FM。85.8%训练样本有负例，负例ADE中位0.80m，仅约9%处于0.3–0.5m。八条同场景模型采样的平均两两ADE0.02m只是该采样配置诊断，不证明所有采样法必然无多样性。",
+      "evidence_ids": [
+        "3a72c4add09d2da6",
+        "a6a4f9ca6b7f5434",
+        "fdd5b89705f2bcaa",
+        "e0fc7cec7de6486a",
+        "7812306e9106114e",
+        "7333de15f89cb6a9",
+        "ace0d7d89401f0cd",
+        "54fcb6721af1b251",
+        "c9f4f89a16771072"
+      ],
+      "quote": "without replacement"
+    },
+    {
+      "kind": "method",
+      "title": "距离自适应hinge排斥，并衰减高噪单步估计影响",
+      "text": "对负例到专家距离a、单步预测到负例距离d，用[0.9a−d]_+；在精确专家处d=a，α≤1使该项为0。每例有效负样本平均后乘(1−t_a)，抑制高噪单步解码不可靠的影响；x0重建求导还引入t_a，合为t_a(1−t_a)前因子，但实际梯度仍依赖解码器和hinge激活。复用原动作输出，不为排斥另跑骨干。这个局部距离目标不是约束所有可能碰撞，也没有关于物理安全集的证明。",
+      "evidence_ids": [
+        "d0dd9646ef1a84ef",
+        "55d8d69fc30542f9",
+        "1da86e42b4593c74",
+        "ead4ab0475b582bc",
+        "7ce5931f46efe4d3",
+        "4a8ef4809052039b",
+        "14fee8e8168a5666",
+        "748230c2eb3296ba",
+        "be43966f67435081"
+      ],
+      "quote": "distance-adaptive"
+    },
+    {
+      "kind": "method",
+      "title": "rider单向读场景，排序梯度写回共享骨干",
+      "text": "专家和每条负例各一组干净rider，共享动作embedding与RoPE，每组零条件chunk+8步轨迹共16 token，flow-time=0。每组只注意当前已观测视觉token与自身组，不能看未来目标或其他rider；原序列也不能注意rider。因此固定权重下原流前向可见性保持，训练梯度仍经共享注意力更新骨干。组内16 token均池化后接256维SiLU标量头，softmax温度0.1把专家排在有效负例前；输出层零初始化使初始兼容性骨干梯度为0，随后才激活。部署删掉组和头，区别于推理时用scorer重排。",
+      "evidence_ids": [
+        "77508b3cc5fea59b",
+        "ddbffd0ac9654ba7",
+        "5f7ae0debc39f3bc",
+        "7eb790306c08a9a2",
+        "587e2d5f7e33c18d",
+        "9525d5e6bbf3cd11",
+        "d4cb53ac92fad71f",
+        "76cdf27df0012cb5",
+        "50b2ac1d186b09fd"
+      ],
+      "quote": "compatibility"
+    },
+    {
+      "kind": "method",
+      "title": "后训练额外预算明确，离线采矿成本未完整计入",
+      "text": "navtrain约103K样本，所有后训练变体从相同100K步FM预训练checkpoint开始；再10K步优化FM+100 L_rep+0.1 L_compat，AdamW全局batch4。附录报4×H100预训练22小时/88 GPU小时，后训练2小时/8 GPU小时，后训练初始LR1e−6并于5K减半。这不是额外算力为零，表中也未单独报告全训练集词表筛选/EPDMS缓存构建、训练期rider token增加的对照成本。BeyondDrive比较是完整方法移植到同WAM且用其原负例，不是仅替换loss；相对它的优势也包含负池构造差异。",
+      "evidence_ids": [
+        "c08712125974cbff",
+        "2662b3add5bbd81a",
+        "c4c2d61f121e38de",
+        "f09ac978e3ba6c16",
+        "25e78eef79efa799",
+        "13e96cfb34dc8edc",
+        "5a8e0c22a4afac68",
+        "5d58eae24079a94b",
+        "12495768f46e0c2d",
+        "28edbf877c58b64b",
+        "6d278501dd565569",
+        "f76d537be6f2be90"
+      ],
+      "quote": "post-training"
+    },
+    {
+      "kind": "evidence",
+      "title": "同预算消融支持双路组合，不能只归因额外训练",
+      "text": "表IV navhard：未后训练37.7，继续FM后训练38.2，仅锚点39.1，仅rider38.8，二者40.4。相对同预算继续训练增加2.2分，而非把全部2.7分都归新增机制；组合相对锚点/仅rider再增1.3/1.6分，支持兼容性监督在输出排斥之外有增益。各变体共起点有利于归因，但没有固定随机标签/错配scene/不共享骨干等对照隔离场景监督语义，图4的3×3对角高分只是示例，非大规模兼容性泛化或安全分类统计。",
+      "evidence_ids": [
+        "f09ac978e3ba6c16",
+        "a8add857ebe06f03",
+        "3504fa027c6dfd28",
+        "19a26a5b9e765b60",
+        "1abd4362ee187b9e",
+        "b95ca1804a3d78bf",
+        "3d0a90530af29889"
+      ],
+      "quote": "post-training control"
+    },
+    {
+      "kind": "evidence",
+      "title": "NAVSIM综合分提升，不等于碰撞指标提升或全方法第一",
+      "text": "所有表按修正官方NAVSIM v2.2协议，含S1初始场景、S2预生成反应场景、跨阶段聚合和专家同失败时惩罚豁免。navhard40.4对BeyondDrive38.8是+1.6点/+4.1%相对，只在作者比较的无外部scorer WAM范围；PDM-Closed56.6更高，文中还注明带GTRS-Dense scorer的DriveFuture55.5。navtest93.3对DriveWAM92.2、BeyondDrive92.9增加1.1/0.4点。EPDMS是多项乘法惩罚与加权平均的综合分，NC并未改善：navtest本法98.1对DriveWAM98.4，DAC98.4对96.7；navhard S2 NC79.2对DriveWAM79.5、BeyondDrive81.2。不能写成碰撞率降低或安全子项全面更优，NC本身也不是可直接按百分比取补的真实道路事故率。",
+      "evidence_ids": [
+        "588b1b2f510f19c9",
+        "fde04f8fa292c539",
+        "81e7211030a37d4e",
+        "e2d79bc4689a6e77",
+        "ec09621d490c7345",
+        "5a8e0c22a4afac68",
+        "8e4eab667eb3ac12",
+        "98244f93844d0ab1",
+        "a08deceed8fe0e31",
+        "79fd65de68b8bca7",
+        "c638187434829d0d",
+        "dfebffc776d2bd40"
+      ],
+      "quote": "external trajectory scorer"
+    },
+    {
+      "kind": "evidence",
+      "title": "HUGSIM总体改善由Easy带动，其余难度两项都下降",
+      "text": "同checkpoint零样本闭环，表III总体RC43.6→45.1、HD27.2→30.6，对DriveWAM约+3.4%/+12.5%相对；Easy RC76.6→90.3、HD64.0→81.7。Medium为33.8→32.8、16.1→15.8；Hard33.9→31.2、16.1→14.2；Extreme30.2→26.1、12.6→10.8。表格表明三个非Easy难度RC和HD均下降，比正文“Hard几乎不变”的概括更值得保留。HD还乘路线完成及多项约束，不能从总体提高推断每类交通交互更安全；正文未给每难度回合数、重复seed和置信区间。",
+      "evidence_ids": [
+        "486aa812b43e69bd",
+        "b5a8c681a69bfc1a",
+        "5bb85d97b38e4fa8",
+        "262dc5a321eee072",
+        "1ca6f47211d37d9d",
+        "c446f26e3ad153bf",
+        "6be05b1a13839997",
+        "40f89ff081492df1",
+        "b8d6d4159576f332",
+        "149f00d4783659c0"
+      ],
+      "quote": "scenario difficulty"
+    },
+    {
+      "kind": "evidence",
+      "title": "移除分支使模块数不增加，测时仍有小幅差异",
+      "text": "推理不使用负例/evaluator/rider/head，视觉3次Euler更新后动作10次Euler更新；这些是积分步数，不是简单宣称总共13次骨干调用。表VI模型存储两者6241.81MB、峰值GPU内存14029.08MB相同，延迟871.35→877.86ms（+6.51ms/+0.75%），吞吐1.15→1.14FPS。因此可称相近部署成本、没有新增推理模块，不能称实测延迟严格零开销，更不能据约1FPS认定高频实时控制已满足。文中训练硬件明确，但完整推理测时硬件、热身/重复/尾延迟设置未充分交代。",
+      "evidence_ids": [
+        "50b2ac1d186b09fd",
+        "5c8876871f4ee1e6",
+        "9549a93c9e78eabe",
+        "797d936a3f7b0cd7",
+        "28edbf877c58b64b",
+        "6d278501dd565569"
+      ],
+      "quote": "nearly unchanged"
+    },
+    {
+      "kind": "limitation",
+      "title": "测试集敏感性透明呈现，不是独立验证集的稳健结论",
+      "text": "作者因公开NAVSIM协议无单独validation split，直接在navhard给完整checkpoint和单变量超参结果；这增加透明性，也意味着主测试成绩与设置比较不是独立留出的模型选择证据。图5/6仅NegWAM为3训练seed均值±1std，baseline单run；表I–IV未给同等重复误差，不能把全部差值写成统计显著。navhard图中5K时NegWAM均值低于baseline，10K最高，之后15K–30K回落但仍高于baseline，不能称多训练单调更好；表V试过的LR/权重39.0–40.4只支持局部敏感性范围，不验证α、温度、词表/ADE阈值或异域难场景稳健。",
+      "evidence_ids": [
+        "a8add857ebe06f03",
+        "19a26a5b9e765b60",
+        "d4245a912c5f302f",
+        "4532f3f1998116cf",
+        "a2c0ca36a56b4bc1",
+        "c68837ab9c7e4640",
+        "b6c75a9e59c6c6bf",
+        "6d278501dd565569",
+        "f76d537be6f2be90"
+      ],
+      "quote": "one-factor-at-a-time"
+    },
+    {
+      "kind": "limitation",
+      "title": "负边界继承词表、评估器与几何距离的盲区",
+      "text": "EPDMS=0把不同违规类型和严重程度合成同一负标签；ADE近只说明平面位置近，不包含相对速度、交互时序和道路风险本身。固定词表之外的罕见机动/交互没有直接负监督，rider读scene也不能消除标签来源偏差。附录图11给出比DriveWAM更差的两例：本法错过左侧超车而直行撞停驶前车，及转弯贴目标车道车辆过近碰撞；这些反例不支持单点统计失败率，却足以否定无条件安全表述。证据限benchmark/仿真，未做真实车闭环或形式安全证明。",
+      "evidence_ids": [
+        "3a72c4add09d2da6",
+        "fdd5b89705f2bcaa",
+        "e0fc7cec7de6486a",
+        "7333de15f89cb6a9",
+        "c9601114b494153b",
+        "1f7585a31632e62e",
+        "d89c42469f18e77f",
+        "31ee76c80deac29c",
+        "666eb9dfbf96adff",
+        "84b5bf4496b0445f",
+        "748230c2eb3296ba",
+        "be43966f67435081"
+      ],
+      "quote": "interaction risk"
+    }
+  ],
+  "hypotheses": [
+    {
+      "title": "待验证：按失败类型平衡负例，能否减少非Easy闭环退化？",
+      "text": "待验证假设：在相同近专家距离、负例数和后训练预算下，按造成失败的指标与交互类型分层采样，比统一EPDMS零分池随机采样更能保留困难闭环场景的表现。仅用公开NAVSIM缓存和HUGSIM仿真，先在navtrain内部按场景组预留独立开发集，固定共享WAM起点、双损失、α/温度和10K训练预算；比较FM继续训练、默认均匀负池、失败多标签分层负池，至少3个训练seed，匹配每例K≤16、ADE分布与实际有效负例覆盖率。分层按NC/DAC/DDC/TLC等具体致零原因及相对速度/交互分组，允许多标签，不把所有零分当碰撞；只用开发集决定权重和checkpoint，冻结后报告navhard/navtest各子项以及HUGSIM E/M/H/X的RC、HD、碰撞/越界和停滞频率，固定相同场景/路线seed并给区间。另报告缓存采矿时间、训练GPU小时和不变推理路径。若改善只留在相同评估器综合分、Hard/Extreme持续退化或Easy收益完全丢失，或匹配ADE/覆盖后优势消失，则推翻分层负例带来更均衡泛化的假设。实验未执行，未创建选题；仍受固定词表覆盖限制，未全面查新，不宣称新研究空白。",
+      "evidence_ids": [
+        "fdd5b89705f2bcaa",
+        "e0fc7cec7de6486a",
+        "7333de15f89cb6a9",
+        "ec09621d490c7345",
+        "c446f26e3ad153bf",
+        "19a26a5b9e765b60",
+        "d4245a912c5f302f",
+        "6d278501dd565569",
+        "84b5bf4496b0445f",
+        "748230c2eb3296ba",
+        "be43966f67435081"
+      ],
+      "quote": "violation types"
+    }
+  ],
+  "attention": {
+    "level": "notable",
+    "reason": "训练期单向rider注意力与输出排斥的组合值得借鉴，但综合分与碰撞子项、困难闭环表现分离，采用前应优先验证负标签覆盖和分难度退化。",
+    "basis": [
+      "training_change",
+      "controlled_comparison",
+      "negative_result"
+    ],
+    "evidence_ids": [
+      "4a8ef4809052039b",
+      "5f7ae0debc39f3bc",
+      "7eb790306c08a9a2",
+      "d4cb53ac92fad71f",
+      "19a26a5b9e765b60",
+      "fde04f8fa292c539",
+      "c446f26e3ad153bf",
+      "9549a93c9e78eabe",
+      "748230c2eb3296ba"
+    ]
+  },
+  "frontier_brief": {
+    "title": "NegWAM：离线失败既作排斥锚点，也作单向读取场景的rider监督",
+    "change_type": "后训练 · 负轨迹与共享表征",
+    "delta": "用近专家零分轨迹约束单步解码动作远离负锚点，同时把专家/负轨迹编码为只读当前观测的rider，排序梯度更新共享DiT；部署移除辅助组与头。",
+    "before": "统一WAM只做专家视频/动作流匹配，附近失败缺监督；只对输出轨迹排斥还未让共享场景表征直接学习专家–失败排序。",
+    "after": "同起点同预算navhard继续训练38.2，锚点39.1，rider38.8，组合40.4；推理保留原生成路径。负样本仍由离线NAVSIM规则评估，非免评估器训练。",
+    "relevance": "为WAM选择不增加推理分支的辅助训练方式时，可比较输出约束和单向注意力表征监督；评估必须同时看碰撞子项与不同难度闭环结果。",
+    "caveat": "HUGSIM总体HD27.2→30.6，但非Easy三档均退化；navtest NC98.4→98.1，不能把综合分当事故率。无独立validation split的测试集敏感性、有限负词表和无真车验证限制结论。",
+    "question": "匹配ADE和负例预算后，按违规/交互类型分层能否缓解Hard/Extreme退化？",
+    "evidence": [
+      {
+        "label": "同预算机制消融",
+        "value": "38.2→39.1/38.8→40.4 EPDMS",
+        "context": "继续FM→仅锚点/仅rider→组合；同100K起点、10K后训练，表IV未给各组等量seed区间。"
+      },
+      {
+        "label": "总体与困难闭环分离",
+        "value": "HUGSIM HD总体27.2→30.6；Extreme12.6→10.8",
+        "context": "DriveWAM→NegWAM零样本，Easy大幅提高，Medium/Hard/Extreme的RC与HD均下降；非真实道路实验。"
+      },
+      {
+        "label": "总分不等于碰撞改善",
+        "value": "navtest EPDMS92.2→93.3，NC98.4→98.1",
+        "context": "修正NAVSIM v2.2综合协议，DAC96.7→98.4；还含专家豁免/复合指标，不可直接转事故率。"
+      },
+      {
+        "label": "部署与训练成本",
+        "value": "延迟871.35→877.86ms；后训练8 H100 GPU小时",
+        "context": "同6241.81MB模型、14029.08MB峰值推理内存；训练4×H100×2h，采矿缓存成本另未单列。"
+      }
+    ],
+    "mechanism": [
+      {
+        "title": "近专家失败缓存",
+        "text": "16K轨迹词表，ADE[0.3,1.0)m且离线EPDMS=0；每次最多16条，85.8%样本有负例，没负例只算FM。"
+      },
+      {
+        "title": "噪声感知排斥",
+        "text": "hinge [0.9a−d]_+乘(1−t)，精确专家处不受罚；使用单步动作解码，不代表全空间形式安全约束。"
+      },
+      {
+        "title": "单向注意力辅助排序",
+        "text": "rider只看当前观测和自身轨迹，原token看不到rider/未来目标；兼容性排序经共享权重影响模型，推理删辅助分支。"
+      }
+    ]
+  },
+  "source_checks": [
+    {
+      "url": "https://arxiv.org/pdf/2611.08111v1",
+      "checked": "固定PDF14页、9347639字节；目视物理页4/5/6/7/8/9/12/13/14，核算法1、损失与注意力掩码、表I–VIII、图3–11。尤其核HUGSIM三档退化、NC子项、3seed对单baseline曲线、+0.75%实测延迟及失败例。作者实验未复现。"
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+{
+  "id": "cc16184bbdcf88e11665d77fd275ef8b7d4ef95b177bb57c61cf6aa2045e9933",
+  "url": "https://arxiv.org/html/2611.08458v1",
+  "format": "html",
+  "passages": [
+    {
+      "id": "b2c468c7b1c828ea",
+      "section": "Latent RL Priors for Data-Efficient Dexterous Manipulation",
+      "location": "Latent RL Priors for Data-Efficient Dexterous Manipulation",
+      "text": "Learning dexterous manipulation from limited visual demonstrations is challenging because policies must acquire both perceptual grounding and precise control, while reinforcement learning (RL) in simulation can acquire rich control behaviors from large-scale interaction with privileged information. We introduce Latent RL Prior , a two-stage framework that reuses this control knowledge for data-efficient visual policy learning. During privileged pretraining, we distill large-scale RL rollouts into a flow-matching action decoder conditioned on proprioception and latent task context. During visual adaptation, we freeze the decoder and learn a visual interface that maps images to its latent context using action supervision alone, without privileged labels or latent targets. The same decoder can further be shared across arms by learning coordinated visual contexts for bimanual manipulation. Across three simulated tasks, our method outperforms full-parameter fine-tuning of π 0.5 \\pi_{0.5} and GR00T N1.7 in the low-data regime; on door lifting and bimanual assembly, it surpasses full-data baselines using 10 × 10\\times and 5 × 5\\times fewer demonstrations, respectively. Further analysis shows that direct visual-to-latent conditioning improves adaptation performance and training stability over routing visual predictions through the pretrained state encoder. Robustness to unseen mass variation and greater linear accessibility of contact-force information in decoder representations further provide evidence of retained RL-acquired control knowledge. Project website: https://yixiaowang7.github.io/latent-rl-prior-page/ .",
+      "url": "https://arxiv.org/html/2611.08458v1#abstract1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b0ff673664416a1d",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Dexterous manipulation requires coordinated arm and finger motion under changing contacts and object dynamics. Learning these behaviors from limited visual demonstrations is challenging because the policy must acquire both perceptual grounding and precise action generation ( Zhao et al., 2023 ; Chi et al., 2023 ) . Pretrained vision-language-action (VLA) models offer transferable priors from broad visual, language, and robot datasets ( Zitkovich et al., 2023 ; Kim et al., 2024 ; Black et al., 2024 ) . We investigate a complementary source of prior knowledge for dexterous control: behaviors acquired through large-scale reinforcement learning (RL) in simulation.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b33c9066c1223fe4",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Simulated interaction enables RL policies to acquire manipulation strategies across diverse object geometries and physical properties ( Andrychowicz et al., 2020 ; Singla et al., 2024 ; Kedia et al., 2026 ) . However, these policies often rely on privileged information, such as object and goal states, that is not directly available at deployment. Reusing their control capabilities requires an interface that connects visual observations to the pretrained controller. Our premise is that preserving pretrained proprioceptive processing and action generation can reduce the visual demonstrations needed to adapt these capabilities to downstream tasks.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "2e1f5aeceee1228f",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We introduce Latent RL Prior, a simple yet effective framework for this transfer. We distill rollouts from an RL teacher trained on procedural pose alignment into a flow-matching action decoder ( Lipman et al., 2023 ) . The decoder receives proprioceptive history through a dedicated pathway and latent context encoding privileged task information. During visual adaptation, we freeze the decoder and learn a visual interface that maps images directly to this context. This latent transfer uses only the action objective on image–proprioception–action demonstrations, without requiring corresponding privileged information, pretrained latent targets, or paired trajectories between the pretraining and adaptation datasets.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "658b37bd93ff1607",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "The same design extends a single-arm RL prior to multiple arms. We share the frozen decoder across arms and learn coordinated visual contexts, each paired with the corresponding arm’s proprioceptive history. Bimanual adaptation thus reuses the pretrained control prior while learning inter-arm coordination through the visual interface.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.p4.1",
+      "kind": "p"
+    },
+    {
+      "id": "391fa8c6ba145f86",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "We evaluate the shared prior on target pose alignment, door lifting, and bimanual assembly in simulation. With limited visual demonstrations, our method outperforms full-parameter fine-tuning of π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) and GR00T N1.7 ( NVIDIA, 2026 ) . On door lifting and bimanual assembly, it surpasses both baselines trained on the full task datasets with 10 × 10\\times and 5 × 5\\times fewer demonstrations, respectively. Comparisons with the same visual policy architecture trained from scratch further support the value of the pretrained action prior.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.p5.1",
+      "kind": "p"
+    },
+    {
+      "id": "bb4565dfe57715cd",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "Further investigations examine how to access and adapt this prior. Latent transfer improves performance and training stability over explicit transfer through the pretrained state encoder. Separate adaptation studies favor conservative updates to the image encoder and a frozen action decoder, particularly for precise alignment. We also investigate the control behaviors and physical information accessible after transfer. The adapted policies exhibit robustness to mass variation absent from the visual demonstrations, and their decoder representations make contact-force information more linearly accessible than those learned from scratch. These observations are consistent with retained control knowledge from large-scale RL pretraining.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.p6.1",
+      "kind": "p"
+    },
+    {
+      "id": "e9a51557e9348302",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "a framework for adapting a frozen RL action prior through latent visual conditioning with action supervision alone, including reuse of a single-arm decoder for multi-arm manipulation;",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.I1.i1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "991f8141d950b733",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "empirical evidence of improved visual-demonstration efficiency across three dexterous tasks, together with evaluations of the transfer interface and adaptation choices; and",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.I1.i2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "a8acf2ef7a1ac610",
+      "section": "1 Introduction",
+      "location": "1 Introduction",
+      "text": "behavioral and representational analyses of mass robustness and contact-force accessibility after visual adaptation.",
+      "url": "https://arxiv.org/html/2611.08458v1#S1.I1.i3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "ee5c7972985ed351",
+      "section": "Dexterous control from reinforcement learning.",
+      "location": "Dexterous control from reinforcement learning.",
+      "text": "RL with dynamics randomization has enabled dexterous in-hand manipulation ( Andrychowicz et al., 2020 ) . Parallel simulation and scalable policy optimization support learning from large amounts of interaction ( Makoviychuk et al., 2021 ; Singla et al., 2024 ) . SimToolReal trains a single policy to manipulate procedurally generated objects toward goal poses and deploys it using object-pose estimates and goal-pose sequences ( Kedia et al., 2026 ) . We build on its released teacher, distill rollouts into an action decoder, and investigate reuse of the resulting control prior through visual conditioning learned from limited downstream demonstrations.",
+      "url": "https://arxiv.org/html/2611.08458v1#S2.SS0.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "86151b8c3a4f77ce",
+      "section": "Transfer with privileged information.",
+      "location": "Transfer with privileged information.",
+      "text": "Asymmetric actor–critic training uses privileged information in the critic to learn policies with restricted observations ( Pinto et al., 2018 ) . Policy distillation transfers behavior between policies ( Rusu et al., 2016 ) , while Learning by Cheating uses a privileged teacher to train a visual student ( Chen et al., 2020 ) . Closer to our interface, Rapid Motor Adaptation (RMA) and its extension to in-hand rotation retain an RL controller while estimating latent representations of physical properties from proprioceptive and action histories ( Kumar et al., 2021 ; Qi et al., 2023 ) . Their adaptation modules are trained to match embeddings computed from corresponding privileged information. Our visual adaptation uses action supervision alone: the decoder distilled from RL rollouts remains frozen, while its visual conditioning is learned without privileged information or latent targets in the downstream demonstrations. We reuse this prior across tasks and extend it to bimanual manipulation through a shared single-arm decoder.",
+      "url": "https://arxiv.org/html/2611.08458v1#S2.SS0.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d6c8d3b7255d412",
+      "section": "Visual imitation and generalist robot policies.",
+      "location": "Visual imitation and generalist robot policies.",
+      "text": "Action chunking and generative action modeling support learning visual manipulation from demonstrations ( Zhao et al., 2023 ; Chi et al., 2023 ) . Generalist policies and VLA models transfer knowledge from diverse robot and vision–language datasets ( Zitkovich et al., 2023 ; Ghosh et al., 2024 ; Kim et al., 2024 ) . The π 0 \\pi_{0} and GR00T families combine pretrained vision–language representations with flow-matching action models ( Black et al., 2024 ; NVIDIA et al., 2025 ) . Our approach combines DINOv2 visual features ( Oquab et al., 2024 ) with a control prior distilled from privileged RL rollouts. We investigate how this source of control experience supports adaptation to dexterous tasks with limited visual demonstrations, comparing against full-parameter fine-tuning of π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) and GR00T N1.7 ( NVIDIA, 2026 ) .",
+      "url": "https://arxiv.org/html/2611.08458v1#S2.SS0.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "71f0d935cf98b32c",
+      "section": "3 Latent RL Prior",
+      "location": "3 Latent RL Prior",
+      "text": "Figure 1: Latent RL Prior. (a) Privileged pretraining: a state tokenizer and Q-Former supply task context to an action decoder conditioned on flow time and single-arm proprioception. (b) Visual adaptation: an image encoder and Q-Former learn context tokens while the decoder remains frozen. For bimanual assembly, left- and right-arm queries interact within the same Q-Former; each output group conditions the shared decoder with its corresponding arm’s proprioception.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.F1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "e123f018a2adb440",
+      "section": "3 Latent RL Prior",
+      "location": "3 Latent RL Prior",
+      "text": "Large-scale reinforcement learning (RL) in simulation can acquire complex dexterous manipulation behavior through abundant interaction across diverse object geometries, masses, and physical properties. However, these policies often rely on privileged state information, such as object and goal states, that is unavailable at deployment. Therefore, in this section, we investigate how to transfer such dexterous behaviors acquired by privileged RL into a reusable RL prior for downstream visual tasks. Our goal is to preserve dexterous capabilities learned from large-scale simulated experience while adapting a visual interface from limited demonstrations using only deployable observations.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "6bdfd55b79e701c6",
+      "section": "3.1 Problem Formulation",
+      "location": "3.1 Problem Formulation",
+      "text": "We consider dexterous manipulation tasks in which, at time t t , the robot observes its proprioceptive state 𝒓 t {\\bm{r}}_{t} and synchronized images 𝑰 t 1 : C {\\bm{I}}_{t}^{1:C} from C C cameras, and executes an action 𝒂 t {\\bm{a}}_{t} . Using a history of H H observations, the policy predicts a K K -step action chunk. We denote",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f00cdd26a913a8e3",
+      "section": "3.1 Problem Formulation",
+      "location": "3.1 Problem Formulation",
+      "text": "𝒫 t = 𝒑 t − H + 1 : t , ℛ t = 𝒓 t − H + 1 : t , ℐ t = 𝑰 t − H + 1 : t 1 : C , 𝒜 t = [ 𝒂 t , … , 𝒂 t + K − 1 ] . \\mathcal{P}_{t}={\\bm{p}}_{t-H+1:t},\\quad\\mathcal{R}_{t}={\\bm{r}}_{t-H+1:t},\\quad\\mathcal{I}_{t}={\\bm{I}}_{t-H+1:t}^{1:C},\\quad\\mathcal{A}_{t}=[{\\bm{a}}_{t},\\ldots,{\\bm{a}}_{t+K-1}].",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.Ex1",
+      "kind": "table"
+    },
+    {
+      "id": "66953fd9e7dc5bfd",
+      "section": "3.1 Problem Formulation",
+      "location": "3.1 Problem Formulation",
+      "text": "We represent task information with M M latent context tokens 𝒁 t ∈ ℝ M × d {\\bm{Z}}_{t}\\in\\mathbb{R}^{M\\times d} , each of dimension d d . Together with the proprioceptive history ℛ t \\mathcal{R}_{t} , these tokens condition the action decoder to predict the action chunk 𝒜 t \\mathcal{A}_{t} . The source of 𝒁 t {\\bm{Z}}_{t} depends on the training stage: it is derived from the privileged history 𝒫 t \\mathcal{P}_{t} during pretraining and from the visual history ℐ t \\mathcal{I}_{t} during visual adaptation.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "b73bb1eccadde5d5",
+      "section": "3.1 Problem Formulation",
+      "location": "3.1 Problem Formulation",
+      "text": "We use a large privileged RL dataset 𝒟 RL = { ( 𝒫 t , ℛ t , 𝒜 t ) } \\mathcal{D}_{\\mathrm{RL}}=\\{(\\mathcal{P}_{t},\\mathcal{R}_{t},\\mathcal{A}_{t})\\} and a smaller downstream visual dataset 𝒟 vis = { ( ℐ t , ℛ t , 𝒜 t ) } \\mathcal{D}_{\\mathrm{vis}}=\\{(\\mathcal{I}_{t},\\mathcal{R}_{t},\\mathcal{A}_{t})\\} . The visual demonstrations contain no privileged-state labels and need not be paired with the RL trajectories. Our goal is to reuse the action prior learned from 𝒟 RL \\mathcal{D}_{\\mathrm{RL}} while replacing privileged conditioning with visual conditioning for downstream tasks.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "9f852f79f07b4ece",
+      "section": "Large-scale teacher rollouts.",
+      "location": "Large-scale teacher rollouts.",
+      "text": "Following Kedia et al. (2026) , we first train an RL teacher on a broad object pose-alignment task, where the robot aligns procedural objects with target poses. We apply domain randomization over object shape, size, and density during training to expose the policy to diverse manipulation conditions. We then roll out the trained policy at scale and construct 𝒟 RL \\mathcal{D}_{\\mathrm{RL}} from the collected trajectories by extracting privileged histories 𝒫 t \\mathcal{P}_{t} , proprioceptive histories ℛ t \\mathcal{R}_{t} , and future action chunks 𝒜 t \\mathcal{A}_{t} .",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3b8ddfdbc90f90d7",
+      "section": "Flow-matching action prior.",
+      "location": "Flow-matching action prior.",
+      "text": "A state tokenizer T η T_{\\eta} followed by a Q-Former Q ψ Q_{\\psi} ( Li et al., 2023 ) maps the privileged history to the latent context",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "82edc40b079893e6",
+      "section": "Flow-matching action prior.",
+      "location": "Flow-matching action prior.",
+      "text": "𝒁 t priv = Q ψ ​ ( T η ​ ( 𝒫 t ) ) ∈ ℝ M × d . {\\bm{Z}}_{t}^{\\mathrm{priv}}=Q_{\\psi}\\!\\left(T_{\\eta}(\\mathcal{P}_{t})\\right)\\in\\mathbb{R}^{M\\times d}.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.Ex2",
+      "kind": "table"
+    },
+    {
+      "id": "bf5e4f479b33b513",
+      "section": "Flow-matching action prior.",
+      "location": "Flow-matching action prior.",
+      "text": "The action decoder v θ v_{\\theta} is a transformer ( Vaswani et al., 2017 ) whose action tokens cross-attend to this context. The proprioceptive history ℛ t \\mathcal{R}_{t} and flow time τ \\tau condition each block through adaptive layer normalization (AdaLN) ( Peebles and Xie, 2023 ) . This separation allows the source of the latent context to change while preserving the pretrained processing of proprioception.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS2.SSS0.Px2.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "5ba95f5fb1d0a86e",
+      "section": "Flow-matching action prior.",
+      "location": "Flow-matching action prior.",
+      "text": "We train the decoder with conditional flow matching ( Lipman et al., 2023 ) . For a demonstrated action chunk 𝒜 t 0 := 𝒜 t \\mathcal{A}_{t}^{0}:=\\mathcal{A}_{t} , we sample 𝒜 t 1 ∼ 𝒩 ⁡ ( 𝟎 , 𝐈 ) \\mathcal{A}_{t}^{1}\\sim\\mathcal{N}(\\bm{0},\\mathbf{I}) and τ ∼ 𝒰 ⁡ [ 0 , 1 ] \\tau\\sim\\mathcal{U}[0,1] , and form 𝒜 t τ = ( 1 − τ ) ​ 𝒜 t 0 + τ ​ 𝒜 t 1 \\mathcal{A}_{t}^{\\tau}=(1-\\tau)\\mathcal{A}_{t}^{0}+\\tau\\mathcal{A}_{t}^{1} . The decoder learns the corresponding velocity field by minimizing",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS2.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d296e794dbd6f98",
+      "section": "Flow-matching action prior.",
+      "location": "Flow-matching action prior.",
+      "text": "ℒ FM = 𝔼 ( ℛ t , 𝒜 t 0 ) ∼ 𝒟 RL , 𝒜 t 1 ∼ 𝒩 ⁡ ( 𝟎 , 𝐈 ) , τ ∼ 𝒰 ⁡ [ 0 , 1 ] ​ [ ‖ v θ ​ ( 𝒜 t τ , τ , 𝒁 t , ℛ t ) − ( 𝒜 t 1 − 𝒜 t 0 ) ‖ 2 2 ] . \\mathcal{L}_{\\mathrm{FM}}=\\mathbb{E}_{\\begin{subarray}{c}(\\mathcal{R}_{t},\\mathcal{A}_{t}^{0})\\sim\\mathcal{D}_{\\mathrm{RL}},\\,\\mathcal{A}_{t}^{1}\\sim\\mathcal{N}(\\bm{0},\\mathbf{I}),\\,\\tau\\sim\\mathcal{U}[0,1]\\end{subarray}}\\left[\\left\\|v_{\\theta}\\!\\left(\\mathcal{A}_{t}^{\\tau},\\tau,{\\bm{Z}}_{t},\\mathcal{R}_{t}\\right)-\\left(\\mathcal{A}_{t}^{1}-\\mathcal{A}_{t}^{0}\\right)\\right\\|_{2}^{2}\\right]. (1)",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.E1",
+      "kind": "table"
+    },
+    {
+      "id": "415b3cd7c9a29091",
+      "section": "3.3 Visual Adaptation",
+      "location": "3.3 Visual Adaptation",
+      "text": "Having pretrained the action prior from privileged RL rollouts, we next adapt it to downstream visual observations, where privileged task information is unavailable. We learn a visual conditioning module from limited demonstrations while keeping the pretrained action decoder fixed. Specifically, an image encoder E vis E_{\\mathrm{vis}} , instantiated with DINOv2 ( Oquab et al., 2024 ) , encodes the visual history as 𝑭 t = E vis ​ ( ℐ t ) {\\bm{F}}_{t}=E_{\\mathrm{vis}}(\\mathcal{I}_{t}) . We keep the pretrained action decoder v θ v_{\\theta} fixed and train the visual pathway on 𝒟 vis \\mathcal{D}_{\\mathrm{vis}} using the same flow-matching objective in Equation 1 . The action loss provides the only supervision; no privileged-state labels or pretrained latent targets are required.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "42bda0fca95accb9",
+      "section": "Latent and explicit transfer.",
+      "location": "Latent and explicit transfer.",
+      "text": "We consider two interfaces for conditioning the pretrained action prior from visual observations. In latent transfer , a visual Q-Former Q ϕ Q_{\\phi} maps image features directly to the decoder context,",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8556a7da9bdad792",
+      "section": "Latent and explicit transfer.",
+      "location": "Latent and explicit transfer.",
+      "text": "𝒁 t latent = Q ϕ ​ ( 𝑭 t ) ∈ ℝ M × d . {\\bm{Z}}_{t}^{\\mathrm{latent}}=Q_{\\phi}({\\bm{F}}_{t})\\in\\mathbb{R}^{M\\times d}.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.Ex3",
+      "kind": "table"
+    },
+    {
+      "id": "a90acefc87f8cd34",
+      "section": "Latent and explicit transfer.",
+      "location": "Latent and explicit transfer.",
+      "text": "This replaces the pretrained state tokenizer and state Q-Former, while preserving the action decoder and its proprioceptive conditioning pathway. We optimize E vis E_{\\mathrm{vis}} and Q ϕ Q_{\\phi} with 𝒁 t = 𝒁 t latent {\\bm{Z}}_{t}={\\bm{Z}}_{t}^{\\mathrm{latent}} .",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.SSS0.Px1.p1.2",
+      "kind": "p"
+    },
+    {
+      "id": "f447fa05619b3cd2",
+      "section": "Latent and explicit transfer.",
+      "location": "Latent and explicit transfer.",
+      "text": "In explicit transfer , a bridge B ρ B_{\\rho} first maps visual features to a privileged-shaped history, 𝒫 ^ t = B ρ ​ ( 𝑭 t ) \\widehat{\\mathcal{P}}_{t}=B_{\\rho}({\\bm{F}}_{t}) , which is then processed by the pretrained state encoder. The two interfaces are therefore",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "411a2287b4c7407e",
+      "section": "Latent and explicit transfer.",
+      "location": "Latent and explicit transfer.",
+      "text": "𝒁 t latent = Q ϕ ​ ( 𝑭 t ) , 𝒁 t explicit = Q ψ ​ ( T η ​ ( 𝒫 ^ t ) ) . {\\bm{Z}}_{t}^{\\mathrm{latent}}=Q_{\\phi}({\\bm{F}}_{t}),\\qquad{\\bm{Z}}_{t}^{\\mathrm{explicit}}=Q_{\\psi}\\!\\left(T_{\\eta}(\\widehat{\\mathcal{P}}_{t})\\right). (2)",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.E2",
+      "kind": "table"
+    },
+    {
+      "id": "75d1783d698bf708",
+      "section": "Latent and explicit transfer.",
+      "location": "Latent and explicit transfer.",
+      "text": "For explicit transfer, we freeze T η T_{\\eta} , Q ψ Q_{\\psi} , and v θ v_{\\theta} , and optimize only E vis E_{\\mathrm{vis}} and B ρ B_{\\rho} .",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.SSS0.Px1.p2.2",
+      "kind": "p"
+    },
+    {
+      "id": "df3960e39e45ec5b",
+      "section": "Extension to multi-arm manipulation.",
+      "location": "Extension to multi-arm manipulation.",
+      "text": "Many bimanual manipulation tasks build on dexterous skills that are already required at the single-arm level, which motivates reusing the pretrained single-arm RL prior for both arms, while learning the additional inter-arm coordination from bimanual demonstrations. Rather than introducing a separate bimanual action decoder, we retain the shared single-arm decoder and extend its visual conditioning to produce coordinated, arm-specific contexts.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "bfcc3cf1a727683e",
+      "section": "Extension to multi-arm manipulation.",
+      "location": "Extension to multi-arm manipulation.",
+      "text": "Specifically, as shown in Figure 1 , we assign M M queries to each arm and process the two query groups jointly with the visual Q-Former. Self-attention between the groups allows each arm’s context to incorporate information from the other arm before action generation. The resulting contexts 𝒁 t L {\\bm{Z}}_{t}^{L} and 𝒁 t R {\\bm{Z}}_{t}^{R} are paired with the corresponding proprioceptive histories ℛ t L \\mathcal{R}_{t}^{L} and ℛ t R \\mathcal{R}_{t}^{R} . The same frozen decoder v θ v_{\\theta} processes the two context–proprioception pairs separately to generate arm–hand actions for the left and right arms, respectively. Thus, both arms reuse the action-generation and proprioceptive processing learned during privileged pretraining, while cross-arm coordination is introduced through the jointly inferred visual contexts.",
+      "url": "https://arxiv.org/html/2611.08458v1#S3.SS3.SSS0.Px2.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "e46b88b585094f9a",
+      "section": "4 Experiments",
+      "location": "4 Experiments",
+      "text": "We first evaluate whether the pretrained action prior improves visual-demonstration efficiency across downstream dexterous manipulation tasks. We then compare latent transfer, which maps visual features directly to decoder context tokens, with explicit transfer, which conditions the decoder through the pretrained state encoder, in terms of adaptation performance and training stability. Next, we examine the effects of fine-tuning the image encoder E vis E_{\\mathrm{vis}} and the action decoder v θ v_{\\theta} . Finally, we investigate what control behaviors and physical information are retained from large-scale RL training after visual adaptation, using mass-variation tests and contact-force probes.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "4b6fd64e0829ff90",
+      "section": "Task design and evaluation.",
+      "location": "Task design and evaluation.",
+      "text": "We conduct the experiments in MuJoCo Warp (MJWarp) ( Google DeepMind and NVIDIA, n.d. ) using KUKA iiwa arms equipped with SHARPA dexterous hands. Figure 2 shows the pretraining task (Section 3.2 ) and three downstream tasks.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS1.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "3f8a194796e0b327",
+      "section": "Task design and evaluation.",
+      "location": "Task design and evaluation.",
+      "text": "Figure 2: Pretraining and downstream tasks. Left: the pretraining task of target pose alignment with varied procedural objects; the inset shows example object templates. Right: the downstream tasks of target pose alignment with a held-out brush, door lifting, and bimanual assembly (left to right). The same pretrained action decoder is reused for visual adaptation across all three downstream tasks.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "211073428336afdc",
+      "section": "Task design and evaluation.",
+      "location": "Task design and evaluation.",
+      "text": "Pretraining. Following the SimToolReal experimental setup ( Kedia et al., 2026 ) , a single arm–hand system reorients procedural object templates with randomized shapes, sizes, and densities to target poses. We measure translation and orientation error using four corresponding keypoints from the clean object and target poses: d max = max j ∈ { 1 , … , 4 } ⁡ ‖ 𝐤 j obj − 𝐤 j goal ‖ 2 d_{\\max}=\\max_{j\\in\\{1,\\ldots,4\\}}\\|\\mathbf{k}_{j}^{\\mathrm{obj}}-\\mathbf{k}_{j}^{\\mathrm{goal}}\\|_{2} . Success requires d max ≤ ϵ = 0.015 d_{\\max}\\leq\\epsilon=0.015 m on 10 policy steps, not necessarily consecutive (Figure 3 ).",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS1.SSS0.Px1.p2.1",
+      "kind": "p"
+    },
+    {
+      "id": "095cca2e175cd246",
+      "section": "Task design and evaluation.",
+      "location": "Task design and evaluation.",
+      "text": "Downstream tasks. (1) In target pose alignment , the robot grasps a blue brush excluded from pretraining and aligns it with a target pose. We use the same keypoint criterion and report strict ( ϵ = 0.015 \\epsilon=0.015 m) and relaxed ( ϵ = 0.05 \\epsilon=0.05 m) success rates. (2) In door lifting , the robot lifts a door to reveal a cube behind it. We randomize the cube’s height, color, and size, as well as the door’s position and orientation. Success requires lifting the door above the cube’s height. (3) In bimanual assembly , two arm–hand systems grasp separate objects from a tabletop, reorient them in hand, and insert a cubic protrusion on one object into a matching cavity in the other. We randomize the objects’ masses and sizes, as well as the cavity size. Success requires full insertion, measured by insertion depth relative to cavity depth. Blue-brush alignment evaluates transfer to an unseen object within the pretraining task, whereas door lifting and bimanual assembly evaluate transfer to different tasks.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS1.SSS0.Px1.p3.1",
+      "kind": "p"
+    },
+    {
+      "id": "d6b86f61d15b1f57",
+      "section": "Data and implementation.",
+      "location": "Data and implementation.",
+      "text": "We fine-tune the released SimToolReal teacher checkpoint ( Kedia et al., 2026 ) on procedural target pose alignment and collect 100,000 successful rollouts for 𝒟 RL \\mathcal{D}_{\\mathrm{RL}} . We train a separate SAPG policy ( Singla et al., 2024 ) for each downstream task and collect its a small amount rollouts for 𝒟 vis \\mathcal{D}_{\\mathrm{vis}} . Table 3 shows the dataset details. Unless otherwise noted, we use latent transfer (Section 3.3 ) with DINOv2-Small (ViT-S/14) as E vis E_{\\mathrm{vis}} and reuse the same pretrained action decoder across downstream tasks.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS1.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "9fe6d145f8d697eb",
+      "section": "Data and implementation.",
+      "location": "Data and implementation.",
+      "text": "Figure 3: Target pose alignment success criterion.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F3.fig1",
+      "kind": "figcaption"
+    },
+    {
+      "id": "127b06e65011eb58",
+      "section": "Data and implementation.",
+      "location": "Data and implementation.",
+      "text": "Table 1: Datasets for privileged pretraining and visual adaptation. F: front; S: side; H: in-hand (L/R: left/right).",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F3.fig2",
+      "kind": "figcaption"
+    },
+    {
+      "id": "c06440ac911f80cc",
+      "section": "Data and implementation.",
+      "location": "Data and implementation.",
+      "text": "Dataset Episodes Arm–hand systems Images Privileged information Pretraining 100,000 single – Yes Target pose alignment 4,000 single F, S, H No Door lift 500 single F, S, H No Bimanual assembly 5,000 bimanual F, H L , H R No",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F3.fig2.1.1",
+      "kind": "table"
+    },
+    {
+      "id": "a0ca1f53e23cc23b",
+      "section": "Baselines.",
+      "location": "Baselines.",
+      "text": "We compare our method with (1) full-parameter fine-tuning of the vision-language-action models π 0.5 \\pi_{0.5} ( Physical Intelligence et al., 2025 ) and GR00T N1.7 ( NVIDIA, 2026 ) ; (2) a scratch baseline that uses the same visual policy architecture without the pretrained action prior; and (3) explicit transfer, as defined in Section 3.3 .",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS1.SSS0.Px3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f439bd26f9d0ec32",
+      "section": "Training and evaluation protocol.",
+      "location": "Training and evaluation protocol.",
+      "text": "For the main comparisons, we fine-tune GR00T N1.7 and π 0.5 \\pi_{0.5} for 30,000 optimization steps using their officially recommended fine-tuning hyperparameters. We train our policy for 100,000 steps. For all methods, we save checkpoints every 5,000 steps and retain the final five for evaluation. We evaluate these checkpoints on held-out environment configurations, which means environment seeds distinct from those used for dataset generation. Each checkpoint is evaluated over 256 policy rollouts. Following prior work ( Wang et al., 2024 ; Chi et al., 2023 ) , we report the highest success rate among the five evaluated checkpoints for each run. Unless otherwise noted, we use three training seeds and report the mean and standard deviation of these per-run maximum success rates. The training seeds control demonstration subsampling and the PyTorch random-number generator such as the initialization of newly introduced parameters.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS1.SSS0.Px4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f64c9177f5bf8d66",
+      "section": "4.2 Latent RL Prior Enables Data-Efficient Visual Adaptation",
+      "location": "4.2 Latent RL Prior Enables Data-Efficient Visual Adaptation",
+      "text": "Figure 4: Comparison with full-parameter fine-tuning of GR00T N1.7 and π 0.5 \\pi_{0.5} across demonstration budgets. (a) Target pose alignment at strict ( ϵ = 0.015 \\epsilon=0.015 m) and relaxed ( ϵ = 0.05 \\epsilon=0.05 m) thresholds; (b) door lifting; (c) bimanual assembly. We report average success rate and standard deviation across three random seeds.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F4",
+      "kind": "figcaption"
+    },
+    {
+      "id": "86820fe97a2fde4b",
+      "section": "Comparison with VLA baselines.",
+      "location": "Comparison with VLA baselines.",
+      "text": "As shown in Figure 4 , our method achieves higher success rates than GR00T N1.7 and π 0.5 \\pi_{0.5} with limited visual demonstrations across all three tasks. The advantage is particularly pronounced in the low-data regime. On door lifting, our method trained with only 50 demonstrations outperforms both VLA baselines trained on the full 500-demonstration dataset, using 10 × 10\\times fewer demonstrations. On bimanual assembly, it likewise surpasses both full-data baselines with 1,000, a 5 × 5\\times reduction. For target pose alignment, under the strict 0.015 0.015 -m criterion, our method maintains an advantage across demonstration budgets, consistent with the pretrained RL prior retaining control capabilities useful for precise alignment. Under the relaxed 0.05 0.05 -m criterion, the advantage remains clear in the low-data regime but narrows as more demonstrations become available, with performance becoming numerically comparable to π 0.5 \\pi_{0.5} at 4,000 demonstrations. Overall, these results indicate that the RL prior is most beneficial when visual demonstrations are scarce or when the task demands precise control.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS2.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "db5daa947ddb8221",
+      "section": "Comparison with VLA baselines.",
+      "location": "Comparison with VLA baselines.",
+      "text": "Figure 5: Target pose-alignment ablations with the action decoder frozen for both latent-transfer variants. Results show mean success rates and standard deviations over three random seeds, except for explicit transfer, which uses five seeds.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F5",
+      "kind": "figcaption"
+    },
+    {
+      "id": "1b012ef896a16882",
+      "section": "Contribution of the pretrained RL prior.",
+      "location": "Contribution of the pretrained RL prior.",
+      "text": "To isolate the contribution of the pretrained RL prior, we compare latent transfer with training from scratch using the same visual policy architecture and training setup. As shown in Figure 5 , latent transfer with the image encoder frozen consistently achieves higher success rates than the from-scratch baseline across the evaluated demonstration budgets and success thresholds. Since the visual encoder remains fixed, these gains cannot be explained by improved visual representation learning during adaptation. The results therefore support that reusing the pretrained RL action prior substantially improves learning from limited visual demonstrations, providing a key source of the data efficiency observed in our method.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS2.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "90751d5f806b5428",
+      "section": "4.3 Latent Transfer Is More Effective under Action-Only Supervision",
+      "location": "4.3 Latent Transfer Is More Effective under Action-Only Supervision",
+      "text": "We compare latent and explicit transfer under action-only supervision, considering both adaptation performance and training stability.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS3.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "f4971cbcf787b0dd",
+      "section": "Adaptation performance.",
+      "location": "Adaptation performance.",
+      "text": "As shown in Figure 5 , latent transfer achieves substantially higher target pose-alignment success than explicit transfer across the evaluated demonstration budgets under both the strict and relaxed success criteria (note that the image encoder is frozen). These results favor latent transfer for visual adaptation under action-only supervision. Interestingly, under the strict 0.015 0.015 -m criterion, explicit transfer still outperforms training from scratch across most demonstration budgets, suggesting that the pretrained RL prior retains useful capabilities for precise manipulation even when accessed through the explicit interface. Under the relaxed 0.05 0.05 -m criterion, however, explicit transfer performs similarly to the from-scratch baseline for much of the data range, with a clearer advantage only in the low-data regime. This pattern is consistent with the results in Section 4.2 , where the benefit of the RL prior is most pronounced with limited demonstrations and under stricter precision requirements. More importantly, the substantially stronger and more consistent performance of latent transfer indicates that effectively reusing the RL prior depends not only on its presence, but also on how visual observations interface with the pretrained controller.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS3.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "63638df2db5d4756",
+      "section": "Training stability.",
+      "location": "Training stability.",
+      "text": "As shown in Figure 6 , with the image encoder frozen, latent transfer exhibits rapid performance improvement together with relatively consistent learning trajectories across random seeds. In contrast, explicit transfer shows greater run-to-run variability, while training from scratch is comparatively stable but converges to lower performance. Thus, latent transfer combines consistent learning with stronger performance.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS3.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8876993f51d6d824",
+      "section": "Training stability.",
+      "location": "Training stability.",
+      "text": "Figure 6: Training stability on target pose alignment at a relaxed ( ϵ = 0.05 \\epsilon=0.05 m) threshold. Dotted curves show individual runs for latent transfer, explicit transfer, and scratch training; shaded regions show the mean ± \\pm one standard deviation. Explicit transfer uses five random seeds, while latent transfer and scratch training use three seeds each.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F6",
+      "kind": "figcaption"
+    },
+    {
+      "id": "5a59d3d69fa99a86",
+      "section": "4.4 Ablations on Visual and Action Adaptation",
+      "location": "4.4 Ablations on Visual and Action Adaptation",
+      "text": "To examine how visual adaptation should modify the pretrained policy, we independently sweep the learning rates of the image encoder E vis E_{\\mathrm{vis}} and action decoder v θ v_{\\theta} , while keeping the visual Q-Former Q ϕ Q_{\\phi} trainable throughout.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS4.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "b32f197c45c6d677",
+      "section": "Image-encoder adaptation.",
+      "location": "Image-encoder adaptation.",
+      "text": "As shown in Figure 7 (a), with the action decoder frozen, conservative updates to the image encoder improve strict pose-alignment success across demonstration budgets, whereas larger updates degrade performance. This effect is particularly pronounced in the low-data regime: with 500 demonstrations, increasing the learning-rate scale leads to both lower mean success and greater variation across seeds, while the 1,000- and 2,000-demonstration settings are comparatively less sensitive. Under the relaxed criterion, the benefit of image-encoder adaptation is less uniform. These results suggest that limited-data adaptation benefits from small, conservative updates to the visual representation, especially when precise alignment is required.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS4.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "cc0d53ee8584009a",
+      "section": "Action-decoder adaptation.",
+      "location": "Action-decoder adaptation.",
+      "text": "As shown in Figure 7 (b), fine-tuning the action decoder provides no benefit across the tested learning-rate scales and demonstration budgets. Keeping the pretrained decoder frozen performs best under the strict criterion, while larger updates reduce performance. We hypothesize that fine-tuning the decoder on a much smaller downstream dataset may lead to overfitting and reduce the benefit of the control prior learned from large-scale privileged pretraining with 𝒟 RL \\mathcal{D}_{\\mathrm{RL}} in Table 3 . These results favor keeping the action decoder frozen during visual adaptation.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS4.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e018836906a57f9e",
+      "section": "Action-decoder adaptation.",
+      "location": "Action-decoder adaptation.",
+      "text": "Figure 7: Learning-rate ablations for (a) the image encoder with the action decoder frozen and (b) the action decoder with the image encoder frozen. Panels report strict ( ϵ = 0.015 \\epsilon=0.015 m) and relaxed ( ϵ = 0.05 \\epsilon=0.05 m) pose-alignment success. We report average success rate and standard deviation across three random seeds. Each scale multiplies the tested module’s original learning rate; zero freezes it.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F7",
+      "kind": "figcaption"
+    },
+    {
+      "id": "2f30905dda0b729c",
+      "section": "4.5 Control Behaviors and Physical Information",
+      "location": "4.5 Control Behaviors and Physical Information",
+      "text": "Having shown that the pretrained RL prior enables data-efficient visual adaptation, we next investigate what control behaviors and physical information from large-scale RL pretraining remain after visual adaptation. These retained properties may help explain the observed data-efficiency gains.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "51f886f7ca355f79",
+      "section": "4.5 Control Behaviors and Physical Information",
+      "location": "4.5 Control Behaviors and Physical Information",
+      "text": "Figure 8: Generalization to increased object mass. (a) Target pose alignment at a relaxed ( ϵ = 0.05 \\epsilon=0.05 m) thresholds. (b) Door lift. The leftmost point in each plot corresponds to the reference mass used for downstream visual training, e.g., for 𝒟 vis \\mathcal{D}_{\\mathrm{vis}} .",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F8",
+      "kind": "figcaption"
+    },
+    {
+      "id": "223987e3b3647f50",
+      "section": "Generalization to increased object mass.",
+      "location": "Generalization to increased object mass.",
+      "text": "RL pretraining includes randomization over object density, whereas the visual demonstrations contain only a single object mass for each task. We therefore test whether generalization to mass variation learned during RL pretraining remains after visual adaptation by evaluating the policies on increasingly heavy objects without further training (see results in Figure 8 ). For door lifting, our policy uses only 50 demonstrations compared with 500 for π 0.5 \\pi_{0.5} ; for pose alignment, the corresponding budgets are 1,000 and 2,000. At the reference mass, the two methods achieve similar performance. As mass increases, however, our policy degrades more gradually: for example, on door lifting, it retains 32.6% success at 5.0 kg compared with 12.9% for π 0.5 \\pi_{0.5} . These results provide evidence that robustness acquired during RL pretraining can remain useful after visual adaptation.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS5.SSS0.Px1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "0d556ac60b37023b",
+      "section": "Linear probing of contact-force information.",
+      "location": "Linear probing of contact-force information.",
+      "text": "Contact forces are central to dexterous manipulation, and large-scale interaction during privileged RL pretraining may induce representations that capture contact-related physical information. To examine whether such information is retained after visual adaptation, we probe the hidden representations of the action decoder for contact forces. Specifically, for target pose alignment, we collect a separate force-annotated dataset 𝒟 probe \\mathcal{D}_{\\mathrm{probe}} and fit linear ridge probes to the hidden state at each decoder layer, while keeping the adapted policy frozen. We compare the RL-prior policy with the same architecture trained from scratch. As shown in Figure 9 , contact-force information is substantially more linearly decodable from the RL-prior representations: the RL-prior model achieves lower probe RMSE than the scratch model across all evaluated layers and demonstration budgets. More notably, with only 200 visual demonstrations, the RL-prior model already matches or outperforms the scratch model trained with 4,000 demonstrations across the force targets, with substantial margins on most metrics. This result suggests that large-scale privileged RL pretraining implicitly learns structured contact-related physical representations that are retained after visual adaptation, but are difficult to acquire from limited visual demonstrations alone. Such retained physical knowledge may therefore contribute to the strong data efficiency provided by the RL prior.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.SS5.SSS0.Px2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "de7b59c4265b05a2",
+      "section": "Linear probing of contact-force information.",
+      "location": "Linear probing of contact-force information.",
+      "text": "Figure 9: Linear contact-force probes of the visual policies. Panels predict (a) total grasp normal force, (b) per-finger normal forces, (c) per-finger tangential forces, and (d) per-finger Cartesian force vectors from each layer of the action decoder. Colors denote visual-demonstration budgets; solid and dashed curves denote the frozen pretrained and trainable scratch action decoders. Both policies fine-tune the image encoder at 0.2 × 0.2\\times its base learning rate for 100k steps. Curves average three policy seeds on the same IID probe test episodes.",
+      "url": "https://arxiv.org/html/2611.08458v1#S4.F9",
+      "kind": "figcaption"
+    },
+    {
+      "id": "012a3bec716ada6f",
+      "section": "5 Limitations",
+      "location": "5 Limitations",
+      "text": "Our results concern downstream visual-demonstration efficiency, not total data or compute efficiency: the method relies on a capable privileged teacher and substantial simulated experience. The frozen prior may inherit the teacher’s failure modes and restrict adaptation when new tasks require different control behaviors. All tasks use the same arm–hand system; bimanual transfer reuses the single-arm decoder and does not establish transfer to different robot morphologies. The evaluation is entirely in simulation, including visual demonstration collection, so physical-robot performance remains untested. Finally, mass robustness and force readout support the proposed interpretation but do not isolate a causal mechanism for the demonstration-efficiency gains.",
+      "url": "https://arxiv.org/html/2611.08458v1#S5.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "7e77bb32ceac544f",
+      "section": "6 Conclusion",
+      "location": "6 Conclusion",
+      "text": "We presented Latent RL Prior, a simple yet effective framework that transfers RL control behavior to visual dexterous manipulation by adapting latent conditioning around a frozen action decoder. This adaptation uses action supervision alone, without privileged information in the visual demonstrations, and sharing the decoder extends a single-arm prior to bimanual manipulation. Across three simulated tasks, the method improves visual-demonstration efficiency, surpassing the evaluated VLA baselines trained on the full task datasets with 10 × 10\\times and 5 × 5\\times fewer demonstrations on door lifting and bimanual assembly, respectively. Further investigations favor latent transfer over the tested explicit interface for performance and training stability, while separate adaptation studies favor conservative visual updates and a frozen decoder. Robustness to mass variation absent from visual demonstrations and greater linear accessibility of contact-force information than in policies trained from scratch provide evidence consistent with retained control knowledge. These findings support preserving RL control priors and adapting their visual interfaces for data-efficient dexterous manipulation.",
+      "url": "https://arxiv.org/html/2611.08458v1#S6.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "8a336ca18369b980",
+      "section": "AI Use Statement",
+      "location": "AI Use Statement",
+      "text": "We used generative AI tools to help draft and refine manuscript text based on author-provided drafts and an author-defined narrative, and to assist with coding and figure preparation. We did not use AI to propose research ideas, design experiments, or analyze or interpret results. The manuscript was reviewed by the authors, who take responsibility for the final content.",
+      "url": "https://arxiv.org/html/2611.08458v1#S6.SSx1.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "e42d0df6ea0da2ca",
+      "section": "Ethics Statement",
+      "location": "Ethics Statement",
+      "text": "This work studies dexterous manipulation for robotics. No human data are used.",
+      "url": "https://arxiv.org/html/2611.08458v1#S6.SSx2.p1.1",
+      "kind": "p"
+    },
+    {
+      "id": "69f144c57880c740",
+      "section": "Reproducibility Statement",
+      "location": "Reproducibility Statement",
+      "text": "The experiment results are evaluated using at least three random seeds. The main text describes the method and experimental setup for reproducibility. We plan to publicly release the training and evaluation code and datasets.",
+      "url": "https://arxiv.org/html/2611.08458v1#S6.SSx3.p1.1",
+      "kind": "p"
+    }
+  ]
+}
